@@ -1,0 +1,34 @@
+.post-card {
+  width: 47rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 3px 8px #ccc;
+
+  &__image {
+    width: 100%;
+    background-image: url('../../../../assets/images/nyuszko-kucko.jpg');
+    background-size: cover;
+    background-position: center center;
+    aspect-ratio: 1/1;
+  }
+
+  &__title {
+    margin: 2rem 0;
+    font-size: 2.4rem;
+  }
+
+  &__paragraph {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__share-button,
+  &__read-button {
+    font-size: 1.6rem;
+  }
+}

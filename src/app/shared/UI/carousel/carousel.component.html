@@ -1,0 +1,19 @@
+<section class="carousel section-margin">
+  <p-carousel
+    [value]="images"
+    [numVisible]="5"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="3000"
+    [responsiveOptions]="responsiveOptions">
+    <ng-template pTemplate="header">
+      <h5 class="carousel__header">
+        Kérjük vegye figyelembe, hogy a termékeink többsége rendelésre készül,
+        amik néhány hetes szállítási időt igényelnek.
+      </h5>
+    </ng-template>
+    <ng-template let-images pTemplate="item">
+      <img [src]="images" class="carousel__image" />
+    </ng-template>
+  </p-carousel>
+</section>

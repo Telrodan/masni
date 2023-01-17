@@ -1,0 +1,28 @@
+@import '../../../../scss/mixins';
+
+.featured-products {
+  width: 100vw;
+
+  &__heading {
+    margin-bottom: 5rem;
+    text-align: center;
+  }
+
+  &__container {
+    display: flex;
+    justify-content: center;
+
+    @include respond(sm) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__wrapper:not(:last-child) {
+    margin-right: 15rem;
+
+    @include respond(sm) {
+      margin: 0 0 5rem;
+    }
+  }
+}

@@ -1,0 +1,104 @@
+@import '../../../../scss/mixins';
+
+.footer {
+  margin-top: 10rem;
+  padding: 10rem 18rem;
+  background-color: var(--color-primary);
+
+  @include respond(sm) {
+    padding: 2rem 3rem;
+  }
+
+  &__container {
+    border-top: 1px solid var(--color-secondary);
+
+    @include respond(sm) {
+    }
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 11rem 5rem;
+
+    @include respond(sm) {
+      padding: 15rem 5rem;
+    }
+  }
+
+  &__logo {
+    width: 20rem;
+
+    @include respond(sm) {
+      position: absolute;
+      top: 2rem;
+      width: 10rem;
+    }
+  }
+
+  &__details {
+    width: 47rem;
+  }
+
+  &__address {
+    margin-bottom: 2rem;
+    font-size: 1.6rem;
+
+    &__icon {
+      margin-right: 1rem;
+    }
+  }
+
+  &__contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__phone,
+    &__email {
+      color: var(--color-text);
+      font-size: 1.6rem;
+
+      &__icon {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+
+    &__link {
+      font-size: 5rem;
+      color: var(--color-secondary);
+
+      &:not(:last-child) {
+        margin-right: 5rem;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+
+    @include respond(sm) {
+      flex-direction: column;
+    }
+  }
+
+  &__link {
+    font-size: 1.6rem;
+    color: var(--color-text);
+
+    &:not(:last-child) {
+      margin-right: 5rem;
+
+      @include respond(sm) {
+        margin: 0 0 2rem;
+      }
+    }
+  }
+}

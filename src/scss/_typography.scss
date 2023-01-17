@@ -1,0 +1,30 @@
+@import './mixins';
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap');
+// font-family: 'Comfortaa', cursive;
+@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&display=swap');
+// font-family: 'Comforter Brush', cursive;
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
+// font-family: 'Dancing Script', cursive;
+
+html {
+  font-family: 'Comfortaa', cursive;
+  font-size: 10px;
+  -webkit-font-smoothing: antialiased;
+
+  @include respond(sm) {
+    font-size: 7.5px;
+  }
+}
+
+.primary-heading {
+  margin-bottom: 1rem;
+  font-size: 6rem;
+  font-weight: 500;
+  font-family: 'Dancing Script', cursive;
+}
+
+.primary-paragraph {
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+}

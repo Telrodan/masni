@@ -1,0 +1,46 @@
+<header class="navbar">
+  <img
+    src="../../../../assets/images/logo-black.svg"
+    alt="Logo"
+    class="navbar__logo" />
+  <nav [@slideInAndOutAnimation]="isNavbarOpen" class="navbar__container">
+    <button class="navbar__close" (click)="toggleNavbar()">
+      <fa-icon [icon]="faXmark"></fa-icon>
+    </button>
+    <ul class="navbar__list">
+      <li class="navbar__item">
+        <a href="" class="navbar__link underline-button">Főoldal</a>
+      </li>
+      <li class="navbar__item">
+        <a href="#" class="navbar__link underline-button"
+          >Termékek <fa-icon [icon]="faChevronDown"></fa-icon
+        ></a>
+        <ul class="navbar__dropdown">
+          <li class="navbar__dropdown__item">
+            <a href="#" class="navbar__dropdown__link">Nyuszko kuckó</a>
+          </li>
+          <li class="navbar__dropdown__item">
+            <a href="#" class="navbar__dropdown__link">Masni Handmade Dolls</a>
+          </li>
+        </ul>
+      </li>
+      <li class="navbar__item">
+        <a href="" class="navbar__link underline-button">Minták</a>
+      </li>
+      <li class="navbar__item">
+        <a href="" class="navbar__link underline-button">Rólunk</a>
+      </li>
+      <li class="navbar__item">
+        <a href="" class="navbar__link underline-button">Kapcsolat</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="navbar__cart">
+    <a href="#" class="navbar__cart__link"
+      ><fa-icon [icon]="faCartShopping"></fa-icon
+    ></a>
+  </div>
+  <button class="navbar__hamburger" (click)="toggleNavbar()">
+    <fa-icon [icon]="faBars"></fa-icon>
+  </button>
+</header>
