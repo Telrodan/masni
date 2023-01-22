@@ -1,0 +1,13 @@
+<div class="masni-shop">
+  <div class="masni-shop__carousel">
+    <h1 class="masni-shop__heading primary-heading">Masni Handmade Dolls</h1>
+    <masni-handmade-dolls-carousel
+      [images]="carouselImages"></masni-handmade-dolls-carousel>
+  </div>
+  <div class="masni-shop__menu">
+    <div class="masni-shop__wrapper" *ngFor="let item of menuItems">
+      <masni-handmade-dolls-menu-item
+        [menuItemData]="item"></masni-handmade-dolls-menu-item>
+    </div>
+  </div>
+</div>

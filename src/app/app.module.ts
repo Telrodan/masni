@@ -12,6 +12,8 @@ import { LandingComponent } from './features/landing/landing.component';
 import { LandingBrandsComponent } from './features/landing/landing-brands/landing-brands.component';
 import { LandingAboutUsComponent } from './features/landing/landing-about-us/landing-about-us.component';
 import { LandingContactUsComponent } from './features/landing/landing-contact-us/landing-contact-us.component';
+import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
+import { MasniShopModule } from './features/masni-shop/masni-shop.module';
 
 const PRIME_NG = [CarouselModule];
 
@@ -27,8 +29,10 @@ const PRIME_NG = [CarouselModule];
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    SharedModule,
     FontAwesomeModule,
+    SharedModule,
+    NyuszkoShopModule,
+    MasniShopModule,
     ...PRIME_NG
   ],
   providers: [],

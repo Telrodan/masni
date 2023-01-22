@@ -1,46 +1,59 @@
-<header class="navbar">
-  <img
-    src="../../../../assets/images/logo-black.svg"
-    alt="Logo"
-    class="navbar__logo" />
-  <nav [@slideInAndOutAnimation]="isNavbarOpen" class="navbar__container">
-    <button class="navbar__close" (click)="toggleNavbar()">
+<nav class="navbar">
+  <img src="../../../../assets/images/logo-black.svg" alt="Logo" class="logo" />
+  <div [@slideInAndOutAnimation]="isNavbarOpen" class="container">
+    <button class="close-btn" (click)="toggleNavbar()">
       <fa-icon [icon]="faXmark"></fa-icon>
     </button>
-    <ul class="navbar__list">
-      <li class="navbar__item">
-        <a href="" class="navbar__link underline-button">Főoldal</a>
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a class="nav-link underline-button" routerLink="/">Főoldal</a>
       </li>
-      <li class="navbar__item">
-        <a href="#" class="navbar__link underline-button"
+      <li class="nav-item">
+        <a class="nav-link"
           >Termékek <fa-icon [icon]="faChevronDown"></fa-icon
         ></a>
-        <ul class="navbar__dropdown">
-          <li class="navbar__dropdown__item">
-            <a href="#" class="navbar__dropdown__link">Nyuszko kuckó</a>
+        <ul class="dropdown-list">
+          <li class="dropdown-item">
+            <a
+              href=""
+              class="dropdown-link underline-button"
+              routerLink="nyuszko-shop"
+              >Nyuszko kuckó</a
+            >
           </li>
-          <li class="navbar__dropdown__item">
-            <a href="#" class="navbar__dropdown__link">Masni Handmade Dolls</a>
+          <li class="dropdown-item">
+            <a
+              href="#"
+              class="dropdown-link underline-button"
+              routerLink="masni-shop"
+              >Masni Handmade Dolls</a
+            >
           </li>
         </ul>
       </li>
-      <li class="navbar__item">
-        <a href="" class="navbar__link underline-button">Minták</a>
+      <li class="nav-item">
+        <a href="" class="nav-link underline-button">Minták</a>
       </li>
-      <li class="navbar__item">
-        <a href="" class="navbar__link underline-button">Rólunk</a>
+      <li class="nav-item">
+        <a href="" class="nav-link underline-button">Rólunk</a>
       </li>
-      <li class="navbar__item">
-        <a href="" class="navbar__link underline-button">Kapcsolat</a>
+      <li class="nav-item">
+        <a
+          href=""
+          class="nav-link underline-button"
+          routerLink="home"
+          fragment="contact-us"
+          >Kapcsolat</a
+        >
       </li>
     </ul>
-  </nav>
-  <div class="navbar__cart">
-    <a href="#" class="navbar__cart__link"
+  </div>
+  <div class="cart">
+    <a href="#" class="cart-link"
       ><fa-icon [icon]="faCartShopping"></fa-icon
     ></a>
   </div>
-  <button class="navbar__hamburger" (click)="toggleNavbar()">
+  <button class="hamburger-btn" (click)="toggleNavbar()">
     <fa-icon [icon]="faBars"></fa-icon>
   </button>
-</header>
+</nav>

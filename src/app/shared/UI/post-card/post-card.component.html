@@ -1,16 +1,20 @@
 <article class="post-card">
-  <div class="post-card__image"></div>
+  <div
+    class="img"
+    [style.background-image]="'url(' + postData?.imgSrc + ')'"></div>
   <!-- <img
     src="../../../../assets/images/nyuszko-kucko.jpg"
     alt=""
     class="post-card__image" /> -->
-  <h1 class="post-card__title">Test cim</h1>
-  <p class="post-card__paragraph">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime obcaecati
-    repellat totam quidem incidunt minus sequi vel sapiente! Aut, ea!
-  </p>
-  <div class="post-card__actions">
-    <button class="post-card__read-button secondary-button">Olvasás</button>
-    <button class="post-card__share-button primary-button">Megosztás</button>
+  <div class="container">
+    <h1 class="title">Test cim</h1>
+    <p class="text">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime obcaecati
+      repellat totam quidem incidunt minus sequi vel sapiente! Aut, ea!
+    </p>
+    <div class="actions-container">
+      <button class="read-button secondary-button">Olvasás</button>
+      <button class="share-button primary-button">Megosztás</button>
+    </div>
   </div>
 </article>

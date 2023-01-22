@@ -1,14 +1,9 @@
-<section class="recent-posts section-margin">
-  <h1 class="recent-posts__heading primary-heading">Friss híreink</h1>
-  <div class="recent-posts__container">
-    <div class="recent-posts__wrapper">
-      <masni-handmade-dolls-post-card></masni-handmade-dolls-post-card>
-    </div>
-    <div class="recent-posts__wrapper">
-      <masni-handmade-dolls-post-card></masni-handmade-dolls-post-card>
-    </div>
-    <div class="recent-posts__wrapper">
-      <masni-handmade-dolls-post-card></masni-handmade-dolls-post-card>
+<section class="recent-news section-margin">
+  <h1 class="heading primary-heading">Friss híreink</h1>
+  <div class="container">
+    <div class="wrapper" *ngFor="let article of recentNews">
+      <masni-handmade-dolls-post-card
+        [postData]="article"></masni-handmade-dolls-post-card>
     </div>
   </div>
 </section>

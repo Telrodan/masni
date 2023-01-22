@@ -1,0 +1,13 @@
+<div class="nyuszko-shop">
+  <div class="nyuszko-shop__carousel">
+    <h1 class="nyuszko-shop__heading primary-heading">Nyuszkó-Kuckó</h1>
+    <masni-handmade-dolls-carousel
+      [images]="carouselImages"></masni-handmade-dolls-carousel>
+  </div>
+  <div class="nyuszko-shop__menu">
+    <div class="nyuszko-shop__wrapper" *ngFor="let item of menuItems">
+      <masni-handmade-dolls-menu-item
+        [menuItemData]="item"></masni-handmade-dolls-menu-item>
+    </div>
+  </div>
+</div>

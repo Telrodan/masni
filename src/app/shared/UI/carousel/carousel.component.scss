@@ -1,8 +1,6 @@
-.carousel {
-  &__header {
-    margin-bottom: 3rem;
-    font-size: 2rem;
-    font-weight: 400;
-    text-align: center;
-  }
+.img {
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  aspect-ratio: 1/1;
 }

@@ -2,34 +2,46 @@
 
 .about-us {
   display: flex;
+  justify-content: center;
+  margin: 20rem 0;
 
   @include respond(sm) {
+    padding: 0 2rem;
     flex-direction: column;
   }
+}
 
-  &__wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 5rem;
-  }
+.container {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-right: 10rem;
 
-  &__description {
+  @include respond(sm) {
+    width: 100%;
     margin-bottom: 5rem;
   }
+}
 
-  &__link {
-    font-size: 1.6rem;
-  }
+.heading {
+  margin-bottom: 3rem;
+}
 
-  &__image {
-    width: 50%;
-    padding: 10rem;
+.paragraph {
+  margin-bottom: 5rem;
+}
 
-    @include respond(sm) {
-      width: 100%;
-      padding: 5rem;
-    }
+.link {
+  font-size: 1.8rem;
+}
+
+.img {
+  width: 40%;
+  box-shadow: 0 3px 8px #ccc;
+
+  @include respond(sm) {
+    width: 100%;
   }
 }

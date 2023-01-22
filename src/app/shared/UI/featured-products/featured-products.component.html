@@ -1,14 +1,9 @@
-<section class="featured-products section-margin">
-  <h1 class="featured-products__heading primary-heading">Kiemelt termékeink</h1>
-  <div class="featured-products__container">
-    <div class="featured-products__wrapper">
-      <masni-handmade-dolls-product-card></masni-handmade-dolls-product-card>
-    </div>
-    <div class="featured-products__wrapper">
-      <masni-handmade-dolls-product-card></masni-handmade-dolls-product-card>
-    </div>
-    <div class="featured-products__wrapper">
-      <masni-handmade-dolls-product-card></masni-handmade-dolls-product-card>
+<section class="featured-products">
+  <h1 class="heading primary-heading">Kiemelt termékeink</h1>
+  <div class="container">
+    <div class="wrapper" *ngFor="let product of featuredProducts">
+      <masni-handmade-dolls-product-card
+        [product]="product"></masni-handmade-dolls-product-card>
     </div>
   </div>
 </section>

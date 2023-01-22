@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Product } from 'src/app/core/models/product.model';
 
 @Component({
   selector: 'masni-handmade-dolls-featured-products',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./featured-products.component.scss']
 })
 export class FeaturedProductsComponent {
-
+  @Input() public featuredProducts: Product[] = [];
 }

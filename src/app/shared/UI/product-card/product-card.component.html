@@ -1,8 +1,10 @@
 <article class="product-card">
-  <div class="product-card__image"></div>
+  <div
+    class="product-card__image"
+    [style.background-image]="'url(' + product?.imgSrc + ')'"></div>
   <div class="product-card__container">
-    <h1 class="product-card__title">Test title</h1>
-    <p class="product-card__price">9999 Ft</p>
+    <h1 class="product-card__title">{{ product?.name }}</h1>
+    <p class="product-card__price">{{ product?.price }} Ft</p>
     <button class="product-card__add-to-cart-button primary-button">
       <fa-icon
         class="product-card__add-to-cart-button__icon"

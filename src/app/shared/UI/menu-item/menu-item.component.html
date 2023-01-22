@@ -1,0 +1,8 @@
+<div
+  [routerLink]="menuItemData?.linkSrc"
+  class="menu-item"
+  [style.background-image]="
+    'url(' + '../../../../assets/images/' + menuItemData?.backgroundImage + ')'
+  ">
+  <p class="menu-item__name">{{ menuItemData?.name }}</p>
+</div>
