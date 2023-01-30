@@ -1,13 +1,25 @@
-<div class="masni-shop">
-  <div class="masni-shop__carousel">
-    <h1 class="masni-shop__heading primary-heading">Masni Handmade Dolls</h1>
+<main class="masni-shop">
+  <section class="carousel">
+    <h1 class="carousel-heading primary-heading">Masni Handmade Dolls</h1>
     <masni-handmade-dolls-carousel
       [images]="carouselImages"></masni-handmade-dolls-carousel>
-  </div>
-  <div class="masni-shop__menu">
-    <div class="masni-shop__wrapper" *ngFor="let item of menuItems">
+  </section>
+  <section class="container">
+    <h1 class="heading secondary-heading">Masni Handmade Dolls bemutatás:</h1>
+    <p class="primary-paragraph">
+      A Masni Handmade Dolls babák egyedi, kézműves babák gyerekeknek. Kérésre
+      kézzel hímzett névvel ellátva. Választását 3 éves kortól ajánlanám.
+      Ilyenkor jön az babázós, öltöztetős korszak, az összes baba és
+      ruha/kiegészítő szabadon kombinálható, cserélgethető. Minden darab gondos
+      odafigyeléssel és nagy szeretettel készül, szeretném ha a babáim nemcsak
+      egyediek lennének, de hosszú ideig társai lehetnének a gyerkőcöknek,
+      később pedig, mint emlék, továbbra is a család tagjai maradnának.
+    </p>
+  </section>
+  <section class="menu">
+    <div class="wrapper" *ngFor="let item of menuItems">
       <masni-handmade-dolls-menu-item
         [menuItemData]="item"></masni-handmade-dolls-menu-item>
     </div>
-  </div>
-</div>
+  </section>
+</main>

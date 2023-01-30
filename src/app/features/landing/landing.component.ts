@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Product } from 'src/app/core/models/product.model';
 
 import { carouselImages, featuredProducts, recentNews } from './LANDING_DATA';
 
@@ -10,7 +11,7 @@ import { carouselImages, featuredProducts, recentNews } from './LANDING_DATA';
 })
 export class LandingComponent implements OnInit {
   public carouselImages = carouselImages;
-  public featuredProducts = featuredProducts;
+  public featuredProducts: Product[] = featuredProducts;
   public recentNews = recentNews;
 
   constructor(private route: ActivatedRoute, private el: ElementRef) {}

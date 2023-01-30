@@ -12,5 +12,5 @@ interface MenuItemData {
   styleUrls: ['./menu-item.component.scss']
 })
 export class MenuItemComponent {
-  @Input() public menuItemData: MenuItemData | undefined;
+  @Input() public menuItemData!: MenuItemData;
 }

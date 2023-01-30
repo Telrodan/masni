@@ -1,0 +1,23 @@
+@import '../../../scss/mixins';
+
+.about-us {
+  width: 70%;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  @include respond(sm) {
+    width: 90%;
+  }
+}
+
+.container {
+  margin-bottom: 5rem;
+
+  &:nth-child(1) {
+    margin-top: 5rem;
+  }
+}
+
+.heading {
+  margin-bottom: 2rem;
+}

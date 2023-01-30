@@ -49,9 +49,9 @@
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.75);
   height: 30rem;
-  width: 40rem;
+  width: 30rem;
   text-align: center;
-  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .shop-icon {

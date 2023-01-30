@@ -9,7 +9,7 @@ import { News } from 'src/app/core/models/news.model';
   styleUrls: ['./post-card.component.scss']
 })
 export class PostCardComponent {
-  @Input() public postData: News | undefined;
+  @Input() public postData!: News;
 
   public faShareNodes = faShareNodes;
 }

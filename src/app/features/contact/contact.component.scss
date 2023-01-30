@@ -1,0 +1,90 @@
+@import '../../../scss/mixins';
+
+.contact-us {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  @include respond(sm) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.left-container,
+.right-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 40%;
+  height: 70vh;
+}
+
+.left-container {
+  padding: 0 10rem;
+  background-image: linear-gradient(
+      to right bottom,
+      var(--color-gradient-1),
+      var(--color-gradient-2)
+    ),
+    url('../../../assets/images/contact-us-test-image.jpg');
+  background-size: cover;
+  background-position: center;
+
+  @include respond(sm) {
+    width: 100%;
+    padding: 0 2rem;
+  }
+}
+
+.text {
+  margin-bottom: 5rem;
+}
+
+.link {
+  display: block;
+  color: var(--color-text);
+  font-size: 1.6rem;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+}
+
+.link-icon {
+  margin-right: 1rem;
+}
+
+.right-container {
+  padding: 5rem;
+
+  @include respond(sm) {
+    width: 100%;
+    padding: 2rem;
+  }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-heading {
+  margin-bottom: 2rem;
+}
+
+.input,
+.textarea {
+  padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-text);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.textarea {
+  resize: none;
+}

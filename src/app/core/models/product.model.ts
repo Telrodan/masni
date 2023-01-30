@@ -1,5 +1,13 @@
 export interface Product {
-  name: string;
-  price: number;
+  title: string;
   imgSrc: string;
+  price: number;
+}
+
+export interface ProductDetails {
+  menuName: string;
+  slug: string;
+  title: string;
+  description: string;
+  imgSrc: string[];
 }

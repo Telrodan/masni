@@ -18,13 +18,18 @@ html {
 }
 
 .primary-heading {
-  margin-bottom: 1rem;
   font-size: 6rem;
+  font-weight: 500;
+  font-family: 'Dancing Script', cursive;
+}
+
+.secondary-heading {
+  font-size: 4rem;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
 }
 
 .primary-paragraph {
   font-size: 1.6rem;
-  line-height: 2.2rem;
+  line-height: 2.4rem;
 }

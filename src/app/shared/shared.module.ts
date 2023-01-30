@@ -17,6 +17,8 @@ import { FeaturedProductsComponent } from './UI/featured-products/featured-produ
 import { RecentNewsComponent } from './UI/recent-news/recent-news.component';
 import { CarouselComponent } from './UI/carousel/carousel.component';
 import { MenuItemComponent } from './UI/menu-item/menu-item.component';
+import { ProductDetailsComponent } from './UI/product-details/product-details.component';
+import { ProductPickerComponent } from './UI/product-picker/product-picker.component';
 
 const PRIME_NG = [
   CarouselModule,
@@ -35,7 +37,9 @@ const PRIME_NG = [
     FeaturedProductsComponent,
     RecentNewsComponent,
     CarouselComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    ProductDetailsComponent,
+    ProductPickerComponent
   ],
   imports: [CommonModule, FontAwesomeModule, RouterModule, ...PRIME_NG],
   exports: [
@@ -46,7 +50,9 @@ const PRIME_NG = [
     FeaturedProductsComponent,
     RecentNewsComponent,
     CarouselComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    ProductDetailsComponent,
+    ProductPickerComponent
   ]
 })
 export class SharedModule {}

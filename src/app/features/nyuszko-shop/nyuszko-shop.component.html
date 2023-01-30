@@ -1,13 +1,27 @@
-<div class="nyuszko-shop">
-  <div class="nyuszko-shop__carousel">
-    <h1 class="nyuszko-shop__heading primary-heading">Nyuszkó-Kuckó</h1>
+<main class="nyuszko-shop">
+  <section class="carousel">
+    <h1 class="carousel-heading primary-heading">Nyuszkó-Kuckó</h1>
     <masni-handmade-dolls-carousel
       [images]="carouselImages"></masni-handmade-dolls-carousel>
-  </div>
-  <div class="nyuszko-shop__menu">
-    <div class="nyuszko-shop__wrapper" *ngFor="let item of menuItems">
+  </section>
+  <section class="container">
+    <h1 class="heading secondary-heading">Nyuszkó-Kuckó bemutatás:</h1>
+    <p class="primary-paragraph">
+      Szeretném nektek bemutatni a Nyuszkó-Kuckót, ahol egyedi, akár kézzel
+      hímzett névvel ellátott textil figurákat, pihe-puha szundikendőket
+      találtok. Nagyon sok minta és szín közül válogathattok, hogy minden
+      egyéniség megtalálja a hozzá leginkább illőt. Minden darab szeretettel és
+      hatalmas odafigyeléssel készül. Termékeimet egészen újszülött kortól
+      ajánlom, babák számára is teljesen biztonságos. Egy nyuszkó egészen óvodás
+      korig hű társ lehet. A pihe-puha szundikendők pedig segítenek az
+      elalvásban, csupa öröm hozzájuk bújni. Kiváló ajándék lehet babaváró
+      bulira, keresztelőre, de újszülött fotózásokra is remek kellék lehet.
+    </p>
+  </section>
+  <section class="menu">
+    <div class="wrapper" *ngFor="let item of menuItems">
       <masni-handmade-dolls-menu-item
         [menuItemData]="item"></masni-handmade-dolls-menu-item>
     </div>
-  </div>
-</div>
+  </section>
+</main>
