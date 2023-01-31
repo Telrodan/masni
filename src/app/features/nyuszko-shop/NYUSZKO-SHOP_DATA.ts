@@ -38,7 +38,7 @@ export const menuItems = [
   },
   {
     name: 'Minták',
-    linkSrc: 'mintak',
+    linkSrc: '/samples',
     backgroundImage: 'menu-item-test.jpg'
   }
 ];

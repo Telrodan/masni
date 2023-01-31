@@ -19,6 +19,9 @@ import { CarouselComponent } from './UI/carousel/carousel.component';
 import { MenuItemComponent } from './UI/menu-item/menu-item.component';
 import { ProductDetailsComponent } from './UI/product-details/product-details.component';
 import { ProductPickerComponent } from './UI/product-picker/product-picker.component';
+import { SamplesComponent } from './UI/samples/samples.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ImageCompositionComponent } from './UI/image-composition/image-composition.component';
 
 const PRIME_NG = [
   CarouselModule,
@@ -39,9 +42,17 @@ const PRIME_NG = [
     CarouselComponent,
     MenuItemComponent,
     ProductDetailsComponent,
-    ProductPickerComponent
+    ProductPickerComponent,
+    SamplesComponent,
+    ImageCompositionComponent
   ],
-  imports: [CommonModule, FontAwesomeModule, RouterModule, ...PRIME_NG],
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+    RouterModule,
+    ReactiveFormsModule,
+    ...PRIME_NG
+  ],
   exports: [
     NavbarComponent,
     FooterComponent,
@@ -52,7 +63,9 @@ const PRIME_NG = [
     CarouselComponent,
     MenuItemComponent,
     ProductDetailsComponent,
-    ProductPickerComponent
+    ProductPickerComponent,
+    SamplesComponent,
+    ImageCompositionComponent
   ]
 })
 export class SharedModule {}

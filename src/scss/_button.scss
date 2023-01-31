@@ -26,8 +26,9 @@
 .primary-button,
 .secondary-button {
   padding: 1rem 2rem;
-  border: 2px solid transparent;
+  border: none;
   transition: all 0.3s ease-in;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -37,7 +38,20 @@
 
   &:hover {
     color: white;
-    // border: 2px solid var(--color-secondary);
+  }
+}
+
+.primary-button-transparent {
+  padding: 1rem 2rem;
+  color: var(--color-text);
+  background-color: var(--color-gradient-1);
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease-in;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-tertiary);
   }
 }
 

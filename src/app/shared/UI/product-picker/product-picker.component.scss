@@ -1,0 +1,11 @@
+.product-picker {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.picker-container {
+  width: 50%;
+  padding: 2rem;
+  border: 2px solid var(--color-tertiary);
+}

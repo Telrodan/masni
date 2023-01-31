@@ -1,0 +1,15 @@
+<div class="image-composition" (mouseleave)="hoveredImageUrl = images[0]">
+  <div
+    class="main-image"
+    [ngStyle]="{
+      'background-image':
+        'url(' + (hoveredImageUrl ? hoveredImageUrl : images[0]) + ')'
+    }"></div>
+  <div class="bottom-images">
+    <div
+      class="wrapper"
+      (mouseenter)="hoveredImageUrl = image"
+      *ngFor="let image of images"
+      [ngStyle]="{ 'background-image': 'url(' + image + ')' }"></div>
+  </div>
+</div>

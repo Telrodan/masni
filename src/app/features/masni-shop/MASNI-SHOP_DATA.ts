@@ -23,7 +23,7 @@ export const menuItems = [
   },
   {
     name: 'Minták/Színek',
-    linkSrc: '/szinek',
+    linkSrc: '/samples',
     backgroundImage: 'menu-item-test.jpg'
   }
 ];

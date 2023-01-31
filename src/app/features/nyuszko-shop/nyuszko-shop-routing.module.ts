@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductDetailsComponent } from 'src/app/shared/UI/product-details/product-details.component';
 import { ProductPickerComponent } from 'src/app/shared/UI/product-picker/product-picker.component';
+import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.component';
 
 import { NyuszkoShopComponent } from './nyuszko-shop.component';
 
@@ -19,7 +20,7 @@ const routes: Routes = [
       },
       {
         path: 'vasarlas',
-        component: ProductPickerComponent
+        component: NyuszkoBuilderComponent
       }
     ]
   },

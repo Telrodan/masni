@@ -1,1 +1,56 @@
-<p>samples works!</p>
+<main class="samples">
+  <h1 class="heading primary-heading">Egyszínű pamutvászon</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of egyszinuPamutvaszon">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+  <h1 class="heading primary-heading">Mintás pamutvászon</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of mintasPamutvaszon">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+  <h1 class="heading primary-heading">Egyszínű lenvászon</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of egyszinuLenvaszon">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+  <h1 class="heading primary-heading">Minky plüss</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of minkyPluss">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+  <h1 class="heading primary-heading">Duplagéz</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of duplagez">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+  <h1 class="heading primary-heading">Gyapjúfilc</h1>
+  <div class="container">
+    <div
+      class="wrapper"
+      [style.background-image]="'url(' + item.image + ')'"
+      *ngFor="let item of gyapjufilc">
+      <p>{{ item.name }}</p>
+    </div>
+  </div>
+</main>
