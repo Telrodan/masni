@@ -9,27 +9,22 @@
 
 html {
   font-family: 'Comfortaa', cursive;
-  font-size: 10px;
   -webkit-font-smoothing: antialiased;
-
-  @include respond(sm) {
-    font-size: 7.5px;
-  }
 }
 
 .primary-heading {
-  font-size: 5rem;
+  font-size: 60px;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
 }
 
 .secondary-heading {
-  font-size: 4rem;
+  font-size: 40px;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
 }
 
 .primary-paragraph {
-  font-size: 1.6rem;
-  line-height: 2.4rem;
+  font-size: 16px;
+  line-height: 24px;
 }

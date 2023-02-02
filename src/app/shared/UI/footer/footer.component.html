@@ -1,56 +1,40 @@
-<footer class="footer">
-  <div class="footer__container">
-    <div class="footer__content">
-      <img
-        src="../../../../assets/images/logo-black.svg"
-        alt="Logo"
-        class="footer__logo" />
-      <div class="footer__details">
-        <p class="footer__address">
-          <fa-icon
-            class="footer__address__icon"
-            [icon]="faLocationDot"></fa-icon>
-          Szentes, Magyarország
-        </p>
-        <div class="footer__contact">
-          <a href="tel:+36 30 123 45 78" class="footer__contact__phone"
-            ><fa-icon
-              class="footer__contact__phone__icon"
-              [icon]="faPhone"></fa-icon>
-            +36 30 123 45 78</a
-          >
-          <a href="mailto:test@test.hu" class="footer__contact__email"
-            ><fa-icon
-              class="footer__contact__email"
-              [icon]="faEnvelope"></fa-icon>
-            test@test.hu</a
-          >
-        </div>
-        <div class="footer__socials">
-          <a href="#" class="footer__socials__link"
-            ><fa-icon
-              class="footer__socials__link__icon"
-              [icon]="faFacebook"></fa-icon
-          ></a>
-          <a href="#" class="footer__socials__link"
-            ><fa-icon
-              class="footer__socials__link__icon"
-              [icon]="faInstagram"></fa-icon
-          ></a>
-        </div>
-      </div>
-    </div>
-    <div class="footer__links">
-      <a href="" class="footer__link underline-button"
+<footer class="footer px-4 md:px-6 lg:px-8">
+  <div
+    class="py-6 flex flex-column sm:flex-row align-items-center justify-content-between">
+    <div class="flex flex-nowap font-medium">
+      <a
+        pRipple
+        class="cursor-pointer block text-700 py-2 px-3 transition-colors transition-duration-150 border-round hover:text-900"
         >Adatkezelési Tájékoztató</a
       >
-      <a href="" class="footer__link underline-button">ÁSZF</a>
-      <a href="" class="footer__link underline-button">Impresszum</a>
-      <a href="" class="footer__link underline-button">Rólunk</a>
-      <a href="" class="footer__link underline-button">Kapcsolat</a>
+      <a
+        pRipple
+        class="cursor-pointer block text-700 py-2 px-3 transition-colors transition-duration-150 border-round hover:text-900"
+        >ÁSZF</a
+      >
+      <a
+        pRipple
+        class="cursor-pointer block text-700 py-2 px-3 transition-colors transition-duration-150 border-round hover:text-900"
+        >Impresszum</a
+      >
+      <a
+        pRipple
+        class="cursor-pointer block text-700 py-2 px-3 transition-colors transition-duration-150 border-round hover:text-900"
+        routerLink="/about-us"
+        >Rólunk</a
+      >
+      <a
+        pRipple
+        class="cursor-pointer block text-700 py-2 px-3 transition-colors transition-duration-150 border-round hover:text-900"
+        routerLink="/contact"
+        >Kapcsolat</a
+      >
+    </div>
+    <div class="mt-3 sm:mt-0">
+      <img
+        src="../../../../assets/images/nyuszko-kucko-logo.png"
+        alt="Image"
+        height="60" />
     </div>
   </div>
 </footer>
-
-<!-- 
- -->

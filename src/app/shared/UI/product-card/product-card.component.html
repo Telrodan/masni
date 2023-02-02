@@ -1,15 +1,12 @@
 <article class="product-card">
   <div
-    class="product-card__image"
+    class="product-image"
     [style.background-image]="'url(' + product.imgSrc + ')'"></div>
-  <div class="product-card__container">
-    <h1 class="product-card__title">{{ product.title }}</h1>
-    <p class="product-card__price">{{ product.price }} Ft</p>
-    <button class="product-card__add-to-cart-button primary-button">
-      <fa-icon
-        class="product-card__add-to-cart-button__icon"
-        [icon]="faCartShopping"></fa-icon
-      >Kosárba
+  <div class="container">
+    <h1 class="product-title">{{ product.title }}</h1>
+    <p class="product-price">{{ product.price }} Ft</p>
+    <button class="add-to-cart-button primary-button">
+      <fa-icon [icon]="faCartShopping"></fa-icon>Kosárba
     </button>
   </div>
 </article>

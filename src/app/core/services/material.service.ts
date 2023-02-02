@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
   providedIn: 'root'
 })
 export class MaterialService {
-  public materials: Material[];
+  private materials: Material[];
 
   constructor(private apiService: ApiService) {}
 
@@ -18,6 +18,7 @@ export class MaterialService {
         const materials = materialsDTO.materials.map((rawMaterial: any) => {
           return Material.fromDTO(rawMaterial);
         });
+        console.log(materials);
         this.materials = materials;
         return materials;
       })

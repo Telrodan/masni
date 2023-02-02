@@ -1,37 +1,43 @@
+@import '../../../../scss/mixins';
+
 .product-card {
-  width: 40rem;
+  width: 400px;
   box-shadow: 0 3px 8px #ccc;
 
-  &__image {
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    aspect-ratio: 1/1;
+  @include respond(sm) {
+    width: 360px;
   }
+}
 
-  &__container {
-    padding: 2rem;
-  }
+.product-image {
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  aspect-ratio: 1/1;
+}
 
-  &__title {
-    margin-bottom: 2.5rem;
-    font-size: 1.8rem;
-  }
+.container {
+  padding: 20px;
+}
 
-  &__price {
-    margin-bottom: 2rem;
-    font-size: 1.6rem;
-  }
+.product-title {
+  margin-bottom: 25px;
+  font-size: 18px;
+}
 
-  &__add-to-cart-button {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.product-price {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
 
-    font-size: 1.6rem;
+.add-to-cart-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 
-    &__icon {
-      margin-right: 1rem;
-    }
+  font-size: 16px;
+
+  fa-icon {
+    margin-right: 10px;
   }
 }

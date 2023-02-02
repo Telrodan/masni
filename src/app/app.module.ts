@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AccordionModule } from 'primeng/accordion';
 
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
@@ -19,6 +20,8 @@ import { ContactComponent } from './features/contact/contact.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageModule } from 'primeng/image';
 import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
+
+const PRIME_NG = [AccordionModule];
 
 @NgModule({
   declarations: [
@@ -40,7 +43,8 @@ import { ReadyProductsComponent } from './features/ready-products/ready-products
     NyuszkoShopModule,
     MasniShopModule,
     HttpClientModule,
-    ImageModule
+    ImageModule,
+    ...PRIME_NG
   ],
   providers: [
     {

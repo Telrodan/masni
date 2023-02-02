@@ -1,7 +1,6 @@
 @import '../../../../scss/mixins';
 
 .footer {
-  padding: 10rem 14rem;
   background-color: var(--color-primary);
 
   @include respond(sm) {

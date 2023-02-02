@@ -2,22 +2,22 @@
 
 .about-us {
   display: flex;
-  justify-content: center;
-  margin: 20rem 0;
+  flex-direction: column;
+  align-items: center;
+  margin: 200px auto;
 
   @include respond(sm) {
-    padding: 0 2rem;
-    flex-direction: column;
+    padding: 0 20px;
   }
 }
 
 .container {
-  width: 40%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin-right: 10rem;
+  width: 50%;
+  text-align: center;
 
   @include respond(sm) {
     width: 100%;
@@ -26,30 +26,49 @@
 }
 
 .heading {
-  margin-bottom: 3rem;
+  margin: 0 auto 3rem;
 
   @include respond(sm) {
     margin: 0 auto 3rem;
   }
 }
 
-.paragraph {
-  margin-bottom: 5rem;
+.accordion-container {
+  margin-top: 50px;
+  width: 50%;
+
+  @include respond(sm) {
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+
+.accordion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include respond(sm) {
+    flex-direction: column;
+  }
+}
+
+.story-paragraph {
+  margin-bottom: 50px;
 }
 
 .link {
-  font-size: 1.8rem;
-
-  @include respond(sm) {
-    margin: 0 auto;
-  }
+  font-size: 18px;
 }
 
 .img {
   width: 40%;
   box-shadow: 0 3px 8px #ccc;
+  border-radius: 500px;
+  aspect-ratio: 1 / 1;
 
   @include respond(sm) {
     width: 100%;
+    margin-top: 50px;
   }
 }

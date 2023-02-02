@@ -6,7 +6,8 @@
       [numVisible]="3"
       [numScroll]="1"
       [circular]="true"
-      [autoplayInterval]="5000"
+      [autoplayInterval]="3000"
+      [showNavigators]="false"
       [responsiveOptions]="responsiveOptions">
       <ng-template pTemplate="header">
         <h5 class="heading primary-heading">Termékek készleten</h5>
@@ -20,7 +21,7 @@
     </p-carousel>
   </div>
 
-  <a routerLink="/kesz-termekek" class="check-all-button secondary-button"
+  <a routerLink="/ready-products" class="check-all-button secondary-button"
     >Mindet Megnézem</a
   >
 </section>

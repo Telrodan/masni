@@ -17,6 +17,9 @@ const masniShopModule = () =>
     (m) => m.MasniShopModule
   );
 
+const adminModule = () =>
+  import('./features/admin/admin.module').then((m) => m.AdminModule);
+
 const routes: Routes = [
   {
     path: '',
@@ -36,7 +39,7 @@ const routes: Routes = [
     loadChildren: masniShopModule
   },
   {
-    path: 'kesz-termekek',
+    path: 'ready-products',
     component: ReadyProductsComponent
   },
   {
@@ -50,6 +53,10 @@ const routes: Routes = [
   {
     path: 'contact',
     component: ContactComponent
+  },
+  {
+    path: 'admin',
+    loadChildren: adminModule
   }
 ];
 
