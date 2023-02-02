@@ -1,7 +1,8 @@
-<div class="app-layout">
+<div class="app-layout" *ngIf="!isLoading">
   <masni-handmade-dolls-navbar></masni-handmade-dolls-navbar>
   <div class="app-router">
     <router-outlet></router-outlet>
   </div>
   <masni-handmade-dolls-footer></masni-handmade-dolls-footer>
 </div>
+<masni-handmade-dolls-spinner *ngIf="isLoading"></masni-handmade-dolls-spinner>

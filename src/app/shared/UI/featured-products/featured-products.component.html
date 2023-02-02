@@ -1,9 +1,26 @@
 <section class="featured-products">
-  <h1 class="heading primary-heading">Kiemelt termékeink</h1>
-  <div class="container">
-    <div class="wrapper" *ngFor="let product of featuredProducts">
-      <masni-handmade-dolls-product-card
-        [product]="product"></masni-handmade-dolls-product-card>
-    </div>
+  <div class="carousel">
+    <p-carousel
+      [value]="featuredProducts"
+      [showIndicators]="false"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="5000"
+      [responsiveOptions]="responsiveOptions">
+      <ng-template pTemplate="header">
+        <h5 class="heading primary-heading">Termékek készleten</h5>
+      </ng-template>
+      <ng-template let-featuredProducts pTemplate="item">
+        <div class="product-item-content">
+          <masni-handmade-dolls-product-card
+            [product]="featuredProducts"></masni-handmade-dolls-product-card>
+        </div>
+      </ng-template>
+    </p-carousel>
   </div>
+
+  <a routerLink="/kesz-termekek" class="check-all-button secondary-button"
+    >Mindet Megnézem</a
+  >
 </section>

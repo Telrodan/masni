@@ -1,6 +1,12 @@
 @import '../../../../scss/mixins';
 
 .featured-products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel {
   width: 100vw;
 }
 
@@ -9,20 +15,13 @@
   text-align: center;
 }
 
-.container {
+.product-item-content {
   display: flex;
   justify-content: center;
-
-  @include respond(sm) {
-    flex-direction: column;
-    align-items: center;
-  }
+  padding-bottom: 1rem;
 }
 
-.wrapper:not(:last-child) {
-  margin-right: 15rem;
-
-  @include respond(sm) {
-    margin: 0 0 5rem;
-  }
+.check-all-button {
+  margin-top: 5rem;
+  font-size: 1.8rem;
 }

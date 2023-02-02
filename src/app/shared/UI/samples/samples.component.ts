@@ -1,24 +1,34 @@
-import { Component } from '@angular/core';
-
-import {
-  egyszinuPamutvaszon,
-  mintasPamutvaszon,
-  egyszinuLenvaszon,
-  minkyPluss,
-  duplagez,
-  gyapjufilc
-} from 'src/app/features/MATERIALS_DATA';
+import { Component, OnInit } from '@angular/core';
+import { Material } from 'src/app/core/models/material.model';
+import { MaterialService } from 'src/app/core/services/material.service';
 
 @Component({
   selector: 'masni-handmade-dolls-samples',
   templateUrl: './samples.component.html',
   styleUrls: ['./samples.component.scss']
 })
-export class SamplesComponent {
-  public egyszinuPamutvaszon = egyszinuPamutvaszon;
-  public mintasPamutvaszon = mintasPamutvaszon;
-  public egyszinuLenvaszon = egyszinuLenvaszon;
-  public minkyPluss = minkyPluss;
-  public duplagez = duplagez;
-  public gyapjufilc = gyapjufilc;
+export class SamplesComponent implements OnInit {
+  private materials: Material[];
+  public patternedCotton: Material[];
+  public minkyPlus: Material[];
+  public doubleGauze: Material[];
+
+  constructor(private materialService: MaterialService) {}
+
+  public ngOnInit(): void {
+    this.materials = this.materialService.getMaterials();
+    this.filterMaterials();
+  }
+
+  private filterMaterials() {
+    this.patternedCotton = this.materials.filter(
+      (material) => material.category === 'patternedCotton'
+    );
+    this.minkyPlus = this.materials.filter(
+      (material) => material.category === 'minkyPlus'
+    );
+    this.doubleGauze = this.materials.filter(
+      (material) => material.category === 'doubleGauze'
+    );
+  }
 }

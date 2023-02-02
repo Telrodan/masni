@@ -5,6 +5,7 @@ import { LandingComponent } from './features/landing/landing.component';
 import { AboutUsComponent } from './features/about-us/about-us.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './shared/UI/samples/samples.component';
+import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'masni-shop',
     loadChildren: masniShopModule
+  },
+  {
+    path: 'kesz-termekek',
+    component: ReadyProductsComponent
   },
   {
     path: 'samples',

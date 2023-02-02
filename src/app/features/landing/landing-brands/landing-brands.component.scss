@@ -21,13 +21,44 @@
 .div3,
 .div4,
 .div5 {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   background-size: cover;
   background-position: center center;
+  cursor: pointer;
+}
 
-  a {
+.title {
+  display: inline-block;
+  padding: 2rem 3rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 3px 5px #ccc;
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-align: center;
+
+  @include respond(sm) {
+    padding: 1.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.75);
+    font-size: 1.6rem;
+  }
+}
+
+.szubdikendok {
+  @include respond(sm) {
+    width: 90%;
+  }
+}
+
+.button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 1.8rem;
+
+  @include respond(sm) {
     font-size: 1.4rem;
   }
 }

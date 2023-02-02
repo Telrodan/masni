@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CarouselModule } from 'primeng/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
@@ -17,8 +16,9 @@ import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from './features/masni-shop/masni-shop.module';
 import { AboutUsComponent } from './features/about-us/about-us.component';
 import { ContactComponent } from './features/contact/contact.component';
-
-const PRIME_NG = [CarouselModule];
+import { HttpClientModule } from '@angular/common/http';
+import { ImageModule } from 'primeng/image';
+import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,8 @@ const PRIME_NG = [CarouselModule];
     LandingAboutUsComponent,
     LandingContactUsComponent,
     AboutUsComponent,
-    ContactComponent
+    ContactComponent,
+    ReadyProductsComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +39,8 @@ const PRIME_NG = [CarouselModule];
     SharedModule,
     NyuszkoShopModule,
     MasniShopModule,
-    ...PRIME_NG
+    HttpClientModule,
+    ImageModule
   ],
   providers: [
     {

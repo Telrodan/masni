@@ -26,6 +26,7 @@ export const Nyuszko = {
     '../../../../assets/images/featured-products/second.jpg',
     '../../../../assets/images/featured-products/third.jpg',
     '../../../../assets/images/featured-products/first.jpg',
+
     '../../../../assets/images/featured-products/second.jpg'
   ]
 };
