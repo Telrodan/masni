@@ -1,14 +1,59 @@
 <main class="landing">
   <masni-handmade-dolls-landing-brands></masni-handmade-dolls-landing-brands>
+  <div class="spacer"></div>
   <masni-handmade-dolls-featured-products
     [featuredProducts]="
       featuredProducts
     "></masni-handmade-dolls-featured-products>
+  <div class="spacer"></div>
   <masni-handmade-dolls-landing-about-us></masni-handmade-dolls-landing-about-us>
+  <div class="spacer"></div>
   <masni-handmade-dolls-carousel-with-heading-and-button
     [data]="carouselImages"
     [displayLink]="false"
     [displayHeading]="
       false
     "></masni-handmade-dolls-carousel-with-heading-and-button>
+  <p class="primary-paragraph">
+    A legtöbb termékemet egyedi megrendelésre készítem, de találhattok azonnal
+    szállítható szépségeket is!
+  </p>
+  <button class="primary-button shadow-2" (click)="scrollToTop()">
+    Vásárolok
+  </button>
+  <div class="spacer"></div>
+  <masni-handmade-dolls-carousel-with-heading-and-button
+    [data]="materialImages"
+    heading="Minták"
+    linkText="Mindet Megnézem"
+    linkRoute="/samples"
+    [displayLink]="true"
+    [displayHeading]="
+      true
+    "></masni-handmade-dolls-carousel-with-heading-and-button>
+  <div class="spacer"></div>
+  <masni-handmade-dolls-carousel-with-heading-and-button
+    [data]="carouselImages"
+    heading="Népszerű babaruhák"
+    linkText="Mindet Megnézem"
+    linkRoute="/samples"
+    [displayLink]="true"
+    [displayHeading]="
+      true
+    "></masni-handmade-dolls-carousel-with-heading-and-button>
+  <div class="spacer"></div>
+  <div class="image-container">
+    <img
+      src="../../../assets/images/featured-products/first.jpg"
+      alt=""
+      class="img shadow-2" />
+    <img
+      src="../../../assets/images/featured-products/first.jpg"
+      alt=""
+      class="img shadow-2" />
+  </div>
+  <button class="primary-button shadow-2" (click)="scrollToTop()">
+    Vásárolok
+  </button>
+  <div class="spacer"></div>
 </main>

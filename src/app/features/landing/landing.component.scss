@@ -1,28 +1,37 @@
-.landing {
-  &__featured-products,
-  &__recent-posts {
-    // padding: 10rem 5rem;
+@import '../../../scss/mixins';
 
-    &__heading {
-      margin-bottom: 5rem;
-      text-align: center;
-    }
+.primary-paragraph {
+  margin: 30px 0;
+  text-align: center;
+}
 
-    &__container {
-      display: flex;
-      justify-content: center;
-    }
+.primary-button {
+  display: block;
+  margin: 0 auto;
+  font-size: 18px;
+}
 
-    &__wrapper:not(:last-child) {
-      margin-right: 15rem;
-    }
+.spacer {
+  height: 100px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  margin: 0 auto 50px;
+
+  @include respond(sm) {
+    width: 90%;
   }
-  &__carousel {
-    &__heading {
-      margin-bottom: 3rem;
-      font-size: 2rem;
-      font-weight: 400;
-      text-align: center;
-    }
+}
+
+.img {
+  width: 40%;
+  border-radius: 500px;
+  aspect-ratio: 1 / 1;
+
+  @include respond(sm) {
+    width: 45%;
   }
 }

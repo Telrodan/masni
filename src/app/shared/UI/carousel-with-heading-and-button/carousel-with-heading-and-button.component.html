@@ -1,4 +1,4 @@
-<section class="featured-products">
+<section>
   <div class="carousel">
     <p-carousel
       [value]="data"
@@ -14,15 +14,17 @@
       </ng-template>
       <ng-template let-data pTemplate="item">
         <div class="item-content-container">
-          <div class="img" [style.background-image]="'url(' + data + ')'"></div>
+          <div
+            class="img shadow-2"
+            [style.background-image]="'url(' + data + ')'"></div>
         </div>
       </ng-template>
     </p-carousel>
   </div>
 
   <a
-    routerLink="/ready-products"
-    class="check-all-button secondary-button"
+    [routerLink]="linkRoute"
+    class="button secondary-button shadow-2"
     *ngIf="displayLink"
     >{{ linkText }}</a
   >

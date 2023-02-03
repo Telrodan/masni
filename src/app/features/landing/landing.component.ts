@@ -1,13 +1,8 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/core/models/product.model';
+import { MaterialService } from 'src/app/core/services/material.service';
 
-import {
-  carouselImages,
-  carouselData,
-  featuredProducts,
-  recentNews
-} from './LANDING_DATA';
+import { carouselImages, featuredProducts, recentNews } from './LANDING_DATA';
 
 @Component({
   selector: 'masni-handmade-dolls-landing',
@@ -17,16 +12,24 @@ import {
 export class LandingComponent implements OnInit {
   public carouselImages = carouselImages;
   public featuredProducts: Product[] = featuredProducts;
-  public recentNews = recentNews;
+  public materialImages: string[] = [];
 
-  constructor(private route: ActivatedRoute, private el: ElementRef) {}
+  constructor(private materialService: MaterialService) {}
 
   public ngOnInit(): void {
-    this.route.fragment.subscribe((fragment) => {
-      if (fragment) {
-        const element = this.el.nativeElement.querySelector('#' + fragment);
-        element.scrollIntoView();
+    this.materialService.getMaterials().forEach((material) => {
+      if (material.image) {
+        this.materialImages.push(
+          '../../../assets/images/materials/' + material.image
+        );
       }
+    });
+  }
+
+  public scrollToTop() {
+    document.querySelector('body').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
   }
 }

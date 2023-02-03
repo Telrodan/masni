@@ -1,13 +1,13 @@
 @import '../../../../scss/mixins';
 
-.featured-products {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .carousel {
-  width: 100vw;
+  width: 100%;
 }
 
 .heading {
@@ -19,9 +19,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px 0;
 }
 
-.check-all-button {
+.button {
   margin-top: 50px;
   font-size: 18px;
 }
@@ -30,6 +31,7 @@
   width: 50%;
   background-size: cover;
   background-position: center center;
+  border-radius: 5px;
   aspect-ratio: 1/1;
 
   @include respond(sm) {
