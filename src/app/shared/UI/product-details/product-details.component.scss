@@ -4,12 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 15px;
 }
 
 .carousel {
   position: relative;
   width: 100%;
-  margin-bottom: 10rem;
+  margin-bottom: 50px;
 }
 
 .carousel-heading {
@@ -17,10 +18,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 2rem 3rem;
-  background-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 3px 5px #ccc;
-  z-index: 2;
+  font-size: 50px;
 
   @include respond(sm) {
     width: 90%;
@@ -33,18 +31,18 @@
 
   @include respond(sm) {
     width: 90%;
-    margin-bottom: 5rem;
+    margin-bottom: 50px;
   }
 }
 
 .heading {
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
 .description {
-  margin-bottom: 4rem;
+  margin-bottom: 40px;
 }
 
 .link {
-  font-size: 2rem;
+  font-size: 18px;
 }

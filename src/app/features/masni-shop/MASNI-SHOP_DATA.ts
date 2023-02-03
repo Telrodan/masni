@@ -22,7 +22,7 @@ export const menuItems = [
     backgroundImage: 'menu-item-test.jpg'
   },
   {
-    name: 'Minták/Színek',
+    name: 'Minták',
     linkSrc: '/samples',
     backgroundImage: 'menu-item-test.jpg'
   }

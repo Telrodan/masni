@@ -2,21 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 35rem;
-  height: 35rem;
-  border: 3px solid transparent;
+  width: 300px;
+  height: 300px;
+  border-radius: 5px;
   background-size: cover;
   background-position: center center;
   cursor: pointer;
   transition: all 0.3s ease-in;
+}
 
-  &:hover {
-    border: 3px solid var(--color-secondary);
-  }
-
-  &__name {
-    padding: 1rem 2rem;
-    font-size: 2rem;
-    background-color: var(--color-tertiary);
-  }
+.item-name {
+  font-size: 30px;
 }

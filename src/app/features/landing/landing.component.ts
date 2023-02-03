@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/core/models/product.model';
 import { MaterialService } from 'src/app/core/services/material.service';
 
-import { carouselImages, featuredProducts, recentNews } from './LANDING_DATA';
+import { carouselImages, featuredProducts } from './LANDING_DATA';
 
 @Component({
   selector: 'masni-handmade-dolls-landing',

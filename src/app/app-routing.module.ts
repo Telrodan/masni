@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { LandingComponent } from './features/landing/landing.component';
-import { AboutUsComponent } from './features/about-us/about-us.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './shared/UI/samples/samples.component';
 import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
@@ -45,10 +44,6 @@ const routes: Routes = [
   {
     path: 'samples',
     component: SamplesComponent
-  },
-  {
-    path: 'about-us',
-    component: AboutUsComponent
   },
   {
     path: 'contact',

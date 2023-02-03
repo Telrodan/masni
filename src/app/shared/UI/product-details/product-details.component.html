@@ -1,16 +1,15 @@
 <main class="product-details">
   <section class="carousel">
-    <h1 class="carousel-heading primary-heading">
+    <h1 class="carousel-heading heading-tertiary">
       {{ productDetails.menuName }}
     </h1>
     <masni-handmade-dolls-carousel
       [images]="carouselImages"></masni-handmade-dolls-carousel>
   </section>
   <div class="container">
-    <h1 class="heading primary-heading">{{ productDetails.title }}</h1>
-    <p class="description primary-paragraph">
+    <p class="description paragraph-primary">
       {{ productDetails.description }}
     </p>
-    <a routerLink="vasarlas" class="link primary-button">Vásárlás</a>
+    <a routerLink="vasarlas" class="link primary-button shadow-2">Vásárlás</a>
   </div>
 </main>

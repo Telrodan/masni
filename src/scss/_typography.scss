@@ -12,24 +12,36 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
-.primary-heading {
+.heading-primary {
   color: var(--color-text);
   font-size: 60px;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
 
   @include respond(sm) {
-    font-size: 50px;
+    font-size: 44px;
   }
 }
 
-.secondary-heading {
+.heading-secondary {
   font-size: 40px;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
 }
 
-.primary-paragraph {
+.heading-tertiary {
+  display: inline-block;
+  padding: 10px 20px;
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 3px 5px #ccc;
+  border-radius: 5px;
+  font-family: 'Dancing Script', cursive;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.paragraph-primary {
   font-size: 16px;
   line-height: 24px;
 }

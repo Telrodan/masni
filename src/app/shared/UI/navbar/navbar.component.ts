@@ -26,4 +26,8 @@ export class NavbarComponent {
   public faPalette = faPalette;
   public faPhone = faPhone;
   public faUser = faUser;
+
+  public closeNabar() {
+    document.getElementsByClassName('sidebar')[0].classList.add('hidden');
+  }
 }

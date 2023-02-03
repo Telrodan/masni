@@ -14,7 +14,6 @@ import { LandingBrandsComponent } from './features/landing/landing-brands/landin
 import { LandingAboutUsComponent } from './features/landing/landing-about-us/landing-about-us.component';
 import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from './features/masni-shop/masni-shop.module';
-import { AboutUsComponent } from './features/about-us/about-us.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageModule } from 'primeng/image';
@@ -29,7 +28,6 @@ const PRIME_NG = [AccordionModule, CarouselModule];
     LandingComponent,
     LandingBrandsComponent,
     LandingAboutUsComponent,
-    AboutUsComponent,
     ContactComponent,
     ReadyProductsComponent
   ],

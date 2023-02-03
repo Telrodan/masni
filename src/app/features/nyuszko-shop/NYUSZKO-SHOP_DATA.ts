@@ -47,7 +47,7 @@ export const productDetails = [
   {
     menuName: 'Nyuszkók',
     slug: 'nyuszkok',
-    title: 'Nyuszkó termék bemutatás:',
+    title: 'Nyuszkók',
     description:
       'A nyuszkókat 100%-ban természetes alapanyagokból, pamutvászon illetve minky plüss anyagokból készítem. Töltőanyagként antiallergén szilikonizált poliészter golyókat használok, ami baba barát, és mosható. Minden nyuszkó kézzel hímzett vidám arcocskát kap. A nyuszkók 24cm magasak, egy-két cm eltérés előfordulhat. Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén a kézzel való tisztítást részesítem előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne tedd!',
     imgSrc: [
@@ -65,7 +65,7 @@ export const productDetails = [
   {
     menuName: 'Mackók',
     slug: 'mackok',
-    title: 'Mackó termék bemutatás:',
+    title: 'Mackók',
     description:
       'A mackókat 100%-ban természetes alapanyagokból, pamutvászon illetve gyapjúfilc anyagokból készítem. Töltőanyagként antiallergén szilikonizált poliészter golyókat használok, ami baba barát, és mosható. Minden mackó kézzel hímzett szemeket és kézzel fellvarrt gyapjúfilc orrot kap. A mackók 25 cm magasak, egy-két cm eltérés előfordulhat. Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén a kézzel való tisztítást részesítem előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne tedd!',
     imgSrc: [
@@ -83,7 +83,7 @@ export const productDetails = [
   {
     menuName: 'Nyuszkó Szundikendők',
     slug: 'nyuszko-szundikendok',
-    title: 'Nyuszkó szundikendő bemutatás:',
+    title: 'Nyuszkó szundikendő',
     description:
       'A szundikendőket 100%-ban természetes alapanyagokból, pamutvászonból és minky plüss anyagból készítem. Igény esetén gyapjúfilcet is használok. A szundikendőhöz tartozó fejecskét antiallergén szilikonizált poliészter golyókkal töltöm meg, ami baba barát és mosható. A nyuszkófej kézzel hímzett vidám arcocskát kap. A szundikendő mérete 30cm*30cm, plusz a fejecske. Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén a kézzel való tisztítást részesítem előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne tedd! A minky plüss nem vasalható!',
     imgSrc: [
