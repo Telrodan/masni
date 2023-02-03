@@ -1,7 +1,7 @@
 .underline-button {
   display: block;
   position: relative;
-  padding-bottom: 0.5rem;
+  padding-bottom: 5px;
   transition: all 0.4s ease;
   cursor: pointer;
 
@@ -25,8 +25,9 @@
 
 .primary-button,
 .secondary-button {
-  padding: 1rem 2rem;
+  padding: 10px 20px;
   border: none;
+  border-radius: 5px;
   transition: all 0.3s ease-in;
   text-align: center;
   cursor: pointer;
@@ -42,7 +43,7 @@
 }
 
 .primary-button-transparent {
-  padding: 1rem 2rem;
+  padding: 10px 20px;
   color: var(--color-text);
   background-color: var(--color-gradient-1);
   text-align: center;

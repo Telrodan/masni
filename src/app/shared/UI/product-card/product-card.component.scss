@@ -3,9 +3,11 @@
 .product-card {
   width: 400px;
   box-shadow: 0 3px 8px #ccc;
+  border-radius: 5px;
+  overflow: hidden;
 
   @include respond(sm) {
-    width: 360px;
+    width: 340px;
   }
 }
 

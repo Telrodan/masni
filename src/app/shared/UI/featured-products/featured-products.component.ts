@@ -9,11 +9,11 @@ import { Product } from 'src/app/core/models/product.model';
 export class FeaturedProductsComponent {
   @Input() public featuredProducts: Product[] = [];
   public responsiveOptions = [
-    // {
-    //   breakpoint: '1024px',
-    //   numVisible: 3,
-    //   numScroll: 3
-    // },
+    {
+      breakpoint: '1024px',
+      numVisible: 3,
+      numScroll: 3
+    },
     {
       breakpoint: '768px',
       numVisible: 2,

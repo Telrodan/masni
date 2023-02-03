@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './landing-about-us.component.html',
   styleUrls: ['./landing-about-us.component.scss']
 })
-export class LandingAboutUsComponent {
-
-}
+export class LandingAboutUsComponent {}

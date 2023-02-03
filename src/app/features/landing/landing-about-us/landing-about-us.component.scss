@@ -72,3 +72,20 @@
     margin-top: 50px;
   }
 }
+
+.carousel {
+  width: 100vw;
+}
+
+.carousel-img {
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  aspect-ratio: 1/1;
+}
+// .product-item-content {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 10px 0;
+// }

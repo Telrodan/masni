@@ -10,6 +10,22 @@ export const carouselImages = [
   '../../../../assets/images/featured-products/third.jpg'
 ];
 
+export const carouselData = {
+  heading: '',
+  displayHeading: false,
+  images: [
+    '../../../../assets/images/featured-products/first.jpg',
+    '../../../../assets/images/featured-products/second.jpg',
+    '../../../../assets/images/featured-products/third.jpg',
+    '../../../../assets/images/featured-products/first.jpg',
+    '../../../../assets/images/featured-products/second.jpg',
+    '../../../../assets/images/featured-products/third.jpg'
+  ],
+  linkText: '',
+  linkRoute: '',
+  displayButton: false
+};
+
 export const featuredProducts = [
   {
     title: 'Masni test',

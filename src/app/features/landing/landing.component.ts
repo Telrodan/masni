@@ -2,7 +2,12 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/core/models/product.model';
 
-import { carouselImages, featuredProducts, recentNews } from './LANDING_DATA';
+import {
+  carouselImages,
+  carouselData,
+  featuredProducts,
+  recentNews
+} from './LANDING_DATA';
 
 @Component({
   selector: 'masni-handmade-dolls-landing',

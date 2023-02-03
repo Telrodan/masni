@@ -4,20 +4,11 @@
     [featuredProducts]="
       featuredProducts
     "></masni-handmade-dolls-featured-products>
-  <div id="about-us">
-    <masni-handmade-dolls-landing-about-us></masni-handmade-dolls-landing-about-us>
-  </div>
-  <masni-handmade-dolls-recent-news
-    [recentNews]="recentNews"></masni-handmade-dolls-recent-news>
-  <section class="landing__carousel">
-    <h5 class="landing__carousel__heading">
-      Kérjük vegye figyelembe, hogy a termékeink többsége rendelésre készül,
-      amik néhány hetes szállítási időt igényelnek.
-    </h5>
-    <masni-handmade-dolls-carousel
-      [images]="carouselImages"></masni-handmade-dolls-carousel>
-  </section>
-  <div id="contact-us">
-    <masni-handmade-dolls-landing-contact-us></masni-handmade-dolls-landing-contact-us>
-  </div>
+  <masni-handmade-dolls-landing-about-us></masni-handmade-dolls-landing-about-us>
+  <masni-handmade-dolls-carousel-with-heading-and-button
+    [data]="carouselImages"
+    [displayLink]="false"
+    [displayHeading]="
+      false
+    "></masni-handmade-dolls-carousel-with-heading-and-button>
 </main>

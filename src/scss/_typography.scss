@@ -13,9 +13,14 @@ html {
 }
 
 .primary-heading {
+  color: var(--color-text);
   font-size: 60px;
   font-weight: 500;
   font-family: 'Dancing Script', cursive;
+
+  @include respond(sm) {
+    font-size: 50px;
+  }
 }
 
 .secondary-heading {
