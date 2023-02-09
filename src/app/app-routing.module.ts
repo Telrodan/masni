@@ -5,6 +5,9 @@ import { LandingComponent } from './features/landing/landing.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './shared/UI/samples/samples.component';
 import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -48,6 +51,18 @@ const routes: Routes = [
   {
     path: 'contact',
     component: ContactComponent
+  },
+  {
+    path: 'signup',
+    component: SignupComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
   },
   {
     path: 'admin',

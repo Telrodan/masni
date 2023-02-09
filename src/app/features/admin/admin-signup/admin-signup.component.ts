@@ -19,16 +19,16 @@ export class AdminSignupComponent implements OnInit {
     });
   }
 
-  public register(): void {
-    if (this.registerForm.valid) {
-      this.authService
-        .createUser(
-          this.registerForm.value.email,
-          this.registerForm.value.password
-        )
-        .subscribe((result) => {
-          console.log(result);
-        });
-    }
-  }
+  // public register(): void {
+  //   if (this.registerForm.valid) {
+  //     this.authService
+  //       .createUser(
+  //         this.registerForm.value.email,
+  //         this.registerForm.value.password
+  //       )
+  //       .subscribe((result) => {
+  //         console.log(result);
+  //       });
+  //   }
+  // }
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { AuthData } from '../models/auth-data.model';
+import { User } from '../models/user.model';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -21,11 +21,9 @@ export class AuthService {
     private apiService: ApiService
   ) {}
 
-  public createUser(email: string, password: string): Observable<AuthData> {
-    const user: AuthData = {
-      email,
-      password
-    };
-    return this.apiService.post$('user/signup', user);
+  public signupUser(newUser: User): Observable<User> {
+    console.log(newUser);
+
+    return this.apiService.post$('users/signup', newUser);
   }
 }

@@ -4,6 +4,7 @@
     <div class="wrapper" *ngFor="let material of patternedCotton">
       <p-image
         [src]="'../../../../assets/images/materials/' + material.image"
+        imageClass="border-round"
         alt="Image"
         [preview]="true">
         <ng-template pTemplate="indicator">

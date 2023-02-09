@@ -13,7 +13,7 @@ export class MaterialService {
   constructor(private apiService: ApiService) {}
 
   public fetchMaterials(): Observable<Material[]> {
-    return this.apiService.get$<{ materials: Material[] }>('material').pipe(
+    return this.apiService.get$<{ materials: Material[] }>('materials').pipe(
       map((materialsDTO) => {
         const materials = materialsDTO.materials.map((rawMaterial: any) => {
           return Material.fromDTO(rawMaterial);

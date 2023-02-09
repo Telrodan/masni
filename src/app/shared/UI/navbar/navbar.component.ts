@@ -7,7 +7,9 @@ import {
   faShop,
   faPalette,
   faPhone,
-  faUser
+  faUser,
+  faUserPlus,
+  faRightToBracket
 } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -26,6 +28,8 @@ export class NavbarComponent {
   public faPalette = faPalette;
   public faPhone = faPhone;
   public faUser = faUser;
+  public faUserPlus = faUserPlus;
+  public faRightToBracket = faRightToBracket;
 
   public closeNabar() {
     document.getElementsByClassName('sidebar')[0].classList.add('hidden');

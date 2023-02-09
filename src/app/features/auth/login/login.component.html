@@ -1,0 +1,49 @@
+<div class="login">
+  <div class="surface-card p-4 mt-8 shadow-2 border-round w-full lg:w-6">
+    <div class="text-center mb-5">
+      <div class="heading-primary mb-3">Belépés</div>
+      <span class="text-600 font-medium line-height-3"
+        >Nem regisztráltál még?</span
+      >
+      <a
+        routerLink="/signup"
+        class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+        >Regisztrálj!</a
+      >
+    </div>
+
+    <div>
+      <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Email cím"
+        pInputText
+        class="w-full mb-3" />
+
+      <label for="password" class="block text-900 font-medium mb-2"
+        >Jelszó</label
+      >
+      <input
+        id="password"
+        type="password"
+        placeholder="Jelszó"
+        pInputText
+        class="w-full mb-3" />
+
+      <div class="flex align-items-center justify-content-between mb-6">
+        <a
+          class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
+          >Elfelejtetted a jelszavad?</a
+        >
+      </div>
+
+      <button
+        pButton
+        pRipple
+        label="Sign In"
+        icon="pi pi-user"
+        class="w-full"></button>
+    </div>
+  </div>
+</div>

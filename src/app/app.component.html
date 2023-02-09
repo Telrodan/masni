@@ -1,8 +1,12 @@
-<div class="app-layout" *ngIf="!isLoading">
+<div class="app-layout">
   <masni-handmade-dolls-navbar></masni-handmade-dolls-navbar>
-  <div class="app-router">
-    <router-outlet></router-outlet>
+  <div *ngIf="!isLoading">
+    <div class="app-router">
+      <router-outlet></router-outlet>
+    </div>
   </div>
+  <masni-handmade-dolls-spinner
+    *ngIf="isLoading"></masni-handmade-dolls-spinner>
   <masni-handmade-dolls-footer></masni-handmade-dolls-footer>
 </div>
-<masni-handmade-dolls-spinner *ngIf="isLoading"></masni-handmade-dolls-spinner>
+<p-toast></p-toast>
