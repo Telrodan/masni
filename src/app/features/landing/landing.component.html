@@ -1,13 +1,9 @@
 <main class="landing">
   <masni-handmade-dolls-landing-brands></masni-handmade-dolls-landing-brands>
-  <div class="spacer"></div>
-  <masni-handmade-dolls-featured-products
-    [featuredProducts]="
-      featuredProducts
-    "></masni-handmade-dolls-featured-products>
-  <div class="spacer"></div>
+  <masni-handmade-dolls-featured-products></masni-handmade-dolls-featured-products>
+
   <masni-handmade-dolls-landing-about-us></masni-handmade-dolls-landing-about-us>
-  <div class="spacer"></div>
+
   <masni-handmade-dolls-carousel-with-heading-and-button
     [data]="carouselImages"
     [displayLink]="false"
@@ -21,7 +17,7 @@
   <button class="primary-button shadow-2" (click)="scrollToTop()">
     Vásárolok
   </button>
-  <div class="spacer"></div>
+
   <masni-handmade-dolls-carousel-with-heading-and-button
     [data]="materialImages"
     heading="Minták"
@@ -31,7 +27,7 @@
     [displayHeading]="
       true
     "></masni-handmade-dolls-carousel-with-heading-and-button>
-  <div class="spacer"></div>
+
   <masni-handmade-dolls-carousel-with-heading-and-button
     [data]="carouselImages"
     heading="Népszerű babaruhák"
@@ -41,7 +37,7 @@
     [displayHeading]="
       true
     "></masni-handmade-dolls-carousel-with-heading-and-button>
-  <div class="spacer"></div>
+
   <div class="image-container">
     <img
       src="../../../assets/images/featured-products/first.jpg"
@@ -55,5 +51,4 @@
   <button class="primary-button shadow-2" (click)="scrollToTop()">
     Vásárolok
   </button>
-  <div class="spacer"></div>
 </main>

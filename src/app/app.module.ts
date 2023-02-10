@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -27,6 +27,8 @@ import { ReadyProductsComponent } from './features/ready-products/ready-products
 import { SignupComponent } from './features/auth/signup/signup.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
+import { AuthInterceptor } from './core/interceptors/auth-interceptor';
+import { MessageService } from 'primeng/api';
 
 const PRIME_NG = [
   AccordionModule,
@@ -64,6 +66,8 @@ const PRIME_NG = [
     ...PRIME_NG
   ],
   providers: [
+    MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

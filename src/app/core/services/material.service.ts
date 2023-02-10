@@ -18,7 +18,6 @@ export class MaterialService {
         const materials = materialsDTO.materials.map((rawMaterial: any) => {
           return Material.fromDTO(rawMaterial);
         });
-        console.log(materials);
         this.materials = materials;
         return materials;
       })

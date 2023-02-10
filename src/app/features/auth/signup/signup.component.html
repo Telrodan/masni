@@ -1,172 +1,173 @@
 <div class="px-4 py-5 md:px-6 lg:px-8">
-  <div class="heading-primary mb-3">Regisztráció</div>
-  <span class="text-600 font-medium line-height-3">Már regisztráltál?</span>
-  <a
-    routerLink="/login"
-    class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
-    >Lépj be!</a
-  >
-  <div class="surface-card p-4 shadow-2 border-round mt-5">
-    <form
-      class="grid formgrid p-fluid"
-      (submit)="onSignup()"
-      [formGroup]="signupForm"
-      *ngIf="!isSuccess">
-      <div class="field mb-4 col-12">
-        <label for="name" class="font-medium text-900">Név</label>
-        <input id="name" type="text" pInputText formControlName="name" />
-        <p
-          class="form-helper"
-          *ngIf="!signupForm.get('name').valid && signupForm.get('name').dirty">
-          Kérlek add meg a neved.
-        </p>
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="email" class="font-medium text-900">Email cím</label>
-        <input id="email" type="email" pInputText formControlName="email" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('email').valid && signupForm.get('email').dirty
-          ">
-          Kérlek add meg az email címed.
-        </p>
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="phone" class="font-medium text-900">Telefonszám</label>
-        <input id="phone" type="string" pInputText formControlName="phone" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('phone').valid && signupForm.get('phone').dirty
-          ">
-          Kérlek add meg a telefonszámod. <br />
-          Például: 06301234567
-        </p>
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="password" class="font-medium text-900">Jelszó</label>
-        <input
-          id="password"
-          type="password"
-          pInputText
-          formControlName="password" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('password').valid &&
-            signupForm.get('password').dirty
-          ">
-          Kérlek adj meg egy jelszót. <br />
-          Minimum 8 karakter.
-        </p>
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="passwordConfirm" class="font-medium text-900"
-          >Jelszó megerősítése</label
-        >
-        <input
-          id="passwordConfirm"
-          type="password"
-          pInputText
-          formControlName="passwordConfirm" />
-        <p
-          class="form-helper"
-          *ngIf="
-            signupForm.get('passwordConfirm').dirty &&
-            signupForm.get('password').value !==
-              signupForm.get('passwordConfirm').value
-          ">
-          Megadott jelszó nem egyezik
-        </p>
-      </div>
-      <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="street" class="font-medium text-900"
-          >Utca/házszám/épület</label
-        >
-        <input id="street" type="text" pInputText formControlName="street" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('street').valid && signupForm.get('street').dirty
-          ">
-          Kérlek add meg a címed.
-        </p>
-      </div>
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="city" class="font-medium text-900">Város</label>
-        <input id="city" type="text" pInputText formControlName="city" />
-        <p
-          class="form-helper"
-          *ngIf="!signupForm.get('city').valid && signupForm.get('city').dirty">
-          Kérlek add meg a várost.
-        </p>
-      </div>
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="postalcode" class="font-medium text-900"
-          >Irányítószám</label
-        >
-        <input
-          id="postalcode"
-          type="number"
-          pInputText
-          formControlName="postalcode" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('postalcode').valid &&
-            signupForm.get('postalcode').dirty
-          ">
-          Kérlek add meg az irányítószámot.
-        </p>
-      </div>
+  <div class="lg:w-6 mx-auto">
+    <div class="heading-primary mb-3">Regisztráció</div>
+    <span class="text-600 font-medium line-height-3">Már regisztráltál?</span>
+    <a
+      routerLink="/login"
+      class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+      >Lépj be!</a
+    >
+    <div class="surface-card p-4 shadow-2 border-round mt-5">
+      <form
+        class="grid formgrid p-fluid"
+        (submit)="onSignup()"
+        [formGroup]="signupForm">
+        <div class="field mb-4 col-12">
+          <label for="name" class="font-medium text-900">Név</label>
+          <input id="name" type="text" pInputText formControlName="name" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('name').valid && signupForm.get('name').dirty
+            ">
+            Kérlek add meg a neved.
+          </p>
+        </div>
+        <div class="field mb-4 col-12">
+          <label for="email" class="font-medium text-900">Email cím</label>
+          <input id="email" type="email" pInputText formControlName="email" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('email').valid && signupForm.get('email').dirty
+            ">
+            Kérlek add meg az email címed.
+          </p>
+        </div>
+        <div class="field mb-4 col-12">
+          <label for="phone" class="font-medium text-900">Telefonszám</label>
+          <input id="phone" type="string" pInputText formControlName="phone" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('phone').valid && signupForm.get('phone').dirty
+            ">
+            Kérlek add meg a telefonszámod. <br />
+            Például: 06301234567
+          </p>
+        </div>
+        <div class="field mb-4 col-12">
+          <label for="password" class="font-medium text-900">Jelszó</label>
+          <input
+            id="password"
+            type="password"
+            pInputText
+            formControlName="password" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('password').valid &&
+              signupForm.get('password').dirty
+            ">
+            Kérlek adj meg egy jelszót. <br />
+            Minimum 8 karakter.
+          </p>
+        </div>
+        <div class="field mb-4 col-12">
+          <label for="passwordConfirm" class="font-medium text-900"
+            >Jelszó megerősítése</label
+          >
+          <input
+            id="passwordConfirm"
+            type="password"
+            pInputText
+            formControlName="passwordConfirm" />
+          <p
+            class="form-helper"
+            *ngIf="
+              signupForm.get('passwordConfirm').dirty &&
+              signupForm.get('password').value !==
+                signupForm.get('passwordConfirm').value
+            ">
+            Megadott jelszó nem egyezik
+          </p>
+        </div>
+        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="street" class="font-medium text-900"
+            >Utca/házszám/épület</label
+          >
+          <input id="street" type="text" pInputText formControlName="street" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('street').valid && signupForm.get('street').dirty
+            ">
+            Kérlek add meg a címed.
+          </p>
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="city" class="font-medium text-900">Város</label>
+          <input id="city" type="text" pInputText formControlName="city" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('city').valid && signupForm.get('city').dirty
+            ">
+            Kérlek add meg a várost.
+          </p>
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="postalcode" class="font-medium text-900"
+            >Irányítószám</label
+          >
+          <input
+            id="postalcode"
+            type="number"
+            pInputText
+            formControlName="postalcode" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('postalcode').valid &&
+              signupForm.get('postalcode').dirty
+            ">
+            Kérlek add meg az irányítószámot.
+          </p>
+        </div>
 
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="county" class="font-medium text-900">Megye</label>
-        <input id="county" type="text" pInputText formControlName="county" />
-        <p
-          class="form-helper"
-          *ngIf="
-            !signupForm.get('county').valid && signupForm.get('county').dirty
-          ">
-          Kérlek add meg a megyét.
-        </p>
-      </div>
-      <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-      <div class="field mb-4 col-12">
-        <div class="flex align-items-center">
-          <p-inputSwitch
-            inputId="privacy"
-            formControlName="privacy"></p-inputSwitch>
-          <label for="privacy" class="ml-2 text-900"
-            >Elfogadom a szabályzatot és az adatvédelmi irányelvet.</label
-          >
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="county" class="font-medium text-900">Megye</label>
+          <input id="county" type="text" pInputText formControlName="county" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('county').valid && signupForm.get('county').dirty
+            ">
+            Kérlek add meg a megyét.
+          </p>
         </div>
-      </div>
-      <div class="field mb-4 col-12">
-        <div class="flex align-items-center">
-          <p-inputSwitch
-            inputId="subscribe"
-            formControlName="subscribe"></p-inputSwitch>
-          <label for="subscribe" class="ml-2 text-900"
-            >Szeretnék feliratkozni a hírlevélre.</label
-          >
+        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+        <div class="field mb-4 col-12">
+          <div class="flex align-items-center">
+            <p-inputSwitch
+              inputId="privacy"
+              formControlName="privacy"></p-inputSwitch>
+            <label for="privacy" class="ml-2 text-900"
+              >Elfogadom a szabályzatot és az adatvédelmi irányelvet.</label
+            >
+          </div>
         </div>
-      </div>
-      <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-      <div class="col-12">
-        <button
-          type="submit"
-          class="primary-button mt-3 shadow-2"
-          [disabled]="!signupForm.valid">
-          Regisztráció
-        </button>
-      </div>
-    </form>
-    <div *ngIf="isSuccess">
-      <h1 class="heading-primary">Sikeres regisztráció</h1>
-      <p>Átirányítás a főoldalra...</p>
+        <div class="field mb-4 col-12">
+          <div class="flex align-items-center">
+            <p-inputSwitch
+              inputId="subscribe"
+              formControlName="subscribe"></p-inputSwitch>
+            <label for="subscribe" class="ml-2 text-900"
+              >Szeretnék feliratkozni a hírlevélre.</label
+            >
+          </div>
+        </div>
+        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+        <div class="col-12">
+          <button
+            type="submit"
+            class="primary-button mt-3 shadow-2"
+            [disabled]="!signupForm.valid">
+            Regisztráció
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

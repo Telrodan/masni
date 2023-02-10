@@ -1,32 +1,40 @@
 @import './mixins';
 
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap');
-// font-family: 'Comfortaa', cursive;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+// font-family: 'Nunito', sans-serif;
 @import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&display=swap');
 // font-family: 'Comforter Brush', cursive;
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
 // font-family: 'Dancing Script', cursive;
 
-html {
-  font-family: 'Comfortaa', cursive;
-  -webkit-font-smoothing: antialiased;
+body {
+  color: var(--color-text);
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+
+  @include respond(sm) {
+    font-size: 16px;
+  }
+}
+
+.heading-primary,
+.heading-secondary,
+.heading-tertiary {
+  font-family: 'Dancing Script', cursive;
+  font-weight: 400;
 }
 
 .heading-primary {
   color: var(--color-text);
-  font-size: 60px;
-  font-weight: 500;
-  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
 
   @include respond(sm) {
-    font-size: 44px;
+    font-size: 21px;
   }
 }
 
 .heading-secondary {
-  font-size: 40px;
-  font-weight: 500;
-  font-family: 'Dancing Script', cursive;
+  font-size: 30px;
 }
 
 .heading-tertiary {
@@ -34,14 +42,17 @@ html {
   padding: 10px 20px;
   color: var(--color-text);
   background-color: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 3px 5px #ccc;
+  box-shadow: 0 3px 5px rgba(139, 139, 139, 0.8);
+  font-size: 36px;
   border-radius: 5px;
-  font-family: 'Dancing Script', cursive;
-  font-weight: 500;
   z-index: 1;
+
+  @include respond(sm) {
+    font-size: 30px;
+  }
 }
 
 .paragraph-primary {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
 }

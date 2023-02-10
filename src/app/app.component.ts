@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { AuthService } from './core/services/auth.service';
 import { MaterialService } from './core/services/material.service';
 import { SpinnerService } from './core/services/spinner.service';
 
 @Component({
   selector: 'masni-handmade-dolls-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [MessageService]
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'masni-handmade-dolls';
   public isLoading = true;
 
   constructor(
     private materialSerivice: MaterialService,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private authService: AuthService
   ) {}
 
   public ngOnInit(): void {
@@ -26,5 +26,7 @@ export class AppComponent implements OnInit {
     this.materialSerivice.fetchMaterials().subscribe(() => {
       this.spinnerService.stopSpinner();
     });
+
+    this.authService.autoAuthentication();
   }
 }

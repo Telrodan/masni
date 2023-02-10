@@ -30,18 +30,16 @@ export class SignupComponent implements OnInit {
   public onSignup(): void {
     if (!this.signupForm.valid) return;
     const newUser = { ...this.signupForm.value };
-    this.isSuccess = true;
     this.spinnerService.startSpinner();
     this.authService.signupUser(newUser).subscribe(() => {
       this.spinnerService.stopSpinner();
       this.messageService.add({
         severity: 'success',
         summary: 'Sikeres regisztráció',
-        detail: 'Átirányítás a főoldalra...'
+        detail: 'Átirányítva a főoldalra'
       });
-      setTimeout(() => {
-        this.router.navigate(['/']);
-      }, 2000);
+
+      this.router.navigate(['/']);
     });
     this.signupForm.reset();
   }

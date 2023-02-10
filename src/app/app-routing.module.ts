@@ -8,6 +8,7 @@ import { ReadyProductsComponent } from './features/ready-products/ready-products
 import { SignupComponent } from './features/auth/signup/signup.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -46,7 +47,8 @@ const routes: Routes = [
   },
   {
     path: 'samples',
-    component: SamplesComponent
+    component: SamplesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'contact',
@@ -76,6 +78,7 @@ const routes: Routes = [
       scrollPositionRestoration: 'enabled'
     })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule {}

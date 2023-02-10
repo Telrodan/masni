@@ -7,7 +7,7 @@ import { Product } from 'src/app/core/models/product.model';
   styleUrls: ['./featured-products.component.scss']
 })
 export class FeaturedProductsComponent {
-  @Input() public featuredProducts: Product[] = [];
+  @Input() public items: any[];
   public responsiveOptions = [
     {
       breakpoint: '1024px',

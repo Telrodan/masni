@@ -1,29 +1,22 @@
-<section class="featured-products">
-  <div class="carousel">
-    <p-carousel
-      [value]="featuredProducts"
-      [showIndicators]="false"
-      [numVisible]="3"
-      [numScroll]="1"
-      [circular]="true"
-      [autoplayInterval]="3000"
-      [showNavigators]="false"
-      [responsiveOptions]="responsiveOptions">
-      <ng-template pTemplate="header">
-        <h5 class="heading heading-primary">Termékek készleten</h5>
-      </ng-template>
-      <ng-template let-featuredProducts pTemplate="item">
-        <div class="product-item-content">
-          <masni-handmade-dolls-product-card
-            [product]="featuredProducts"></masni-handmade-dolls-product-card>
-        </div>
-      </ng-template>
-    </p-carousel>
-  </div>
+<p-carousel
+  [value]="items"
+  [numVisible]="3"
+  [numScroll]="1"
+  [circular]="true"
+  [autoplayInterval]="3000"
+  [showNavigators]="false"
+  [showIndicators]="false"
+  [responsiveOptions]="responsiveOptions">
+  <ng-template pTemplate="header">
+    <h1 class="heading-primary">Termékek készleten</h1>
+  </ng-template>
+  <ng-template let-item pTemplate="item">
+    <ng-content [ngTemplateOutletContext]="{ item: item }"></ng-content>
+  </ng-template>
+</p-carousel>
 
-  <a
-    routerLink="/ready-products"
-    class="check-all-button secondary-button shadow-2"
-    >Mindet Megnézem</a
-  >
-</section>
+<a
+  routerLink="/ready-products"
+  class="check-all-button secondary-button shadow-2"
+  >Mindet Megnézem</a
+>

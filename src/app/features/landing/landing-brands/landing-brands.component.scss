@@ -39,41 +39,48 @@
 .div1 {
   grid-area: 1 / 1 / 3 / 3;
   background-image: url('../../../../assets/images/landing-page/landing-page-01.jpg');
+
+  @include respond(sm) {
+    background-image: url('../../../../assets/images/landing-page/landing-page-01-mobile.jpg');
+  }
 }
 .div2 {
   grid-area: 1 / 3 / 2 / 4;
   background-image: url('../../../../assets/images/landing-page/landing-page-02.jpg');
+
+  @include respond(sm) {
+    background-image: url('../../../../assets/images/landing-page/landing-page-02-mobile.jpg');
+  }
 }
 .div3 {
   grid-area: 2 / 3 / 3 / 4;
   background-image: url('../../../../assets/images/landing-page/landing-page-03.jpg');
+
+  @include respond(sm) {
+    background-image: url('../../../../assets/images/landing-page/landing-page-03-mobile.jpg');
+  }
 }
 .div4 {
   grid-area: 3 / 1 / 4 / 2;
   background-image: url('../../../../assets/images/landing-page/landing-page-04.jpg');
+
+  @include respond(sm) {
+    background-image: url('../../../../assets/images/landing-page/landing-page-04-mobile.jpg');
+  }
 }
 .div5 {
   grid-area: 4 / 1 / 5 / 2;
   background-image: url('../../../../assets/images/landing-page/landing-page-05.jpg');
+
+  @include respond(sm) {
+    background-image: url('../../../../assets/images/landing-page/landing-page-05-mobile.jpg');
+  }
 }
 .div6 {
   grid-area: 3 / 2 / 5 / 4;
   background-image: url('../../../../assets/images/landing-page/landing-page-06.jpg');
-}
-
-.title {
-  display: inline-block;
-  padding: 10px 20px;
-  color: var(--color-text);
-  background-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 3px 5px #ccc;
-  border-radius: 5px;
-  font-size: 40px;
-  font-weight: 500;
-  font-family: 'Dancing Script', cursive;
-  text-align: center;
 
   @include respond(sm) {
-    font-size: 20px;
+    background-image: url('../../../../assets/images/landing-page/landing-page-06-mobile.jpg');
   }
 }

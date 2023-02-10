@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/core/models/product.model';
 import { MaterialService } from 'src/app/core/services/material.service';
 
-import { carouselImages, featuredProducts } from './LANDING_DATA';
+import { carouselImages } from './LANDING_DATA';
 
 @Component({
   selector: 'masni-handmade-dolls-landing',
@@ -11,7 +10,6 @@ import { carouselImages, featuredProducts } from './LANDING_DATA';
 })
 export class LandingComponent implements OnInit {
   public carouselImages = carouselImages;
-  public featuredProducts: Product[] = featuredProducts;
   public materialImages: string[] = [];
 
   constructor(private materialService: MaterialService) {}

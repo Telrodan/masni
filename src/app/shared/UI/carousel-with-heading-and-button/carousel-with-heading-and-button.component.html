@@ -14,9 +14,10 @@
       </ng-template>
       <ng-template let-data pTemplate="item">
         <div class="item-content-container">
-          <div
+          <ng-content select="selector"></ng-content>
+          <!-- <div
             class="img shadow-2"
-            [style.background-image]="'url(' + data + ')'"></div>
+            [style.background-image]="'url(' + data + ')'"></div> -->
         </div>
       </ng-template>
     </p-carousel>
