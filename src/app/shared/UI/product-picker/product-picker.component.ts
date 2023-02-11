@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { Macko } from '../../../features/nyuszko-shop/product-profiles/macko';
+// import { Macko } from '../../../features/nyuszko-shop/product-profiles/macko';
 
 @Component({
   selector: 'masni-handmade-dolls-product-picker',
@@ -10,7 +10,7 @@ import { Macko } from '../../../features/nyuszko-shop/product-profiles/macko';
 })
 export class ProductPickerComponent implements OnInit {
   public pickerForm: FormGroup;
-  public product = Macko;
+  // public product = Macko;
   public hoveredImageUrl: string;
 
   public ngOnInit(): void {

@@ -1,7 +1,7 @@
-<section>
-  <div class="carousel">
+<section class="carousel">
+  <div class="carousel-container">
     <p-carousel
-      [value]="data"
+      [value]="carouselData.images"
       [showIndicators]="false"
       [numVisible]="3"
       [numScroll]="1"
@@ -9,24 +9,23 @@
       [autoplayInterval]="3000"
       [showNavigators]="false"
       [responsiveOptions]="responsiveOptions">
-      <ng-template pTemplate="header" *ngIf="displayHeading">
-        <h5 class="heading heading-primary">{{ heading }}</h5>
+      <ng-template pTemplate="header" *ngIf="carouselData.displayHeading">
+        <h5 class="heading-primary">{{ carouselData.heading }}</h5>
       </ng-template>
-      <ng-template let-data pTemplate="item">
-        <div class="item-content-container">
-          <ng-content select="selector"></ng-content>
-          <!-- <div
+      <ng-template let-images pTemplate="item">
+        <div class="item-content">
+          <div
             class="img shadow-2"
-            [style.background-image]="'url(' + data + ')'"></div> -->
+            [style.background-image]="'url(' + images + ')'"></div>
         </div>
       </ng-template>
     </p-carousel>
   </div>
 
   <a
-    [routerLink]="linkRoute"
-    class="button secondary-button shadow-2"
-    *ngIf="displayLink"
-    >{{ linkText }}</a
+    [routerLink]="carouselData.linkRoute"
+    class="secondary-button shadow-2"
+    *ngIf="carouselData.displayLink"
+    >{{ carouselData.linkText }}</a
   >
 </section>

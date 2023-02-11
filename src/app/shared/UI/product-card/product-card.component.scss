@@ -4,6 +4,7 @@
   width: 370px;
   border-radius: 5px;
   overflow: hidden;
+  text-align: left;
 
   @include respond(sm) {
     width: 340px;

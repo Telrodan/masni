@@ -1,7 +1,11 @@
 <div class="product-card shadow-2">
   <div
     class="product-image"
-    [style.background-image]="'url(' + product.images[0] + ')'"></div>
+    [style.background-image]="
+      'url(../../../../../../assets/images/featured-products/' +
+      product.images[0] +
+      ')'
+    "></div>
   <div class="container">
     <h1 class="product-title">{{ product.name }}</h1>
     <p class="product-price">{{ product.price }} Ft</p>

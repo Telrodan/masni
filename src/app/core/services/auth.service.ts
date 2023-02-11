@@ -111,7 +111,6 @@ export class AuthService {
   }
 
   private setAuthenticationTimer(duration: number): void {
-    console.log('setting timer' + duration);
     this.tokenTimer = setTimeout(() => {
       this.messageService.add({
         severity: 'info',

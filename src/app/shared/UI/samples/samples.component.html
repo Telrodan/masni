@@ -1,51 +1,92 @@
 <main class="samples">
-  <h1 class="heading heading-primary">Mintás pamutvászon</h1>
-  <div class="container">
-    <div class="wrapper" *ngFor="let material of patternedCotton">
-      <p-image
-        [src]="'../../../../assets/images/materials/' + material.image"
-        imageClass="border-round"
-        alt="Image"
-        [preview]="true">
-        <ng-template pTemplate="indicator">
-          <p class="indicator-text">
-            {{ material.name | titlecase }}
-          </p>
-        </ng-template></p-image
-      >
-      <p class="name">{{ material.name | titlecase }}</p>
+  <h1 class="heading-primary">Mintás pamutvászon</h1>
+  <p-galleria
+    [value]="patternedCotton"
+    [(visible)]="displayCustom"
+    [(activeIndex)]="activeIndex"
+    [containerStyle]="{ 'max-width': '850px' }"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false">
+    <ng-template pTemplate="item" let-sample>
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        [alt]="sample.name"
+        style="width: 100%; display: block" />
+    </ng-template>
+  </p-galleria>
+  <div *ngIf="patternedCotton" class="grid" style="max-width: 100%">
+    <div
+      *ngFor="let sample of patternedCotton; let index = index"
+      class="item-content col-3 lg:col-2"
+      key="index">
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        class="mb-1 shadow-2"
+        style="cursor: pointer"
+        (click)="imageClick(index)" />
+      <p class="name text-center">{{ sample.name | titlecase }}</p>
     </div>
   </div>
   <h1 class="heading heading-primary">Minky plüss</h1>
-  <div class="container">
-    <div class="wrapper" *ngFor="let material of minkyPlus">
-      <p-image
-        [src]="'../../../../assets/images/materials/' + material.image"
-        alt="Image"
-        [preview]="true">
-        <ng-template pTemplate="indicator">
-          <p class="indicator-text">
-            {{ material.name | titlecase }}
-          </p>
-        </ng-template></p-image
-      >
-      <p class="name">{{ material.name | titlecase }}</p>
+  <p-galleria
+    [value]="minkyPlus"
+    [(visible)]="displayCustom"
+    [(activeIndex)]="activeIndex"
+    [containerStyle]="{ 'max-width': '850px' }"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false">
+    <ng-template pTemplate="item" let-sample>
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        [alt]="sample.name"
+        style="width: 100%; display: block" />
+    </ng-template>
+  </p-galleria>
+  <div *ngIf="patternedCotton" class="grid" style="max-width: 100%">
+    <div
+      *ngFor="let sample of minkyPlus; let index = index"
+      class="item-content col-3 lg:col-2"
+      key="index">
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        class="mb-1 shadow-2"
+        style="cursor: pointer"
+        (click)="imageClick(index)" />
+      <p class="name text-center">{{ sample.name | titlecase }}</p>
     </div>
   </div>
-  <h1 class="heading heading-primary">Duplagéz</h1>
-  <div class="container">
-    <div class="wrapper" *ngFor="let material of doubleGauze">
-      <p-image
-        [src]="'../../../../assets/images/materials/' + material.image"
-        alt="Image"
-        [preview]="true">
-        <ng-template pTemplate="indicator">
-          <p class="indicator-text">
-            {{ material.name | titlecase }}
-          </p>
-        </ng-template></p-image
-      >
-      <p class="name">{{ material.name | titlecase }}</p>
+  <h1 class="heading heading-primary">Minky plüss</h1>
+  <p-galleria
+    [value]="doubleGauze"
+    [(visible)]="displayCustom"
+    [(activeIndex)]="activeIndex"
+    [containerStyle]="{ 'max-width': '850px' }"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false">
+    <ng-template pTemplate="item" let-sample>
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        [alt]="sample.name"
+        style="width: 100%; display: block" />
+    </ng-template>
+  </p-galleria>
+  <div *ngIf="patternedCotton" class="grid" style="max-width: 100%">
+    <div
+      *ngFor="let sample of doubleGauze; let index = index"
+      class="item-content col-3 lg:col-2"
+      key="index">
+      <img
+        [src]="'../../../../assets/images/materials/' + sample.image"
+        class="mb-1 shadow-2"
+        style="cursor: pointer"
+        (click)="imageClick(index)" />
+      <p class="name text-center">{{ sample.name | titlecase }}</p>
     </div>
   </div>
 </main>

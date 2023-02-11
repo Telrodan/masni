@@ -13,6 +13,14 @@ export class SamplesComponent implements OnInit {
   public minkyPlus: Material[];
   public doubleGauze: Material[];
 
+  displayCustom: boolean;
+  activeIndex = 0;
+
+  imageClick(index: number) {
+    this.activeIndex = index;
+    this.displayCustom = true;
+  }
+
   constructor(private materialService: MaterialService) {}
 
   public ngOnInit(): void {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialService } from 'src/app/core/services/material.service';
 
-import { carouselImages } from './LANDING_DATA';
+import { firstCarousel, secondCarousel, thirdCarousel } from './LANDING_DATA';
 
 @Component({
   selector: 'masni-handmade-dolls-landing',
@@ -9,15 +9,17 @@ import { carouselImages } from './LANDING_DATA';
   styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit {
-  public carouselImages = carouselImages;
-  public materialImages: string[] = [];
+  public firstCarousel = { ...firstCarousel };
+  public secondCarousel = { ...secondCarousel };
+  public thirdCarousel = { ...thirdCarousel };
 
   constructor(private materialService: MaterialService) {}
 
   public ngOnInit(): void {
-    this.materialService.getMaterials().forEach((material) => {
+    const materials = this.materialService.getMaterials();
+    materials.forEach((material) => {
       if (material.image) {
-        this.materialImages.push(
+        this.secondCarousel.images.push(
           '../../../assets/images/materials/' + material.image
         );
       }

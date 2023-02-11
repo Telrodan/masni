@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { Nyuszko } from '../product-profiles/nyuszko';
+// import { Nyuszko } from '../product-profiles/nyuszko';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-builder',
@@ -10,7 +10,7 @@ import { Nyuszko } from '../product-profiles/nyuszko';
 })
 export class NyuszkoBuilderComponent implements OnInit {
   public pickerForm: FormGroup;
-  public product = Nyuszko;
+  // public product = Nyuszko;
 
   public ngOnInit(): void {
     this.pickerForm = new FormGroup({

@@ -25,6 +25,7 @@ import { SamplesComponent } from './UI/samples/samples.component';
 import { ImageCompositionComponent } from './UI/image-composition/image-composition.component';
 import { SpinnerComponent } from './UI/spinner/spinner.component';
 import { CarouselWithHeadingAndButtonComponent } from './UI/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
+import { GalleriaModule } from 'primeng/galleria';
 
 const PRIME_NG = [
   CarouselModule,
@@ -32,7 +33,8 @@ const PRIME_NG = [
   ButtonModule,
   RippleModule,
   MenuModule,
-  ImageModule
+  ImageModule,
+  GalleriaModule
 ];
 
 @NgModule({

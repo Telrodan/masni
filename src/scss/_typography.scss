@@ -26,15 +26,19 @@ body {
 
 .heading-primary {
   color: var(--color-text);
-  font-size: 36px;
+  font-size: 40px;
 
   @include respond(sm) {
-    font-size: 21px;
+    font-size: 30px;
   }
 }
 
 .heading-secondary {
-  font-size: 30px;
+  font-size: 35px;
+
+  @include respond(sm) {
+    font-size: 27px;
+  }
 }
 
 .heading-tertiary {
@@ -43,8 +47,9 @@ body {
   color: var(--color-text);
   background-color: rgba(255, 255, 255, 0.75);
   box-shadow: 0 3px 5px rgba(139, 139, 139, 0.8);
-  font-size: 36px;
+  font-size: 40px;
   border-radius: 5px;
+  text-align: center;
   z-index: 1;
 
   @include respond(sm) {

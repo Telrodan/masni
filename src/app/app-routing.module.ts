@@ -20,9 +20,6 @@ const masniShopModule = () =>
     (m) => m.MasniShopModule
   );
 
-const adminModule = () =>
-  import('./features/admin/admin.module').then((m) => m.AdminModule);
-
 const routes: Routes = [
   {
     path: '',
@@ -47,8 +44,7 @@ const routes: Routes = [
   },
   {
     path: 'samples',
-    component: SamplesComponent,
-    canActivate: [AuthGuard]
+    component: SamplesComponent
   },
   {
     path: 'contact',
@@ -65,10 +61,6 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent
-  },
-  {
-    path: 'admin',
-    loadChildren: adminModule
   }
 ];
 

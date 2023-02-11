@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
     const authData: AuthData = { ...this.loginForm.value };
     this.spinnerService.startSpinner();
     this.authService.loginUser(authData).subscribe((result) => {
-      console.log(result);
       this.spinnerService.stopSpinner();
       this.messageService.add({
         severity: 'success',

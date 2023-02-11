@@ -9,6 +9,7 @@ import { Product } from 'src/app/core/models/product.model';
   styleUrls: ['./product-card.component.scss']
 })
 export class ProductCardComponent {
-  @Input() product!: Product;
+  @Input() product: Product;
+
   public faCartShopping = faCartShopping;
 }

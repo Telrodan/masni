@@ -1,53 +1,29 @@
 @import '../../../../scss/mixins';
 
-p-image {
-  border-radius: 5px;
-}
-
 .samples {
   width: 80%;
-  margin: 50px auto;
+  margin: 0 auto 50px;
 
   @include respond(sm) {
-    width: 90%;
-  }
-}
-
-.heading {
-  margin-bottom: 40px;
-
-  @include respond(sm) {
-    text-align: center;
-  }
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 10px;
-  column-gap: 10px;
-  margin-bottom: 50px;
-
-  @include respond(sm) {
-    justify-content: center;
     width: 100%;
   }
 }
 
-.wrapper {
-  width: 170px;
-  height: 170px;
-  margin-bottom: 35px;
+.grid {
+  margin: 0;
+}
+
+.heading-primary {
+  margin: 40px 0;
 
   @include respond(sm) {
-    width: 100px;
-    height: 100px;
+    margin: 20px 0;
+    text-align: center;
   }
 }
 
 .name {
-  margin-top: 5px;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
 
   @include respond(sm) {
@@ -55,7 +31,45 @@ p-image {
   }
 }
 
-.indicator-text {
-  font-size: 14px;
-  text-align: center;
-}
+// .samples {
+//   width: 80%;
+//   margin: 50px auto;
+
+//   @include respond(sm) {
+//     width: 90%;
+//   }
+// }
+
+// .heading {
+//   margin-bottom: 40px;
+
+//   @include respond(sm) {
+//     text-align: center;
+//   }
+// }
+
+// .container {
+//   display: flex;
+//   flex-wrap: wrap;
+//   row-gap: 10px;
+//   column-gap: 10px;
+//   margin-bottom: 50px;
+
+//   @include respond(sm) {
+//     justify-content: center;
+//     width: 100%;
+//   }
+// }
+
+// .wrapper {
+//   width: 170px;
+//   height: 170px;
+//   margin-bottom: 35px;
+
+//   @include respond(sm) {
+//     width: 100px;
+//     height: 100px;
+//   }
+// }
+
+// }

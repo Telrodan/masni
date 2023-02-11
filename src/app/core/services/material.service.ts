@@ -12,6 +12,10 @@ export class MaterialService {
 
   constructor(private apiService: ApiService) {}
 
+  public getMaterials(): Material[] {
+    return this.materials;
+  }
+
   public fetchMaterials(): Observable<Material[]> {
     return this.apiService.get$<{ materials: Material[] }>('materials').pipe(
       map((materialsDTO) => {
@@ -19,12 +23,9 @@ export class MaterialService {
           return Material.fromDTO(rawMaterial);
         });
         this.materials = materials;
-        return materials;
+
+        return this.materials;
       })
     );
-  }
-
-  public getMaterials(): Material[] {
-    return this.materials;
   }
 }

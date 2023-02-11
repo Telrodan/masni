@@ -1,26 +1,19 @@
 @import '../../../../scss/mixins';
 
 .about-us {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
+  margin: 0 auto 70px;
+  width: 50%;
 
   @include respond(sm) {
+    width: 100%;
     padding: 0 10px;
   }
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 50%;
   text-align: center;
 
   @include respond(sm) {
-    width: 100%;
     margin-bottom: 5rem;
   }
 }
@@ -35,11 +28,10 @@
 
 .accordion-container {
   margin-top: 50px;
-  width: 50%;
+  width: 100%;
 
   @include respond(sm) {
     margin-top: 10px;
-    width: 100%;
   }
 }
 
@@ -72,15 +64,4 @@
     width: 100%;
     margin-top: 50px;
   }
-}
-
-.carousel {
-  width: 100vw;
-}
-
-.carousel-img {
-  width: 100%;
-  background-size: cover;
-  background-position: center center;
-  aspect-ratio: 1/1;
 }

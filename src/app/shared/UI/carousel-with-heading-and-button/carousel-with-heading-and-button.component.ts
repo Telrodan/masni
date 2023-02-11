@@ -1,17 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+interface CarouselData {
+  heading: string;
+  displayHeading: boolean;
+  images: string[];
+  linkText: string;
+  linkRoute: string;
+  displayLink: boolean;
+}
+
 @Component({
   selector: 'masni-handmade-dolls-carousel-with-heading-and-button',
   templateUrl: './carousel-with-heading-and-button.component.html',
   styleUrls: ['./carousel-with-heading-and-button.component.scss']
 })
 export class CarouselWithHeadingAndButtonComponent implements OnInit {
-  @Input() public heading: string;
-  @Input() public displayHeading: boolean;
-  @Input() public data: string[];
-  @Input() public linkText: string;
-  @Input() public linkRoute: string;
-  @Input() public displayLink: boolean;
+  @Input() public carouselData: CarouselData;
+  public images: string[];
+
+  public ngOnInit(): void {
+    this.images = this.carouselData.images;
+  }
 
   public responsiveOptions = [
     {
@@ -30,6 +39,4 @@ export class CarouselWithHeadingAndButtonComponent implements OnInit {
       numScroll: 1
     }
   ];
-
-  public ngOnInit(): void {}
 }

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AccordionModule } from 'primeng/accordion';
+import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { CarouselModule } from 'primeng/carousel';
 import { ImageModule } from 'primeng/image';
@@ -28,7 +29,6 @@ import { SignupComponent } from './features/auth/signup/signup.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
-import { MessageService } from 'primeng/api';
 
 const PRIME_NG = [
   AccordionModule,
