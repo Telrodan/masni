@@ -17,7 +17,6 @@
         style="width: 100%; display: block" />
     </ng-template>
   </p-galleria>
-
   <div
     *ngIf="sortedMaterials.patternedCotton"
     class="grid"
@@ -35,7 +34,7 @@
     </div>
   </div>
 
-  <h1 class="heading heading-primary">Minky plüss</h1>
+  <h1 class="heading-primary">Mintás pamutvászon</h1>
   <p-galleria
     [value]="sortedMaterials.minkyPlus"
     [(visible)]="displayCustomSecondGalery"
@@ -44,7 +43,8 @@
     [circular]="true"
     [fullScreen]="true"
     [showItemNavigators]="true"
-    [showThumbnails]="false">
+    [showThumbnails]="false"
+    [baseZIndex]="50">
     <ng-template pTemplate="item" let-sample>
       <img
         [src]="'../../../../assets/images/materials/' + sample.image"
@@ -61,10 +61,11 @@
         [src]="'../../../../assets/images/materials/' + sample.image"
         class="mb-1 shadow-2"
         style="cursor: pointer"
-        (click)="imageClickFirstGalery(index)" />
+        (click)="imageClickSecondGalery(index)" />
       <p class="name text-center">{{ sample.name | titlecase }}</p>
     </div>
   </div>
+
   <h1 class="heading heading-primary">Duplagéz</h1>
   <p-galleria
     [value]="sortedMaterials.doubleGauze"

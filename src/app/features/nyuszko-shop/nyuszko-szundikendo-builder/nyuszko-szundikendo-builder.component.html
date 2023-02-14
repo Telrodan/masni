@@ -10,10 +10,7 @@
       nyuszkó-szundikendő végösszegén!
     </p>
 
-    <form
-      class="form"
-      (submit)="onSubmit()"
-      [formGroup]="nyuszkoSzundikendoBuilderForm">
+    <form class="form" (submit)="onSubmit()" [formGroup]="builderForm">
       <div formGroupName="baseMaterials">
         <div class="form-group">
           <label class="form-label">Alapszín:</label>
@@ -58,11 +55,7 @@
 
         <div
           class="form-group"
-          *ngIf="
-            nyuszkoSzundikendoBuilderForm.get(
-              'extraOptions.nameEmbroideryCheckbox'
-            ).value
-          ">
+          *ngIf="builderForm.get('extraOptions.nameEmbroideryCheckbox').value">
           <input
             id="nameEmbroideryInput"
             type="text"
@@ -88,7 +81,7 @@
       <button
         class="primary-button shadow-2"
         type="submit"
-        [disabled]="!nyuszkoSzundikendoBuilderForm.valid"
+        [disabled]="!builderForm.valid"
         *ngIf="isAuthenticated">
         <fa-icon [icon]="faShoppingCart"></fa-icon>
         Kosárba

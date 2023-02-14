@@ -13,9 +13,9 @@ export class FeaturedProductsComponent implements OnInit {
   constructor(private productsService: ProductService) {}
 
   public ngOnInit(): void {
-    this.productsService.fetchProducts().subscribe((reponse) => {
-      this.products = reponse;
-    });
+    // this.productsService.fetchProducts().subscribe((reponse) => {
+    //   this.products = reponse;
+    // });
   }
 
   public responsiveOptions = [

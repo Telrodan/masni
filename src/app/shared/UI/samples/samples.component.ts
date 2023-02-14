@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil, tap } from 'rxjs';
-import { Material } from 'src/app/core/models/material.model';
+import { Subject, takeUntil } from 'rxjs';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
 import { MaterialService } from 'src/app/core/services/material.service';
 
@@ -27,6 +26,7 @@ export class SamplesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy))
       .subscribe((response) => {
         this.sortedMaterials = response;
+        console.log(this.sortedMaterials);
       });
   }
 

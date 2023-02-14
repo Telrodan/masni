@@ -7,7 +7,7 @@ import { SortedMaterials } from '../sorted-materials.model';
 //   ['63e9fc610c0aff28bef14d2b', 'nyuszko']
 // ]);
 
-const BASE_PRODUCT_TYPE_ID = '63eb785d8cb597f429e66b41';
+const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de12e';
 
 export class NyuszkoProduct {
   public baseProduct: string;

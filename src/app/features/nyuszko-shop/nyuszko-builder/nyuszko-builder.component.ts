@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { forkJoin, Subject, takeUntil, tap } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { forkJoin, Subject, takeUntil, tap, switchMap } from 'rxjs';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { Material } from 'src/app/core/models/material.model';
@@ -20,7 +19,7 @@ import { ProductService } from 'src/app/core/services/product.service';
 })
 export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
-  public nyuszkoBuilderForm: FormGroup;
+  public builderForm: FormGroup;
   public product: NyuszkoProduct;
   public price = 0;
   public materials: Material[];
@@ -38,44 +37,37 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
   constructor(
     private materialService: MaterialService,
     private orderService: OrderService,
-    private messageService: MessageService,
     private authService: AuthService,
     private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.authService
+      .getAuthStatus$()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((response) => {
+        this.isAuthenticated = response;
+      });
 
     forkJoin([
       this.materialService.getMaterials$(),
       this.materialService.getSortedMaterials$()
     ])
       .pipe(
-        takeUntil(this.destroy),
         tap(([materials, sortedMaterials]) => {
           this.materials = materials;
           this.sortedMaterials = sortedMaterials;
           this.product = NyuszkoProduct.setUpMaterials(this.sortedMaterials);
           this.createForm();
           this.price = this.productService.getProductPrice(
-            this.nyuszkoBuilderForm.value,
-            this.materials
+            this.builderForm.value
           );
-          this.nyuszkoBuilderForm.valueChanges.subscribe((changes) => {
-            this.price = this.productService.getProductPrice(
-              changes,
-              this.materials
-            );
-          });
-        })
+        }),
+        switchMap(() => this.builderForm.valueChanges),
+        takeUntil(this.destroy)
       )
-      .subscribe();
-
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
+      .subscribe((changes) => {
+        this.price = this.productService.getProductPrice(changes);
       });
   }
 
@@ -85,26 +77,13 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (!this.nyuszkoBuilderForm.valid) return;
-
-    this.orderService
-      .addOrderToCart(this.nyuszkoBuilderForm, this.price)
-      .subscribe(() => {
-        const productName = this.materialService.getMaterialNameById(
-          this.product.baseProduct,
-          this.materials
-        );
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Siker!',
-          detail: `${productName + ` hozzáadva, ${this.price} Ft értékben.`}`
-        });
-        this.nyuszkoBuilderForm.reset();
-      });
+    if (!this.builderForm.valid) return;
+    this.orderService.addOrderToCart(this.builderForm, this.price);
+    this.builderForm.reset();
   }
 
   private createForm(): void {
-    this.nyuszkoBuilderForm = new FormGroup({
+    this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl('', Validators.required),

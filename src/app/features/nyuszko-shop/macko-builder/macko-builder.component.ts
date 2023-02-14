@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { forkJoin, Subject, takeUntil, tap } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { forkJoin, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { Material } from 'src/app/core/models/material.model';
@@ -20,7 +19,7 @@ import { ProductService } from 'src/app/core/services/product.service';
 })
 export class MackoBuilderComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
-  public mackoBuilderForm: FormGroup;
+  public builderForm: FormGroup;
   public product: MackoProduct;
   public price = 0;
   public materials: Material[];
@@ -37,7 +36,6 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
   constructor(
     private materialService: MaterialService,
     private orderService: OrderService,
-    private messageService: MessageService,
     private authService: AuthService,
     private productService: ProductService
   ) {}
@@ -50,25 +48,21 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
       this.materialService.getSortedMaterials$()
     ])
       .pipe(
-        takeUntil(this.destroy),
         tap(([materials, sortedMaterials]) => {
           this.materials = materials;
           this.sortedMaterials = sortedMaterials;
           this.product = MackoProduct.setUpMaterials(this.sortedMaterials);
           this.createForm();
           this.price = this.productService.getProductPrice(
-            this.mackoBuilderForm.value,
-            this.materials
+            this.builderForm.value
           );
-          this.mackoBuilderForm.valueChanges.subscribe((changes) => {
-            this.price = this.productService.getProductPrice(
-              changes,
-              this.materials
-            );
-          });
-        })
+        }),
+        switchMap(() => this.builderForm.valueChanges),
+        takeUntil(this.destroy)
       )
-      .subscribe();
+      .subscribe((changes) => {
+        this.price = this.productService.getProductPrice(changes);
+      });
 
     this.authService
       .getAuthStatus$()
@@ -84,25 +78,12 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (!this.mackoBuilderForm.valid) return;
-    this.orderService
-      .addOrderToCart(this.mackoBuilderForm, this.price)
-      .subscribe(() => {
-        const productName = this.materialService.getMaterialNameById(
-          this.product.baseProduct,
-          this.materials
-        );
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Siker!',
-          detail: `${productName + ` hozzáadva, ${this.price} Ft értékben.`}`
-        });
-        this.mackoBuilderForm.reset();
-      });
+    if (!this.builderForm.valid) return;
+    this.orderService.addOrderToCart(this.builderForm, this.price);
   }
 
   private createForm(): void {
-    this.mackoBuilderForm = new FormGroup({
+    this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl('', Validators.required),

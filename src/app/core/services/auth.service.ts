@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
 import { ApiService } from './api.service';
@@ -13,7 +13,9 @@ import { CookieService } from './cookie.service';
 export class AuthService {
   private isAuthenticated = false;
   private token: string;
-  private authStatusListener = new Subject<boolean>();
+  private authStatusListener = new BehaviorSubject<boolean>(
+    this.isAuthenticated
+  );
   private tokenTimer: NodeJS.Timer;
   private userId: string;
 

@@ -10,7 +10,7 @@
       végösszegén!
     </p>
 
-    <form class="form" (submit)="onSubmit()" [formGroup]="mackoBuilderForm">
+    <form class="form" (submit)="onSubmit()" [formGroup]="builderForm">
       <div formGroupName="baseMaterials">
         <div class="form-group">
           <label class="form-label">Alapszín:</label>
@@ -53,9 +53,7 @@
 
         <div
           class="form-group"
-          *ngIf="
-            mackoBuilderForm.get('extraOptions.nameEmbroideryCheckbox').value
-          ">
+          *ngIf="builderForm.get('extraOptions.nameEmbroideryCheckbox').value">
           <input
             id="nameEmbroideryInput"
             type="text"
@@ -81,7 +79,7 @@
       <button
         class="primary-button shadow-2"
         type="submit"
-        [disabled]="!mackoBuilderForm.valid"
+        [disabled]="!builderForm.valid"
         *ngIf="isAuthenticated">
         <fa-icon [icon]="faShoppingCart"></fa-icon>
         Kosárba

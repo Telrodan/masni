@@ -10,7 +10,7 @@
       végösszegén!
     </p>
 
-    <form class="form" (submit)="onSubmit()" [formGroup]="nyuszkoBuilderForm">
+    <form class="form" (submit)="onSubmit()" [formGroup]="builderForm">
       <div formGroupName="baseMaterials">
         <div class="form-group">
           <label class="form-label">Alapszín:</label>
@@ -52,9 +52,7 @@
         </div>
         <div
           class="form-group"
-          *ngIf="
-            nyuszkoBuilderForm.get('extraOptions.extraMinkyEarCheckbox').value
-          ">
+          *ngIf="builderForm.get('extraOptions.extraMinkyEarCheckbox').value">
           <p-dropdown
             styleClass="w-full"
             [options]="sortedMaterials.minkyPlus"
@@ -74,9 +72,7 @@
 
         <div
           class="form-group"
-          *ngIf="
-            nyuszkoBuilderForm.get('extraOptions.nameEmbroideryCheckbox').value
-          ">
+          *ngIf="builderForm.get('extraOptions.nameEmbroideryCheckbox').value">
           <input
             id="nameEmbroideryInput"
             type="text"
@@ -102,7 +98,7 @@
       <button
         class="primary-button shadow-2"
         type="submit"
-        [disabled]="!nyuszkoBuilderForm.valid"
+        [disabled]="!builderForm.valid"
         *ngIf="isAuthenticated">
         <fa-icon [icon]="faShoppingCart"></fa-icon>
         Kosárba

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { Observable, tap } from 'rxjs';
 import { Order } from '../models/order.model';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
+import { MaterialService } from './material.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +13,12 @@ import { CookieService } from './cookie.service';
 export class OrderService {
   constructor(
     private apiService: ApiService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private materialService: MaterialService,
+    private messageService: MessageService
   ) {}
 
-  public addOrderToCart(
-    orderForm: FormGroup,
-    price: number
-  ): Observable<Order> {
+  public addOrderToCart(orderForm: FormGroup, price: number): void {
     const baseMaterials = orderForm.value['baseMaterials'];
     const extraOptions = orderForm.value['extraOptions'];
     const order: Order = {
@@ -37,7 +38,16 @@ export class OrderService {
       buyerId: this.cookieService.getCookie('userId'),
       price: price
     };
-    return this.apiService.post$('orders', order);
+    this.apiService.post$('orders', order).subscribe(() => {
+      const productName = this.materialService.getMaterialNameById(
+        order.productDetails.baseProduct
+      );
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Siker!',
+        detail: `${productName + ` hozzáadva, ${order.price} Ft értékben.`}`
+      });
+    });
   }
 
   public getPersonalOrders(): Observable<{
@@ -47,7 +57,7 @@ export class OrderService {
     const userId = this.cookieService.getCookie('userId');
     return this.apiService.get$<{ status: string; data: { orders: Order[] } }>(
       'orders',
-      { id: userId }
+      { userId: userId }
     );
   }
 }
