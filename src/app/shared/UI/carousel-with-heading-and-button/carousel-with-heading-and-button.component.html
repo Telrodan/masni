@@ -16,6 +16,7 @@
         <div class="item-content">
           <div
             class="img shadow-2"
+            [style.border-radius]="carouselData.isRoundImage ? '500px' : '0px'"
             [style.background-image]="'url(' + images + ')'"></div>
         </div>
       </ng-template>

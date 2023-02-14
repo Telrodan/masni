@@ -4,6 +4,7 @@ interface CarouselData {
   heading: string;
   displayHeading: boolean;
   images: string[];
+  isRoundImage: boolean;
   linkText: string;
   linkRoute: string;
   displayLink: boolean;

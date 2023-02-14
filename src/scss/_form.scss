@@ -6,13 +6,11 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
 .form-label {
   margin-bottom: 5px;
-  color: var(--color-text);
-  font-size: 1.6rem;
 }
 
 .form-helper {
@@ -20,24 +18,4 @@
   color: var(--color-red);
   font-size: 14px;
   line-height: 20px;
-}
-
-.checkbox-group {
-  margin-bottom: 2rem;
-}
-
-.form-checkbox {
-  margin-right: 1rem;
-}
-
-.form-select,
-.form-textarea,
-.form-input {
-  padding: 1rem 1.2rem;
-  border: 2px solid var(--color-primary);
-  font-size: 1.6rem;
-
-  &:focus {
-    outline: none;
-  }
 }

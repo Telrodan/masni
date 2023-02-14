@@ -5,6 +5,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
 import { ApiService } from './api.service';
+import { CookieService } from './cookie.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cookieService: CookieService
   ) {}
 
   public getToken(): string {
@@ -38,14 +40,19 @@ export class AuthService {
     return this.apiService.post$('users/signup', newUser);
   }
 
-  public loginUser(
-    authData: AuthData
-  ): Observable<{ success: string; token: string; expiresIn: number }> {
+  public loginUser(authData: AuthData): Observable<{
+    success: string;
+    token: string;
+    userId: string;
+    expiresIn: number;
+  }> {
     return this.apiService
-      .post$<{ success: string; token: string; expiresIn: number }>(
-        'users/login',
-        authData
-      )
+      .post$<{
+        success: string;
+        token: string;
+        userId: string;
+        expiresIn: number;
+      }>('users/login', authData)
       .pipe(
         tap((result) => {
           this.token = result.token;
@@ -53,6 +60,7 @@ export class AuthService {
             const expiresInDuration = result.expiresIn;
             this.setAuthenticationTimer(expiresInDuration);
             this.isAuthenticated = true;
+            this.userId = result.userId;
             this.authStatusListener.next(true);
             const now = new Date();
             const expirationDate = new Date(
@@ -65,12 +73,13 @@ export class AuthService {
   }
 
   public saveAuthenticationData(token: string, expirationDate: Date): void {
-    localStorage.setItem('token', token);
-    localStorage.setItem('expiration', expirationDate.toISOString());
+    this.cookieService.setCookie('token', token, 1);
+    this.cookieService.setCookie('expiration', expirationDate.toISOString(), 1);
+    this.cookieService.setCookie('userId', this.userId, 1);
   }
 
   public clearAuthenticationData(): void {
-    localStorage.clear();
+    this.cookieService.clearCookies();
   }
 
   public logout(): void {
@@ -86,8 +95,8 @@ export class AuthService {
     token: string;
     expirationDate: Date;
   } {
-    const token = localStorage.getItem('token');
-    const expirationDate = new Date(localStorage.getItem('expiration'));
+    const token = this.cookieService.getCookie('token');
+    const expirationDate = new Date(this.cookieService.getCookie('expiration'));
 
     if (!token || !expirationDate) return null;
     return {

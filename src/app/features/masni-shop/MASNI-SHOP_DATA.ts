@@ -14,7 +14,7 @@ export const menuItems = [
   {
     name: 'Babák',
     linkSrc: '/babak',
-    backgroundImage: 'menu-item-test.jpg'
+    backgroundImage: '../../../../assets/images/masni-shop/menu/babak-menu.jpg'
   },
   {
     name: 'Baba ruhák',
@@ -24,6 +24,7 @@ export const menuItems = [
   {
     name: 'Minták',
     linkSrc: '/samples',
-    backgroundImage: 'menu-item-test.jpg'
+    backgroundImage:
+      '../../../../assets/images/nyuszko-shop/menu/mintak-menu.jpg'
   }
 ];

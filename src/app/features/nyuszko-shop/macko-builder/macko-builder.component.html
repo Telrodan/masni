@@ -1,0 +1,117 @@
+<main class="builder" *ngIf="sortedMaterials && materials">
+  <div class="image-composition-container">
+    <masni-handmade-dolls-image-composition
+      [images]="productImages"></masni-handmade-dolls-image-composition>
+  </div>
+  <div class="container shadow-2">
+    <h1 class="heading-primary">Mackó</h1>
+    <p class="paragraph-primary reminder-text">
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a mackó
+      végösszegén!
+    </p>
+
+    <form class="form" (submit)="onSubmit()" [formGroup]="mackoBuilderForm">
+      <div formGroupName="baseMaterials">
+        <div class="form-group">
+          <label class="form-label">Alapszín:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.baseColor"
+            formControlName="baseColor"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fülek és test színe/mintája:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.ears"
+            formControlName="ears"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Orr színe:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.ribbon"
+            formControlName="ribbon"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
+      </div>
+      <div formGroupName="extraOptions">
+        <div class="field-checkbox">
+          <p-checkbox
+            [binary]="true"
+            formControlName="nameEmbroideryCheckbox"
+            inputId="nameEmbroideryCheckbox"></p-checkbox>
+          <label for="nameEmbroideryCheckbox"
+            >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
+          >
+        </div>
+
+        <div
+          class="form-group"
+          *ngIf="
+            mackoBuilderForm.get('extraOptions.nameEmbroideryCheckbox').value
+          ">
+          <input
+            id="nameEmbroideryInput"
+            type="text"
+            pInputText
+            formControlName="nameEmbroideryInput"
+            placeholder="Add meg a nevet" />
+        </div>
+        <div class="form-group">
+          <label for="orderComment" class="form-label"
+            >Megjegyzés az elkészítéssel kapcsolatban!</label
+          >
+          <textarea
+            rows="5"
+            cols="30"
+            id="orderComment"
+            pInputTextarea
+            formControlName="orderComment"
+            [autoResize]="true"></textarea>
+        </div>
+      </div>
+
+      <p class="price">Ár: {{ price }} Ft</p>
+      <button
+        class="primary-button shadow-2"
+        type="submit"
+        [disabled]="!mackoBuilderForm.valid"
+        *ngIf="isAuthenticated">
+        <fa-icon [icon]="faShoppingCart"></fa-icon>
+        Kosárba
+      </button>
+      <a
+        routerLink="/login"
+        class="primary-button shadow-2"
+        *ngIf="!isAuthenticated"
+        >Előbb lépj be a rendeléshez</a
+      >
+    </form>
+    <p-accordion>
+      <p-accordionTab header="Termék leírása"
+        ><div class="accordion-content">
+          <div class="story-container">
+            <p class="story-paragraph paragraph-primary">
+              A mackókat 100%-ban természetes alapanyagokból, pamutvászon
+              illetve gyapjúfilc anyagokból készítem. Töltőanyagként
+              antiallergén szilikonizált poliészter golyókat használok, ami baba
+              barát, és mosható. Minden mackó kézzel hímzett szemeket és kézzel
+              fellvarrt gyapjúfilc orrot kap. A mackók 25 cm magasak, egy-két cm
+              eltérés előfordulhat. Amennyiben szeretnéd, hogy ajándékod még
+              egyedibb legyen, kézzel hímzett névvel ellátva is kérheted. Kézzel
+              hímzett termékek esetén a kézzel való tisztítást részesítem
+              előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható.
+              Szárítógépbe kérlek ne tedd!
+            </p>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+</main>

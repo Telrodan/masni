@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductDetailsComponent } from 'src/app/shared/UI/product-details/product-details.component';
-import { ProductPickerComponent } from 'src/app/shared/UI/product-picker/product-picker.component';
+import { MackoBuilderComponent } from './macko-builder/macko-builder.component';
 import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.component';
 
 import { NyuszkoShopComponent } from './nyuszko-shop.component';
+import { NyuszkoSzundikendoBuilderComponent } from './nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
 
 const routes: Routes = [
   {
@@ -13,55 +13,19 @@ const routes: Routes = [
   },
   {
     path: 'nyuszkok',
-    children: [
-      {
-        path: '',
-        component: ProductDetailsComponent
-      },
-      {
-        path: 'vasarlas',
-        component: NyuszkoBuilderComponent
-      }
-    ]
+    component: NyuszkoBuilderComponent
   },
   {
     path: 'nyuszko-szundikendok',
-    children: [
-      {
-        path: '',
-        component: ProductDetailsComponent
-      },
-      {
-        path: 'vasarlas',
-        component: ProductPickerComponent
-      }
-    ]
+    component: NyuszkoSzundikendoBuilderComponent
   },
   {
     path: 'mackok',
-    children: [
-      {
-        path: '',
-        component: ProductDetailsComponent
-      },
-      {
-        path: 'vasarlas',
-        component: ProductPickerComponent
-      }
-    ]
+    component: MackoBuilderComponent
   },
   {
     path: 'macko-szundikendok',
-    children: [
-      {
-        path: '',
-        component: ProductDetailsComponent
-      },
-      {
-        path: 'vasarlas',
-        component: ProductPickerComponent
-      }
-    ]
+    children: []
   }
 ];
 

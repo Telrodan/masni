@@ -4,11 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './features/landing/landing.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './shared/UI/samples/samples.component';
-import { ReadyProductsComponent } from './features/ready-products/ready-products.component';
 import { SignupComponent } from './features/auth/signup/signup.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ShoppingCartComponent } from './shared/UI/shopping-cart/shopping-cart.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -39,8 +39,8 @@ const routes: Routes = [
     loadChildren: masniShopModule
   },
   {
-    path: 'ready-products',
-    component: ReadyProductsComponent
+    path: 'shopping-cart',
+    component: ShoppingCartComponent
   },
   {
     path: 'samples',

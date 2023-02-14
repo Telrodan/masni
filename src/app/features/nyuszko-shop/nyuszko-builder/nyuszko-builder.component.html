@@ -1,61 +1,138 @@
-<!-- <main class="builder">
+<main class="builder" *ngIf="sortedMaterials && materials">
   <div class="image-composition-container">
     <masni-handmade-dolls-image-composition
-      [images]="product.kepek"></masni-handmade-dolls-image-composition>
+      [images]="productImages"></masni-handmade-dolls-image-composition>
   </div>
-  <div class="container">
-    <h1 class="heading heading-primary">{{ product.nev }}</h1>
-    <form class="form" [formGroup]="pickerForm">
-      <div class="form-group">
-        <label for="alapszin" class="form-label">Válassz egy alapszínt:</label>
-        <select formControlName="alapszin" id="alapszin" class="form-select">
-          <option
-            [value]="item.name"
-            class="form-option"
-            *ngFor="let item of product.alapszin">
-            {{ item.name | titlecase }}
-          </option>
-        </select>
+  <div class="container shadow-2">
+    <h1 class="heading-primary">Nyuszkó</h1>
+    <p class="paragraph-primary reminder-text">
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a nyuszkó
+      végösszegén!
+    </p>
+
+    <form class="form" (submit)="onSubmit()" [formGroup]="nyuszkoBuilderForm">
+      <div formGroupName="baseMaterials">
+        <div class="form-group">
+          <label class="form-label">Alapszín:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.baseColor"
+            formControlName="baseColor"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fülek színe mintája:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.ears"
+            formControlName="ears"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Masni színe:</label>
+          <p-dropdown
+            styleClass="w-full"
+            [options]="product.ribbon"
+            formControlName="ribbon"
+            optionLabel="nameWithExtra"
+            optionValue="id"></p-dropdown>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="fulek" class="form-label">Fülek színe mintája:</label>
-        <select formControlName="fulek" id="fulek" class="form-select">
-          <option
-            [value]="item.name"
-            class="form-option"
-            *ngFor="let item of product.fulek">
-            {{ item.name | titlecase }}
-            {{ item.extra !== 0 ? ' +' + item.extra + ' Ft' : '' }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="masni" class="form-label">Masni színe:</label>
-        <select formControlName="masni" id="masni" class="form-select">
-          <option
-            [value]="item"
-            class="form-option"
-            *ngFor="let item of product.masni">
-            {{ item | titlecase }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <div class="checkbox-group">
-          <input type="checkbox" id="extraNev" class="form-checkbox" />
-          <label for="extraNev" class="form-label"
+      <div formGroupName="extraOptions">
+        <div class="field-checkbox">
+          <p-checkbox
+            [binary]="true"
+            formControlName="extraMinkyEarCheckbox"
+            inputId="extraMinkyEarCheckbox"></p-checkbox>
+          <label for="extraMinkyEarCheckbox"
+            >Extra minky plüss fülekkel kérem! +400 Ft</label
+          >
+        </div>
+        <div
+          class="form-group"
+          *ngIf="
+            nyuszkoBuilderForm.get('extraOptions.extraMinkyEarCheckbox').value
+          ">
+          <p-dropdown
+            styleClass="w-full"
+            [options]="sortedMaterials.minkyPlus"
+            formControlName="extraMinkyEarInput"
+            optionLabel="name"
+            optionValue="id"></p-dropdown>
+        </div>
+        <div class="field-checkbox">
+          <p-checkbox
+            [binary]="true"
+            formControlName="nameEmbroideryCheckbox"
+            inputId="nameEmbroideryCheckbox"></p-checkbox>
+          <label for="nameEmbroideryCheckbox"
             >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
           >
         </div>
 
-        <input type="text" placeholder="Név" class="form-input" />
+        <div
+          class="form-group"
+          *ngIf="
+            nyuszkoBuilderForm.get('extraOptions.nameEmbroideryCheckbox').value
+          ">
+          <input
+            id="nameEmbroideryInput"
+            type="text"
+            pInputText
+            formControlName="nameEmbroideryInput"
+            placeholder="Add meg a nevet" />
+        </div>
+        <div class="form-group">
+          <label for="orderComment" class="form-label"
+            >Megjegyzés az elkészítéssel kapcsolatban!</label
+          >
+          <textarea
+            rows="5"
+            cols="30"
+            id="orderComment"
+            pInputTextarea
+            formControlName="orderComment"
+            [autoResize]="true"></textarea>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="megjegyzes" class="form-label"
-          >Megjegyzés az elkészítéssel kapcsolatban!</label
-        >
-        <textarea id="megjegyzes" rows="6" class="form-textarea"></textarea>
-      </div>
+
+      <p class="price">Ár: {{ price }} Ft</p>
+      <button
+        class="primary-button shadow-2"
+        type="submit"
+        [disabled]="!nyuszkoBuilderForm.valid"
+        *ngIf="isAuthenticated">
+        <fa-icon [icon]="faShoppingCart"></fa-icon>
+        Kosárba
+      </button>
+      <a
+        routerLink="/login"
+        class="primary-button shadow-2"
+        *ngIf="!isAuthenticated"
+        >Előbb lépj be a rendeléshez</a
+      >
     </form>
+    <p-accordion>
+      <p-accordionTab header="Termék leírása"
+        ><div class="accordion-content">
+          <div class="story-container">
+            <p class="story-paragraph paragraph-primary">
+              A nyuszkókat 100%-ban természetes alapanyagokból, pamutvászon
+              illetve minky plüss anyagokból készítem. Töltőanyagként
+              antiallergén szilikonizált poliészter golyókat használok, ami baba
+              barát, és mosható. Minden nyuszkó kézzel hímzett vidám arcocskát
+              kap. A nyuszkók 24cm magasak, egy-két cm eltérés előfordulhat.
+              Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel
+              hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén
+              a kézzel való tisztítást részesítem előnyben, de 30°C-on,
+              kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne
+              tedd!
+            </p>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
   </div>
-</main> -->
+</main>
