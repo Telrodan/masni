@@ -25,7 +25,7 @@
           <label class="form-label">Fülek és test színe/mintája:</label>
           <p-dropdown
             styleClass="w-full"
-            [options]="product.ears"
+            [options]="product.earsAndBodyColor"
             formControlName="ears"
             optionLabel="nameWithExtra"
             optionValue="id"></p-dropdown>
@@ -34,7 +34,7 @@
           <label class="form-label">Orr színe:</label>
           <p-dropdown
             styleClass="w-full"
-            [options]="product.ribbon"
+            [options]="product.noseColor"
             formControlName="ribbon"
             optionLabel="nameWithExtra"
             optionValue="id"></p-dropdown>
@@ -47,7 +47,7 @@
             formControlName="nameEmbroideryCheckbox"
             inputId="nameEmbroideryCheckbox"></p-checkbox>
           <label for="nameEmbroideryCheckbox"
-            >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
+            >Szeretnék kézzel hímzett nevet a mackóra! +500 Ft</label
           >
         </div>
 

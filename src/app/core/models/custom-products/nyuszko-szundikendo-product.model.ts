@@ -23,7 +23,7 @@ export class NyuszkoSzundikendoProduct {
     sortedMaterials: SortedMaterials
   ): NyuszkoSzundikendoProduct {
     return new NyuszkoSzundikendoProduct(
-      '63e9fc610c0aff28bef14d2c',
+      '63eb785d8cb597f429e66b42',
       sortedMaterials.plainCotton,
       [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],
       sortedMaterials.minkyPlus

@@ -11,6 +11,7 @@ import { MaterialService } from 'src/app/core/services/material.service';
 import { NyuszkoSzundikendoProduct } from 'src/app/core/models/custom-products/nyuszko-szundikendo-product.model';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-szundikendo-builder',
@@ -38,7 +39,8 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
     private materialService: MaterialService,
     private orderService: OrderService,
     private messageService: MessageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
@@ -55,13 +57,17 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
           this.product = NyuszkoSzundikendoProduct.setUpMaterials(
             this.sortedMaterials
           );
-
           this.createForm();
-          this.getProductPrice(this.nyuszkoSzundikendoBuilderForm.value);
-
+          this.price = this.productService.getProductPrice(
+            this.nyuszkoSzundikendoBuilderForm.value,
+            this.materials
+          );
           this.nyuszkoSzundikendoBuilderForm.valueChanges.subscribe(
             (changes) => {
-              this.getProductPrice(changes);
+              this.price = this.productService.getProductPrice(
+                changes,
+                this.materials
+              );
             }
           );
         })
@@ -81,19 +87,6 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
     this.destroy.complete();
   }
 
-  public getProductPrice(formValues: any): void {
-    this.price = 0;
-    for (const key in formValues.baseMaterials) {
-      if (key !== 'minkyColorBack') {
-        this.price += this.materialService.getExtraPriceById(
-          formValues.baseMaterials[key],
-          this.materials
-        );
-      }
-    }
-    this.price += formValues.extraOptions.nameEmbroideryCheckbox ? 500 : 0;
-  }
-
   public onSubmit() {
     if (!this.nyuszkoSzundikendoBuilderForm.valid) return;
 
@@ -108,8 +101,9 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
         this.messageService.add({
           severity: 'success',
           summary: 'Siker!',
-          detail: `${productName + `hozzáadva, ${this.price} Ft értékben.`}`
+          detail: `${productName + ` hozzáadva, ${this.price} Ft értékben.`}`
         });
+        this.nyuszkoSzundikendoBuilderForm.reset();
       });
   }
 

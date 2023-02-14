@@ -7,29 +7,25 @@ import { SortedMaterials } from '../sorted-materials.model';
 //   ['63e9fc610c0aff28bef14d2b', 'nyuszko']
 // ]);
 
-const BASE_PRODUCT_TYPE_ID = '63e9fc610c0aff28bef14d2b';
+const BASE_PRODUCT_TYPE_ID = '63eb785d8cb597f429e66b41';
 
 export class NyuszkoProduct {
   public baseProduct: string;
   public baseColor: Material[];
-  public ears: Material[];
-  public ribbon: Material[];
+  public earsColor: Material[];
+  public ribbonColor: Material[];
 
   constructor(
     baseProduct: string,
     baseColor: Material[],
-    ears: Material[],
-    ribbon: Material[]
+    earsColor: Material[],
+    ribbonColor: Material[]
   ) {
     this.baseProduct = baseProduct;
     this.baseColor = baseColor;
-    this.ears = ears;
-    this.ribbon = ribbon;
+    this.earsColor = earsColor;
+    this.ribbonColor = ribbonColor;
   }
-
-  // public static getBaseProduct(id: BaseProductId): BaseProductType {
-  //   return baseProductMap.get(id);
-  // }
 
   public static setUpMaterials(
     sortedMaterials: SortedMaterials

@@ -1,7 +1,10 @@
 import { Material } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
-const BASE_PRODUCT_TYPE_ID = '63e9fc610c0aff28bef14d2b';
+// macko-szundikendo
+// 63eb785d8cb597f429e66b44
+
+const BASE_PRODUCT_TYPE_ID = '63eb785d8cb597f429e66b43';
 
 export class MackoProduct {
   public baseProduct: string;
@@ -25,12 +28,8 @@ export class MackoProduct {
     return new MackoProduct(
       BASE_PRODUCT_TYPE_ID,
       sortedMaterials.plainCotton,
-      [
-        ...sortedMaterials.plainCotton,
-        ...sortedMaterials.patternedCotton,
-        ...sortedMaterials.doubleGauze
-      ],
-      sortedMaterials.ribbon
+      [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],
+      sortedMaterials.woolFelt
     );
   }
 }

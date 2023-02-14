@@ -1,10 +1,9 @@
 import { NyuszkoProduct } from './custom-products/nyuszko-product.model';
-import { NyuszkoSzundikendoProduct } from './custom-products/nyuszko-szundikendo-product.model';
 
 export class Order {
   public id?: string;
   public productName: string;
-  public productDetails: any | any[];
+  public productDetails: ProductDetails;
   public orderComment: string;
   public buyerId: string;
   public price: number;
@@ -12,7 +11,7 @@ export class Order {
   constructor(
     id: string,
     productName: string,
-    productDetails: NyuszkoProduct,
+    productDetails: ProductDetails,
     orderComment: string,
     buyerId: string,
     price: number
@@ -24,4 +23,16 @@ export class Order {
     this.buyerId = buyerId;
     this.price = price;
   }
+}
+
+export interface ProductDetails {
+  baseProduct: string;
+  baseColor: string;
+  szundikendoColor?: string;
+  earsColor?: string;
+  ribbonColor?: string;
+  isExtraMinkyEars?: boolean;
+  minkyEarsColor?: string;
+  isExtraNameEmbroidery: boolean;
+  nameEmbroideryText: string;
 }

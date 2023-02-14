@@ -11,6 +11,7 @@ import { MaterialService } from 'src/app/core/services/material.service';
 import { NyuszkoProduct } from 'src/app/core/models/custom-products/nyuszko-product.model';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-builder',
@@ -38,7 +39,8 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
     private materialService: MaterialService,
     private orderService: OrderService,
     private messageService: MessageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
@@ -55,10 +57,15 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
           this.sortedMaterials = sortedMaterials;
           this.product = NyuszkoProduct.setUpMaterials(this.sortedMaterials);
           this.createForm();
-          this.getProductPrice(this.nyuszkoBuilderForm.value);
-
+          this.price = this.productService.getProductPrice(
+            this.nyuszkoBuilderForm.value,
+            this.materials
+          );
           this.nyuszkoBuilderForm.valueChanges.subscribe((changes) => {
-            this.getProductPrice(changes);
+            this.price = this.productService.getProductPrice(
+              changes,
+              this.materials
+            );
           });
         })
       )
@@ -77,19 +84,6 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
     this.destroy.complete();
   }
 
-  public getProductPrice(formValues: any): void {
-    this.price = 0;
-    for (const key in formValues.baseMaterials) {
-      const extraPrice = this.materialService.getExtraPriceById(
-        formValues.baseMaterials[key],
-        this.materials
-      );
-      this.price += extraPrice;
-    }
-    this.price += formValues.extraOptions?.extraMinkyEarCheckbox ? 400 : 0;
-    this.price += formValues.extraOptions?.nameEmbroideryCheckbox ? 500 : 0;
-  }
-
   public onSubmit(): void {
     if (!this.nyuszkoBuilderForm.valid) return;
 
@@ -100,12 +94,12 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
           this.product.baseProduct,
           this.materials
         );
-
         this.messageService.add({
           severity: 'success',
           summary: 'Siker!',
-          detail: `${productName + `hozzáadva, ${this.price} Ft értékben.`}`
+          detail: `${productName + ` hozzáadva, ${this.price} Ft értékben.`}`
         });
+        this.nyuszkoBuilderForm.reset();
       });
   }
 
@@ -114,8 +108,8 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl('', Validators.required),
-        ears: new FormControl('', Validators.required),
-        ribbon: new FormControl('', Validators.required)
+        earsColor: new FormControl('', Validators.required),
+        ribbonColor: new FormControl('', Validators.required)
       }),
       extraOptions: new FormGroup({
         extraMinkyEarCheckbox: new FormControl(false, Validators.required),

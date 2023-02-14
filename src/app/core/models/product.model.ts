@@ -29,11 +29,3 @@ export class Product {
     );
   }
 }
-
-export interface ProductDetails {
-  menuName: string;
-  slug: string;
-  title: string;
-  description: string;
-  imgSrc: string[];
-}

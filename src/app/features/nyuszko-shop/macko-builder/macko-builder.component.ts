@@ -8,9 +8,10 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { Material } from 'src/app/core/models/material.model';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
 import { MaterialService } from 'src/app/core/services/material.service';
-import { NyuszkoProduct } from 'src/app/core/models/custom-products/nyuszko-product.model';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { MackoProduct } from 'src/app/core/models/custom-products/macko-product';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
   selector: 'masni-handmade-dolls-macko-builder',
@@ -20,7 +21,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class MackoBuilderComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
   public mackoBuilderForm: FormGroup;
-  public product: NyuszkoProduct;
+  public product: MackoProduct;
   public price = 0;
   public materials: Material[];
   public sortedMaterials: SortedMaterials;
@@ -37,7 +38,8 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
     private materialService: MaterialService,
     private orderService: OrderService,
     private messageService: MessageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
@@ -52,12 +54,17 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
         tap(([materials, sortedMaterials]) => {
           this.materials = materials;
           this.sortedMaterials = sortedMaterials;
-          this.product = NyuszkoProduct.setUpMaterials(this.sortedMaterials);
+          this.product = MackoProduct.setUpMaterials(this.sortedMaterials);
           this.createForm();
-          this.getProductPrice(this.mackoBuilderForm.value);
-
+          this.price = this.productService.getProductPrice(
+            this.mackoBuilderForm.value,
+            this.materials
+          );
           this.mackoBuilderForm.valueChanges.subscribe((changes) => {
-            this.getProductPrice(changes);
+            this.price = this.productService.getProductPrice(
+              changes,
+              this.materials
+            );
           });
         })
       )
@@ -76,22 +83,8 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
     this.destroy.complete();
   }
 
-  public getProductPrice(formValues: any): void {
-    this.price = 0;
-    for (const key in formValues.baseMaterials) {
-      const extraPrice = this.materialService.getExtraPriceById(
-        formValues.baseMaterials[key],
-        this.materials
-      );
-      this.price += extraPrice;
-    }
-    this.price += formValues.extraOptions?.extraMinkyEarCheckbox ? 400 : 0;
-    this.price += formValues.extraOptions?.nameEmbroideryCheckbox ? 500 : 0;
-  }
-
   public onSubmit(): void {
     if (!this.mackoBuilderForm.valid) return;
-
     this.orderService
       .addOrderToCart(this.mackoBuilderForm, this.price)
       .subscribe(() => {
@@ -99,12 +92,12 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
           this.product.baseProduct,
           this.materials
         );
-
         this.messageService.add({
           severity: 'success',
           summary: 'Siker!',
-          detail: `${productName + `hozzáadva, ${this.price} Ft értékben.`}`
+          detail: `${productName + ` hozzáadva, ${this.price} Ft értékben.`}`
         });
+        this.mackoBuilderForm.reset();
       });
   }
 

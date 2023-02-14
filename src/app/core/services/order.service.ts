@@ -26,12 +26,12 @@ export class OrderService {
         baseProduct: baseMaterials.baseProduct,
         baseColor: baseMaterials.baseColor,
         szundikendoColor: baseMaterials?.szundikendoColor,
-        ears: baseMaterials?.ears,
-        ribbon: baseMaterials?.ribbon,
+        earsColor: baseMaterials?.ears,
+        ribbonColor: baseMaterials?.ribbon,
         isExtraMinkyEars: extraOptions?.extraMinkyEarCheckbox,
-        minkyEars: extraOptions?.extraMinkyEarInput,
+        minkyEarsColor: extraOptions?.extraMinkyEarInput,
         isExtraNameEmbroidery: extraOptions?.nameEmbroideryCheckbox,
-        nameEmbroidery: extraOptions?.nameEmbroideryInput
+        nameEmbroideryText: extraOptions?.nameEmbroideryInput
       },
       orderComment: extraOptions.orderComment,
       buyerId: this.cookieService.getCookie('userId'),
