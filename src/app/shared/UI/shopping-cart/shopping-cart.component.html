@@ -1,6 +1,8 @@
 <div class="px-4 py-8 md:px-6 lg:px-8">
   <div class="flex flex-column align-items-center mb-6">
-    <div class="text-900 text-4xl mb-4 font-medium">Kosár értéke 11999 Ft</div>
+    <div class="text-900 text-4xl mb-4 font-medium">
+      Kosár értéke {{ cartPrice }} Ft
+    </div>
 
     <button class="primary-button shadow-2">
       <fa-icon [icon]="faCreditCard"></fa-icon> Fizetés
@@ -20,7 +22,15 @@
             <span class="text-900 text-xl font-medium mb-3">{{
               order.productName
             }}</span>
-            <span class="text-600">Medium</span>
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0].nameEmbroideryText"
+              >Hímzett név:
+              {{ order.productDetails[0].nameEmbroideryText }}</span
+            >
+            <span class="text-600" *ngIf="order.orderComment"
+              >Megjegyzés: {{ order.orderComment }}</span
+            >
           </div>
 
           <div
@@ -28,12 +38,13 @@
             <div></div>
             <div class="flex flex-column sm:align-items-end">
               <span class="text-900 text-2xl font-medium mb-2 sm:mb-3"
-                >$20.00</span
+                >{{ order.price }} Ft</span
               >
               <a
                 class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"
                 tabindex="0"
-                >Remove</a
+                (click)="onDeleteOrder(order.id)"
+                >Törlés</a
               >
             </div>
           </div>
@@ -52,7 +63,7 @@
     <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Részösszeg</span>
-        <span class="text-xl text-900">$82.00</span>
+        <span class="text-xl text-900">{{ cartPrice }} Ft</span>
       </li>
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Szállítás</span>
@@ -62,7 +73,9 @@
       <li
         class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
         <span class="text-xl text-900 font-bold text-3xl">Teljes összeg:</span>
-        <span class="text-xl text-900 font-bold text-3xl">11999 Ft</span>
+        <span class="text-xl text-900 font-bold text-3xl"
+          >{{ cartPrice }} Ft</span
+        >
       </li>
       <li class="flex justify-content-end">
         <button class="primary-button shadow-2">

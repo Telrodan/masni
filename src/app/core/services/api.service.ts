@@ -21,4 +21,10 @@ export class ApiService {
       this.http.get(`${environment.apiUrl}${endpoint}`, { params })
     );
   }
+
+  public delete$<T>(endpoint: string, id: string): Observable<T> {
+    return <Observable<T>>(
+      this.http.delete(`${environment.apiUrl}${endpoint}/` + id)
+    );
+  }
 }

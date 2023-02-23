@@ -27,7 +27,6 @@ export class MaterialService {
         }),
         tap((materials) => {
           this.materials = materials;
-          console.log(this.materials);
         })
       );
   }
@@ -63,7 +62,7 @@ export class MaterialService {
     const material = this.materials.find(
       (material) => material.id === materialId
     );
-    if (!material) return undefined;
+    if (!material) return materialId;
     return material.name;
   }
 }

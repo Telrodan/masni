@@ -50,15 +50,32 @@ export class OrderService {
     });
   }
 
-  public getPersonalOrders(): Observable<{ orders: Order[] }> {
+  public getPersonalOrders(): Observable<Order[]> {
     const owner = {
       buyerId: this.cookieService.getCookie('userId')
     };
     return this.apiService.get$<{ orders: Order[] }>('orders', owner).pipe(
       map((ordersDTO) => {
-        console.log(ordersDTO);
-        return ordersDTO;
+        const orders = ordersDTO.orders.map((rawOrder: any) => {
+          return Order.fromDTO(rawOrder);
+        });
+        orders.map((order) => {
+          for (const key in order) {
+            order[key] = this.materialService.getMaterialNameById(order[key]);
+          }
+          const productDetails = order.productDetails[0];
+          for (const key in productDetails) {
+            productDetails[key] = this.materialService.getMaterialNameById(
+              productDetails[key]
+            );
+          }
+        });
+        return orders;
       })
     );
+  }
+
+  public deleteOrder(id: string): Observable<null> {
+    return this.apiService.delete$('orders', id);
   }
 }

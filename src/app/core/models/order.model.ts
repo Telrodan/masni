@@ -22,16 +22,16 @@ export class Order {
     this.price = price;
   }
 
-  // private static getName(material: Material): string {
-  //   return this.material;
-  // }
-
-  // public static fromDTO(orderResult: any): Order {
-  //   return new Order(
-  //     orderResult._id,
-
-  //   );
-  // }
+  public static fromDTO(orderResult: any): Order {
+    return new Order(
+      orderResult._id,
+      orderResult.productName,
+      orderResult.productDetails,
+      orderResult.orderComment,
+      orderResult.buyerId,
+      orderResult.price
+    );
+  }
 }
 
 export interface ProductDetails {

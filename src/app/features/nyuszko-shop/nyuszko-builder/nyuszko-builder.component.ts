@@ -79,7 +79,6 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
   public onSubmit(): void {
     if (!this.builderForm.valid) return;
     this.orderService.addOrderToCart(this.builderForm, this.price);
-    this.builderForm.reset();
   }
 
   private createForm(): void {
