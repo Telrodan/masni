@@ -49,6 +49,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           const index = this.orders.findIndex((order) => order.id === id);
+          this.cartPrice -= this.orders[index].price;
           this.orders.splice(index, 1);
         }),
         takeUntil(this.destroy)
@@ -59,6 +60,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
           summary: 'Termék törölve!'
         });
       });
+  }
+
+  public details(order: Order) {
+    console.log(order);
   }
 
   public ngOnDestroy(): void {

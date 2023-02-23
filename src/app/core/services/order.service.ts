@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
 import { Order } from '../models/order.model';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
@@ -11,12 +11,20 @@ import { MaterialService } from './material.service';
   providedIn: 'root'
 })
 export class OrderService {
+  public orders: Order[];
+  private orderCounter = 0;
+  private orderCounterUpdated = new BehaviorSubject<number>(this.orderCounter);
+
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
     private materialService: MaterialService,
     private messageService: MessageService
   ) {}
+
+  public getOrderCounterListener$(): Observable<number> {
+    return this.orderCounterUpdated.asObservable();
+  }
 
   public addOrderToCart(orderForm: FormGroup, price: number): void {
     const baseMaterials = orderForm.value['baseMaterials'];
@@ -27,8 +35,8 @@ export class OrderService {
         baseProduct: baseMaterials.baseProduct,
         baseColor: baseMaterials.baseColor,
         szundikendoColor: baseMaterials?.szundikendoColor,
-        earsColor: baseMaterials?.ears,
-        ribbonColor: baseMaterials?.ribbon,
+        earsColor: baseMaterials?.earsColor,
+        ribbonColor: baseMaterials?.ribbonColor,
         isExtraMinkyEars: extraOptions?.extraMinkyEarCheckbox,
         minkyEarsColor: extraOptions?.extraMinkyEarInput,
         isExtraNameEmbroidery: extraOptions?.nameEmbroideryCheckbox,
@@ -71,6 +79,11 @@ export class OrderService {
           }
         });
         return orders;
+      }),
+      tap((orders) => {
+        this.orders = orders;
+        this.orderCounter = this.orders.length;
+        this.orderCounterUpdated.next(this.orderCounter);
       })
     );
   }

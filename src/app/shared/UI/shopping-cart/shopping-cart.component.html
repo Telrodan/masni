@@ -18,18 +18,49 @@
       <div class="flex-auto py-5 md:pl-5">
         <div
           class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
-          <div class="w-full sm:w-6 flex flex-column">
+          <div class="w-full sm:w-6 flex flex-column" (click)="details(order)">
             <span class="text-900 text-xl font-medium mb-3">{{
-              order.productName
+              order.productName | titlecase
             }}</span>
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0].nameEmbroideryText"
-              >Hímzett név:
-              {{ order.productDetails[0].nameEmbroideryText }}</span
+              *ngIf="order.productDetails[0]?.nameEmbroideryText">
+              <span class="text-900">Hímzett név:</span>
+              {{ order.productDetails[0]?.nameEmbroideryText }}
+            </span>
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0]?.baseColor"
+              ><span class="text-900">Alapszín:</span>
+              {{ order.productDetails[0]?.baseColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0].earsColor"
+              ><span class="text-900">Fülek színe mintája:</span>
+              {{ order.productDetails[0]?.earsColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0]?.ribbonColor"
+              ><span class="text-900">Masni színe:</span>
+              {{ order.productDetails[0]?.ribbonColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0]?.isExtraMinkyEars"
+              ><span class="text-900">Extra minky plüss fülek színe:</span>
+              {{ order.productDetails[0]?.minkyEarsColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0]?.szundikendoColor"
+              ><span class="text-900">Szundikendo színe/mintája:</span>
+              {{ order.productDetails[0]?.szundikendoColor }}</span
             >
             <span class="text-600" *ngIf="order.orderComment"
-              >Megjegyzés: {{ order.orderComment }}</span
+              ><span class="text-900">Megjegyzés:</span>
+              {{ order.orderComment }}</span
             >
           </div>
 

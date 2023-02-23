@@ -13,8 +13,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { OrderService } from 'src/app/core/services/order.service';
 
 @Component({
   selector: 'masni-handmade-dolls-navbar',
@@ -23,9 +24,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
+  public orderCounter = 0;
   private destroy = new Subject();
 
-  // Fontawesome icons
   public faChevronDown = faChevronDown;
   public faCartShopping = faCartShopping;
   public faBars = faBars;
@@ -40,11 +41,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private orderSerivce: OrderService
   ) {}
 
   public ngOnInit(): void {
     this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.orderSerivce
+      .getPersonalOrders()
+      .pipe(
+        switchMap(() => this.orderSerivce.getOrderCounterListener$()),
+        takeUntil(this.destroy)
+      )
+      .subscribe((orderCounter) => {
+        this.orderCounter = orderCounter;
+      });
+
     this.authService
       .getAuthStatus$()
       .pipe(takeUntil(this.destroy))
