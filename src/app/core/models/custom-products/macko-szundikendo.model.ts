@@ -1,9 +1,9 @@
 import { Material } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
-const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de12f';
+const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de131';
 
-export class NyuszkoSzundikendoProduct {
+export class MackoSzundikendoProduct {
   public baseProduct: string;
   public baseColor: Material[];
   public szundikendoColor: Material[];
@@ -23,8 +23,8 @@ export class NyuszkoSzundikendoProduct {
 
   public static setUpMaterials(
     sortedMaterials: SortedMaterials
-  ): NyuszkoSzundikendoProduct {
-    return new NyuszkoSzundikendoProduct(
+  ): MackoSzundikendoProduct {
+    return new MackoSzundikendoProduct(
       BASE_PRODUCT_TYPE_ID,
       sortedMaterials.plainCotton,
       [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],

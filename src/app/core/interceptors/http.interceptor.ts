@@ -37,11 +37,11 @@ export class HTTPInterceptor implements HttpInterceptor {
             horizontalPosition: 'right'
           });
         } else {
-          this.snackBar.open(`Szerver oldali hiba!`, 'Bezárás', {
+          this.snackBar.open('Szerver oldali hiba!', 'Bezárás', {
             verticalPosition: 'top',
             horizontalPosition: 'right'
           });
-          errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
+          errorMsg = `Error Code: ${error.status},  Message: ${error.error.message}`;
         }
         return throwError(() => new Error(errorMsg));
       }),

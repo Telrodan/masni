@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Order } from '../models/order.model';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
@@ -50,14 +50,15 @@ export class OrderService {
     });
   }
 
-  public getPersonalOrders(): Observable<{
-    status: string;
-    data: { orders: Order[] };
-  }> {
-    const userId = this.cookieService.getCookie('userId');
-    return this.apiService.get$<{ status: string; data: { orders: Order[] } }>(
-      'orders',
-      { userId: userId }
+  public getPersonalOrders(): Observable<{ orders: Order[] }> {
+    const owner = {
+      buyerId: this.cookieService.getCookie('userId')
+    };
+    return this.apiService.get$<{ orders: Order[] }>('orders', owner).pipe(
+      map((ordersDTO) => {
+        console.log(ordersDTO);
+        return ordersDTO;
+      })
     );
   }
 }

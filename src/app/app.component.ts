@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Carousel } from 'primeng/carousel';
 
 import { AuthService } from './core/services/auth.service';
 
@@ -8,7 +9,10 @@ import { AuthService } from './core/services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    Carousel.prototype.onTouchMove = () => {};
+  }
 
   public ngOnInit(): void {
     this.authService.autoAuthentication();

@@ -16,20 +16,14 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   public faCreditCard = faCreditCard;
   private destroy = new Subject();
 
-  constructor(
-    private orderService: OrderService,
-    private spinnerService: SpinnerService
-  ) {}
+  constructor(private orderService: OrderService) {}
 
   public ngOnInit(): void {
-    this.spinnerService.startSpinner();
     this.orderService
       .getPersonalOrders()
       .pipe(takeUntil(this.destroy))
       .subscribe((response) => {
-        this.orders = response.data.orders;
-        // console.log(this.orders);
-        // this.spinnerService.stopSpinner();
+        this.orders = response.orders;
       });
   }
 

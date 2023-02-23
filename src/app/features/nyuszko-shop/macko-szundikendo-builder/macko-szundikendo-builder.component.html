@@ -4,10 +4,10 @@
       [images]="productImages"></masni-handmade-dolls-image-composition>
   </div>
   <div class="container shadow-2">
-    <h1 class="heading-primary">Nyuszkó</h1>
+    <h1 class="heading-primary">Mackó-szundikendő</h1>
     <p class="paragraph-primary reminder-text">
-      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a nyuszkó
-      végösszegén!
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a
+      mackó-szundikendő végösszegén!
     </p>
 
     <form class="form" (submit)="onSubmit()" [formGroup]="builderForm">
@@ -22,21 +22,23 @@
             optionValue="id"></p-dropdown>
         </div>
         <div class="form-group">
-          <label class="form-label">Fülek színe mintája:</label>
+          <label class="form-label">Szundikendo színe/mintája:</label>
           <p-dropdown
             styleClass="w-full"
-            [options]="product.earsColor"
-            formControlName="earsColor"
+            [options]="product.szundikendoColor"
+            formControlName="szundikendoColor"
             optionLabel="nameWithExtra"
             optionValue="id"></p-dropdown>
         </div>
         <div class="form-group">
-          <label class="form-label">Masni színe:</label>
+          <label class="form-label"
+            >Minky plüss színe(szundikendő-hátulja):</label
+          >
           <p-dropdown
             styleClass="w-full"
-            [options]="product.ribbonColor"
-            formControlName="ribbonColor"
-            optionLabel="nameWithExtra"
+            [options]="product.minkyColorBack"
+            formControlName="minkyColorBack"
+            optionLabel="name"
             optionValue="id"></p-dropdown>
         </div>
       </div>
@@ -44,29 +46,10 @@
         <div class="field-checkbox">
           <p-checkbox
             [binary]="true"
-            formControlName="extraMinkyEarCheckbox"
-            inputId="extraMinkyEarCheckbox"></p-checkbox>
-          <label for="extraMinkyEarCheckbox"
-            >Extra minky plüss fülekkel kérem! +400 Ft</label
-          >
-        </div>
-        <div
-          class="form-group"
-          *ngIf="builderForm.get('extraOptions.extraMinkyEarCheckbox').value">
-          <p-dropdown
-            styleClass="w-full"
-            [options]="sortedMaterials.minkyPlus"
-            formControlName="extraMinkyEarInput"
-            optionLabel="name"
-            optionValue="id"></p-dropdown>
-        </div>
-        <div class="field-checkbox">
-          <p-checkbox
-            [binary]="true"
             formControlName="nameEmbroideryCheckbox"
             inputId="nameEmbroideryCheckbox"></p-checkbox>
           <label for="nameEmbroideryCheckbox"
-            >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
+            >Szeretnék kézzel hímzett nevet a szundikendőre! +500 Ft</label
           >
         </div>
 
@@ -116,16 +99,17 @@
         ><div class="accordion-content">
           <div class="story-container">
             <p class="story-paragraph paragraph-primary">
-              A nyuszkókat 100%-ban természetes alapanyagokból, pamutvászon
-              illetve minky plüss anyagokból készítem. Töltőanyagként
-              antiallergén szilikonizált poliészter golyókat használok, ami baba
-              barát, és mosható. Minden nyuszkó kézzel hímzett vidám arcocskát
-              kap. A nyuszkók 24cm magasak, egy-két cm eltérés előfordulhat.
-              Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel
-              hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén
-              a kézzel való tisztítást részesítem előnyben, de 30°C-on,
-              kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne
-              tedd!
+              A szundikendőket 100%-ban természetes alapanyagokból,
+              pamutvászonból és minky plüss anyagból készítem. Az arc
+              kialakításáshoz gyapjúfilcet használok. A szundikendőhöz tartozó
+              fejecskét antiallergén szilikonizált poliészter golyókkal töltöm
+              meg, ami baba barát és mosható. A mackófej kézzel hímzett szemeket
+              és kézzel felvarrt gyapjúfilc orrot kap. A szundikendő mérete
+              30cm*30cm, plusz a fejecske. Amennyiben szeretnéd, hogy ajándékod
+              még egyedibb legyen, kézzel hímzett névvel ellátva is kérheted.
+              Kézzel hímzett termékek esetén a kézzel való tisztítást részesítem
+              előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható.
+              Szárítógépbe kérlek ne tedd! A minky plüss nem vasalható!
             </p>
           </div>
         </div>

@@ -15,17 +15,28 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.component';
 import { NyuszkoSzundikendoBuilderComponent } from './nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
 import { MackoBuilderComponent } from './macko-builder/macko-builder.component';
+import { MackoSzundikendoBuilderComponent } from './macko-szundikendo-builder/macko-szundikendo-builder.component';
+import { SettsComponent } from './setts/setts.component';
+import { ButtonModule } from 'primeng/button';
 
 const PRIME_NG = [
   DropdownModule,
   CheckboxModule,
   InputTextareaModule,
   InputTextModule,
-  AccordionModule
+  AccordionModule,
+  ButtonModule
 ];
 
 @NgModule({
-  declarations: [NyuszkoShopComponent, NyuszkoBuilderComponent, NyuszkoSzundikendoBuilderComponent, MackoBuilderComponent],
+  declarations: [
+    NyuszkoShopComponent,
+    NyuszkoBuilderComponent,
+    NyuszkoSzundikendoBuilderComponent,
+    MackoBuilderComponent,
+    MackoSzundikendoBuilderComponent,
+    SettsComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,

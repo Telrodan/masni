@@ -1,5 +1,3 @@
-import { NyuszkoProduct } from './custom-products/nyuszko-product.model';
-
 export class Order {
   public id?: string;
   public productName: string;
@@ -23,6 +21,17 @@ export class Order {
     this.buyerId = buyerId;
     this.price = price;
   }
+
+  // private static getName(material: Material): string {
+  //   return this.material;
+  // }
+
+  // public static fromDTO(orderResult: any): Order {
+  //   return new Order(
+  //     orderResult._id,
+
+  //   );
+  // }
 }
 
 export interface ProductDetails {
