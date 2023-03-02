@@ -25,11 +25,9 @@ export class MackoSzundikendoBuilderComponent implements OnInit, OnDestroy {
   public materials: Material[];
   public sortedMaterials: SortedMaterials;
   public productImages = [
-    '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-1.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-2.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-3.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-4.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-5.jpg'
+    '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-1.jpg',
+    '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-2.jpg',
+    '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-3.jpg'
   ];
   public faShoppingCart = faShoppingCart;
   private destroy = new Subject();
@@ -89,9 +87,18 @@ export class MackoSzundikendoBuilderComponent implements OnInit, OnDestroy {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
-        baseColor: new FormControl('', Validators.required),
-        szundikendoColor: new FormControl('', Validators.required),
-        minkyColorBack: new FormControl('', Validators.required)
+        baseColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        szundikendoColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        minkyColorBack: new FormControl(
+          this.sortedMaterials.minkyPlus[0].id,
+          Validators.required
+        )
       }),
       extraOptions: new FormGroup({
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),

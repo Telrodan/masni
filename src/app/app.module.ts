@@ -30,6 +30,12 @@ import { SignupComponent } from './features/auth/signup/signup.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { SharedModule } from './shared/shared.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { environment } from 'src/environments/environment';
+import { CoreModule } from './core/core.module';
+import { reducers } from './reducer';
+import { ShopComponent } from './features/shop/shop.component';
 
 const PRIME_NG = [
   AccordionModule,
@@ -49,7 +55,8 @@ const PRIME_NG = [
     ContactComponent,
     SignupComponent,
     LoginComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ShopComponent
   ],
   imports: [
     BrowserModule,
@@ -64,10 +71,18 @@ const PRIME_NG = [
     HttpClientModule,
     ImageModule,
     MatSnackBarModule,
-    ...PRIME_NG
+    CoreModule,
+    ...PRIME_NG,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
+    StoreModule.forRoot(reducers),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [
     MessageService,
+
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HTTPInterceptor, multi: true },
     {

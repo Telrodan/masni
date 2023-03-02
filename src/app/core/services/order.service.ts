@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Order } from '../models/order.model';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
@@ -13,7 +13,9 @@ import { MaterialService } from './material.service';
 export class OrderService {
   public orders: Order[];
   private orderCounter = 0;
-  private orderCounterUpdated = new BehaviorSubject<number>(this.orderCounter);
+  private orderCounterUpdatedListener = new BehaviorSubject<number>(
+    this.orderCounter
+  );
 
   constructor(
     private apiService: ApiService,
@@ -23,7 +25,7 @@ export class OrderService {
   ) {}
 
   public getOrderCounterListener$(): Observable<number> {
-    return this.orderCounterUpdated.asObservable();
+    return this.orderCounterUpdatedListener.asObservable();
   }
 
   public addOrderToCart(orderForm: FormGroup, price: number): void {
@@ -35,6 +37,7 @@ export class OrderService {
         baseProduct: baseMaterials.baseProduct,
         baseColor: baseMaterials.baseColor,
         szundikendoColor: baseMaterials?.szundikendoColor,
+        minkyColorBack: baseMaterials?.minkyColorBack,
         earsColor: baseMaterials?.earsColor,
         ribbonColor: baseMaterials?.ribbonColor,
         isExtraMinkyEars: extraOptions?.extraMinkyEarCheckbox,
@@ -46,7 +49,7 @@ export class OrderService {
       buyerId: this.cookieService.getCookie('userId'),
       price: price
     };
-    this.apiService.post$('orders', order).subscribe(() => {
+    this.apiService.post('orders', order).subscribe(() => {
       const productName = this.materialService.getMaterialNameById(
         order.productDetails.baseProduct
       );
@@ -62,7 +65,7 @@ export class OrderService {
     const owner = {
       buyerId: this.cookieService.getCookie('userId')
     };
-    return this.apiService.get$<{ orders: Order[] }>('orders', owner).pipe(
+    return this.apiService.get<{ orders: Order[] }>('orders', owner).pipe(
       map((ordersDTO) => {
         const orders = ordersDTO.orders.map((rawOrder: any) => {
           return Order.fromDTO(rawOrder);
@@ -83,12 +86,12 @@ export class OrderService {
       tap((orders) => {
         this.orders = orders;
         this.orderCounter = this.orders.length;
-        this.orderCounterUpdated.next(this.orderCounter);
+        this.orderCounterUpdatedListener.next(this.orderCounter);
       })
     );
   }
 
   public deleteOrder(id: string): Observable<null> {
-    return this.apiService.delete$('orders', id);
+    return this.apiService.delete('orders', id);
   }
 }

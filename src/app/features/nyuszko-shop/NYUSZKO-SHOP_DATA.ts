@@ -28,12 +28,14 @@ export const menuItems = [
   {
     name: 'Mackók',
     linkSrc: 'mackok',
-    backgroundImage: ''
+    backgroundImage:
+      '../../../../assets/images/nyuszko-shop/menu/macko-menu.jpg'
   },
   {
     name: 'Mackó Szundikendők',
     linkSrc: 'macko-szundikendok',
-    backgroundImage: ''
+    backgroundImage:
+      '../../../../assets/images/nyuszko-shop/menu/macko-szundikendo-menu.jpg'
   },
   {
     name: 'Szettek -%',

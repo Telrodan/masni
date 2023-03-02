@@ -55,8 +55,16 @@
             <span
               class="text-600 mb-1"
               *ngIf="order.productDetails[0]?.szundikendoColor"
-              ><span class="text-900">Szundikendo színe/mintája:</span>
+              ><span class="text-900">Szundikendő színe/mintája:</span>
               {{ order.productDetails[0]?.szundikendoColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="order.productDetails[0]?.minkyColorBack"
+              ><span class="text-900"
+                >Minky plüss színe(szundikendő-hátulja)</span
+              >
+              {{ order.productDetails[0]?.minkyColorBack }}</span
             >
             <span class="text-600" *ngIf="order.orderComment"
               ><span class="text-900">Megjegyzés:</span>
@@ -93,11 +101,15 @@
     <div class="w-12rem hidden md:block"></div>
     <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
       <li class="flex justify-content-between mb-4">
-        <span class="text-xl text-900">Részösszeg</span>
+        <span class="text-xl text-900">Akció:</span>
+        <span class="text-xl text-900">-1000 Ft</span>
+      </li>
+      <li class="flex justify-content-between mb-4">
+        <span class="text-xl text-900">Részösszeg:</span>
         <span class="text-xl text-900">{{ cartPrice }} Ft</span>
       </li>
       <li class="flex justify-content-between mb-4">
-        <span class="text-xl text-900">Szállítás</span>
+        <span class="text-xl text-900">Szállítás:</span>
         <span class="text-xl text-900">Ingyenes</span>
       </li>
 

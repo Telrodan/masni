@@ -9,6 +9,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ShoppingCartComponent } from './shared/UI/shopping-cart/shopping-cart.component';
+import { ShopComponent } from './features/shop/shop.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'masni-shop',
     loadChildren: masniShopModule
+  },
+  {
+    path: 'shop',
+    component: ShopComponent
   },
   {
     path: 'shopping-cart',

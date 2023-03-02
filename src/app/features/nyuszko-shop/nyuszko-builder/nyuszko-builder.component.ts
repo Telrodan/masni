@@ -85,13 +85,24 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
-        baseColor: new FormControl('', Validators.required),
-        earsColor: new FormControl('', Validators.required),
-        ribbonColor: new FormControl('', Validators.required)
+        baseColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        earsColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        ribbonColor: new FormControl(
+          this.sortedMaterials.ribbon[0].id,
+          Validators.required
+        )
       }),
       extraOptions: new FormGroup({
         extraMinkyEarCheckbox: new FormControl(false, Validators.required),
-        extraMinkyEarInput: new FormControl(''),
+        extraMinkyEarInput: new FormControl(
+          this.sortedMaterials.plainCotton[0].id
+        ),
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),
         nameEmbroideryInput: new FormControl(''),
         orderComment: new FormControl('')

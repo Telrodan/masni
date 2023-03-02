@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+
 import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { MessageService } from 'primeng/api';
+
+import { CookieService } from './cookie.service';
+import { ApiService } from './api.service';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
-import { ApiService } from './api.service';
-import { CookieService } from './cookie.service';
+
+interface LoginData {
+  token: string;
+  userId: string;
+  expiresIn: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +21,9 @@ import { CookieService } from './cookie.service';
 export class AuthService {
   private isAuthenticated = false;
   private token: string;
-  private authStatusListener = new BehaviorSubject<boolean>(
-    this.isAuthenticated
-  );
-  private tokenTimer: NodeJS.Timer;
   private userId: string;
+  private tokenTimer: NodeJS.Timer;
+  private authStatusListener = new BehaviorSubject<boolean>(false);
 
   constructor(
     private router: Router,
@@ -25,10 +31,6 @@ export class AuthService {
     private messageService: MessageService,
     private cookieService: CookieService
   ) {}
-
-  public getToken(): string {
-    return this.token;
-  }
 
   public getIsAuthenticated(): boolean {
     return this.isAuthenticated;
@@ -39,56 +41,44 @@ export class AuthService {
   }
 
   public signupUser(newUser: User): Observable<User> {
-    return this.apiService.post$('users/signup', newUser);
+    return this.apiService.post('users/signup', newUser);
   }
 
-  public loginUser(authData: AuthData): Observable<{
-    success: string;
-    token: string;
-    userId: string;
-    expiresIn: number;
-  }> {
-    return this.apiService
-      .post$<{
-        success: string;
-        token: string;
-        userId: string;
-        expiresIn: number;
-      }>('users/login', authData)
-      .pipe(
-        tap((result) => {
-          this.token = result.token;
-          if (this.token) {
-            const expiresInDuration = result.expiresIn;
-            this.setAuthenticationTimer(expiresInDuration);
-            this.isAuthenticated = true;
-            this.userId = result.userId;
-            this.authStatusListener.next(true);
-            const now = new Date();
-            const expirationDate = new Date(
-              now.getTime() + expiresInDuration * 1000
-            );
-            this.saveAuthenticationData(this.token, expirationDate);
-          }
-        })
-      );
+  public loginUser(authData: AuthData): Observable<LoginData> {
+    return this.apiService.post<LoginData>('users/login', authData).pipe(
+      tap((result) => {
+        this.token = result.token;
+        if (this.token) {
+          const expiresInDuration = result.expiresIn;
+          this.userId = result.userId;
+          this.isAuthenticated = true;
+          this.authStatusListener.next(this.isAuthenticated);
+          this.setAuthenticationTimer(expiresInDuration);
+          this.setAuthData(expiresInDuration);
+        }
+      })
+    );
   }
 
-  public saveAuthenticationData(token: string, expirationDate: Date): void {
-    this.cookieService.setCookie('token', token, 1);
-    this.cookieService.setCookie('expiration', expirationDate.toISOString(), 1);
+  private setAuthData(expiresInDuration: number): void {
+    const currentDate = new Date();
+    const expirationDate = new Date(
+      currentDate.getTime() + expiresInDuration * 1000
+    );
+    this.saveAuthenticationData(expirationDate);
+  }
+
+  private saveAuthenticationData(expirationDate: Date): void {
+    this.cookieService.setCookie('token', this.token, 1);
     this.cookieService.setCookie('userId', this.userId, 1);
-  }
-
-  public clearAuthenticationData(): void {
-    this.cookieService.clearCookies();
+    this.cookieService.setCookie('expiration', expirationDate.toISOString(), 1);
   }
 
   public logout(): void {
     this.token = null;
     this.isAuthenticated = false;
-    this.authStatusListener.next(false);
-    this.clearAuthenticationData();
+    this.authStatusListener.next(this.isAuthenticated);
+    this.cookieService.clearCookies();
     this.router.navigate(['/']);
     clearTimeout(this.tokenTimer);
   }
@@ -110,14 +100,15 @@ export class AuthService {
   public autoAuthentication() {
     const authenticationInformation = this.getAuthenticationData();
     if (!authenticationInformation) return;
-    const now = new Date();
+    const currentDate = new Date();
     const expiresIn =
-      authenticationInformation.expirationDate.getTime() - now.getTime();
+      authenticationInformation.expirationDate.getTime() -
+      currentDate.getTime();
     if (expiresIn > 0) {
       this.token = authenticationInformation.token;
       this.isAuthenticated = true;
+      this.authStatusListener.next(this.isAuthenticated);
       this.setAuthenticationTimer(expiresIn / 1000);
-      this.authStatusListener.next(true);
     }
   }
 
@@ -125,7 +116,7 @@ export class AuthService {
     this.tokenTimer = setTimeout(() => {
       this.messageService.add({
         severity: 'info',
-        summary: 'Időkorlát lejárt',
+        summary: 'Időkorlát lejárt!',
         detail: 'Kérlek lépj be újra'
       });
       this.logout();

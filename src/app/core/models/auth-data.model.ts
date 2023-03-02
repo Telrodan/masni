@@ -1,4 +1,9 @@
-export interface AuthData {
-  email: string;
-  password: string;
+export class AuthData {
+  public email: string;
+  public password: string;
+
+  constructor(email: string, password: string) {
+    this.email = email;
+    this.password = password;
+  }
 }

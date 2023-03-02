@@ -86,9 +86,18 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
-        baseColor: new FormControl('', Validators.required),
-        ears: new FormControl('', Validators.required),
-        ribbon: new FormControl('', Validators.required)
+        baseColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        earsColor: new FormControl(
+          this.sortedMaterials.plainCotton[0].id,
+          Validators.required
+        ),
+        ribbonColor: new FormControl(
+          this.sortedMaterials.ribbon[0].id,
+          Validators.required
+        )
       }),
       extraOptions: new FormGroup({
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),

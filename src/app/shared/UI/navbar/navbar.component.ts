@@ -13,7 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { MessageService } from 'primeng/api';
-import { Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
+
 import { AuthService } from 'src/app/core/services/auth.service';
 import { OrderService } from 'src/app/core/services/order.service';
 
@@ -46,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
+    // this.isAuthenticated = this.authService.getIsAuthenticated();
     this.orderSerivce
       .getPersonalOrders()
       .pipe(
@@ -74,7 +75,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.messageService.add({
       severity: 'success',
-      summary: 'Sikeres kilépés'
+      summary: 'Siker!',
+      detail: 'Sikeres kilépés, átirányítva a főoldalra'
     });
   }
 

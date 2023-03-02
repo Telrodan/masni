@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./landing-brands.component.scss']
 })
 export class LandingBrandsComponent {
-
+  public onNavigate() {
+    window.open(
+      'https://www.facebook.com/profile.php?id=100087389177967',
+      '_blank'
+    );
+  }
 }

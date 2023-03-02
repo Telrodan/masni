@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 
 import { Order } from 'src/app/core/models/order.model';
 import { MaterialService } from 'src/app/core/services/material.service';
@@ -21,14 +23,15 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
 
   constructor(
     private orderService: OrderService,
-    private materialService: MaterialService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store$: Store
   ) {}
 
   public ngOnInit(): void {
-    this.materialService
-      .getMaterials$()
+    this.store$
+      .select(coreSelectors.selectMaterials)
       .pipe(
+        filter((materials) => !!materials.length),
         switchMap(() => this.orderService.getPersonalOrders()),
         map((orders) => {
           orders.map((order) => {
@@ -36,11 +39,12 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
           });
           return orders;
         }),
+        tap((orders) => {
+          this.orders = orders;
+        }),
         takeUntil(this.destroy)
       )
-      .subscribe((orders) => {
-        this.orders = orders;
-      });
+      .subscribe();
   }
 
   public onDeleteOrder(id: string): void {

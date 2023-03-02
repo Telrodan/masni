@@ -38,6 +38,7 @@ export interface ProductDetails {
   baseProduct: string;
   baseColor: string;
   szundikendoColor?: string;
+  minkyColorBack?: string;
   earsColor?: string;
   ribbonColor?: string;
   isExtraMinkyEars?: boolean;

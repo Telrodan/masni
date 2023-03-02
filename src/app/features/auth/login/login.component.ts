@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
+
 import { AuthData } from 'src/app/core/models/auth-data.model';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { SpinnerService } from 'src/app/core/services/spinner.service';
 
 @Component({
   selector: 'masni-handmade-dolls-login',
@@ -17,7 +19,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
-    private spinnerService: SpinnerService,
     private router: Router
   ) {}
 
@@ -27,23 +28,29 @@ export class LoginComponent implements OnInit {
 
   public onLogin(): void {
     if (!this.loginForm.valid) return;
-    const authData: AuthData = { ...this.loginForm.value };
-    this.spinnerService.startSpinner();
-    this.authService.loginUser(authData).subscribe((result) => {
-      this.spinnerService.stopSpinner();
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sikeres belépés',
-        detail: 'Átirányítva a főoldalra'
-      });
-      this.router.navigate(['/']);
-    });
-    this.loginForm.reset();
+    const authData: AuthData = {
+      email: this.loginForm.value.email.toLowerCase().trim(),
+      password: this.loginForm.value.password.trim()
+    };
+
+    this.authService
+      .loginUser(authData)
+      .pipe(
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: 'Sikeres belépés, átirányítva a főoldra'
+          });
+          this.router.navigate(['/']);
+          this.loginForm.reset();
+        })
+      )
+      .subscribe();
   }
 
   public createForm(): void {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
+    const emailRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     this.loginForm = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
