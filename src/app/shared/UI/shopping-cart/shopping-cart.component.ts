@@ -9,7 +9,6 @@ import { Coupon } from 'src/app/core/models/coupon.mode';
 
 import { Order } from 'src/app/core/models/order.model';
 import { CouponService } from 'src/app/core/services/coupon.service';
-import { MaterialService } from 'src/app/core/services/material.service';
 import { OrderService } from 'src/app/core/services/order.service';
 
 @Component({
@@ -20,8 +19,12 @@ import { OrderService } from 'src/app/core/services/order.service';
 export class ShoppingCartComponent implements OnInit, OnDestroy {
   public orders: Order[];
   public coupons: Coupon[];
-  public cartPrice = 0;
+  public discountedCartPrice = 0;
+  public originalCartPrice = 0;
+  public discount = 0;
   private destroy = new Subject();
+  private nyuszkoSett = ['nyuszkó', 'nyuszkó-szundikendő'];
+  private mackoSett = ['mackó', 'mackó-szundikendő'];
   public faCreditCard = faCreditCard;
 
   constructor(
@@ -32,16 +35,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.couponService
-      .getUserCoupons()
-      .pipe(
-        tap((coupons) => {
-          this.coupons = coupons;
-          console.log(this.coupons);
-        })
-      )
-      .subscribe();
-
     this.store$
       .select(coreSelectors.selectMaterials)
       .pipe(
@@ -49,16 +42,40 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
         switchMap(() => this.orderService.getPersonalOrders()),
         map((orders) => {
           orders.map((order) => {
-            this.cartPrice += order.price;
+            this.discountedCartPrice += order.price;
           });
+          this.originalCartPrice = this.discountedCartPrice;
           return orders;
         }),
         tap((orders) => {
           this.orders = orders;
         }),
+        switchMap(() => this.couponService.getUserCoupons()),
+        tap((coupons) => {
+          if (!coupons) return;
+          this.coupons = coupons;
+          if (this.checkSettCouponConditions()) {
+            this.discount = this.coupons[0].discount;
+            this.discountedCartPrice -= this.discount;
+          }
+        }),
         takeUntil(this.destroy)
       )
       .subscribe();
+  }
+
+  private checkSettCouponConditions(): boolean {
+    this.discount = 0;
+    let isValid = false;
+    let nyuszkoSettCounter = 0;
+    let mackoSettCounter = 0;
+    this.orders.forEach((order) => {
+      if (this.nyuszkoSett.includes(order.productName)) nyuszkoSettCounter++;
+      if (this.mackoSett.includes(order.productName)) mackoSettCounter++;
+    });
+    if (nyuszkoSettCounter >= 2) isValid = true;
+    if (mackoSettCounter >= 2) isValid = true;
+    return isValid;
   }
 
   public onDeleteOrder(id: string): void {
@@ -67,8 +84,12 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           const index = this.orders.findIndex((order) => order.id === id);
-          this.cartPrice -= this.orders[index].price;
+          this.discountedCartPrice -= this.orders[index].price;
+          this.originalCartPrice -= this.orders[index].price;
           this.orders.splice(index, 1);
+          if (!this.checkSettCouponConditions()) {
+            this.discountedCartPrice = this.originalCartPrice;
+          }
         }),
         takeUntil(this.destroy)
       )
@@ -87,6 +108,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy.next(null);
     this.destroy.complete();
-    this.cartPrice = 0;
+    this.discountedCartPrice = 0;
   }
 }

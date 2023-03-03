@@ -49,49 +49,61 @@ export class OrderService {
       buyerId: this.cookieService.getCookie('userId'),
       price: price
     };
-    this.apiService.post('orders', order).subscribe(() => {
-      const productName = this.materialService.getMaterialNameById(
-        order.productDetails.baseProduct
-      );
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Siker!',
-        detail: `${productName + ` hozzáadva, ${order.price} Ft értékben.`}`
-      });
-    });
+
+    this.apiService
+      .post('orders', order)
+      .pipe(
+        tap(() => {
+          this.orderCounter++;
+          this.orderCounterUpdatedListener.next(this.orderCounter);
+          const productName = this.materialService.getMaterialNameById(
+            order.productDetails.baseProduct
+          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: `${productName + ` hozzáadva, ${order.price} Ft értékben.`}`
+          });
+        })
+      )
+      .subscribe();
   }
 
   public getPersonalOrders(): Observable<Order[]> {
     const owner = {
       buyerId: this.cookieService.getCookie('userId')
     };
-    return this.apiService.get<{ orders: Order[] }>('orders', owner).pipe(
-      map((ordersDTO) => {
-        const orders = ordersDTO.orders.map((rawOrder: any) => {
-          return Order.fromDTO(rawOrder);
-        });
-        orders.map((order) => {
-          for (const key in order) {
-            order[key] = this.materialService.getMaterialNameById(order[key]);
-          }
-          const productDetails = order.productDetails[0];
-          for (const key in productDetails) {
-            productDetails[key] = this.materialService.getMaterialNameById(
-              productDetails[key]
-            );
-          }
-        });
-        return orders;
-      }),
-      tap((orders) => {
-        this.orders = orders;
-        this.orderCounter = this.orders.length;
-        this.orderCounterUpdatedListener.next(this.orderCounter);
-      })
-    );
+    return this.apiService
+      .get<{ data: { orders: Order[] } }>('orders', owner)
+      .pipe(
+        map((ordersDTO) => {
+          const orders = ordersDTO.data.orders.map((rawOrder: any) => {
+            return Order.fromDTO(rawOrder);
+          });
+          orders.map((order) => {
+            for (const key in order) {
+              order[key] = this.materialService.getMaterialNameById(order[key]);
+            }
+            const productDetails = order.productDetails[0];
+            for (const key in productDetails) {
+              productDetails[key] = this.materialService.getMaterialNameById(
+                productDetails[key]
+              );
+            }
+          });
+          return orders;
+        }),
+        tap((orders) => {
+          this.orders = orders;
+          this.orderCounter = this.orders.length;
+          this.orderCounterUpdatedListener.next(this.orderCounter);
+        })
+      );
   }
 
   public deleteOrder(id: string): Observable<null> {
+    this.orderCounter--;
+    this.orderCounterUpdatedListener.next(this.orderCounter);
     return this.apiService.delete('orders', id);
   }
 }

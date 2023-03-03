@@ -1,7 +1,7 @@
 <div class="px-4 py-8 md:px-6 lg:px-8">
   <div class="flex flex-column align-items-center mb-6">
     <div class="text-900 text-4xl mb-4 font-medium">
-      Kosár értéke {{ cartPrice }} Ft
+      Kosár értéke {{ discountedCartPrice }} Ft
     </div>
 
     <button class="primary-button shadow-2">
@@ -100,13 +100,13 @@
   <div class="flex">
     <div class="w-12rem hidden md:block"></div>
     <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
-      <li class="flex justify-content-between mb-4">
+      <li class="flex justify-content-between mb-4" *ngIf="discount !== 0">
         <span class="text-xl text-900">Akció:</span>
-        <span class="text-xl text-900">-1000 Ft</span>
+        <span class="text-xl text-900">-{{ discount }} Ft</span>
       </li>
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Részösszeg:</span>
-        <span class="text-xl text-900">{{ cartPrice }} Ft</span>
+        <span class="text-xl text-900">{{ discountedCartPrice }} Ft</span>
       </li>
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Szállítás:</span>
@@ -117,7 +117,7 @@
         class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
         <span class="text-xl text-900 font-bold text-3xl">Teljes összeg:</span>
         <span class="text-xl text-900 font-bold text-3xl"
-          >{{ cartPrice }} Ft</span
+          >{{ discountedCartPrice }} Ft</span
         >
       </li>
       <li class="flex justify-content-end">
