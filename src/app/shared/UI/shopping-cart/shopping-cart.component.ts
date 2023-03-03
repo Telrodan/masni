@@ -5,8 +5,10 @@ import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import coreSelectors from 'src/app/core/core-ngrx/selectors';
+import { Coupon } from 'src/app/core/models/coupon.mode';
 
 import { Order } from 'src/app/core/models/order.model';
+import { CouponService } from 'src/app/core/services/coupon.service';
 import { MaterialService } from 'src/app/core/services/material.service';
 import { OrderService } from 'src/app/core/services/order.service';
 
@@ -17,17 +19,29 @@ import { OrderService } from 'src/app/core/services/order.service';
 })
 export class ShoppingCartComponent implements OnInit, OnDestroy {
   public orders: Order[];
-  public faCreditCard = faCreditCard;
+  public coupons: Coupon[];
   public cartPrice = 0;
   private destroy = new Subject();
+  public faCreditCard = faCreditCard;
 
   constructor(
     private orderService: OrderService,
     private messageService: MessageService,
+    private couponService: CouponService,
     private store$: Store
   ) {}
 
   public ngOnInit(): void {
+    this.couponService
+      .getUserCoupons()
+      .pipe(
+        tap((coupons) => {
+          this.coupons = coupons;
+          console.log(this.coupons);
+        })
+      )
+      .subscribe();
+
     this.store$
       .select(coreSelectors.selectMaterials)
       .pipe(
