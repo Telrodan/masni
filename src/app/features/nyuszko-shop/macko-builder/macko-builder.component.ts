@@ -25,10 +25,9 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
   public materials: Material[];
   public sortedMaterials: SortedMaterials;
   public productImages = [
-    '../../../../assets/images/nyuszko-shop/test-product-image-1.jpg',
-    '../../../../assets/images/nyuszko-shop/test-product-image-2.jpg',
-    '../../../../assets/images/nyuszko-shop/test-product-image-3.jpg',
-    '../../../../assets/images/nyuszko-shop/test-product-image-4.jpg'
+    '../../../../assets/images/nyuszko-shop/macko-builder/image-1.jpg',
+    '../../../../assets/images/nyuszko-shop/macko-builder/image-2.jpg',
+    '../../../../assets/images/nyuszko-shop/macko-builder/image-3.jpg'
   ];
   public faShoppingCart = faShoppingCart;
   private destroy = new Subject();

@@ -31,7 +31,8 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/login']);
       this.messageService.add({
         severity: 'warn',
-        summary: 'Előbb lépje be!'
+        summary: 'Figyelem!',
+        detail: 'Előbb lépje be'
       });
     }
     return isAuthenticated;

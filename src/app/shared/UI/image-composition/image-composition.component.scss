@@ -1,3 +1,5 @@
+@use '../../../../scss/mixins' as *;
+
 .image-composition {
   width: 100%;
   margin-right: 5rem;
@@ -14,8 +16,12 @@
 
 .bottom-images {
   display: flex;
-  justify-content: space-between;
+  column-gap: 2rem;
   margin-top: 2rem;
+
+  @include respond(sm) {
+    column-gap: 0.5rem;
+  }
 }
 
 .wrapper {
