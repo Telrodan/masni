@@ -37,6 +37,7 @@ import { CoreModule } from './core/core.module';
 import { reducers } from './reducer';
 import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 
 const PRIME_NG = [
   AccordionModule,
@@ -58,7 +59,8 @@ const PRIME_NG = [
     LoginComponent,
     ForgotPasswordComponent,
     ShopComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    TermsAndConditionsComponent
   ],
   imports: [
     BrowserModule,

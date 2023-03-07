@@ -11,6 +11,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { ShoppingCartComponent } from './shared/UI/shopping-cart/shopping-cart.component';
 import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -72,6 +73,10 @@ const routes: Routes = [
   {
     path: 'privacy-policy',
     component: PrivacyPolicyComponent
+  },
+  {
+    path: 'terms-and-conditions',
+    component: TermsAndConditionsComponent
   }
 ];
 
