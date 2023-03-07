@@ -39,8 +39,9 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       .select(coreSelectors.selectMaterials)
       .pipe(
         filter((materials) => !!materials.length),
-        switchMap(() => this.orderService.getPersonalOrders()),
+        switchMap(() => this.store$.select(coreSelectors.selectOrders)),
         map((orders) => {
+          console.log(orders);
           orders.map((order) => {
             this.discountedCartPrice += order.price;
           });

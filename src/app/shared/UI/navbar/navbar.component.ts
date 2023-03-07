@@ -12,8 +12,11 @@ import {
   faRightToBracket
 } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
+import { Order } from 'src/app/core/models/order.model';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { OrderService } from 'src/app/core/services/order.service';
@@ -27,6 +30,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
   public orderCounter = 0;
   private destroy = new Subject();
+  public orderCounterStore: Observable<Order[]>;
 
   public faChevronDown = faChevronDown;
   public faCartShopping = faCartShopping;
@@ -43,20 +47,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
-    private orderSerivce: OrderService
+    private orderSerivce: OrderService,
+    private store$: Store
   ) {}
 
   public ngOnInit(): void {
-    // this.isAuthenticated = this.authService.getIsAuthenticated();
-    this.orderSerivce
-      .getPersonalOrders()
-      .pipe(
-        switchMap(() => this.orderSerivce.getOrderCounterListener$()),
-        takeUntil(this.destroy)
-      )
-      .subscribe((orderCounter) => {
-        this.orderCounter = orderCounter;
-      });
+    this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.orderCounterStore = this.store$.select(coreSelectors.selectOrders);
+    // this.orderSerivce
+    //   .getPersonalOrders()
+    //   .pipe(
+    //     switchMap(() => this.orderSerivce.getOrderCounterListener$()),
+    //     takeUntil(this.destroy)
+    //   )
+    //   .subscribe((orderCounter) => {
+    //     this.orderCounter = orderCounter;
+    //   });
 
     this.authService
       .getAuthStatus$()

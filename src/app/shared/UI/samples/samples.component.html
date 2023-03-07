@@ -1,7 +1,7 @@
-<main class="samples" *ngIf="sortedMaterials">
+<main class="samples" *ngIf="sortedMaterials | async">
   <h1 class="heading-primary">Mintás pamutvászon</h1>
   <p-galleria
-    [value]="sortedMaterials.patternedCotton"
+    [value]="(sortedMaterials | async).patternedCotton"
     [(visible)]="displayCustomFirstGalery"
     [(activeIndex)]="activeIndexFirstGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -17,12 +17,12 @@
         style="width: 100%; display: block" />
     </ng-template>
   </p-galleria>
-  <div
-    *ngIf="sortedMaterials.patternedCotton"
-    class="grid"
-    style="max-width: 100%">
+  <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="let sample of sortedMaterials.patternedCotton; let index = index"
+      *ngFor="
+        let sample of (sortedMaterials | async).patternedCotton;
+        let index = index
+      "
       class="item-content col-3 lg:col-2"
       key="index">
       <img
@@ -36,7 +36,7 @@
 
   <h1 class="heading-primary">Mintás pamutvászon</h1>
   <p-galleria
-    [value]="sortedMaterials.minkyPlus"
+    [value]="(sortedMaterials | async).minkyPlus"
     [(visible)]="displayCustomSecondGalery"
     [(activeIndex)]="activeIndexSecondGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -52,9 +52,12 @@
         style="width: 100%; display: block" />
     </ng-template>
   </p-galleria>
-  <div *ngIf="sortedMaterials.minkyPlus" class="grid" style="max-width: 100%">
+  <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="let sample of sortedMaterials.minkyPlus; let index = index"
+      *ngFor="
+        let sample of (sortedMaterials | async).minkyPlus;
+        let index = index
+      "
       class="item-content col-3 lg:col-2"
       key="index">
       <img
@@ -68,7 +71,7 @@
 
   <h1 class="heading heading-primary">Duplagéz</h1>
   <p-galleria
-    [value]="sortedMaterials.doubleGauze"
+    [value]="(sortedMaterials | async).doubleGauze"
     [(visible)]="displayCustomThirdGalery"
     [(activeIndex)]="activeIndexThirdGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -83,9 +86,12 @@
         style="width: 100%; display: block" />
     </ng-template>
   </p-galleria>
-  <div *ngIf="sortedMaterials.doubleGauze" class="grid" style="max-width: 100%">
+  <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="let sample of sortedMaterials.doubleGauze; let index = index"
+      *ngFor="
+        let sample of (sortedMaterials | async).doubleGauze;
+        let index = index
+      "
       class="item-content col-3 lg:col-2"
       key="index">
       <img

@@ -1,5 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import coreActions from 'src/app/core/core-ngrx/actions';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
 import { MaterialService } from 'src/app/core/services/material.service';
 
@@ -8,31 +11,21 @@ import { MaterialService } from 'src/app/core/services/material.service';
   templateUrl: './samples.component.html',
   styleUrls: ['./samples.component.scss']
 })
-export class SamplesComponent implements OnInit, OnDestroy {
-  public sortedMaterials: SortedMaterials;
+export class SamplesComponent implements OnInit {
+  public sortedMaterials: Observable<SortedMaterials>;
   public activeIndexFirstGalery = 0;
   public displayCustomFirstGalery: boolean;
   public activeIndexSecondGalery = 0;
   public displayCustomSecondGalery: boolean;
   public activeIndexThirdGalery = 0;
   public displayCustomThirdGalery: boolean;
-  private destroy = new Subject<null>();
 
-  constructor(private materialService: MaterialService) {}
+  constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.materialService
-      .getSortedMaterials$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.sortedMaterials = response;
-        console.log(this.sortedMaterials);
-      });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
+    this.sortedMaterials = this.store$.select(
+      coreSelectors.selectSortedMaterials
+    );
   }
 
   public imageClickFirstGalery(index: number): void {

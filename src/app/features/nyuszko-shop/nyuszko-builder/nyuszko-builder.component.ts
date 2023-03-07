@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { forkJoin, Subject, takeUntil, tap, switchMap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subject, takeUntil, tap, switchMap } from 'rxjs';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-import { Material } from 'src/app/core/models/material.model';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { MaterialService } from 'src/app/core/services/material.service';
 import { NyuszkoProduct } from 'src/app/core/models/custom-products/nyuszko-product.model';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -19,10 +19,9 @@ import { ProductService } from 'src/app/core/services/product.service';
 })
 export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
-  public builderForm: FormGroup;
+  public builderForm: FormGroup = new FormGroup({});
   public product: NyuszkoProduct;
   public price = 0;
-  public materials: Material[];
   public sortedMaterials: SortedMaterials;
   public productImages = [
     '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-1.jpg',
@@ -32,10 +31,10 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
     '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-5.jpg'
   ];
   public faShoppingCart = faShoppingCart;
-  private destroy = new Subject();
+  private destroy = new Subject<void>();
 
   constructor(
-    private materialService: MaterialService,
+    private store$: Store,
     private orderService: OrderService,
     private authService: AuthService,
     private productService: ProductService
@@ -49,30 +48,27 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
         this.isAuthenticated = response;
       });
 
-    forkJoin([
-      this.materialService.getMaterials$(),
-      this.materialService.getSortedMaterials$()
-    ])
+    this.store$
+      .select(coreSelectors.selectSortedMaterials)
       .pipe(
-        tap(([materials, sortedMaterials]) => {
-          this.materials = materials;
+        tap((sortedMaterials) => {
+          if (!sortedMaterials) return;
           this.sortedMaterials = sortedMaterials;
           this.product = NyuszkoProduct.setUpMaterials(this.sortedMaterials);
           this.createForm();
-          this.price = this.productService.getProductPrice(
-            this.builderForm.value
-          );
         }),
         switchMap(() => this.builderForm.valueChanges),
+        tap(
+          (changes) =>
+            (this.price = this.productService.getProductPrice(changes))
+        ),
         takeUntil(this.destroy)
       )
-      .subscribe((changes) => {
-        this.price = this.productService.getProductPrice(changes);
-      });
+      .subscribe();
   }
 
   public ngOnDestroy(): void {
-    this.destroy.next(null);
+    this.destroy.next();
     this.destroy.complete();
   }
 
@@ -108,5 +104,6 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
         orderComment: new FormControl('')
       })
     });
+    this.price = this.productService.getProductPrice(this.builderForm.value);
   }
 }

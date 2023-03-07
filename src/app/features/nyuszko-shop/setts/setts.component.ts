@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { tap } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
 import { Coupon } from 'src/app/core/models/coupon.mode';
@@ -12,9 +12,10 @@ import { CouponService } from 'src/app/core/services/coupon.service';
   templateUrl: './setts.component.html',
   styleUrls: ['./setts.component.scss']
 })
-export class SettsComponent implements OnInit {
+export class SettsComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
   public coupon: Coupon;
+  private destroy = new Subject<void>();
 
   constructor(
     private couponService: CouponService,
@@ -23,7 +24,13 @@ export class SettsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.authService
+      .getAuthStatus$()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((response) => {
+        this.isAuthenticated = response;
+      });
+
     this.couponService
       .getUserCoupons()
       .pipe(
@@ -32,6 +39,11 @@ export class SettsComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   public onActivateCoupon(): void {

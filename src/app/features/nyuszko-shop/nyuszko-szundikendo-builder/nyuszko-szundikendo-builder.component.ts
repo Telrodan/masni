@@ -11,6 +11,8 @@ import { NyuszkoSzundikendoProduct } from 'src/app/core/models/custom-products/n
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProductService } from 'src/app/core/services/product.service';
+import { Store } from '@ngrx/store';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-szundikendo-builder',
@@ -38,15 +40,21 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
     private materialService: MaterialService,
     private orderService: OrderService,
     private authService: AuthService,
-    private productService: ProductService
+    private productService: ProductService,
+    private store$: Store
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.authService
+      .getAuthStatus$()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((response) => {
+        this.isAuthenticated = response;
+      });
 
     forkJoin([
-      this.materialService.getMaterials$(),
-      this.materialService.getSortedMaterials$()
+      this.store$.select(coreSelectors.selectMaterials),
+      this.store$.select(coreSelectors.selectSortedMaterials)
     ])
       .pipe(
         tap(([materials, sortedMaterials]) => {
@@ -65,13 +73,6 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
       )
       .subscribe((changes) => {
         this.price = this.productService.getProductPrice(changes);
-      });
-
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
       });
   }
 

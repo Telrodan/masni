@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil, tap } from 'rxjs';
-import { MaterialService } from 'src/app/core/services/material.service';
+import { Store } from '@ngrx/store';
 
+import { Subject, takeUntil, tap } from 'rxjs';
+
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 import {
   firstCarousel,
   secondCarousel,
@@ -21,13 +23,12 @@ export class LandingComponent implements OnInit, OnDestroy {
   public fourthCarousel = { ...fourthCarousel };
   private destroy = new Subject<null>();
 
-  constructor(private materialService: MaterialService) {}
+  constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.materialService
-      .getMaterials$()
+    this.store$
+      .select(coreSelectors.selectMaterials)
       .pipe(
-        takeUntil(this.destroy),
         tap((materials) => {
           materials.forEach((material) => {
             if (material?.image) {
@@ -36,7 +37,8 @@ export class LandingComponent implements OnInit, OnDestroy {
               );
             }
           });
-        })
+        }),
+        takeUntil(this.destroy)
       )
       .subscribe();
   }

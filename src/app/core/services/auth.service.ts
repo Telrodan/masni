@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, TimeoutConfig } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
 import { CookieService } from './cookie.service';
 import { ApiService } from './api.service';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
+import { OrderService } from './order.service';
 
 interface LoginData {
   token: string;
@@ -29,7 +30,8 @@ export class AuthService {
     private router: Router,
     private apiService: ApiService,
     private messageService: MessageService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private orderSerivce: OrderService
   ) {}
 
   public getIsAuthenticated(): boolean {
@@ -55,6 +57,7 @@ export class AuthService {
           this.authStatusListener.next(this.isAuthenticated);
           this.setAuthenticationTimer(expiresInDuration);
           this.setAuthData(expiresInDuration);
+          this.orderSerivce.setUserOrdersStore();
         }
       })
     );
@@ -97,7 +100,7 @@ export class AuthService {
     };
   }
 
-  public autoAuthentication() {
+  public autoAuthentication(): void {
     const authenticationInformation = this.getAuthenticationData();
     if (!authenticationInformation) return;
     const currentDate = new Date();
@@ -110,6 +113,8 @@ export class AuthService {
       this.authStatusListener.next(this.isAuthenticated);
       this.setAuthenticationTimer(expiresIn / 1000);
     }
+
+    this.orderSerivce.setUserOrdersStore();
   }
 
   private setAuthenticationTimer(duration: number): void {

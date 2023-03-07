@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
+import { AppState } from 'src/app/reducer';
 import { Coupon } from '../models/coupon.mode';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
@@ -16,13 +18,20 @@ interface CouponsDataType {
   };
 }
 
+interface CouponsBackendInterface {
+  data: {
+    coupons: Coupon[];
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CouponService {
   constructor(
     private apiService: ApiService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private store$: Store
   ) {}
 
   // COUPON TYPES
@@ -41,11 +50,13 @@ export class CouponService {
     );
   }
 
+  public getUserCouponsStore(): void {}
+
   public getUserCoupons(): Observable<Coupon[]> {
-    const coupon = {
+    const owner = {
       couponOwner: this.cookieService.getCookie('userId')
     };
-    return this.apiService.post<CouponsDataType>('coupon/get', coupon).pipe(
+    return this.apiService.post<CouponsDataType>('coupon/get', owner).pipe(
       map((result) => {
         const coupons = result.data.coupons;
         return coupons;

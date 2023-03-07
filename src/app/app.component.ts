@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+
 import { Carousel } from 'primeng/carousel';
-import { filter, map } from 'rxjs';
-import coreActions from './core/core-ngrx/actions';
 
 import { AuthService } from './core/services/auth.service';
 import { MaterialService } from './core/services/material.service';
@@ -15,23 +13,14 @@ import { MaterialService } from './core/services/material.service';
 export class AppComponent implements OnInit {
   constructor(
     private authService: AuthService,
-    private store$: Store,
     private materialService: MaterialService
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    // Allows user to scroll on carousel(mobile scroll issue fix)
     Carousel.prototype.onTouchMove = () => {};
   }
 
   public ngOnInit(): void {
+    this.materialService.getMaterialsStore();
     this.authService.autoAuthentication();
-    this.materialService
-      .getMaterialsStore$()
-      .pipe(
-        filter((materials) => !!materials),
-        map((materials) => {
-          this.store$.dispatch(coreActions.setMaterials({ materials }));
-        })
-      )
-      .subscribe();
   }
 }

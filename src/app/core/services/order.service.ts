@@ -1,32 +1,35 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { Store } from '@ngrx/store';
+import { map, Observable, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { Order } from '../models/order.model';
-import { ApiService } from './api.service';
-import { CookieService } from './cookie.service';
+
 import { MaterialService } from './material.service';
+import { CookieService } from './cookie.service';
+import { ApiService } from './api.service';
+import { Order } from '../models/order.model';
+import coreActions from '../core-ngrx/actions';
+
+interface OrdersBackendInterface {
+  data: {
+    orders: Order[];
+  };
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   public orders: Order[];
-  private orderCounter = 0;
-  private orderCounterUpdatedListener = new BehaviorSubject<number>(
-    this.orderCounter
-  );
 
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
     private materialService: MaterialService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store$: Store
   ) {}
-
-  public getOrderCounterListener$(): Observable<number> {
-    return this.orderCounterUpdatedListener.asObservable();
-  }
 
   public addOrderToCart(orderForm: FormGroup, price: number): void {
     const baseMaterials = orderForm.value['baseMaterials'];
@@ -50,12 +53,11 @@ export class OrderService {
       price: price
     };
 
+    this.store$.dispatch(coreActions.addOrder({ order }));
     this.apiService
       .post('orders', order)
       .pipe(
         tap(() => {
-          this.orderCounter++;
-          this.orderCounterUpdatedListener.next(this.orderCounter);
           const productName = this.materialService.getMaterialNameById(
             order.productDetails.baseProduct
           );
@@ -69,41 +71,43 @@ export class OrderService {
       .subscribe();
   }
 
-  public getPersonalOrders(): Observable<Order[]> {
-    const owner = {
+  public setUserOrdersStore(): void {
+    const user = {
       buyerId: this.cookieService.getCookie('userId')
     };
-    return this.apiService
-      .get<{ data: { orders: Order[] } }>('orders', owner)
+    this.apiService
+      .get<OrdersBackendInterface>('orders', user)
       .pipe(
         map((ordersDTO) => {
-          const orders = ordersDTO.data.orders.map((rawOrder: any) => {
+          const ordersWithId = ordersDTO.data.orders.map((rawOrder: any) => {
             return Order.fromDTO(rawOrder);
           });
-          orders.map((order) => {
-            for (const key in order) {
-              order[key] = this.materialService.getMaterialNameById(order[key]);
-            }
-            const productDetails = order.productDetails[0];
-            for (const key in productDetails) {
-              productDetails[key] = this.materialService.getMaterialNameById(
-                productDetails[key]
-              );
-            }
-          });
+          const orders = this.createReadableOrders(ordersWithId);
           return orders;
         }),
         tap((orders) => {
-          this.orders = orders;
-          this.orderCounter = this.orders.length;
-          this.orderCounterUpdatedListener.next(this.orderCounter);
+          this.store$.dispatch(coreActions.setOrders({ orders }));
         })
-      );
+      )
+      .subscribe();
+  }
+
+  private createReadableOrders(orders: Order[]): Order[] {
+    orders.map((order) => {
+      for (const key in order) {
+        order[key] = this.materialService.getMaterialNameById(order[key]);
+      }
+      const productDetails = order.productDetails[0];
+      for (const key in productDetails) {
+        productDetails[key] = this.materialService.getMaterialNameById(
+          productDetails[key]
+        );
+      }
+    });
+    return orders;
   }
 
   public deleteOrder(id: string): Observable<null> {
-    this.orderCounter--;
-    this.orderCounterUpdatedListener.next(this.orderCounter);
     return this.apiService.delete('orders', id);
   }
 }

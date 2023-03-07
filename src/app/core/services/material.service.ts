@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, tap } from 'rxjs';
+
+import { filter, map, tap } from 'rxjs';
+
+import { ApiService } from './api.service';
+import coreActions from '../core-ngrx/actions';
 import coreSelectors from '../core-ngrx/selectors';
 import { Material } from '../models/material.model';
 import { SortedMaterials } from '../models/sorted-materials.model';
 
-import { ApiService } from './api.service';
+interface MaterialsBackendInterface {
+  data: {
+    materials: Material[];
+  };
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
-  private materials: Material[];
-
   constructor(private apiService: ApiService, private store$: Store) {}
 
-  public getMaterials$(): Observable<Material[]> {
-    return this.apiService
-      .get<{ data: { materials: Material[] } }>('materials')
+  public getMaterialsStore(): void {
+    this.apiService
+      .get<MaterialsBackendInterface>('materials')
       .pipe(
         map((materialsDTO) => {
           const materials = materialsDTO.data.materials.map(
@@ -27,62 +33,44 @@ export class MaterialService {
           );
           return materials;
         }),
+        filter((materials) => !!materials),
         tap((materials) => {
-          this.materials = materials;
-        })
-      );
-  }
-
-  public getSortedMaterials$(): Observable<SortedMaterials> {
-    return this.apiService
-      .get<{ data: { materials: Material[] } }>('materials')
-      .pipe(
-        map((materialsDTO) => {
-          const materials = materialsDTO.data.materials.map(
-            (rawMaterial: any) => {
-              return Material.fromDTO(rawMaterial);
-            }
-          );
           const sortedMaterials: SortedMaterials =
             SortedMaterials.sortMaterials(materials);
-          return sortedMaterials;
-        })
-      );
-  }
-
-  public getMaterialsStore$(): Observable<Material[]> {
-    return this.apiService
-      .get<{ data: { materials: Material[] } }>('materials')
-      .pipe(
-        map((materialsDTO) => {
-          const materials = materialsDTO.data.materials.map(
-            (rawMaterial: Material) => {
-              return Material.fromDTO(rawMaterial);
-            }
+          this.store$.dispatch(coreActions.setMaterials({ materials }));
+          this.store$.dispatch(
+            coreActions.setSortedMaterials({ sortedMaterials })
           );
           return materials;
         })
-      );
+      )
+      .subscribe();
   }
 
   public getExtraPriceById(materialId: string): number {
-    let extraPrice = 0;
-    const material = this.materials.find(
-      (material) => material.id === materialId
-    );
-    if (!material) return extraPrice;
-    extraPrice = material.extra;
-    return extraPrice;
+    let result = 0;
+    this.store$
+      .select(coreSelectors.selectMaterialExtraPriceById(materialId))
+      .pipe(
+        tap((extraPrice) => {
+          result = extraPrice;
+        })
+      )
+      .subscribe();
+
+    return result;
   }
 
   public getMaterialNameById(materialId: string): string {
-    let result = null;
+    let result = '';
     this.store$
-      .select(coreSelectors.selectMaterialById(materialId))
-      .subscribe((respond) => {
-        result = respond;
-      });
-
+      .select(coreSelectors.selectMaterialNameById(materialId))
+      .pipe(
+        tap((materialName) => {
+          result = materialName;
+        })
+      )
+      .subscribe();
     return result;
   }
 }

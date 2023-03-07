@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,11 +32,11 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { SharedModule } from './shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreModule } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 import { CoreModule } from './core/core.module';
 import { reducers } from './reducer';
 import { ShopComponent } from './features/shop/shop.component';
+import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 
 const PRIME_NG = [
   AccordionModule,
@@ -56,7 +57,8 @@ const PRIME_NG = [
     SignupComponent,
     LoginComponent,
     ForgotPasswordComponent,
-    ShopComponent
+    ShopComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,

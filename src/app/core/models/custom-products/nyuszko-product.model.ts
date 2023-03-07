@@ -30,6 +30,7 @@ export class NyuszkoProduct {
   public static setUpMaterials(
     sortedMaterials: SortedMaterials
   ): NyuszkoProduct {
+    console.log(sortedMaterials);
     return new NyuszkoProduct(
       BASE_PRODUCT_TYPE_ID,
       sortedMaterials.plainCotton,

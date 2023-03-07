@@ -6,11 +6,12 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { Material } from 'src/app/core/models/material.model';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { MaterialService } from 'src/app/core/services/material.service';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProductService } from 'src/app/core/services/product.service';
 import { MackoSzundikendoProduct } from 'src/app/core/models/custom-products/macko-szundikendo.model';
+import { Store } from '@ngrx/store';
+import coreSelectors from 'src/app/core/core-ngrx/selectors';
 
 @Component({
   selector: 'masni-handmade-dolls-szundikendo-builder',
@@ -33,18 +34,16 @@ export class MackoSzundikendoBuilderComponent implements OnInit, OnDestroy {
   private destroy = new Subject();
 
   constructor(
-    private materialService: MaterialService,
+    private store$: Store,
     private orderService: OrderService,
     private authService: AuthService,
     private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
-
     forkJoin([
-      this.materialService.getMaterials$(),
-      this.materialService.getSortedMaterials$()
+      this.store$.select(coreSelectors.selectMaterials),
+      this.store$.select(coreSelectors.selectSortedMaterials)
     ])
       .pipe(
         tap(([materials, sortedMaterials]) => {
