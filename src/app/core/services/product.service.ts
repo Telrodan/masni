@@ -13,7 +13,6 @@ export class ProductService {
   ) {}
 
   public getProductPrice(formValues: any): number {
-    console.log(formValues);
     let price = 0;
     for (const key in formValues.baseMaterials) {
       if (key !== 'minkyColorBack') {
@@ -23,7 +22,7 @@ export class ProductService {
         price += extraPrice;
       }
     }
-    price += formValues.extraOptions?.extraMinkyEarCheckbox ? 400 : 0;
+    price += formValues.extraOptions?.extraMinkyEarsCheckbox ? 400 : 0;
     price += formValues.extraOptions?.nameEmbroideryCheckbox ? 500 : 0;
 
     return price;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
@@ -7,7 +8,6 @@ import { filter, map, Observable, tap, first } from 'rxjs';
 
 // import coreSelectors from 'src/app/core/store/selectors';
 import { Coupon } from 'src/app/core/models/coupon.mode';
-import { ProductInterface } from 'src/app/core/models/product.model';
 import { CouponService } from 'src/app/core/services/coupon.service';
 import { OrderService } from 'src/app/core/services/order.service';
 import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service';
@@ -18,7 +18,7 @@ import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service
   styleUrls: ['./shopping-cart.component.scss']
 })
 export class ShoppingCartComponent implements OnInit {
-  public products$: Observable<ProductInterface[]>;
+  public products$: Observable<ShoppingCartItem[]>;
   public coupons: Coupon[];
   public discount = 0;
   public totalPrice = 0;
@@ -101,7 +101,7 @@ export class ShoppingCartComponent implements OnInit {
   //   return isValid;
   // }
 
-  public onDeleteOrder(product: ProductInterface): void {
+  public onDeleteOrder(product: ShoppingCartItem): void {
     this.shoppingCartService.deleteProductFromCart(product);
     // this.orderService
     //   .deleteOrder(id)

@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { filter, map, Observable, tap } from 'rxjs';
-import {
-  ProductInterface,
-  RawBuiltProductInterface
-} from '../models/product.model';
+import { RawBuiltShoppingCartProductInterface } from '../models/product.model';
 import { ApiService } from './api.service';
 
 import { CookieService } from './cookie.service';
@@ -15,16 +12,17 @@ import {
   deleteProductFromCart,
   setUserShoppingCart
 } from '@core/store';
+import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 
 interface ProductBackendInterface {
   data: {
-    product: ProductInterface;
+    product: ShoppingCartItem;
   };
 }
 
-interface ProductsBackendInterface {
+interface ShoppingCartItemsDTO {
   data: {
-    products: ProductInterface[];
+    shoppingCartItems: ShoppingCartItem[];
   };
 }
 
@@ -39,30 +37,42 @@ export class ShoppingCartService {
     private messageService: MessageService
   ) {}
 
-  public setUserShoppingCartProductsStore(): Observable<ProductInterface[]> {
-    const userId = this.cookieService.getCookie('userId');
+  public getUserShoppingCartItems(): Observable<ShoppingCartItem[]> {
+    const ownerId = this.cookieService.getCookie('userId');
     return this.apiService
-      .get<ProductsBackendInterface>('shopping-cart/get-user-products', {
-        ownerId: userId
-      })
-      .pipe(
-        map((productsDTO) => {
-          const products: ProductInterface[] = productsDTO.data.products;
-          return products;
-        }),
-        filter((products) => !!products),
-        tap((products) => {
-          this.store$.dispatch(setUserShoppingCart({ products }));
-        })
-      );
+      .get<ShoppingCartItemsDTO>('shopping-cart/get-user-items', ownerId)
+      .pipe(map((items) => items.data.shoppingCartItems));
   }
 
-  public addBuiltProductToCart(rawProduct: RawBuiltProductInterface): void {
+  // public setUserShoppingCartProductsStore(): Observable<
+  //   RawBuiltShoppingCartProductInterface[]
+  // > {
+  //   const userId = this.cookieService.getCookie('userId');
+  //   return this.apiService
+  //     .get<ProductsBackendInterface>('shopping-cart/get-user-products', {
+  //       ownerId: userId
+  //     })
+  //     .pipe(
+  //       map((productsDTO) => {
+  //         const products: ShoppingCartProductInterface[] =
+  //           productsDTO.data.products;
+  //         return products;
+  //       }),
+  //       filter((products) => !!products),
+  //       tap((products) => {
+  //         this.store$.dispatch(setUserShoppingCart({ products }));
+  //       })
+  //     );
+  // }
+
+  public addBuiltProductToCart(
+    rawProduct: RawBuiltShoppingCartProductInterface
+  ): void {
     const userId = this.cookieService.getCookie('userId');
-    const product: ProductInterface = {
+    const product: ShoppingCartItem = {
       ownerId: userId,
       productName: rawProduct.baseMaterials.baseProduct,
-      productComment: rawProduct.extraOptions.comment,
+      productComment: rawProduct.extraOptions.productComment,
       productDetails: {
         baseProduct: rawProduct.baseMaterials.baseProduct,
         baseColor: rawProduct.baseMaterials.baseColor,
@@ -70,19 +80,21 @@ export class ShoppingCartService {
         minkyColorBack: rawProduct.baseMaterials.minkyColorBack,
         earsColor: rawProduct.baseMaterials.earsColor,
         ribbonColor: rawProduct.baseMaterials.ribbonColor,
-        isExtraMinkyEars: rawProduct.extraOptions.extraMinkyEarCheckbox,
-        minkyEarsColor: rawProduct.extraOptions.extraMinkyEarInput,
+        isExtraMinkyEars: rawProduct.extraOptions.extraMinkyEarsCheckbox,
+        minkyEarsColor: rawProduct.extraOptions.extraMinkyEarsInput,
         isExtraNameEmbroidery: rawProduct.extraOptions.nameEmbroideryCheckbox,
         nameEmbroideryText: rawProduct.extraOptions.nameEmbroideryInput
       },
       productPrice: rawProduct.price
     };
 
+    console.log(product);
+
     this.apiService
       .post<ProductBackendInterface>('shopping-cart/add', product)
       .pipe(
         tap((productDTO) => {
-          const product: ProductInterface = productDTO.data.product;
+          const product: ShoppingCartItem = productDTO.data.product;
           this.store$.dispatch(addProduct({ product }));
 
           const productName =
@@ -102,7 +114,7 @@ export class ShoppingCartService {
 
   public addReadyProductToCart(): void {}
 
-  public deleteProductFromCart(product: ProductInterface): void {
+  public deleteProductFromCart(product: ShoppingCartItem): void {
     this.store$.dispatch(deleteProductFromCart({ product }));
     this.apiService.delete('shopping-cart', product._id).subscribe();
   }

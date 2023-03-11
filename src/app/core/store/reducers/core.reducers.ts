@@ -2,7 +2,7 @@ import { MaterialInterface } from '../../models/material.model';
 import { Order } from '@core/models/order.model';
 import { Coupon } from '../../models/coupon.mode';
 import { SortedMaterials } from '../../models/sorted-materials.model';
-import { ProductInterface } from '../../models/product.model';
+import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 
 export const coreFeatureKey = 'core';
 
@@ -11,7 +11,7 @@ export interface CoreState {
   sortedMaterials: SortedMaterials;
   orders: Order[];
   coupons: Coupon[];
-  shoppingCart: ProductInterface[];
+  shoppingCart: ShoppingCartItem[];
 }
 
 // export const coreReducer = createReducer(

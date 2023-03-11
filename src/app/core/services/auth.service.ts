@@ -9,6 +9,8 @@ import { ApiService } from './api.service';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
 import { OrderService } from './order.service';
+import { Store } from '@ngrx/store';
+import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
 
 interface LoginData {
   token: string;
@@ -31,7 +33,8 @@ export class AuthService {
     private apiService: ApiService,
     private messageService: MessageService,
     private cookieService: CookieService,
-    private orderSerivce: OrderService
+    private orderSerivce: OrderService,
+    private store$: Store
   ) {}
 
   public getIsAuthenticated(): boolean {
@@ -57,6 +60,7 @@ export class AuthService {
           this.authStatusListener.next(this.isAuthenticated);
           this.setAuthenticationTimer(expiresInDuration);
           this.setAuthData(expiresInDuration);
+          this.store$.dispatch(getShoppingCartItems());
         }
       })
     );
@@ -112,6 +116,8 @@ export class AuthService {
       this.authStatusListener.next(this.isAuthenticated);
       this.setAuthenticationTimer(expiresIn / 1000);
     }
+
+    this.store$.dispatch(getShoppingCartItems());
   }
 
   private setAuthenticationTimer(duration: number): void {

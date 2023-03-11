@@ -1,7 +1,7 @@
+import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 import { createAction, props } from '@ngrx/store';
 import { Coupon } from '../../models/coupon.mode';
 import { Order } from '../../models/order.model';
-import { ProductInterface } from '../../models/product.model';
 
 export const setOrders = createAction(
   '[Core] Set Orders',
@@ -10,17 +10,17 @@ export const setOrders = createAction(
 
 export const setUserShoppingCart = createAction(
   '[Core] Set User Shopping Cart',
-  props<{ products: ProductInterface[] }>()
+  props<{ products: ShoppingCartItem[] }>()
 );
 
 export const addProduct = createAction(
   '[Core] Add Product To Cart',
-  props<{ product: ProductInterface }>()
+  props<{ product: ShoppingCartItem }>()
 );
 
 export const deleteProductFromCart = createAction(
   '[Core] Delete Product From Cart',
-  props<{ product: ProductInterface }>()
+  props<{ product: ShoppingCartItem }>()
 );
 
 export const deleteOrder = createAction(

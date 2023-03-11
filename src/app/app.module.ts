@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,6 +39,8 @@ import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialEffects } from '@core/store/effects/material.effects';
+import { AuthService } from '@core/services/auth.service';
+import { InitializerModule } from '@core/initializer/initializer.module';
 
 const PRIME_NG = [
   AccordionModule,
@@ -86,6 +88,16 @@ const PRIME_NG = [
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [AuthService],
+      useFactory: (auth: AuthService) => {
+        return () => {
+          auth.autoAuthentication();
+        };
+      }
+    },
     MessageService,
 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

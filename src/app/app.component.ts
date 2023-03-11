@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { getMaterials } from '@core/store';
+import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
 
 import { Store } from '@ngrx/store';
 import { Carousel } from 'primeng/carousel';
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.store$.dispatch(getMaterials());
+
     // APP_INIT
     // of()
     //   .pipe(

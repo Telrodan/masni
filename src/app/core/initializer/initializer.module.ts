@@ -1,19 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-
-import { MaterialService } from '../services/material.service';
+import { AuthService } from '@core/services/auth.service';
 
 @NgModule({
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      useFactory: (materials: MaterialService) => {
-        return () => {
-          materials.getMaterials$().subscribe();
-        };
-      },
-      deps: [MaterialService]
-    }
-  ]
+  providers: []
 })
 export class InitializerModule {}

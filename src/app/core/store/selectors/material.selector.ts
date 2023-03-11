@@ -4,10 +4,20 @@ import { createSelector } from '@ngrx/store';
 
 export const selectMaterialsState = (state: AppState) => state.materials;
 
-export const materialsSelector = (state: AppState) => state.materials.materials;
+export const materialsSelector = createSelector(
+  selectMaterialsState,
+  (state) => state.materials
+);
 
-export const sortedMaterialsSelector = (state: AppState) =>
-  state.materials.sortedMaterials;
+export const sortedMaterialsSelector = createSelector(
+  selectMaterialsState,
+  (state) => state.sortedMaterials
+);
 
-export const materialsErrorSelector = (state: AppState) =>
-  state.materials.error;
+export const materialExtraByNameSelector = (materialName: string) =>
+  createSelector(materialsSelector, (materials) => {
+    const material = materials.find(
+      (material) => material.name === materialName
+    );
+    return material ? material.extra : 0;
+  });

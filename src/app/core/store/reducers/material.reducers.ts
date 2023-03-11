@@ -5,11 +5,7 @@ import {
   SortedMaterialsInterface
 } from '@core/models/sorted-materials.model';
 import { MaterialsStateInterface } from '@core/store/models/materials-state.model';
-import {
-  getMaterials,
-  getMaterialsFailure,
-  getMaterialsSuccess
-} from '@core/store/actions/';
+import { getMaterials, getMaterialsSuccess } from '@core/store/actions/';
 
 export const initialState: MaterialsStateInterface = {
   materials: [],
@@ -30,9 +26,5 @@ export const materialReducers = createReducer(
       materials: action.materials,
       sortedMaterials
     };
-  }),
-  on(getMaterialsFailure, (state, action) => ({
-    ...state,
-    error: action.error
-  }))
+  })
 );

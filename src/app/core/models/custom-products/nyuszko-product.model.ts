@@ -14,17 +14,20 @@ export class NyuszkoProduct {
   public baseColor: MaterialInterface[];
   public earsColor: MaterialInterface[];
   public ribbonColor: MaterialInterface[];
+  public extraMinkyEars: MaterialInterface[];
 
   constructor(
     baseProduct: string,
     baseColor: MaterialInterface[],
     earsColor: MaterialInterface[],
-    ribbonColor: MaterialInterface[]
+    ribbonColor: MaterialInterface[],
+    extraMinkyEars: MaterialInterface[]
   ) {
     this.baseProduct = baseProduct;
     this.baseColor = baseColor;
     this.earsColor = earsColor;
     this.ribbonColor = ribbonColor;
+    this.extraMinkyEars = extraMinkyEars;
   }
 
   public static setUpMaterials(
@@ -38,7 +41,8 @@ export class NyuszkoProduct {
         ...sortedMaterials.patternedCotton,
         ...sortedMaterials.doubleGauze
       ],
-      sortedMaterials.ribbon
+      sortedMaterials.ribbon,
+      sortedMaterials.minkyPlus
     );
   }
 }

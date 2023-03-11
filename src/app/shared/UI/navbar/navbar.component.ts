@@ -54,7 +54,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.isAuthenticated = this.authService.getIsAuthenticated();
-    this.orderCounterStore = this.store$.select(selectOrders);
+    // this.orderCounterStore = this.store$.select(selectOrders);
     // this.orderSerivce
     //   .getPersonalOrders()
     //   .pipe(

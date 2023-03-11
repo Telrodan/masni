@@ -7,6 +7,7 @@ import { ApiService } from './api.service';
 import { MaterialInterface } from '../models/material.model';
 import { SortedMaterials } from '../models/sorted-materials.model';
 import { selectMaterialExtraPriceByName } from '@core/store/selectors/core.selectors';
+import { materialExtraByNameSelector } from '@core/store/selectors/material.selector';
 
 interface MaterialsBackendInterface {
   data: {
@@ -41,10 +42,10 @@ export class MaterialService {
     );
   }
 
-  public getExtraPriceByName(materialId: string): number {
+  public getExtraPriceByName(name: string): number {
     let result = 0;
     this.store$
-      .select(selectMaterialExtraPriceByName(materialId))
+      .select(materialExtraByNameSelector(name))
       .pipe(
         tap((extraPrice) => {
           result = extraPrice;
