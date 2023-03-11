@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import coreActions from 'src/app/core/core-ngrx/actions';
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
+
+import { Observable } from 'rxjs';
+
+// import coreSelectors from 'src/app/core/store/selectors';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { MaterialService } from 'src/app/core/services/material.service';
 
 @Component({
   selector: 'masni-handmade-dolls-samples',
@@ -23,9 +23,9 @@ export class SamplesComponent implements OnInit {
   constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.sortedMaterials = this.store$.select(
-      coreSelectors.selectSortedMaterials
-    );
+    // this.sortedMaterials = this.store$.select(
+    //   coreSelectors.selectSortedMaterials
+    // );
   }
 
   public imageClickFirstGalery(index: number): void {

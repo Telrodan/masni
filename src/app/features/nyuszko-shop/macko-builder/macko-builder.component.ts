@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { MackoProduct } from 'src/app/core/models/custom-products/macko-product';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Store } from '@ngrx/store';
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
+// import coreSelectors from 'src/app/core/store/selectors';
 
 @Component({
   selector: 'masni-handmade-dolls-macko-builder',
@@ -39,23 +39,23 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.store$
-      .select(coreSelectors.selectSortedMaterials)
-      .pipe(
-        tap((sortedMaterials) => {
-          if (!sortedMaterials) return;
-          this.sortedMaterials = sortedMaterials;
-          this.product = MackoProduct.setUpMaterials(this.sortedMaterials);
-          this.createForm();
-        }),
-        switchMap(() => this.builderForm.valueChanges),
-        tap(
-          (changes) =>
-            (this.price = this.productService.getProductPrice(changes))
-        ),
-        takeUntil(this.destroy)
-      )
-      .subscribe();
+    // this.store$
+    //   .select(coreSelectors.selectSortedMaterials)
+    //   .pipe(
+    //     tap((sortedMaterials) => {
+    //       if (!sortedMaterials) return;
+    //       this.sortedMaterials = sortedMaterials;
+    //       this.product = MackoProduct.setUpMaterials(this.sortedMaterials);
+    //       this.createForm();
+    //     }),
+    //     switchMap(() => this.builderForm.valueChanges),
+    //     tap(
+    //       (changes) =>
+    //         (this.price = this.productService.getProductPrice(changes))
+    //     ),
+    //     takeUntil(this.destroy)
+    //   )
+    //   .subscribe();
 
     this.authService
       .getAuthStatus$()
@@ -80,15 +80,15 @@ export class MackoBuilderComponent implements OnInit, OnDestroy {
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0]._id,
           Validators.required
         ),
         earsColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0]._id,
           Validators.required
         ),
         ribbonColor: new FormControl(
-          this.sortedMaterials.ribbon[0].id,
+          this.sortedMaterials.ribbon[0]._id,
           Validators.required
         )
       }),

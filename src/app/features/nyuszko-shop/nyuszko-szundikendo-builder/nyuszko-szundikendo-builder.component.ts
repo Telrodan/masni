@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil, tap, forkJoin, switchMap } from 'rxjs';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-import { Material } from 'src/app/core/models/material.model';
+import { MaterialInterface } from 'src/app/core/models/material.model';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
 import { MaterialService } from 'src/app/core/services/material.service';
 import { NyuszkoSzundikendoProduct } from 'src/app/core/models/custom-products/nyuszko-szundikendo-product.model';
@@ -12,7 +12,7 @@ import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Store } from '@ngrx/store';
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
+import coreSelectors from 'src/app/core/store/selectors';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-szundikendo-builder',
@@ -24,7 +24,7 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
   public builderForm: FormGroup;
   public product: NyuszkoSzundikendoProduct;
   public price = 0;
-  public materials: Material[];
+  public materials: MaterialInterface[];
   public sortedMaterials: SortedMaterials;
   public productImages = [
     '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-1.jpg',
@@ -91,15 +91,15 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0]._id,
           Validators.required
         ),
         szundikendoColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0]._id,
           Validators.required
         ),
         minkyColorBack: new FormControl(
-          this.sortedMaterials.minkyPlus[0].id,
+          this.sortedMaterials.minkyPlus[0]._id,
           Validators.required
         )
       }),

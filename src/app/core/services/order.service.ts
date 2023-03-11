@@ -9,9 +9,8 @@ import { MaterialService } from './material.service';
 import { CookieService } from './cookie.service';
 import { ApiService } from './api.service';
 import { Order } from '../models/order.model';
-import coreActions from '../core-ngrx/actions';
 
-interface OrdersBackendInterface {
+interface OrdersDataBackendInterface {
   data: {
     orders: Order[];
   };
@@ -53,14 +52,14 @@ export class OrderService {
       price: price
     };
 
-    this.store$.dispatch(coreActions.addOrder({ order }));
+    // this.store$.dispatch(addOrder({ order }));
     this.apiService
       .post('orders', order)
       .pipe(
         tap(() => {
-          const productName = this.materialService.getMaterialNameById(
-            order.productDetails.baseProduct
-          );
+          const productName =
+            order.productDetails.baseProduct.charAt(0).toUpperCase() +
+            order.productDetails.baseProduct.slice(1);
           this.messageService.add({
             severity: 'success',
             summary: 'Siker!',
@@ -71,43 +70,43 @@ export class OrderService {
       .subscribe();
   }
 
-  public setUserOrdersStore(): void {
-    const user = {
-      buyerId: this.cookieService.getCookie('userId')
-    };
-    this.apiService
-      .get<OrdersBackendInterface>('orders', user)
-      .pipe(
-        map((ordersDTO) => {
-          const ordersWithId = ordersDTO.data.orders.map((rawOrder: any) => {
-            return Order.fromDTO(rawOrder);
-          });
-          const orders = this.createReadableOrders(ordersWithId);
-          return orders;
-        }),
-        tap((orders) => {
-          this.store$.dispatch(coreActions.setOrders({ orders }));
-        })
-      )
-      .subscribe();
-  }
+  // public setUserOrdersStore(): void {
+  //   const user = {
+  //     buyerId: this.cookieService.getCookie('userId')
+  //   };
+  //   this.apiService
+  //     .get<OrdersDataBackendInterface>('orders', user)
+  //     .pipe(
+  //       map((ordersDTO) => {
+  //         const ordersWithId = ordersDTO.data.orders.map((rawOrder: any) => {
+  //           return Order.fromDTO(rawOrder);
+  //         });
+  //         const orders = this.createReadableOrders(ordersWithId);
+  //         return orders;
+  //       }),
+  //       tap((orders) => {
+  //         this.store$.dispatch(coreActions.setOrders({ orders }));
+  //       })
+  //     )
+  //     .subscribe();
+  // }
 
-  private createReadableOrders(orders: Order[]): Order[] {
-    orders.map((order) => {
-      for (const key in order) {
-        order[key] = this.materialService.getMaterialNameById(order[key]);
-      }
-      const productDetails = order.productDetails[0];
-      for (const key in productDetails) {
-        productDetails[key] = this.materialService.getMaterialNameById(
-          productDetails[key]
-        );
-      }
-    });
-    return orders;
-  }
+  // private createReadableOrders(orders: Order[]): Order[] {
+  //   orders.map((order) => {
+  //     for (const key in order) {
+  //       order[key] = this.materialService.getMaterialNameById(order[key]);
+  //     }
+  //     const productDetails = order.productDetails[0];
+  //     for (const key in productDetails) {
+  //       productDetails[key] = this.materialService.getMaterialNameById(
+  //         productDetails[key]
+  //       );
+  //     }
+  //   });
+  //   return orders;
+  // }
 
-  public deleteOrder(id: string): Observable<null> {
-    return this.apiService.delete('orders', id);
-  }
+  // public deleteOrder(id: string): Observable<null> {
+  //   return this.apiService.delete('orders', id);
+  // }
 }

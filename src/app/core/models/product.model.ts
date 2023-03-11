@@ -1,31 +1,40 @@
-export class Product {
-  public id: string;
-  public name: string;
-  public images: string[];
-  public description: string;
-  public price: number;
+export interface RawBuiltProductInterface {
+  baseMaterials: {
+    baseProduct: string;
+    baseColor: string;
+    szundikendoColor?: string;
+    minkyColorBack?: string;
+    earsColor?: string;
+    ribbonColor?: string;
+  };
+  extraOptions: {
+    extraMinkyEarCheckbox?: boolean;
+    extraMinkyEarInput?: string;
+    nameEmbroideryCheckbox?: boolean;
+    nameEmbroideryInput?: string;
+    comment?: string;
+  };
+  price: number;
+}
 
-  constructor(
-    id: string,
-    name: string,
-    images: string[],
-    description: string,
-    price: number
-  ) {
-    this.id = id;
-    this.name = name;
-    this.images = images;
-    this.description = description;
-    this.price = price;
-  }
-
-  public static fromDTO(productResult: any): Product {
-    return new Product(
-      productResult._id,
-      productResult.name,
-      productResult.images,
-      productResult.description,
-      productResult.price
-    );
-  }
+export interface ProductInterface {
+  ownerId: string;
+  _id?: string;
+  productName: string;
+  productComment: string;
+  productDetails: {
+    baseProduct?: string;
+    baseColor?: string;
+    szundikendoColor?: string;
+    minkyColorBack?: string;
+    earsColor?: string;
+    ribbonColor?: string;
+    isExtraMinkyEars?: boolean;
+    minkyEarsColor?: string;
+    isExtraNameEmbroidery?: boolean;
+    nameEmbroideryText?: string;
+  };
+  productPrice: number;
+  addedAt?: Date;
+  productStatus?: string;
 }

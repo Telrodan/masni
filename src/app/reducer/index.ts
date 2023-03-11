@@ -1,17 +1,15 @@
+import { materialReducers } from '@core/store';
+import { MaterialsStateInterface } from '@core/store/models/materials-state.model';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
-import {
-  coreReducer,
-  CoreState
-} from '../core/core-ngrx/reducers/core.reducers';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AppState {
-  core: CoreState;
+  materials: MaterialsStateInterface;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  core: coreReducer
+  materials: materialReducers
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production

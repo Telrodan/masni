@@ -57,7 +57,6 @@ export class AuthService {
           this.authStatusListener.next(this.isAuthenticated);
           this.setAuthenticationTimer(expiresInDuration);
           this.setAuthData(expiresInDuration);
-          this.orderSerivce.setUserOrdersStore();
         }
       })
     );
@@ -113,8 +112,6 @@ export class AuthService {
       this.authStatusListener.next(this.isAuthenticated);
       this.setAuthenticationTimer(expiresIn / 1000);
     }
-
-    this.orderSerivce.setUserOrdersStore();
   }
 
   private setAuthenticationTimer(duration: number): void {

@@ -1,4 +1,4 @@
-<main class="builder" *ngIf="sortedMaterials !== null">
+<main class="builder" *ngIf="sortedMaterials">
   <div class="image-composition-container">
     <masni-handmade-dolls-image-composition
       [images]="productImages"></masni-handmade-dolls-image-composition>
@@ -19,7 +19,7 @@
             [options]="product.baseColor"
             formControlName="baseColor"
             optionLabel="nameWithExtra"
-            optionValue="id"></p-dropdown>
+            optionValue="name"></p-dropdown>
         </div>
         <div class="form-group">
           <label class="form-label">Fülek színe mintája:</label>
@@ -28,7 +28,7 @@
             [options]="product.earsColor"
             formControlName="earsColor"
             optionLabel="nameWithExtra"
-            optionValue="id"></p-dropdown>
+            optionValue="name"></p-dropdown>
         </div>
         <div class="form-group">
           <label class="form-label">Masni színe:</label>
@@ -37,7 +37,7 @@
             [options]="product.ribbonColor"
             formControlName="ribbonColor"
             optionLabel="nameWithExtra"
-            optionValue="id"></p-dropdown>
+            optionValue="name"></p-dropdown>
         </div>
       </div>
       <div formGroupName="extraOptions">

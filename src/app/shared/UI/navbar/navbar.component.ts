@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { selectOrders } from '@core/store/selectors/core.selectors';
 
 import {
   faChevronDown,
@@ -15,7 +16,7 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
+// import coreSelectors from 'src/app/core/store/selectors';
 import { Order } from 'src/app/core/models/order.model';
 
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -53,7 +54,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.isAuthenticated = this.authService.getIsAuthenticated();
-    this.orderCounterStore = this.store$.select(coreSelectors.selectOrders);
+    this.orderCounterStore = this.store$.select(selectOrders);
     // this.orderSerivce
     //   .getPersonalOrders()
     //   .pipe(

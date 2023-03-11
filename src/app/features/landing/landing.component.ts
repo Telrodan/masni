@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
+import { map, tap } from 'rxjs';
 
-import { Subject, takeUntil, tap } from 'rxjs';
+import { materialsSelector } from '@core/store/selectors/material.selector';
 
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
 import {
   firstCarousel,
   secondCarousel,
@@ -11,41 +13,37 @@ import {
   fourthCarousel
 } from './LANDING_DATA';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'masni-handmade-dolls-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent implements OnInit, OnDestroy {
-  public firstCarousel = { ...firstCarousel };
-  public secondCarousel = { ...secondCarousel };
-  public thirdCarousel = { ...thirdCarousel };
-  public fourthCarousel = { ...fourthCarousel };
-  private destroy = new Subject<null>();
+export class LandingComponent implements OnInit {
+  public firstCarousel = firstCarousel;
+  public secondCarousel = secondCarousel;
+  public thirdCarousel = thirdCarousel;
+  public fourthCarousel = fourthCarousel;
 
   constructor(private store$: Store) {}
 
   public ngOnInit(): void {
     this.store$
-      .select(coreSelectors.selectMaterials)
+      .select(materialsSelector)
       .pipe(
-        tap((materials) => {
-          materials.forEach((material) => {
-            if (material?.image) {
-              this.secondCarousel.images.push(
-                '../../../assets/images/materials/' + material.image
-              );
-            }
+        map((materials) => {
+          const materialImages = materials.map((material) => {
+            return material.image !== undefined
+              ? `../../../assets/images/materials/${material['image']}`
+              : null;
           });
+          return materialImages.filter((image) => !!image);
         }),
-        takeUntil(this.destroy)
+        tap((materialImages) => {
+          this.secondCarousel.images = materialImages;
+        })
       )
       .subscribe();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
   }
 
   public scrollToTop() {

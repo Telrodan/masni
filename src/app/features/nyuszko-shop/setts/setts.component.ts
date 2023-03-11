@@ -32,7 +32,7 @@ export class SettsComponent implements OnInit, OnDestroy {
       });
 
     this.couponService
-      .getUserCoupons()
+      .setUserCouponsStore()
       .pipe(
         tap((coupons) => {
           this.coupon = coupons.find((coupon) => coupon.couponType === 'sett');

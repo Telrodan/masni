@@ -1,10 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 
-import { Product } from '../models/product.model';
 import { MaterialService } from './material.service';
-import { Material } from '../models/material.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +13,11 @@ export class ProductService {
   ) {}
 
   public getProductPrice(formValues: any): number {
+    console.log(formValues);
     let price = 0;
     for (const key in formValues.baseMaterials) {
       if (key !== 'minkyColorBack') {
-        const extraPrice = this.materialService.getExtraPriceById(
+        const extraPrice = this.materialService.getExtraPriceByName(
           formValues.baseMaterials[key]
         );
         price += extraPrice;

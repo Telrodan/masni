@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { setCoupons } from '@core/store';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 import { AppState } from 'src/app/reducer';
 import { Coupon } from '../models/coupon.mode';
 import { ApiService } from './api.service';
@@ -44,15 +45,13 @@ export class CouponService {
     };
     return this.apiService.post<CouponDataType>('coupon/activate', coupon).pipe(
       map((result) => {
-        const coupon = Coupon.fromDTO(result.data.coupon);
+        const coupon = result.data.coupon;
         return coupon;
       })
     );
   }
 
-  public getUserCouponsStore(): void {}
-
-  public getUserCoupons(): Observable<Coupon[]> {
+  public setUserCouponsStore(): Observable<Coupon[]> {
     const owner = {
       couponOwner: this.cookieService.getCookie('userId')
     };
@@ -60,6 +59,10 @@ export class CouponService {
       map((result) => {
         const coupons = result.data.coupons;
         return coupons;
+      }),
+      filter((coupons) => !!coupons),
+      tap((coupons) => {
+        this.store$.dispatch(setCoupons({ coupons }));
       })
     );
   }

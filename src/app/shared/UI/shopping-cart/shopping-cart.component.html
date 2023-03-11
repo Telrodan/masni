@@ -1,7 +1,7 @@
-<div class="px-4 py-8 md:px-6 lg:px-8">
+<div class="px-4 py-8 md:px-6 lg:px-8" *ngIf="products$ | async as products">
   <div class="flex flex-column align-items-center mb-6">
     <div class="text-900 text-4xl mb-4 font-medium">
-      Kosár értéke {{ discountedCartPrice }} Ft
+      Kosár értéke {{ totalPrice - discount }} Ft
     </div>
 
     <button class="primary-button shadow-2">
@@ -10,7 +10,7 @@
   </div>
   <ul class="list-none p-0 m-0">
     <li
-      *ngFor="let order of orders"
+      *ngFor="let product of products"
       class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
       <img
         src="../../../../assets/images/nyuszko-kucko-logo.png"
@@ -18,57 +18,57 @@
       <div class="flex-auto py-5 md:pl-5">
         <div
           class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
-          <div class="w-full sm:w-6 flex flex-column" (click)="details(order)">
+          <div class="w-full sm:w-6 flex flex-column">
             <span class="text-900 text-xl font-medium mb-3">{{
-              order.productName | titlecase
+              product.productName | titlecase
             }}</span>
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.nameEmbroideryText">
+              *ngIf="product.productDetails[0]?.nameEmbroideryText">
               <span class="text-900">Hímzett név:</span>
-              {{ order.productDetails[0]?.nameEmbroideryText }}
+              {{ product.productDetails[0]?.nameEmbroideryText }}
             </span>
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.baseColor"
+              *ngIf="product.productDetails[0]?.baseColor"
               ><span class="text-900">Alapszín:</span>
-              {{ order.productDetails[0]?.baseColor }}</span
+              {{ product.productDetails[0]?.baseColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0].earsColor"
+              *ngIf="product.productDetails[0].earsColor"
               ><span class="text-900">Fülek színe mintája:</span>
-              {{ order.productDetails[0]?.earsColor }}</span
+              {{ product.productDetails[0]?.earsColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.ribbonColor"
+              *ngIf="product.productDetails[0]?.ribbonColor"
               ><span class="text-900">Masni színe:</span>
-              {{ order.productDetails[0]?.ribbonColor }}</span
+              {{ product.productDetails[0]?.ribbonColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.isExtraMinkyEars"
+              *ngIf="product.productDetails[0]?.isExtraMinkyEars"
               ><span class="text-900">Extra minky plüss fülek színe:</span>
-              {{ order.productDetails[0]?.minkyEarsColor }}</span
+              {{ product.productDetails[0]?.minkyEarsColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.szundikendoColor"
+              *ngIf="product.productDetails[0]?.szundikendoColor"
               ><span class="text-900">Szundikendő színe/mintája:</span>
-              {{ order.productDetails[0]?.szundikendoColor }}</span
+              {{ product.productDetails[0]?.szundikendoColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="order.productDetails[0]?.minkyColorBack"
+              *ngIf="product.productDetails[0]?.minkyColorBack"
               ><span class="text-900"
                 >Minky plüss színe(szundikendő-hátulja)</span
               >
-              {{ order.productDetails[0]?.minkyColorBack }}</span
+              {{ product.productDetails[0]?.minkyColorBack }}</span
             >
-            <span class="text-600" *ngIf="order.orderComment"
+            <span class="text-600" *ngIf="product.productComment"
               ><span class="text-900">Megjegyzés:</span>
-              {{ order.orderComment }}</span
+              {{ product.productComment }}</span
             >
           </div>
 
@@ -77,12 +77,12 @@
             <div></div>
             <div class="flex flex-column sm:align-items-end">
               <span class="text-900 text-2xl font-medium mb-2 sm:mb-3"
-                >{{ order.price }} Ft</span
+                >{{ product.productPrice }} Ft</span
               >
               <a
                 class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"
                 tabindex="0"
-                (click)="onDeleteOrder(order.id)"
+                (click)="onDeleteOrder(product)"
                 >Törlés</a
               >
             </div>
@@ -106,7 +106,7 @@
       </li>
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Részösszeg:</span>
-        <span class="text-xl text-900">{{ discountedCartPrice }} Ft</span>
+        <span class="text-xl text-900">{{ totalPrice - discount }} Ft</span>
       </li>
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Szállítás:</span>
@@ -117,7 +117,7 @@
         class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
         <span class="text-xl text-900 font-bold text-3xl">Teljes összeg:</span>
         <span class="text-xl text-900 font-bold text-3xl"
-          >{{ discountedCartPrice }} Ft</span
+          >{{ totalPrice - discount }} Ft</span
         >
       </li>
       <li class="flex justify-content-end">

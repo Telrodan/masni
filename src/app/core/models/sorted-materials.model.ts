@@ -1,24 +1,35 @@
-import { Material } from './material.model';
+import { MaterialInterface } from './material.model';
 
-export class SortedMaterials {
-  public patternedCotton: Material[];
-  public plainCotton: Material[];
-  public plainLinen: Material[];
-  public doubleGauze: Material[];
-  public minkyPlus: Material[];
-  public ribbon: Material[];
-  public woolFelt: Material[];
-  public baseProduct: Material[];
+export interface SortedMaterialsInterface {
+  patternedCotton: MaterialInterface[];
+  plainCotton: MaterialInterface[];
+  plainLinen: MaterialInterface[];
+  doubleGauze: MaterialInterface[];
+  minkyPlus: MaterialInterface[];
+  ribbon: MaterialInterface[];
+  woolFelt: MaterialInterface[];
+  baseProduct: MaterialInterface[];
+}
+
+export class SortedMaterials implements SortedMaterialsInterface {
+  public patternedCotton: MaterialInterface[];
+  public plainCotton: MaterialInterface[];
+  public plainLinen: MaterialInterface[];
+  public doubleGauze: MaterialInterface[];
+  public minkyPlus: MaterialInterface[];
+  public ribbon: MaterialInterface[];
+  public woolFelt: MaterialInterface[];
+  public baseProduct: MaterialInterface[];
 
   constructor(
-    patternedCotton: Material[],
-    plainCotton: Material[],
-    plainLinen: Material[],
-    doubleGauze: Material[],
-    minkyPlus: Material[],
-    ribbon: Material[],
-    woolFelt: Material[],
-    baseProduct: Material[]
+    patternedCotton: MaterialInterface[],
+    plainCotton: MaterialInterface[],
+    plainLinen: MaterialInterface[],
+    doubleGauze: MaterialInterface[],
+    minkyPlus: MaterialInterface[],
+    ribbon: MaterialInterface[],
+    woolFelt: MaterialInterface[],
+    baseProduct: MaterialInterface[]
   ) {
     this.patternedCotton = patternedCotton;
     this.plainCotton = plainCotton;
@@ -30,11 +41,14 @@ export class SortedMaterials {
     this.baseProduct = baseProduct;
   }
 
-  private static sorter(materials: Material[], category: string): Material[] {
+  private static sorter(
+    materials: MaterialInterface[],
+    category: string
+  ): MaterialInterface[] {
     return materials.filter((material) => material.category === category);
   }
 
-  public static sortMaterials(materials: Material[]): SortedMaterials {
+  public static sortMaterials(materials: MaterialInterface[]): SortedMaterials {
     return new SortedMaterials(
       this.sorter(materials, 'patternedCotton'),
       this.sorter(materials, 'plainCotton'),

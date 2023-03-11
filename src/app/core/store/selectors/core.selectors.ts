@@ -12,13 +12,15 @@ export const selectMaterials = createSelector(
 
 export const selectMaterialNameById = (materialId: string) =>
   createSelector(selectMaterials, (materials) => {
-    const material = materials.find((material) => material.id === materialId);
+    const material = materials.find((material) => material._id === materialId);
     return material ? material.name : materialId;
   });
 
-export const selectMaterialExtraPriceById = (materialId: string) =>
+export const selectMaterialExtraPriceByName = (materialName: string) =>
   createSelector(selectMaterials, (materials) => {
-    const material = materials.find((material) => material.id === materialId);
+    const material = materials.find(
+      (material) => material.name === materialName
+    );
     return material ? material.extra : 0;
   });
 
@@ -30,4 +32,14 @@ export const selectSortedMaterials = createSelector(
 export const selectOrders = createSelector(
   selectCoreState,
   (core) => core.orders
+);
+
+export const selectUserCoupons = createSelector(
+  selectCoreState,
+  (core) => core.coupons
+);
+
+export const selectUserShoppingCartProducts = createSelector(
+  selectCoreState,
+  (core) => core.shoppingCart
 );

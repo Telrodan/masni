@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
-import { Product } from 'src/app/core/models/product.model';
 
 @Component({
   selector: 'masni-handmade-dolls-product-card',
@@ -9,7 +8,7 @@ import { Product } from 'src/app/core/models/product.model';
   styleUrls: ['./product-card.component.scss']
 })
 export class ProductCardComponent {
-  @Input() product: Product;
+  @Input() product: any;
 
   public faCartShopping = faCartShopping;
 }

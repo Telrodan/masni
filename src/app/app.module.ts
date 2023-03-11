@@ -33,11 +33,12 @@ import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-
 import { SharedModule } from './shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
-import { CoreModule } from './core/core.module';
 import { reducers } from './reducer';
 import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
+import { EffectsModule } from '@ngrx/effects';
+import { MaterialEffects } from '@core/store/effects/material.effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -75,13 +76,13 @@ const PRIME_NG = [
     HttpClientModule,
     ImageModule,
     MatSnackBarModule,
-    CoreModule,
     ...PRIME_NG,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
     }),
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([MaterialEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [

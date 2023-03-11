@@ -1,19 +1,19 @@
-import { Material } from '../material.model';
+import { MaterialInterface } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
 const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de130';
 
 export class MackoProduct {
   public baseProduct: string;
-  public baseColor: Material[];
-  public earsAndBodyColor: Material[];
-  public noseColor: Material[];
+  public baseColor: MaterialInterface[];
+  public earsAndBodyColor: MaterialInterface[];
+  public noseColor: MaterialInterface[];
 
   constructor(
     baseProduct: string,
-    baseColor: Material[],
-    earsAndBodyColor: Material[],
-    noseColor: Material[]
+    baseColor: MaterialInterface[],
+    earsAndBodyColor: MaterialInterface[],
+    noseColor: MaterialInterface[]
   ) {
     this.baseProduct = baseProduct;
     this.baseColor = baseColor;

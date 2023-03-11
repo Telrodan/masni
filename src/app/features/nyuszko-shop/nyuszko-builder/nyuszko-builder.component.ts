@@ -2,15 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, tap, switchMap } from 'rxjs';
+import { Subject, takeUntil, tap, switchMap, Observable } from 'rxjs';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-import coreSelectors from 'src/app/core/core-ngrx/selectors';
+import coreSelectors from 'src/app/core/store/selectors';
 import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
 import { NyuszkoProduct } from 'src/app/core/models/custom-products/nyuszko-product.model';
 import { OrderService } from 'src/app/core/services/order.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProductService } from 'src/app/core/services/product.service';
+import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service';
 
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-builder',
@@ -37,7 +38,8 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
     private store$: Store,
     private orderService: OrderService,
     private authService: AuthService,
-    private productService: ProductService
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService
   ) {}
 
   public ngOnInit(): void {
@@ -74,7 +76,8 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
 
   public onSubmit(): void {
     if (!this.builderForm.valid) return;
-    this.orderService.addOrderToCart(this.builderForm, this.price);
+    const item = { ...this.builderForm.value, price: this.price };
+    this.shoppingCartService.addBuiltProductToCart(item);
   }
 
   private createForm(): void {
@@ -82,22 +85,22 @@ export class NyuszkoBuilderComponent implements OnInit, OnDestroy {
       baseMaterials: new FormGroup({
         baseProduct: new FormControl(this.product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0].name,
           Validators.required
         ),
         earsColor: new FormControl(
-          this.sortedMaterials.plainCotton[0].id,
+          this.sortedMaterials.plainCotton[0].name,
           Validators.required
         ),
         ribbonColor: new FormControl(
-          this.sortedMaterials.ribbon[0].id,
+          this.sortedMaterials.ribbon[0].name,
           Validators.required
         )
       }),
       extraOptions: new FormGroup({
         extraMinkyEarCheckbox: new FormControl(false, Validators.required),
         extraMinkyEarInput: new FormControl(
-          this.sortedMaterials.plainCotton[0].id
+          this.sortedMaterials.plainCotton[0].name
         ),
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),
         nameEmbroideryInput: new FormControl(''),
