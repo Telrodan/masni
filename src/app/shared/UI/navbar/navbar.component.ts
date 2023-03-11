@@ -1,6 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { selectOrders } from '@core/store/selectors/core.selectors';
+import { Component, OnInit } from '@angular/core';
 
+import { Store } from '@ngrx/store';
+import { filter, map, Observable } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { MessageService } from 'primeng/api';
 import {
   faChevronDown,
   faCartShopping,
@@ -10,28 +13,23 @@ import {
   faPhone,
   faUser,
   faUserPlus,
-  faRightToBracket
+  faRightToBracket,
+  faBars,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons';
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
-import { Observable, Subject, switchMap, takeUntil } from 'rxjs';
-// import coreSelectors from 'src/app/core/store/selectors';
-import { Order } from 'src/app/core/models/order.model';
 
-import { AuthService } from 'src/app/core/services/auth.service';
-import { OrderService } from 'src/app/core/services/order.service';
+import { AuthService } from '@core/services/auth.service';
+import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'masni-handmade-dolls-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
   public isAuthenticated = false;
-  public orderCounter = 0;
-  private destroy = new Subject();
-  public orderCounterStore: Observable<Order[]>;
+  public itemCounter$: Observable<number>;
 
   public faChevronDown = faChevronDown;
   public faCartShopping = faCartShopping;
@@ -48,29 +46,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
-    private orderSerivce: OrderService,
     private store$: Store
   ) {}
 
   public ngOnInit(): void {
     this.isAuthenticated = this.authService.getIsAuthenticated();
-    // this.orderCounterStore = this.store$.select(selectOrders);
-    // this.orderSerivce
-    //   .getPersonalOrders()
-    //   .pipe(
-    //     switchMap(() => this.orderSerivce.getOrderCounterListener$()),
-    //     takeUntil(this.destroy)
-    //   )
-    //   .subscribe((orderCounter) => {
-    //     this.orderCounter = orderCounter;
-    //   });
+    this.itemCounter$ = this.store$.select(shoppingCartItemsSelector).pipe(
+      filter((items) => !!items),
+      map((items) => items.length)
+    );
 
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
-      });
+    this.authService.getAuthStatus$().subscribe((response) => {
+      this.isAuthenticated = response;
+    });
   }
 
   public closeNavbar(): void {
@@ -85,10 +73,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
       summary: 'Siker!',
       detail: 'Sikeres kilépés, átirányítva a főoldalra'
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
   }
 }

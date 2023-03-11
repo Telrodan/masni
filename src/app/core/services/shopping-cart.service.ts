@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
+
 import { Store } from '@ngrx/store';
-
-import { filter, map, Observable, tap } from 'rxjs';
-import { RawBuiltShoppingCartProductInterface } from '../models/product.model';
-import { ApiService } from './api.service';
-
-import { CookieService } from './cookie.service';
+import { map, Observable, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import {
-  addProduct,
-  deleteProductFromCart,
-  setUserShoppingCart
-} from '@core/store';
+
+import { ApiService } from './api.service';
+import { CookieService } from './cookie.service';
+import { addProduct, deleteProductFromCart } from '@core/store/actions';
+import { RawBuiltShoppingCartProductInterface } from '@core/models/product.model';
 import { ShoppingCartItem } from '@core/models/shopping-cart.model';
+import {
+  addShoppingCartItem,
+  deleteShoppingCartItem
+} from '@core/store/actions/shopping-cart.actions';
 
 interface ProductBackendInterface {
   data: {
@@ -40,30 +40,9 @@ export class ShoppingCartService {
   public getUserShoppingCartItems(): Observable<ShoppingCartItem[]> {
     const ownerId = this.cookieService.getCookie('userId');
     return this.apiService
-      .get<ShoppingCartItemsDTO>('shopping-cart/get-user-items', ownerId)
+      .get<ShoppingCartItemsDTO>('shopping-cart/get-user-items', { ownerId })
       .pipe(map((items) => items.data.shoppingCartItems));
   }
-
-  // public setUserShoppingCartProductsStore(): Observable<
-  //   RawBuiltShoppingCartProductInterface[]
-  // > {
-  //   const userId = this.cookieService.getCookie('userId');
-  //   return this.apiService
-  //     .get<ProductsBackendInterface>('shopping-cart/get-user-products', {
-  //       ownerId: userId
-  //     })
-  //     .pipe(
-  //       map((productsDTO) => {
-  //         const products: ShoppingCartProductInterface[] =
-  //           productsDTO.data.products;
-  //         return products;
-  //       }),
-  //       filter((products) => !!products),
-  //       tap((products) => {
-  //         this.store$.dispatch(setUserShoppingCart({ products }));
-  //       })
-  //     );
-  // }
 
   public addBuiltProductToCart(
     rawProduct: RawBuiltShoppingCartProductInterface
@@ -88,18 +67,17 @@ export class ShoppingCartService {
       productPrice: rawProduct.price
     };
 
-    console.log(product);
-
     this.apiService
       .post<ProductBackendInterface>('shopping-cart/add', product)
       .pipe(
         tap((productDTO) => {
-          const product: ShoppingCartItem = productDTO.data.product;
-          this.store$.dispatch(addProduct({ product }));
+          const shoppingCartItem: ShoppingCartItem = productDTO.data.product;
+          this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
 
           const productName =
             product.productName.charAt(0).toUpperCase() +
             product.productName.slice(1);
+
           this.messageService.add({
             severity: 'success',
             summary: 'Siker!',
@@ -114,8 +92,27 @@ export class ShoppingCartService {
 
   public addReadyProductToCart(): void {}
 
-  public deleteProductFromCart(product: ShoppingCartItem): void {
-    this.store$.dispatch(deleteProductFromCart({ product }));
-    this.apiService.delete('shopping-cart', product._id).subscribe();
+  public deleteProductFromCart(shoppingCartItem: ShoppingCartItem): void {
+    this.apiService
+      .delete('shopping-cart', shoppingCartItem._id)
+      .pipe(
+        tap(() => {
+          const productName =
+            shoppingCartItem.productName.charAt(0).toUpperCase() +
+            shoppingCartItem.productName.slice(1);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: `${
+              productName +
+              ` termék törölve, ${shoppingCartItem.productPrice} Ft értékben.`
+            }`
+          });
+
+          this.store$.dispatch(deleteShoppingCartItem({ shoppingCartItem }));
+        })
+      )
+      .subscribe();
   }
 }

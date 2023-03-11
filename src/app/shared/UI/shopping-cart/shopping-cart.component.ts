@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 
-import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
+import {
+  MessageService,
+  ConfirmationService,
+  ConfirmEventType
+} from 'primeng/api';
+import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
+
+import { ShoppingCartItem } from '@core/models/shopping-cart.model';
+import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
+
 import { filter, map, Observable, tap, first } from 'rxjs';
 
 // import coreSelectors from 'src/app/core/store/selectors';
@@ -31,22 +38,21 @@ export class ShoppingCartComponent implements OnInit {
     private orderService: OrderService,
     private messageService: MessageService,
     private couponService: CouponService,
-    private store$: Store
+    private store$: Store,
+    private confirmationService: ConfirmationService
   ) {}
 
   public ngOnInit(): void {
-    // this.products$ = this.store$
-    //   .select(coreSelectors.selectUserShoppingCartProducts)
-    //   .pipe(
-    //     filter((products) => !!products),
-    //     map((products) => {
-    //       products.map((product) => {
-    //         this.totalPrice += product.productPrice;
-    //       });
-    //       console.log(products);
-    //       return products;
-    //     })
-    //   );
+    this.products$ = this.store$.select(shoppingCartItemsSelector).pipe(
+      filter((items) => !!items),
+      tap((items) => {
+        this.totalPrice = 0;
+        items.map((item) => {
+          this.totalPrice += item.productPrice;
+        });
+      })
+    );
+
     // this.store$
     //   .select(coreSelectors.selectUserCoupons)
     //   .pipe(
@@ -55,34 +61,6 @@ export class ShoppingCartComponent implements OnInit {
     //       this.coupons = coupons;
     //       this.discount = this.coupons[0].discount;
     //     })
-    //   )
-    //   .subscribe();
-    // this.store$
-    //   .select(coreSelectors.selectMaterials)
-    //   .pipe(
-    //     filter((materials) => !!materials.length),
-    //     switchMap(() => this.store$.select(coreSelectors.selectOrders)),
-    //     map((orders) => {
-    //       console.log(orders);
-    //       orders.map((order) => {
-    //         this.discountedCartPrice += order.price;
-    //       });
-    //       this.originalCartPrice = this.discountedCartPrice;
-    //       return orders;
-    //     }),
-    //     tap((orders) => {
-    //       this.orders = orders;
-    //     }),
-    //     switchMap(() => this.couponService.getUserCoupons()),
-    //     tap((coupons) => {
-    //       if (!coupons) return;
-    //       this.coupons = coupons;
-    //       if (this.checkSettCouponConditions()) {
-    //         this.discount = this.coupons[0].discount;
-    //         this.discountedCartPrice -= this.discount;
-    //       }
-    //     }),
-    //     takeUntil(this.destroy)
     //   )
     //   .subscribe();
   }
@@ -102,7 +80,37 @@ export class ShoppingCartComponent implements OnInit {
   // }
 
   public onDeleteOrder(product: ShoppingCartItem): void {
-    this.shoppingCartService.deleteProductFromCart(product);
+    const productName =
+      product.productName.charAt(0).toUpperCase() +
+      product.productName.slice(1);
+
+    this.confirmationService.confirm({
+      message: `Biztos törölni szeretnéd ${productName} terméket, ${product.productPrice} Ft értékben?`,
+      header: 'Megerősítés',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.shoppingCartService.deleteProductFromCart(product);
+      },
+      reject: (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Rejected',
+              detail: 'You have rejected'
+            });
+            break;
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Cancelled',
+              detail: 'You have cancelled'
+            });
+            break;
+        }
+      }
+    });
+
     // this.orderService
     //   .deleteOrder(id)
     //   .pipe(

@@ -4,7 +4,7 @@ import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions'
 
 import { Store } from '@ngrx/store';
 import { Carousel } from 'primeng/carousel';
-import { filter, of, switchMap } from 'rxjs';
+import { filter, of, switchMap, tap } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
 import { CouponService } from './core/services/coupon.service';
@@ -30,6 +30,16 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.store$.dispatch(getMaterials());
+    this.authService
+      .getAuthStatus$()
+      .pipe(
+        filter((isAuth) => !!isAuth),
+        tap(() => {
+          console.log('minden fasza');
+          this.store$.dispatch(getShoppingCartItems());
+        })
+      )
+      .subscribe();
 
     // APP_INIT
     // of()

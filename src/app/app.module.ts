@@ -9,13 +9,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AccordionModule } from 'primeng/accordion';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { CarouselModule } from 'primeng/carousel';
 import { ImageModule } from 'primeng/image';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,9 +39,10 @@ import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { EffectsModule } from '@ngrx/effects';
-import { MaterialEffects } from '@core/store/effects/material.effects';
+import * as effects from '@core/store/effects';
 import { AuthService } from '@core/services/auth.service';
 import { InitializerModule } from '@core/initializer/initializer.module';
+import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -48,7 +50,8 @@ const PRIME_NG = [
   InputTextModule,
   InputSwitchModule,
   ButtonModule,
-  ToastModule
+  ToastModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({
@@ -84,7 +87,7 @@ const PRIME_NG = [
       logOnly: environment.production
     }),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([MaterialEffects]),
+    EffectsModule.forRoot([MaterialEffects, ShoppingCartEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [
@@ -99,6 +102,7 @@ const PRIME_NG = [
       }
     },
     MessageService,
+    ConfirmationService,
 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HTTPInterceptor, multi: true },
