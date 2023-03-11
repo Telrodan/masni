@@ -5,6 +5,8 @@ export interface RawBuiltShoppingCartProductInterface {
     szundikendoColor?: string;
     minkyColorBack?: string;
     earsColor?: string;
+    earsAndBodyColor?: string;
+    noseColor?: string;
     ribbonColor?: string;
   };
   extraOptions: {

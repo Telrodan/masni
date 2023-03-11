@@ -1,103 +1,93 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-
-import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { OrderService } from 'src/app/core/services/order.service';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { MackoProduct } from 'src/app/core/models/custom-products/macko-product';
-import { ProductService } from 'src/app/core/services/product.service';
 import { Store } from '@ngrx/store';
-// import coreSelectors from 'src/app/core/store/selectors';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
+
+import { AuthService } from '@core/services/auth.service';
+import { ProductService } from '@core/services/product.service';
+import { ShoppingCartService } from '@core/services/shopping-cart.service';
+import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
+import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { MackoProduct } from '@core/models/custom-products/macko-product';
 
 @Component({
   selector: 'masni-handmade-dolls-macko-builder',
   templateUrl: './macko-builder.component.html',
   styleUrls: ['./macko-builder.component.scss']
 })
-export class MackoBuilderComponent implements OnInit, OnDestroy {
-  public isAuthenticated = false;
-  public builderForm: FormGroup = new FormGroup({});
+export class MackoBuilderComponent implements OnInit {
+  public isAuthenticated$: Observable<boolean>;
   public product: MackoProduct;
+  public sortedMaterials$: Observable<SortedMaterialsInterface>;
   public price = 0;
-  public sortedMaterials: SortedMaterials;
+  public builderForm: FormGroup = new FormGroup({});
   public productImages = [
     '../../../../assets/images/nyuszko-shop/macko-builder/image-1.jpg',
     '../../../../assets/images/nyuszko-shop/macko-builder/image-2.jpg',
     '../../../../assets/images/nyuszko-shop/macko-builder/image-3.jpg'
   ];
   public faShoppingCart = faShoppingCart;
-  private destroy = new Subject();
 
   constructor(
     private store$: Store,
-    private orderService: OrderService,
     private authService: AuthService,
-    private productService: ProductService
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService
   ) {}
 
   public ngOnInit(): void {
-    // this.store$
-    //   .select(coreSelectors.selectSortedMaterials)
-    //   .pipe(
-    //     tap((sortedMaterials) => {
-    //       if (!sortedMaterials) return;
-    //       this.sortedMaterials = sortedMaterials;
-    //       this.product = MackoProduct.setUpMaterials(this.sortedMaterials);
-    //       this.createForm();
-    //     }),
-    //     switchMap(() => this.builderForm.valueChanges),
-    //     tap(
-    //       (changes) =>
-    //         (this.price = this.productService.getProductPrice(changes))
-    //     ),
-    //     takeUntil(this.destroy)
-    //   )
-    //   .subscribe();
+    this.isAuthenticated$ = this.authService.getAuthStatus$();
 
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
-      });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
+    this.store$
+      .select(sortedMaterialsSelector)
+      .pipe(
+        filter((sortedMaterials) => !!sortedMaterials),
+        map((sortedMaterials) => MackoProduct.setUpMaterials(sortedMaterials)),
+        tap((product) => {
+          this.product = product;
+          this.createForm(product);
+        }),
+        switchMap(() => this.builderForm.valueChanges),
+        tap((changes) => {
+          this.price = this.productService.getProductPrice(changes);
+        })
+      )
+      .subscribe();
   }
 
   public onSubmit(): void {
     if (!this.builderForm.valid) return;
-    this.orderService.addOrderToCart(this.builderForm, this.price);
+    const item = { ...this.builderForm.value, price: this.price };
+    this.shoppingCartService.addBuiltProductToCart(item);
   }
 
-  private createForm(): void {
+  private createForm(product: MackoProduct): void {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
-        baseProduct: new FormControl(this.product.baseProduct),
+        baseProduct: new FormControl(product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+          product.baseColor[0].name,
           Validators.required
         ),
-        earsColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+        earsAndBodyColor: new FormControl(
+          product.earsAndBodyColor[0].name,
           Validators.required
         ),
-        ribbonColor: new FormControl(
-          this.sortedMaterials.ribbon[0]._id,
+        noseColor: new FormControl(
+          product.noseColor[0].name,
           Validators.required
         )
       }),
       extraOptions: new FormGroup({
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),
         nameEmbroideryInput: new FormControl(''),
-        orderComment: new FormControl('')
+        productComment: new FormControl('')
       })
     });
+
     this.price = this.productService.getProductPrice(this.builderForm.value);
   }
 }

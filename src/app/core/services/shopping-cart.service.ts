@@ -58,6 +58,8 @@ export class ShoppingCartService {
         szundikendoColor: rawProduct.baseMaterials.szundikendoColor,
         minkyColorBack: rawProduct.baseMaterials.minkyColorBack,
         earsColor: rawProduct.baseMaterials.earsColor,
+        earsAndBodyColor: rawProduct.baseMaterials.earsAndBodyColor,
+        noseColor: rawProduct.baseMaterials.noseColor,
         ribbonColor: rawProduct.baseMaterials.ribbonColor,
         isExtraMinkyEars: rawProduct.extraOptions.extraMinkyEarsCheckbox,
         minkyEarsColor: rawProduct.extraOptions.extraMinkyEarsInput,

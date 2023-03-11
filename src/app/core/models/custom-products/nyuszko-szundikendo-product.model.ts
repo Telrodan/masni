@@ -1,7 +1,7 @@
 import { MaterialInterface } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
-const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de12f';
+const BASE_PRODUCT = 'nyuszkó-szundikendő';
 
 export class NyuszkoSzundikendoProduct {
   public baseProduct: string;
@@ -25,7 +25,7 @@ export class NyuszkoSzundikendoProduct {
     sortedMaterials: SortedMaterials
   ): NyuszkoSzundikendoProduct {
     return new NyuszkoSzundikendoProduct(
-      BASE_PRODUCT_TYPE_ID,
+      BASE_PRODUCT,
       sortedMaterials.plainCotton,
       [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],
       sortedMaterials.minkyPlus

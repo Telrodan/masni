@@ -1,7 +1,7 @@
 import { MaterialInterface } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
-const BASE_PRODUCT_TYPE_ID = '63eb94a421e3dfdd574de130';
+const BASE_PRODUCT = 'mackó';
 
 export class MackoProduct {
   public baseProduct: string;
@@ -23,7 +23,7 @@ export class MackoProduct {
 
   public static setUpMaterials(sortedMaterials: SortedMaterials): MackoProduct {
     return new MackoProduct(
-      BASE_PRODUCT_TYPE_ID,
+      BASE_PRODUCT,
       sortedMaterials.plainCotton,
       [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],
       sortedMaterials.woolFelt

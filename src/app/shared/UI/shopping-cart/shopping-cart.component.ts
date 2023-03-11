@@ -88,26 +88,10 @@ export class ShoppingCartComponent implements OnInit {
       message: `Biztos törölni szeretnéd ${productName} terméket, ${product.productPrice} Ft értékben?`,
       header: 'Megerősítés',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Igen',
+      rejectLabel: 'Nem',
       accept: () => {
         this.shoppingCartService.deleteProductFromCart(product);
-      },
-      reject: (type) => {
-        switch (type) {
-          case ConfirmEventType.REJECT:
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Rejected',
-              detail: 'You have rejected'
-            });
-            break;
-          case ConfirmEventType.CANCEL:
-            this.messageService.add({
-              severity: 'warn',
-              summary: 'Cancelled',
-              detail: 'You have cancelled'
-            });
-            break;
-        }
       }
     });
 

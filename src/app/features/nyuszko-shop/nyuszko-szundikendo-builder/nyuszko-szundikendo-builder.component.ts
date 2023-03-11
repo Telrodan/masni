@@ -1,31 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { Subject, takeUntil, tap, forkJoin, switchMap } from 'rxjs';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-
-import { MaterialInterface } from 'src/app/core/models/material.model';
-import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { MaterialService } from 'src/app/core/services/material.service';
-import { NyuszkoSzundikendoProduct } from 'src/app/core/models/custom-products/nyuszko-szundikendo-product.model';
-import { OrderService } from 'src/app/core/services/order.service';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { ProductService } from 'src/app/core/services/product.service';
 import { Store } from '@ngrx/store';
-import coreSelectors from 'src/app/core/store/selectors';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
 
+import { AuthService } from '@core/services/auth.service';
+import { ProductService } from '@core/services/product.service';
+import { ShoppingCartService } from '@core/services/shopping-cart.service';
+import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
+import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { NyuszkoSzundikendoProduct } from '@core/models/custom-products/nyuszko-szundikendo-product.model';
+
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-szundikendo-builder',
   templateUrl: './nyuszko-szundikendo-builder.component.html',
   styleUrls: ['./nyuszko-szundikendo-builder.component.scss']
 })
-export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
-  public isAuthenticated = false;
-  public builderForm: FormGroup;
+export class NyuszkoSzundikendoBuilderComponent implements OnInit {
+  public isAuthenticated$: Observable<boolean>;
   public product: NyuszkoSzundikendoProduct;
+  public sortedMaterials$: Observable<SortedMaterialsInterface>;
   public price = 0;
-  public materials: MaterialInterface[];
-  public sortedMaterials: SortedMaterials;
+  public builderForm: FormGroup = new FormGroup({});
   public productImages = [
     '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-1.jpg',
     '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-2.jpg',
@@ -34,80 +33,67 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit, OnDestroy {
     '../../../../assets/images/nyuszko-shop/nyuszko-szundikendo-builder/image-5.jpg'
   ];
   public faShoppingCart = faShoppingCart;
-  private destroy = new Subject();
 
   constructor(
-    private materialService: MaterialService,
-    private orderService: OrderService,
+    private store$: Store,
     private authService: AuthService,
     private productService: ProductService,
-    private store$: Store
+    private shoppingCartService: ShoppingCartService
   ) {}
 
   public ngOnInit(): void {
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
-      });
+    this.isAuthenticated$ = this.authService.getAuthStatus$();
 
-    forkJoin([
-      this.store$.select(coreSelectors.selectMaterials),
-      this.store$.select(coreSelectors.selectSortedMaterials)
-    ])
+    this.store$
+      .select(sortedMaterialsSelector)
       .pipe(
-        tap(([materials, sortedMaterials]) => {
-          this.materials = materials;
-          this.sortedMaterials = sortedMaterials;
-          this.product = NyuszkoSzundikendoProduct.setUpMaterials(
-            this.sortedMaterials
-          );
-          this.createForm();
-          this.price = this.productService.getProductPrice(
-            this.builderForm.value
-          );
+        filter((sortedMaterials) => !!sortedMaterials),
+        map((sortedMaterials) =>
+          NyuszkoSzundikendoProduct.setUpMaterials(sortedMaterials)
+        ),
+        tap((product) => {
+          this.product = product;
+          this.createForm(product);
         }),
         switchMap(() => this.builderForm.valueChanges),
-        takeUntil(this.destroy)
+        tap((changes) => {
+          this.price = this.productService.getProductPrice(changes);
+          console.log(this.price);
+        })
       )
-      .subscribe((changes) => {
-        this.price = this.productService.getProductPrice(changes);
-      });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
+      .subscribe();
   }
 
   public onSubmit() {
     if (!this.builderForm.valid) return;
-    this.orderService.addOrderToCart(this.builderForm, this.price);
+    const item = { ...this.builderForm.value, price: this.price };
+    this.shoppingCartService.addBuiltProductToCart(item);
   }
 
-  private createForm(): void {
+  private createForm(product: NyuszkoSzundikendoProduct): void {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
-        baseProduct: new FormControl(this.product.baseProduct),
+        baseProduct: new FormControl(product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+          product.baseColor[0].name,
           Validators.required
         ),
         szundikendoColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+          product.szundikendoColor[0].name,
           Validators.required
         ),
         minkyColorBack: new FormControl(
-          this.sortedMaterials.minkyPlus[0]._id,
+          product.minkyColorBack[0].name,
           Validators.required
         )
       }),
       extraOptions: new FormGroup({
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),
         nameEmbroideryInput: new FormControl(''),
-        orderComment: new FormControl('')
+        productComment: new FormControl('')
       })
     });
+
+    this.price = this.productService.getProductPrice(this.builderForm.value);
   }
 }
