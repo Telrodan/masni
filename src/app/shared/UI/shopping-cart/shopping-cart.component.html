@@ -62,9 +62,21 @@
               class="text-600 mb-1"
               *ngIf="product.productDetails[0]?.minkyColorBack"
               ><span class="text-900"
-                >Minky plüss színe(szundikendő-hátulja)</span
+                >Minky plüss színe(szundikendő-hátulja):</span
               >
               {{ product.productDetails[0]?.minkyColorBack }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="product.productDetails[0]?.earsAndBodyColor"
+              ><span class="text-900">Fülek és test színe/mintája:</span>
+              {{ product.productDetails[0]?.earsAndBodyColor }}</span
+            >
+            <span
+              class="text-600 mb-1"
+              *ngIf="product.productDetails[0]?.noseColor"
+              ><span class="text-900">Orr színe:</span>
+              {{ product.productDetails[0]?.noseColor }}</span
             >
             <span class="text-600" *ngIf="product.productComment"
               ><span class="text-900">Megjegyzés:</span>

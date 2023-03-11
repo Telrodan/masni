@@ -17,16 +17,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 18px;
-  width: 18px;
+  height: 20px;
+  width: 20px;
   background-color: var(--color-red);
   color: white;
   border-radius: 500px;
-  font-size: 14px;
+  font-size: 12px;
 
   @include respond(sm) {
     top: 15px;
-    left: 25px;
+    left: 28px;
     transform: translateX(0);
   }
 }

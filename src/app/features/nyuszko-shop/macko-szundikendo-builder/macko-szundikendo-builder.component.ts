@@ -1,109 +1,95 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { Subject, takeUntil, tap, forkJoin, switchMap } from 'rxjs';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-
-import { MaterialInterface } from 'src/app/core/models/material.model';
-import { SortedMaterials } from 'src/app/core/models/sorted-materials.model';
-import { OrderService } from 'src/app/core/services/order.service';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { ProductService } from 'src/app/core/services/product.service';
-import { MackoSzundikendoProduct } from 'src/app/core/models/custom-products/macko-szundikendo.model';
 import { Store } from '@ngrx/store';
-import coreSelectors from 'src/app/core/store/selectors';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
+
+import { AuthService } from '@core/services/auth.service';
+import { ProductService } from '@core/services/product.service';
+import { ShoppingCartService } from '@core/services/shopping-cart.service';
+import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
+import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { MackoSzundikendoProduct } from '@core/models/custom-products/macko-szundikendo.model';
 
 @Component({
   selector: 'masni-handmade-dolls-szundikendo-builder',
   templateUrl: './macko-szundikendo-builder.component.html',
   styleUrls: ['./macko-szundikendo-builder.component.scss']
 })
-export class MackoSzundikendoBuilderComponent implements OnInit, OnDestroy {
-  public isAuthenticated = false;
-  public builderForm: FormGroup;
+export class MackoSzundikendoBuilderComponent implements OnInit {
+  public isAuthenticated$: Observable<boolean>;
   public product: MackoSzundikendoProduct;
+  public sortedMaterials$: Observable<SortedMaterialsInterface>;
   public price = 0;
-  public materials: MaterialInterface[];
-  public sortedMaterials: SortedMaterials;
+  public builderForm: FormGroup = new FormGroup({});
   public productImages = [
     '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-1.jpg',
     '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-2.jpg',
     '../../../../assets/images/nyuszko-shop/macko-szundikendo-builder/image-3.jpg'
   ];
   public faShoppingCart = faShoppingCart;
-  private destroy = new Subject();
 
   constructor(
     private store$: Store,
-    private orderService: OrderService,
     private authService: AuthService,
-    private productService: ProductService
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService
   ) {}
 
   public ngOnInit(): void {
-    forkJoin([
-      this.store$.select(coreSelectors.selectMaterials),
-      this.store$.select(coreSelectors.selectSortedMaterials)
-    ])
+    this.isAuthenticated$ = this.authService.getAuthStatus$();
+
+    this.store$
+      .select(sortedMaterialsSelector)
       .pipe(
-        tap(([materials, sortedMaterials]) => {
-          this.materials = materials;
-          this.sortedMaterials = sortedMaterials;
-          this.product = MackoSzundikendoProduct.setUpMaterials(
-            this.sortedMaterials
-          );
-          this.createForm();
-          this.price = this.productService.getProductPrice(
-            this.builderForm.value
-          );
+        filter((sortedMaterials) => !!sortedMaterials),
+        map((sortedMaterials) =>
+          MackoSzundikendoProduct.setUpMaterials(sortedMaterials)
+        ),
+        tap((product) => {
+          this.product = product;
+          this.createForm(product);
         }),
         switchMap(() => this.builderForm.valueChanges),
-        takeUntil(this.destroy)
+        tap((changes) => {
+          this.price = this.productService.getProductPrice(changes);
+        })
       )
-      .subscribe((changes) => {
-        this.price = this.productService.getProductPrice(changes);
-      });
-
-    this.authService
-      .getAuthStatus$()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
-        this.isAuthenticated = response;
-      });
+      .subscribe();
   }
 
-  public ngOnDestroy(): void {
-    this.destroy.next(null);
-    this.destroy.complete();
-  }
-
-  public onSubmit() {
+  public onSubmit(): void {
     if (!this.builderForm.valid) return;
-    this.orderService.addOrderToCart(this.builderForm, this.price);
+    const item = { ...this.builderForm.value, price: this.price };
+    this.shoppingCartService.addBuiltProductToCart(item);
   }
 
-  private createForm(): void {
+  private createForm(product: MackoSzundikendoProduct): void {
     this.builderForm = new FormGroup({
       baseMaterials: new FormGroup({
-        baseProduct: new FormControl(this.product.baseProduct),
+        baseProduct: new FormControl(product.baseProduct),
         baseColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+          product.baseColor[0].name,
           Validators.required
         ),
         szundikendoColor: new FormControl(
-          this.sortedMaterials.plainCotton[0]._id,
+          product.szundikendoColor[0].name,
           Validators.required
         ),
         minkyColorBack: new FormControl(
-          this.sortedMaterials.minkyPlus[0]._id,
+          product.minkyColorBack[0].name,
           Validators.required
         )
       }),
       extraOptions: new FormGroup({
         nameEmbroideryCheckbox: new FormControl(false, Validators.required),
         nameEmbroideryInput: new FormControl(''),
-        orderComment: new FormControl('')
+        productComment: new FormControl('')
       })
     });
+
+    this.price = this.productService.getProductPrice(this.builderForm.value);
   }
 }
