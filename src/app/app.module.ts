@@ -43,6 +43,7 @@ import * as effects from '@core/store/effects';
 import { AuthService } from '@core/services/auth.service';
 import { InitializerModule } from '@core/initializer/initializer.module';
 import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
+import { ProductEffects } from '@core/store/effects/product.effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -87,7 +88,11 @@ const PRIME_NG = [
       logOnly: environment.production
     }),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([MaterialEffects, ShoppingCartEffects]),
+    EffectsModule.forRoot([
+      MaterialEffects,
+      ShoppingCartEffects,
+      ProductEffects
+    ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [

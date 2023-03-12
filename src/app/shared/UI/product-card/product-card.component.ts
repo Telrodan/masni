@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Product } from '@core/models/product.model';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,7 +9,7 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./product-card.component.scss']
 })
 export class ProductCardComponent {
-  @Input() product: any;
+  @Input() product: Product;
 
   public faCartShopping = faCartShopping;
 }

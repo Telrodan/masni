@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { getMaterials } from '@core/store';
+import { getMaterials, getProducts } from '@core/store';
 import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
 
 import { Store } from '@ngrx/store';
@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.store$.dispatch(getMaterials());
+    this.store$.dispatch(getProducts());
     this.authService
       .getAuthStatus$()
       .pipe(
