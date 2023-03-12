@@ -4,13 +4,13 @@ import { SortedMaterials } from '@core/models/sorted-materials.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import { getMaterials, getMaterialsSuccess } from '@core/store/actions/';
 
-export const initialState: MaterialState = {
+export const materialInitialState: MaterialState = {
   materials: [],
   sortedMaterials: null
 };
 
 export const materialReducers = createReducer(
-  initialState,
+  materialInitialState,
   on(getMaterials, (state) => ({
     ...state
   })),

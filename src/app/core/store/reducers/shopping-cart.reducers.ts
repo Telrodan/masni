@@ -8,12 +8,12 @@ import {
   getShoppingCartItemsSuccess
 } from '../actions/shopping-cart.actions';
 
-export const initialState: ShoppingCartState = {
+export const shoppingCartInitialState: ShoppingCartState = {
   shoppingCartItems: []
 };
 
 export const shoppingCartReducers = createReducer(
-  initialState,
+  shoppingCartInitialState,
 
   on(getShoppingCartItems, (state) => ({
     ...state

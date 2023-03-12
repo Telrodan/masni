@@ -1,6 +1,15 @@
 <div class="px-4 py-8 md:px-6 lg:px-8">
-  <h1 class="heading-primary mb-4">Popular Products</h1>
-  <div class="grid -mt-3 -ml-3 -mr-3">
-    <masni-handmade-dolls-product-card></masni-handmade-dolls-product-card>
+  <h1 class="heading-primary mb-4">Azonnal rendelhető termékek</h1>
+  <div
+    class="grid -mt-3 -ml-3 -mr-3"
+    *ngIf="availableProducts$ | async as availableProducts">
+    <div
+      class="col-12 md:col-6 lg:col-4"
+      *ngFor="let product of availableProducts">
+      <div class="p-2">
+        <masni-handmade-dolls-product-card
+          [product]="product"></masni-handmade-dolls-product-card>
+      </div>
+    </div>
   </div>
 </div>

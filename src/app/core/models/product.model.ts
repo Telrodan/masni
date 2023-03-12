@@ -33,5 +33,6 @@ export interface Product {
     isExtraNameEmbroidery?: boolean;
     nameEmbroideryText?: string;
   };
+  category: string;
   productStatus: string;
 }

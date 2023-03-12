@@ -3,13 +3,13 @@ import { getProducts, getProductsSuccess } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
 
-export const initialState: ProductState = {
+export const productInitialState: ProductState = {
   products: [],
   availableProducts: []
 };
 
 export const productReducers = createReducer(
-  initialState,
+  productInitialState,
 
   on(getProducts, (state) => ({
     ...state
