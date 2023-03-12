@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable, tap } from 'rxjs';
 import { AppState } from 'src/app/reducer';
-import { Coupon } from '../models/coupon.mode';
+import { Coupon } from '../models/coupon.model';
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
 

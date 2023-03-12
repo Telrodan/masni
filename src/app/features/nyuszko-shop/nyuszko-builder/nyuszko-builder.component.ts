@@ -29,8 +29,7 @@ export class NyuszkoBuilderComponent implements OnInit {
     '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-1.jpg',
     '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-2.jpg',
     '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-3.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-4.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-5.jpg'
+    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-4.jpg'
   ];
   public faShoppingCart = faShoppingCart;
 

@@ -14,7 +14,7 @@ import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.s
 import { filter, map, Observable, tap, first } from 'rxjs';
 
 // import coreSelectors from 'src/app/core/store/selectors';
-import { Coupon } from 'src/app/core/models/coupon.mode';
+import { Coupon } from '@core/models/coupon.model';
 import { CouponService } from 'src/app/core/services/coupon.service';
 import { OrderService } from 'src/app/core/services/order.service';
 import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service';

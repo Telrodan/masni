@@ -8,4 +8,6 @@ import { Component, Input } from '@angular/core';
 export class ImageCompositionComponent {
   @Input() public images: string[];
   public hoveredImageUrl: string;
+
+  public selectedImageIndex = 0;
 }

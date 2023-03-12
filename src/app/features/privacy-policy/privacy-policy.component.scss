@@ -1,7 +1,13 @@
+@import '../../../scss/mixins';
+
 .privacy-policy {
   .content {
     width: 50%;
     margin: 0 auto;
     padding: 40px 0;
+
+    @include respond(sm) {
+      width: 90%;
+    }
   }
 }

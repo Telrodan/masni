@@ -39,11 +39,10 @@ import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { EffectsModule } from '@ngrx/effects';
-import * as effects from '@core/store/effects';
 import { AuthService } from '@core/services/auth.service';
-import { InitializerModule } from '@core/initializer/initializer.module';
 import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
+import { CheckboxModule } from 'primeng/checkbox';
 
 const PRIME_NG = [
   AccordionModule,
@@ -52,7 +51,8 @@ const PRIME_NG = [
   InputSwitchModule,
   ButtonModule,
   ToastModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  CheckboxModule
 ];
 
 @NgModule({

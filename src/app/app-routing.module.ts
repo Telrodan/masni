@@ -12,6 +12,7 @@ import { ShoppingCartComponent } from './shared/UI/shopping-cart/shopping-cart.c
 import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
+import { ProductDetailsComponent } from './shared/UI/product-details/product-details.component';
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -43,7 +44,16 @@ const routes: Routes = [
   },
   {
     path: 'shop',
-    component: ShopComponent
+    children: [
+      {
+        path: '',
+        component: ShopComponent
+      },
+      {
+        path: ':id',
+        component: ProductDetailsComponent
+      }
+    ]
   },
   {
     path: 'shopping-cart',

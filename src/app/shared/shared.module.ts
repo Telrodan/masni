@@ -25,6 +25,9 @@ import { ImageCompositionComponent } from './UI/image-composition/image-composit
 import { SpinnerComponent } from './UI/spinner/spinner.component';
 import { CarouselWithHeadingAndButtonComponent } from './UI/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
 import { ShoppingCartComponent } from './UI/shopping-cart/shopping-cart.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 const PRIME_NG = [
   CarouselModule,
@@ -34,7 +37,10 @@ const PRIME_NG = [
   MenuModule,
   ImageModule,
   GalleriaModule,
-  BadgeModule
+  BadgeModule,
+  CheckboxModule,
+  InputTextareaModule,
+  InputTextModule
 ];
 
 @NgModule({

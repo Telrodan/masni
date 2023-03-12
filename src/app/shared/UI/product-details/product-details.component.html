@@ -1,15 +1,80 @@
-<!-- <main class="product-details">
-  <section class="carousel">
-    <h1 class="carousel-heading heading-tertiary">
-      {{ productDetails.menuName }}
-    </h1>
-    <masni-handmade-dolls-carousel
-      [images]="carouselImages"></masni-handmade-dolls-carousel>
-  </section>
-  <div class="container">
-    <p class="description paragraph-primary">
-      {{ productDetails.description }}
-    </p>
-    <a routerLink="vasarlas" class="link primary-button shadow-2">Vásárlás</a>
+<div class="px-4 py-8 md:px-6 lg:px-8" *ngIf="product$ | async as product">
+  <div class="grid">
+    <div class="w-full lg:w-5">
+      <masni-handmade-dolls-image-composition
+        [images]="images"></masni-handmade-dolls-image-composition>
+    </div>
+
+    <div class="col-12 lg:col-6 py-3 lg:pl-6">
+      <div class="flex align-items-center mb-4">
+        <h1 class="heading-primary">{{ product.productName }}</h1>
+        <!-- <i
+          class="pi ml-3 cursor-pointer"
+          [ngClass]="{
+            'pi-heart text-600': true,
+            'pi-heart-fill text-orange-500': false
+          }"
+          (click)="liked1 = !liked1"></i> -->
+      </div>
+      <span class="text-primary font-medium text-3xl block mb-5"
+        >{{ product.productPrice }} Ft</span
+      >
+      <div class="field-checkbox">
+        <p-checkbox
+          [binary]="true"
+          inputId="nameEmbroideryCheckbox"></p-checkbox>
+        <label for="nameEmbroideryCheckbox"
+          >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
+        >
+      </div>
+
+      <div class="form-group">
+        <input
+          id="nameEmbroideryInput"
+          type="text"
+          pInputText
+          placeholder="Add meg a nevet" />
+      </div>
+      <div class="flex align-items-center mb-5">
+        <i class="pi pi-question-circle text-600 mr-3"></i>
+        <span class="mr-3">Need help about size?</span>
+        <a
+          tabindex="0"
+          class="text-900 font-medium inline-flex align-items-center hover:text-primary cursor-pointer transition-colors transition-duration-150"
+          >Size Guide <i class="ml-1 pi pi-angle-right"></i
+        ></a>
+      </div>
+      <button
+        class="primary-button shadow-2 mb-3 w-full"
+        *ngIf="isAuthenticated$ | async">
+        <fa-icon [icon]="faShoppingCart"></fa-icon>
+        Kosárba
+      </button>
+      <button
+        routerLink="/login"
+        class="primary-button shadow-2 mb-3 w-full"
+        *ngIf="(isAuthenticated$ | async) === false">
+        Előbb lépj be a rendeléshez
+      </button>
+      <div class="flex align-items-center justify-content-center text-900 mb-5">
+        <i class="pi pi-users mr-3"></i>
+        <span><b>12 people</b> are looking at this right now.</span>
+      </div>
+      <ol class="list-none p-0 m-0 surface-100 text-center text-900">
+        <li class="line-height-3 p-3 font-bold border-bottom-1 border-300">
+          Product Highlights
+        </li>
+        <li class="line-height-3 p-3 border-bottom-1 border-300">
+          Sed tempus urna et pharetra. Metus vulputate eu scelerisque felis
+          imperdiet proin fermentum.
+        </li>
+        <li class="line-height-3 p-3 border-bottom-1 border-300">
+          Purus gravida quis blandit turpis cursus in hac habitasse platea.
+        </li>
+        <li class="line-height-3 p-3">
+          Nisi quis eleifend quam adipiscing vitae proin sagittis.
+        </li>
+      </ol>
+    </div>
   </div>
-</main> -->
+</div>

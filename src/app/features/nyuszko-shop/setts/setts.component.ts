@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
-import { Coupon } from 'src/app/core/models/coupon.mode';
+import { Coupon } from '@core/models/coupon.model';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { CouponService } from 'src/app/core/services/coupon.service';
 

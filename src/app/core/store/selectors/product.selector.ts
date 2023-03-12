@@ -12,3 +12,9 @@ export const availableProductsSelector = createSelector(
   selectProductState,
   (state) => state.availableProducts
 );
+
+export const productByIdSelector = (productId: string) =>
+  createSelector(availableProductsSelector, (products) => {
+    const result = products.find((product) => product._id === productId);
+    return result;
+  });
