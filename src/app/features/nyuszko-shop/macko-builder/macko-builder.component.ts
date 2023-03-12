@@ -10,7 +10,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
-import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { SortedMaterials } from '@core/models/sorted-materials.model';
 import { MackoProduct } from '@core/models/custom-products/macko-product';
 
 @Component({
@@ -21,7 +21,7 @@ import { MackoProduct } from '@core/models/custom-products/macko-product';
 export class MackoBuilderComponent implements OnInit {
   public isAuthenticated$: Observable<boolean>;
   public product: MackoProduct;
-  public sortedMaterials$: Observable<SortedMaterialsInterface>;
+  public sortedMaterials$: Observable<SortedMaterials>;
   public price = 0;
   public builderForm: FormGroup = new FormGroup({});
   public productImages = [

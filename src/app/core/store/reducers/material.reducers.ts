@@ -1,16 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 
-import {
-  SortedMaterials,
-  SortedMaterialsInterface
-} from '@core/models/sorted-materials.model';
-import { MaterialsStateInterface } from '@core/store/models/materials-state.model';
+import { SortedMaterials } from '@core/models/sorted-materials.model';
+import { MaterialState } from '@core/store/models/material-state.model';
 import { getMaterials, getMaterialsSuccess } from '@core/store/actions/';
 
-export const initialState: MaterialsStateInterface = {
+export const initialState: MaterialState = {
   materials: [],
-  sortedMaterials: null,
-  error: null
+  sortedMaterials: null
 };
 
 export const materialReducers = createReducer(
@@ -19,8 +15,9 @@ export const materialReducers = createReducer(
     ...state
   })),
   on(getMaterialsSuccess, (state, action) => {
-    const sortedMaterials: SortedMaterialsInterface =
-      SortedMaterials.sortMaterials(action.materials);
+    const sortedMaterials: SortedMaterials = SortedMaterials.sortMaterials(
+      action.materials
+    );
     return {
       ...state,
       materials: action.materials,

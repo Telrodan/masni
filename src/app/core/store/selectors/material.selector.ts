@@ -2,15 +2,15 @@ import { AppState } from 'src/app/reducer';
 
 import { createSelector } from '@ngrx/store';
 
-export const selectMaterialsState = (state: AppState) => state.materials;
+export const selectMaterialState = (state: AppState) => state.materials;
 
 export const materialsSelector = createSelector(
-  selectMaterialsState,
+  selectMaterialState,
   (state) => state.materials
 );
 
 export const sortedMaterialsSelector = createSelector(
-  selectMaterialsState,
+  selectMaterialState,
   (state) => state.sortedMaterials
 );
 

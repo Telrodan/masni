@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { setCoupons } from '@core/store';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable, tap } from 'rxjs';
 import { AppState } from 'src/app/reducer';
@@ -62,7 +61,7 @@ export class CouponService {
       }),
       filter((coupons) => !!coupons),
       tap((coupons) => {
-        this.store$.dispatch(setCoupons({ coupons }));
+        // this.store$.dispatch(setCoupons({ coupons }));
       })
     );
   }

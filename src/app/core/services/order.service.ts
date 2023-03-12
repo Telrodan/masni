@@ -8,11 +8,11 @@ import { MessageService } from 'primeng/api';
 import { MaterialService } from './material.service';
 import { CookieService } from './cookie.service';
 import { ApiService } from './api.service';
-import { Order } from '../models/order.model';
+// import { Order } from '../models/order.model';
 
 interface OrdersDataBackendInterface {
   data: {
-    orders: Order[];
+    // orders: Order[];
   };
 }
 
@@ -20,7 +20,7 @@ interface OrdersDataBackendInterface {
   providedIn: 'root'
 })
 export class OrderService {
-  public orders: Order[];
+  // public orders: Order[];
 
   constructor(
     private apiService: ApiService,
@@ -31,43 +31,42 @@ export class OrderService {
   ) {}
 
   public addOrderToCart(orderForm: FormGroup, price: number): void {
-    const baseMaterials = orderForm.value['baseMaterials'];
-    const extraOptions = orderForm.value['extraOptions'];
-    const order: Order = {
-      productName: baseMaterials.baseProduct,
-      productDetails: {
-        baseProduct: baseMaterials.baseProduct,
-        baseColor: baseMaterials.baseColor,
-        szundikendoColor: baseMaterials?.szundikendoColor,
-        minkyColorBack: baseMaterials?.minkyColorBack,
-        earsColor: baseMaterials?.earsColor,
-        ribbonColor: baseMaterials?.ribbonColor,
-        isExtraMinkyEars: extraOptions?.extraMinkyEarCheckbox,
-        minkyEarsColor: extraOptions?.extraMinkyEarInput,
-        isExtraNameEmbroidery: extraOptions?.nameEmbroideryCheckbox,
-        nameEmbroideryText: extraOptions?.nameEmbroideryInput
-      },
-      orderComment: extraOptions.orderComment,
-      buyerId: this.cookieService.getCookie('userId'),
-      price: price
-    };
-
-    // this.store$.dispatch(addOrder({ order }));
-    this.apiService
-      .post('orders', order)
-      .pipe(
-        tap(() => {
-          const productName =
-            order.productDetails.baseProduct.charAt(0).toUpperCase() +
-            order.productDetails.baseProduct.slice(1);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Siker!',
-            detail: `${productName + ` hozzáadva, ${order.price} Ft értékben.`}`
-          });
-        })
-      )
-      .subscribe();
+    // const baseMaterials = orderForm.value['baseMaterials'];
+    // const extraOptions = orderForm.value['extraOptions'];
+    // const order: Order = {
+    //   productName: baseMaterials.baseProduct,
+    //   productDetails: {
+    //     baseProduct: baseMaterials.baseProduct,
+    //     baseColor: baseMaterials.baseColor,
+    //     szundikendoColor: baseMaterials?.szundikendoColor,
+    //     minkyColorBack: baseMaterials?.minkyColorBack,
+    //     earsColor: baseMaterials?.earsColor,
+    //     ribbonColor: baseMaterials?.ribbonColor,
+    //     isExtraMinkyEars: extraOptions?.extraMinkyEarCheckbox,
+    //     minkyEarsColor: extraOptions?.extraMinkyEarInput,
+    //     isExtraNameEmbroidery: extraOptions?.nameEmbroideryCheckbox,
+    //     nameEmbroideryText: extraOptions?.nameEmbroideryInput
+    //   },
+    //   orderComment: extraOptions.orderComment,
+    //   buyerId: this.cookieService.getCookie('userId'),
+    //   price: price
+    // };
+    // // this.store$.dispatch(addOrder({ order }));
+    // this.apiService
+    //   .post('orders', order)
+    //   .pipe(
+    //     tap(() => {
+    //       const productName =
+    //         order.productDetails.baseProduct.charAt(0).toUpperCase() +
+    //         order.productDetails.baseProduct.slice(1);
+    //       this.messageService.add({
+    //         severity: 'success',
+    //         summary: 'Siker!',
+    //         detail: `${productName + ` hozzáadva, ${order.price} Ft értékben.`}`
+    //       });
+    //     })
+    //   )
+    //   .subscribe();
   }
 
   // public setUserOrdersStore(): void {

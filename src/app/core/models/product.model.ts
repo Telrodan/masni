@@ -1,4 +1,10 @@
-export interface RawBuiltShoppingCartProductInterface {
+export interface ProductsDTO {
+  data: {
+    products: Product[];
+  };
+}
+
+export interface BuiltProduct {
   baseMaterials: {
     baseProduct: string;
     baseColor: string;
@@ -17,4 +23,15 @@ export interface RawBuiltShoppingCartProductInterface {
     productComment?: string;
   };
   price: number;
+}
+
+export interface Product {
+  _id?: string;
+  productName: string;
+  productPrice: number;
+  productDetails: {
+    isExtraNameEmbroidery?: boolean;
+    nameEmbroideryText?: string;
+  };
+  productStatus: string;
 }

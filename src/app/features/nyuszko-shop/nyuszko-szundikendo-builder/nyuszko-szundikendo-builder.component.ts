@@ -10,7 +10,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
-import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { SortedMaterials } from '@core/models/sorted-materials.model';
 import { NyuszkoSzundikendoProduct } from '@core/models/custom-products/nyuszko-szundikendo-product.model';
 
 @UntilDestroy({ checkProperties: true })
@@ -22,7 +22,7 @@ import { NyuszkoSzundikendoProduct } from '@core/models/custom-products/nyuszko-
 export class NyuszkoSzundikendoBuilderComponent implements OnInit {
   public isAuthenticated$: Observable<boolean>;
   public product: NyuszkoSzundikendoProduct;
-  public sortedMaterials$: Observable<SortedMaterialsInterface>;
+  public sortedMaterials$: Observable<SortedMaterials>;
   public price = 0;
   public builderForm: FormGroup = new FormGroup({});
   public productImages = [

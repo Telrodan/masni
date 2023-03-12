@@ -4,14 +4,13 @@ import { Store } from '@ngrx/store';
 import { filter, map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
-import { MaterialInterface } from '../models/material.model';
+import { Material } from '../models/material.model';
 import { SortedMaterials } from '../models/sorted-materials.model';
-import { selectMaterialExtraPriceByName } from '@core/store/selectors/core.selectors';
 import { materialExtraByNameSelector } from '@core/store/selectors/material.selector';
 
 interface MaterialsBackendInterface {
   data: {
-    materials: MaterialInterface[];
+    materials: Material[];
   };
 }
 
@@ -21,25 +20,10 @@ interface MaterialsBackendInterface {
 export class MaterialService {
   constructor(private apiService: ApiService, private store$: Store) {}
 
-  public getMaterials(): Observable<MaterialInterface[]> {
+  public getMaterials(): Observable<Material[]> {
     return this.apiService
       .get<MaterialsBackendInterface>('materials')
       .pipe(map((materialsDTO) => materialsDTO.data.materials));
-  }
-
-  public setMaterialsStore(): Observable<MaterialInterface[]> {
-    return this.apiService.get<MaterialsBackendInterface>('materials').pipe(
-      map((materialsDTO) => {
-        const { materials } = materialsDTO.data;
-        return materials;
-      }),
-      filter((materials) => !!materials),
-      tap((materials) => {
-        const sortedMaterials: SortedMaterials =
-          SortedMaterials.sortMaterials(materials);
-        // this.store$.dispatch(LoadMaterials({ materials }));
-      })
-    );
   }
 
   public getExtraPriceByName(name: string): number {
@@ -55,17 +39,4 @@ export class MaterialService {
 
     return result;
   }
-
-  // public getMaterialNameById(materialId: string): string {
-  //   let result = '';
-  //   this.store$
-  //     .select(coreSelectors.selectMaterialNameById(materialId))
-  //     .pipe(
-  //       tap((materialName) => {
-  //         result = materialName;
-  //       })
-  //     )
-  //     .subscribe();
-  //   return result;
-  // }
 }

@@ -1,3 +1,15 @@
+export interface ShoppingCartItemDTO {
+  data: {
+    shoppingCartItem: ShoppingCartItem;
+  };
+}
+
+export interface ShoppingCartItemsDTO {
+  data: {
+    shoppingCartItems: ShoppingCartItem[];
+  };
+}
+
 export interface ShoppingCartItem {
   ownerId: string;
   _id?: string;

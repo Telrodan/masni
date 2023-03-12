@@ -1,19 +1,19 @@
-import { MaterialInterface } from '../material.model';
+import { Material } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
 const BASE_PRODUCT = 'nyuszkó-szundikendő';
 
 export class NyuszkoSzundikendoProduct {
   public baseProduct: string;
-  public baseColor: MaterialInterface[];
-  public szundikendoColor: MaterialInterface[];
-  public minkyColorBack: MaterialInterface[];
+  public baseColor: Material[];
+  public szundikendoColor: Material[];
+  public minkyColorBack: Material[];
 
   constructor(
     baseProduct: string,
-    baseColor: MaterialInterface[],
-    szundikendoColor: MaterialInterface[],
-    minkyColorBack: MaterialInterface[]
+    baseColor: Material[],
+    szundikendoColor: Material[],
+    minkyColorBack: Material[]
   ) {
     this.baseProduct = baseProduct;
     this.baseColor = baseColor;

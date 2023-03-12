@@ -1,4 +1,4 @@
-import { MaterialInterface } from '@core/models/material.model';
+import { Material } from '@core/models/material.model';
 import { createAction, props } from '@ngrx/store';
 
 export enum MaterialActionTypes {
@@ -10,5 +10,5 @@ export const getMaterials = createAction(MaterialActionTypes.GET_MATERIALS);
 
 export const getMaterialsSuccess = createAction(
   MaterialActionTypes.GET_MATERIALS_SUCCESS,
-  props<{ materials: MaterialInterface[] }>()
+  props<{ materials: Material[] }>()
 );

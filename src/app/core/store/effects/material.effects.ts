@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
-import { MaterialService } from '@core/services/material.service';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  filter,
-  switchMap,
-  tap,
-  map,
-  mergeMap,
-  Observable,
-  exhaustMap
-} from 'rxjs';
+import { map, exhaustMap } from 'rxjs';
+
+import { MaterialService } from '@core/services/material.service';
 import { getMaterials, getMaterialsSuccess } from '@core/store/actions';
-import { MaterialsStateInterface } from '../models/materials-state.model';
 
 @Injectable()
 export class MaterialEffects {

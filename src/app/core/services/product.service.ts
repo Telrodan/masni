@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
 
+import { map, Observable } from 'rxjs';
+
+import { ApiService } from './api.service';
 import { MaterialService } from './material.service';
+import { Product, ProductsDTO } from '@core/models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +14,12 @@ export class ProductService {
     private apiService: ApiService,
     private materialService: MaterialService
   ) {}
+
+  public getProducts(): Observable<Product[]> {
+    return this.apiService
+      .get<ProductsDTO>('products/get')
+      .pipe(map((productsDTO) => productsDTO.data.products));
+  }
 
   public getProductPrice(formValues: any): number {
     let price = 0;
@@ -27,16 +36,4 @@ export class ProductService {
 
     return price;
   }
-
-  // public fetchProducts(): Observable<Product[]> {
-  //   // return this.apiService.get$<{ products: Product[] }>('products').pipe(
-  //   //   map((productsDTO) => {
-  //   //     const products = productsDTO.products.map((rawProduct: any) => {
-  //   //       return Product.fromDTO(rawProduct);
-  //   //     });
-  //   //     this.products = products;
-  //   //     return this.products;
-  //   //   })
-  //   // );
-  // }
 }

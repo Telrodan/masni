@@ -1,19 +1,19 @@
-import { MaterialInterface } from '../material.model';
+import { Material } from '../material.model';
 import { SortedMaterials } from '../sorted-materials.model';
 
 const BASE_PRODUCT = 'mackó';
 
 export class MackoProduct {
   public baseProduct: string;
-  public baseColor: MaterialInterface[];
-  public earsAndBodyColor: MaterialInterface[];
-  public noseColor: MaterialInterface[];
+  public baseColor: Material[];
+  public earsAndBodyColor: Material[];
+  public noseColor: Material[];
 
   constructor(
     baseProduct: string,
-    baseColor: MaterialInterface[],
-    earsAndBodyColor: MaterialInterface[],
-    noseColor: MaterialInterface[]
+    baseColor: Material[],
+    earsAndBodyColor: Material[],
+    noseColor: Material[]
   ) {
     this.baseProduct = baseProduct;
     this.baseColor = baseColor;

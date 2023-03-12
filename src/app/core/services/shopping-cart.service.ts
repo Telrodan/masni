@@ -6,25 +6,16 @@ import { MessageService } from 'primeng/api';
 
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
-import { addProduct, deleteProductFromCart } from '@core/store/actions';
-import { RawBuiltShoppingCartProductInterface } from '@core/models/product.model';
-import { ShoppingCartItem } from '@core/models/shopping-cart.model';
 import {
   addShoppingCartItem,
   deleteShoppingCartItem
 } from '@core/store/actions/shopping-cart.actions';
-
-interface ProductBackendInterface {
-  data: {
-    product: ShoppingCartItem;
-  };
-}
-
-interface ShoppingCartItemsDTO {
-  data: {
-    shoppingCartItems: ShoppingCartItem[];
-  };
-}
+import {
+  ShoppingCartItem,
+  ShoppingCartItemDTO,
+  ShoppingCartItemsDTO
+} from '@core/models/shopping-cart.model';
+import { BuiltProduct } from '@core/models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +35,7 @@ export class ShoppingCartService {
       .pipe(map((items) => items.data.shoppingCartItems));
   }
 
-  public addBuiltProductToCart(
-    rawProduct: RawBuiltShoppingCartProductInterface
-  ): void {
+  public addBuiltProductToCart(rawProduct: BuiltProduct): void {
     const userId = this.cookieService.getCookie('userId');
     const product: ShoppingCartItem = {
       ownerId: userId,
@@ -70,10 +59,11 @@ export class ShoppingCartService {
     };
 
     this.apiService
-      .post<ProductBackendInterface>('shopping-cart/add', product)
+      .post<ShoppingCartItemDTO>('shopping-cart/add', product)
       .pipe(
         tap((productDTO) => {
-          const shoppingCartItem: ShoppingCartItem = productDTO.data.product;
+          const shoppingCartItem: ShoppingCartItem =
+            productDTO.data.shoppingCartItem;
           this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
 
           const productName =

@@ -1,2 +1,2 @@
-import * as coreSelectors from './core.selectors';
-export default coreSelectors;
+export * from './material.selector';
+export * from './shopping-cart.selectors';

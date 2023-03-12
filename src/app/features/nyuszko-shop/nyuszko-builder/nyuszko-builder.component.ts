@@ -11,7 +11,7 @@ import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
 import { NyuszkoProduct } from '@core/models/custom-products/nyuszko-product.model';
-import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
+import { SortedMaterials } from '@core/models/sorted-materials.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -22,7 +22,7 @@ import { SortedMaterialsInterface } from '@core/models/sorted-materials.model';
 export class NyuszkoBuilderComponent implements OnInit {
   public isAuthenticated$: Observable<boolean>;
   public product: NyuszkoProduct;
-  public sortedMaterials$: Observable<SortedMaterialsInterface>;
+  public sortedMaterials$: Observable<SortedMaterials>;
   public price = 0;
   public builderForm: FormGroup = new FormGroup({});
   public productImages = [

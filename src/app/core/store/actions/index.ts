@@ -1,2 +1,3 @@
 export * from './material.actions';
-export * from './core.actions';
+export * from './product.actions';
+export * from './shopping-cart.actions';

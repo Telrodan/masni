@@ -1,4 +1,4 @@
-export interface MaterialInterface {
+export interface Material {
   _id?: string;
   name: string;
   nameWithExtra: string;
