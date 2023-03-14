@@ -7,6 +7,7 @@
   @include respond(sm) {
     width: 100%;
     padding: 0 10px;
+    margin: 0 auto 10px;
   }
 }
 
@@ -14,20 +15,20 @@
   text-align: center;
 
   @include respond(sm) {
-    margin-bottom: 5rem;
+    margin-bottom: 40px;
   }
 }
 
 .heading {
-  margin: 0 auto 3rem;
+  margin: 0 auto 28px;
 
   @include respond(sm) {
-    margin: 0 auto 3rem;
+    margin: 0 auto 20px;
   }
 }
 
 .accordion-container {
-  margin-top: 50px;
+  margin-top: 12px;
   width: 100%;
 
   @include respond(sm) {
@@ -43,12 +44,8 @@
 
   @include respond(sm) {
     flex-direction: column;
-    padding: 10px;
+    padding: 8px;
   }
-}
-
-.story-paragraph {
-  margin-bottom: 50px;
 }
 
 .link {
@@ -62,6 +59,6 @@
 
   @include respond(sm) {
     width: 100%;
-    margin-top: 50px;
+    margin-top: 40px;
   }
 }

@@ -23,6 +23,15 @@ export class ProductService {
 
   public getProductPrice(formValues: any): number {
     let price = 0;
+
+    // Ready product price check
+    for (const key in formValues) {
+      const extraPrice = this.materialService.getExtraPriceByName(
+        formValues[key]
+      );
+      price += extraPrice;
+    }
+
     for (const key in formValues.baseMaterials) {
       if (key !== 'minkyColorBack') {
         const extraPrice = this.materialService.getExtraPriceByName(
@@ -33,7 +42,7 @@ export class ProductService {
     }
     price += formValues.extraOptions?.extraMinkyEarsCheckbox ? 400 : 0;
     price += formValues.extraOptions?.nameEmbroideryCheckbox ? 500 : 0;
-
+    price += formValues?.nameEmbroideryCheckbox ? 500 : 0;
     return price;
   }
 }

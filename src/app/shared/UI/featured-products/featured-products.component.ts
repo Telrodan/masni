@@ -1,20 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Product } from '@core/models/product.model';
+import { Store } from '@ngrx/store';
+import { filter, Observable } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { availableProductsSelector } from '@core/store';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'masni-handmade-dolls-featured-products',
   templateUrl: './featured-products.component.html',
   styleUrls: ['./featured-products.component.scss']
 })
 export class FeaturedProductsComponent implements OnInit {
-  public products: any[];
+  public products$: Observable<Product[]>;
 
-  constructor(private productsService: ProductService) {}
+  constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    // this.productsService.fetchProducts().subscribe((reponse) => {
-    //   this.products = reponse;
-    // });
+    this.products$ = this.store$
+      .select(availableProductsSelector)
+      .pipe(filter((products) => !!products));
   }
 
   public responsiveOptions = [

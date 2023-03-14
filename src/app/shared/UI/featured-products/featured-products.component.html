@@ -1,11 +1,11 @@
 <section class="featured-products">
   <div class="carousel-container">
     <p-carousel
-      [value]="products"
+      [value]="products$ | async"
       [numVisible]="3"
       [numScroll]="1"
       [circular]="true"
-      [autoplayInterval]="3000"
+      [autoplayInterval]="6000"
       [showNavigators]="false"
       [showIndicators]="false"
       [responsiveOptions]="responsiveOptions">
@@ -20,7 +20,5 @@
       </ng-template>
     </p-carousel>
   </div>
-  <a routerLink="/ready-products" class="secondary-button shadow-2"
-    >Mindet Megnézem</a
-  >
+  <a routerLink="/shop" class="secondary-button shadow-2">Mindet Megnézem</a>
 </section>

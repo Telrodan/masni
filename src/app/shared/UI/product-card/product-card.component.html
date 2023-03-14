@@ -1,27 +1,23 @@
 <div
-  class="shadow-2 p-4 surface-card border-round product-card"
+  class="shadow-2 p-3 surface-card border-round product-card max-w-25rem"
   (click)="productDetails()">
   <div class="relative mb-3">
-    <span
+    <!-- <span
       class="surface-card text-900 shadow-2 px-3 py-2 absolute"
       style="border-radius: 1.5rem; left: 1rem; top: 1rem"
       >{{ product.category | titlecase }}</span
-    >
-    <img
-      src="../../../assets/images/nyuszko-shop/macko-builder/image-2.jpg"
-      class="w-full" />
+    > -->
+    <img [src]="product.images[0]" class="w-full" />
   </div>
   <div class="flex justify-content-between align-items-center mb-3">
-    <span class="text-900 font-medium text-xl">{{ product.productName }}</span>
+    <span class="">{{ product.name | titlecase }}</span>
     <!-- <span>
       <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
       <span class="font-medium">5.0</span>
     </span> -->
   </div>
-  <p class="mt-0 mb-3 text-600 line-height-3">
-    Enim nec dui nunc mattis enim ut tellus. Tincidunt arcu.
+  <p class="hidden md:block mt-0 mb-3 text-600">
+    {{ product.description[0] }}
   </p>
-  <span class="text-primary text-xl font-medium"
-    >{{ product.productPrice }} Ft</span
-  >
+  <span class="text-primary">{{ product.price }} Ft</span>
 </div>

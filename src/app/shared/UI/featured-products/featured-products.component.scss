@@ -1,8 +1,9 @@
 @import '../../../../scss/mixins';
 
 .featured-products {
-  text-align: center;
-  margin: 100px 0 150px;
+  display: flex;
+  flex-direction: column;
+  margin: 100px 0 140px;
 
   @include respond(sm) {
     margin: 50px 0 75px;
@@ -10,16 +11,20 @@
 }
 
 .heading-primary {
-  margin-bottom: 20px;
-}
-
-.carousel-container {
-  margin-bottom: 50px;
+  text-align: center;
 }
 
 .item-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 40px;
+
+  @include respond(sm) {
+    padding: 20px;
+  }
+}
+
+.secondary-button {
+  align-self: center;
 }

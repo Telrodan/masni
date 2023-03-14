@@ -20,67 +20,59 @@
           class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
           <div class="w-full sm:w-6 flex flex-column">
             <span class="text-900 text-xl font-medium mb-3">{{
-              product.productName | titlecase
+              product.name | titlecase
             }}</span>
             <span
               class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.nameEmbroideryText">
+              *ngIf="product.details[0]?.nameEmbroideryText">
               <span class="text-900">Hímzett név:</span>
-              {{ product.productDetails[0]?.nameEmbroideryText }}
+              {{ product.details[0]?.nameEmbroideryText }}
             </span>
-            <span
-              class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.baseColor"
+            <span class="text-600 mb-1" *ngIf="product.details[0]?.baseColor"
               ><span class="text-900">Alapszín:</span>
-              {{ product.productDetails[0]?.baseColor }}</span
+              {{ product.details[0]?.baseColor }}</span
             >
-            <span
-              class="text-600 mb-1"
-              *ngIf="product.productDetails[0].earsColor"
+            <span class="text-600 mb-1" *ngIf="product.details[0].earsColor"
               ><span class="text-900">Fülek színe mintája:</span>
-              {{ product.productDetails[0]?.earsColor }}</span
+              {{ product.details[0]?.earsColor }}</span
             >
-            <span
-              class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.ribbonColor"
+            <span class="text-600 mb-1" *ngIf="product.details[0]?.ribbonColor"
               ><span class="text-900">Masni színe:</span>
-              {{ product.productDetails[0]?.ribbonColor }}</span
+              {{ product.details[0]?.ribbonColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.isExtraMinkyEars"
+              *ngIf="product.details[0]?.isExtraMinkyEars"
               ><span class="text-900">Extra minky plüss fülek színe:</span>
-              {{ product.productDetails[0]?.minkyEarsColor }}</span
+              {{ product.details[0]?.minkyEarsColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.szundikendoColor"
+              *ngIf="product.details[0]?.szundikendoColor"
               ><span class="text-900">Szundikendő színe/mintája:</span>
-              {{ product.productDetails[0]?.szundikendoColor }}</span
+              {{ product.details[0]?.szundikendoColor }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.minkyColorBack"
+              *ngIf="product.details[0]?.minkyColorBack"
               ><span class="text-900"
                 >Minky plüss színe(szundikendő-hátulja):</span
               >
-              {{ product.productDetails[0]?.minkyColorBack }}</span
+              {{ product.details[0]?.minkyColorBack }}</span
             >
             <span
               class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.earsAndBodyColor"
+              *ngIf="product.details[0]?.earsAndBodyColor"
               ><span class="text-900">Fülek és test színe/mintája:</span>
-              {{ product.productDetails[0]?.earsAndBodyColor }}</span
+              {{ product.details[0]?.earsAndBodyColor }}</span
             >
-            <span
-              class="text-600 mb-1"
-              *ngIf="product.productDetails[0]?.noseColor"
+            <span class="text-600 mb-1" *ngIf="product.details[0]?.noseColor"
               ><span class="text-900">Orr színe:</span>
-              {{ product.productDetails[0]?.noseColor }}</span
+              {{ product.details[0]?.noseColor }}</span
             >
-            <span class="text-600" *ngIf="product.productComment"
+            <span class="text-600" *ngIf="product.comment"
               ><span class="text-900">Megjegyzés:</span>
-              {{ product.productComment }}</span
+              {{ product.comment }}</span
             >
           </div>
 
@@ -89,7 +81,7 @@
             <div></div>
             <div class="flex flex-column sm:align-items-end">
               <span class="text-900 text-2xl font-medium mb-2 sm:mb-3"
-                >{{ product.productPrice }} Ft</span
+                >{{ product.price }} Ft</span
               >
               <a
                 class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"

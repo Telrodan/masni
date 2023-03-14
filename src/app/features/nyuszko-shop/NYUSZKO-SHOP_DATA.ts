@@ -1,15 +1,12 @@
 export const carouselImages = [
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-1.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-2.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-3.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-4.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-5.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-6.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-2.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-3.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-4.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-5.jpg',
-  '../../../../assets/images/landing-page/first-carousel/test-product-image-6.jpg'
+  '../../../../assets/images/nyuszko-shop/image-01.jpg',
+  '../../../../assets/images/nyuszko-shop/image-02.jpg',
+  '../../../../assets/images/nyuszko-shop/image-03.jpg',
+  '../../../../assets/images/nyuszko-shop/image-04.jpg',
+  '../../../../assets/images/nyuszko-shop/image-05.jpg',
+  '../../../../assets/images/nyuszko-shop/image-06.jpg',
+  '../../../../assets/images/nyuszko-shop/image-07.jpg',
+  '../../../../assets/images/nyuszko-shop/image-08.jpg'
 ];
 
 export const menuItems = [

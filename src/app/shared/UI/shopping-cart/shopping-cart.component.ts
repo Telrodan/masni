@@ -48,7 +48,8 @@ export class ShoppingCartComponent implements OnInit {
       tap((items) => {
         this.totalPrice = 0;
         items.map((item) => {
-          this.totalPrice += item.productPrice;
+          console.log(item);
+          this.totalPrice += item.price;
         });
       })
     );
@@ -81,11 +82,10 @@ export class ShoppingCartComponent implements OnInit {
 
   public onDeleteOrder(product: ShoppingCartItem): void {
     const productName =
-      product.productName.charAt(0).toUpperCase() +
-      product.productName.slice(1);
+      product.name.charAt(0).toUpperCase() + product.name.slice(1);
 
     this.confirmationService.confirm({
-      message: `Biztos törölni szeretnéd ${productName} terméket, ${product.productPrice} Ft értékben?`,
+      message: `Biztos törölni szeretnéd ${productName} terméket, ${product.price} Ft értékben?`,
       header: 'Megerősítés',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Igen',

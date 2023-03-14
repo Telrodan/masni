@@ -1,21 +1,21 @@
 export interface ShoppingCartItemDTO {
   data: {
-    shoppingCartItem: ShoppingCartItem;
+    item: ShoppingCartItem;
   };
 }
 
 export interface ShoppingCartItemsDTO {
   data: {
-    shoppingCartItems: ShoppingCartItem[];
+    items: ShoppingCartItem[];
   };
 }
 
 export interface ShoppingCartItem {
   ownerId: string;
   _id?: string;
-  productName: string;
-  productComment: string;
-  productDetails: {
+  name: string;
+  comment: string;
+  details: {
     baseProduct?: string;
     baseColor?: string;
     szundikendoColor?: string;
@@ -29,7 +29,7 @@ export interface ShoppingCartItem {
     isExtraNameEmbroidery?: boolean;
     nameEmbroideryText?: string;
   };
-  productPrice: number;
+  price: number;
   addedAt?: Date;
-  productStatus?: string;
+  status?: string;
 }

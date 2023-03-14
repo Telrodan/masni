@@ -27,12 +27,16 @@ export interface BuiltProduct {
 
 export interface Product {
   _id?: string;
-  productName: string;
-  productPrice: number;
-  productDetails: {
-    isExtraNameEmbroidery?: boolean;
-    nameEmbroideryText?: string;
+  name: string;
+  baseProduct: string;
+  price: number;
+  details: {
+    nameEmbroideryCheckbox?: boolean;
+    nameEmbroideryInput?: string;
+    comment?: string;
   };
+  description: string[];
+  images: string[];
   category: string;
-  productStatus: string;
+  status: string;
 }

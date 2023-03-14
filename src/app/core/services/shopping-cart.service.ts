@@ -15,7 +15,8 @@ import {
   ShoppingCartItemDTO,
   ShoppingCartItemsDTO
 } from '@core/models/shopping-cart.model';
-import { BuiltProduct } from '@core/models/product.model';
+import { BuiltProduct, Product } from '@core/models/product.model';
+import { formatNameInput } from 'src/app/shared/util/input-formatter';
 
 @Injectable({
   providedIn: 'root'
@@ -32,57 +33,88 @@ export class ShoppingCartService {
     const ownerId = this.cookieService.getCookie('userId');
     return this.apiService
       .get<ShoppingCartItemsDTO>('shopping-cart/get-user-items', { ownerId })
-      .pipe(map((items) => items.data.shoppingCartItems));
+      .pipe(map((items) => items.data.items));
   }
 
-  public addBuiltProductToCart(rawProduct: BuiltProduct): void {
+  public addBuiltProductToCart(product: BuiltProduct): void {
     const userId = this.cookieService.getCookie('userId');
-    const product: ShoppingCartItem = {
+    const item: ShoppingCartItem = {
       ownerId: userId,
-      productName: rawProduct.baseMaterials.baseProduct,
-      productComment: rawProduct.extraOptions.productComment,
-      productDetails: {
-        baseProduct: rawProduct.baseMaterials.baseProduct,
-        baseColor: rawProduct.baseMaterials.baseColor,
-        szundikendoColor: rawProduct.baseMaterials.szundikendoColor,
-        minkyColorBack: rawProduct.baseMaterials.minkyColorBack,
-        earsColor: rawProduct.baseMaterials.earsColor,
-        earsAndBodyColor: rawProduct.baseMaterials.earsAndBodyColor,
-        noseColor: rawProduct.baseMaterials.noseColor,
-        ribbonColor: rawProduct.baseMaterials.ribbonColor,
-        isExtraMinkyEars: rawProduct.extraOptions.extraMinkyEarsCheckbox,
-        minkyEarsColor: rawProduct.extraOptions.extraMinkyEarsInput,
-        isExtraNameEmbroidery: rawProduct.extraOptions.nameEmbroideryCheckbox,
-        nameEmbroideryText: rawProduct.extraOptions.nameEmbroideryInput
+      name: product.baseMaterials.baseProduct,
+      comment: product.extraOptions.productComment,
+      details: {
+        baseProduct: product.baseMaterials.baseProduct,
+        baseColor: product.baseMaterials.baseColor,
+        szundikendoColor: product.baseMaterials.szundikendoColor,
+        minkyColorBack: product.baseMaterials.minkyColorBack,
+        earsColor: product.baseMaterials.earsColor,
+        earsAndBodyColor: product.baseMaterials.earsAndBodyColor,
+        noseColor: product.baseMaterials.noseColor,
+        ribbonColor: product.baseMaterials.ribbonColor,
+        isExtraMinkyEars: product.extraOptions.extraMinkyEarsCheckbox,
+        minkyEarsColor: product.extraOptions.extraMinkyEarsInput,
+        isExtraNameEmbroidery: product.extraOptions.nameEmbroideryCheckbox,
+        nameEmbroideryText: product.extraOptions.nameEmbroideryInput
       },
-      productPrice: rawProduct.price
+      price: product.price
     };
 
     this.apiService
-      .post<ShoppingCartItemDTO>('shopping-cart/add', product)
+      .post<ShoppingCartItemDTO>('shopping-cart/add', item)
       .pipe(
         tap((productDTO) => {
-          const shoppingCartItem: ShoppingCartItem =
-            productDTO.data.shoppingCartItem;
+          const shoppingCartItem: ShoppingCartItem = productDTO.data.item;
+
+          console.log(shoppingCartItem);
           this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
 
-          const productName =
-            product.productName.charAt(0).toUpperCase() +
-            product.productName.slice(1);
+          const productName = formatNameInput(item.name);
 
           this.messageService.add({
             severity: 'success',
             summary: 'Siker!',
-            detail: `${
-              productName + ` hozzáadva, ${product.productPrice} Ft értékben.`
-            }`
+            detail: `${productName + ` hozzáadva, ${item.price} Ft értékben.`}`
           });
         })
       )
       .subscribe();
   }
 
-  public addReadyProductToCart(): void {}
+  public addReadyProductToCart(product: Product): void {
+    console.log(product);
+    const userId = this.cookieService.getCookie('userId');
+    const item: ShoppingCartItem = {
+      ownerId: userId,
+      name: product.name,
+      comment: product.details.comment,
+      details: {
+        baseProduct: product.baseProduct,
+        isExtraNameEmbroidery: product.details.nameEmbroideryCheckbox,
+        nameEmbroideryText: product.details.nameEmbroideryInput
+      },
+      price: product.price
+    };
+
+    console.log(item);
+
+    this.apiService
+      .post<ShoppingCartItemDTO>('shopping-cart/add', item)
+      .pipe(
+        tap((productDTO) => {
+          const shoppingCartItem: ShoppingCartItem = productDTO.data.item;
+          this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
+
+          const productName = formatNameInput(item.name);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: `${productName + ` hozzáadva, ${item.price} Ft értékben.`}`
+          });
+        })
+      )
+      .subscribe();
+  }
 
   public deleteProductFromCart(shoppingCartItem: ShoppingCartItem): void {
     this.apiService
@@ -90,15 +122,15 @@ export class ShoppingCartService {
       .pipe(
         tap(() => {
           const productName =
-            shoppingCartItem.productName.charAt(0).toUpperCase() +
-            shoppingCartItem.productName.slice(1);
+            shoppingCartItem.name.charAt(0).toUpperCase() +
+            shoppingCartItem.name.slice(1);
 
           this.messageService.add({
             severity: 'success',
             summary: 'Siker!',
             detail: `${
               productName +
-              ` termék törölve, ${shoppingCartItem.productPrice} Ft értékben.`
+              ` termék törölve, ${shoppingCartItem.price} Ft értékben.`
             }`
           });
 

@@ -17,7 +17,7 @@ export const productReducers = createReducer(
 
   on(getProductsSuccess, (state, action) => {
     const availableProducts = action.products.filter(
-      (product) => product.productStatus === 'available'
+      (product) => product.status === 'available'
     );
     return {
       ...state,

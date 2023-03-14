@@ -2,13 +2,13 @@
 
 .paragraph-primary {
   width: 90%;
-  margin: -120px auto 30px;
+  margin: -120px auto 28px;
   text-align: center;
 }
 
 .primary-button {
   display: block;
-  margin: 0 auto 150px;
+  margin: 0 auto 120px;
   font-size: 18px;
 }
 
@@ -16,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   width: 70%;
-  margin: 0 auto 50px;
+  margin: 0 auto 40px;
 
   @include respond(sm) {
     width: 90%;

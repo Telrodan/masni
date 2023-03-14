@@ -1,7 +1,7 @@
-<main class="samples" *ngIf="sortedMaterials | async">
+<main class="samples" *ngIf="sortedMaterials$ | async as sortedMaterials">
   <h1 class="heading-primary">Mintás pamutvászon</h1>
   <p-galleria
-    [value]="(sortedMaterials | async).patternedCotton"
+    [value]="sortedMaterials.patternedCotton"
     [(visible)]="displayCustomFirstGalery"
     [(activeIndex)]="activeIndexFirstGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -19,10 +19,7 @@
   </p-galleria>
   <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="
-        let sample of (sortedMaterials | async).patternedCotton;
-        let index = index
-      "
+      *ngFor="let sample of sortedMaterials.patternedCotton; let index = index"
       class="item-content col-3 lg:col-2"
       key="index">
       <img
@@ -36,7 +33,7 @@
 
   <h1 class="heading-primary">Mintás pamutvászon</h1>
   <p-galleria
-    [value]="(sortedMaterials | async).minkyPlus"
+    [value]="sortedMaterials.minkyPlus"
     [(visible)]="displayCustomSecondGalery"
     [(activeIndex)]="activeIndexSecondGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -54,10 +51,7 @@
   </p-galleria>
   <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="
-        let sample of (sortedMaterials | async).minkyPlus;
-        let index = index
-      "
+      *ngFor="let sample of sortedMaterials.minkyPlus; let index = index"
       class="item-content col-3 lg:col-2"
       key="index">
       <img
@@ -71,7 +65,7 @@
 
   <h1 class="heading heading-primary">Duplagéz</h1>
   <p-galleria
-    [value]="(sortedMaterials | async).doubleGauze"
+    [value]="sortedMaterials.doubleGauze"
     [(visible)]="displayCustomThirdGalery"
     [(activeIndex)]="activeIndexThirdGalery"
     [containerStyle]="{ 'max-width': '850px' }"
@@ -88,10 +82,7 @@
   </p-galleria>
   <div class="grid" style="max-width: 100%">
     <div
-      *ngFor="
-        let sample of (sortedMaterials | async).doubleGauze;
-        let index = index
-      "
+      *ngFor="let sample of sortedMaterials.doubleGauze; let index = index"
       class="item-content col-3 lg:col-2"
       key="index">
       <img
