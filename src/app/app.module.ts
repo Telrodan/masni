@@ -28,9 +28,6 @@ import { LandingAboutUsComponent } from './features/landing/landing-about-us/lan
 import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from './features/masni-shop/masni-shop.module';
 import { ContactComponent } from './features/contact/contact.component';
-import { SignupComponent } from './features/auth/signup/signup.component';
-import { LoginComponent } from './features/auth/login/login.component';
-import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { SharedModule } from './shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
@@ -43,6 +40,7 @@ import { AuthService } from '@core/services/auth.service';
 import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
 import { CheckboxModule } from 'primeng/checkbox';
+import { AuthModule } from './features/auth/auth.module';
 
 const PRIME_NG = [
   AccordionModule,
@@ -62,9 +60,6 @@ const PRIME_NG = [
     LandingBrandsComponent,
     LandingAboutUsComponent,
     ContactComponent,
-    SignupComponent,
-    LoginComponent,
-    ForgotPasswordComponent,
     ShopComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent
@@ -79,6 +74,7 @@ const PRIME_NG = [
     SharedModule,
     NyuszkoShopModule,
     MasniShopModule,
+    AuthModule,
     HttpClientModule,
     ImageModule,
     MatSnackBarModule,

@@ -29,20 +29,17 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.store$.dispatch(getMaterials());
-    this.store$.dispatch(getProducts());
-    this.authService
-      .getAuthStatus$()
+    of(this.store$.dispatch(getMaterials()))
       .pipe(
+        switchMap(() => of(this.store$.dispatch(getProducts()))),
+        switchMap(() => this.authService.getAuthStatus$()),
         filter((isAuth) => !!isAuth),
         tap(() => {
-          console.log('minden fasza');
           this.store$.dispatch(getShoppingCartItems());
         })
       )
       .subscribe();
-
-    // APP_INIT
+    // APP_INIT;
     // of()
     //   .pipe(
     //     // switchMap(() => this.materialService.setMaterialsStore()),

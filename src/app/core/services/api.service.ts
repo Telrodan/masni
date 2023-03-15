@@ -27,4 +27,10 @@ export class ApiService {
       this.http.delete(`${environment.apiUrl}${endpoint}/` + id)
     );
   }
+
+  public patch<T>(endpoint: string, data: any): Observable<T> {
+    return <Observable<T>>(
+      this.http.patch(`${environment.apiUrl}${endpoint}`, data)
+    );
+  }
 }

@@ -4,15 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './features/landing/landing.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './shared/UI/samples/samples.component';
-import { SignupComponent } from './features/auth/signup/signup.component';
-import { LoginComponent } from './features/auth/login/login.component';
-import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ShoppingCartComponent } from './shared/UI/shopping-cart/shopping-cart.component';
 import { ShopComponent } from './features/shop/shop.component';
 import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { ProductDetailsComponent } from './shared/UI/product-details/product-details.component';
+import { HasRoleGuard } from '@core/guards/has-role.guard';
+
+const authModule = () =>
+  import('./features/auth/auth.module').then((m) => m.AuthModule);
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: LandingComponent
+  },
+  {
+    path: 'auth',
+    loadChildren: authModule
   },
   {
     path: 'nyuszko-shop',
@@ -62,23 +67,15 @@ const routes: Routes = [
   },
   {
     path: 'samples',
-    component: SamplesComponent
+    component: SamplesComponent,
+    canActivate: [HasRoleGuard],
+    data: {
+      role: 'admin'
+    }
   },
   {
     path: 'contact',
     component: ContactComponent
-  },
-  {
-    path: 'signup',
-    component: SignupComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'forgot-password',
-    component: ForgotPasswordComponent
   },
   {
     path: 'privacy-policy',

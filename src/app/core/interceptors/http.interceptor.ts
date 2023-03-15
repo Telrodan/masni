@@ -6,20 +6,17 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap, finalize } from 'rxjs/operators';
-
-import { SpinnerService } from '../services/spinner.service';
+import { Observable, throwError, catchError, tap, finalize } from 'rxjs';
 import { MessageService } from 'primeng/api';
+
+import { SpinnerService } from '@core/services/spinner.service';
 
 @Injectable()
 export class HTTPInterceptor implements HttpInterceptor {
   constructor(
     private spinnerService: SpinnerService,
-    private messageService: MessageService,
-    private snackBar: MatSnackBar
+    private messageService: MessageService
   ) {}
 
   intercept(
@@ -39,10 +36,6 @@ export class HTTPInterceptor implements HttpInterceptor {
             summary: 'Error',
             detail: 'Message Content'
           });
-          // this.snackBar.open('Kliens oldali hiba!', 'Bezárás', {
-          //   verticalPosition: 'top',
-          //   horizontalPosition: 'right'
-          // });
         } else {
           errorMsg = `Error Code: ${error.status},  Message: ${error.error.message}`;
           this.messageService.add({
@@ -50,10 +43,6 @@ export class HTTPInterceptor implements HttpInterceptor {
             summary: 'Szerver oldali hiba!',
             detail: error.error.message
           });
-          // this.snackBar.open('Szerver oldali hiba!', 'Bezárás', {
-          //   verticalPosition: 'top',
-          //   horizontalPosition: 'right'
-          // });
         }
         return throwError(() => new Error(errorMsg));
       }),

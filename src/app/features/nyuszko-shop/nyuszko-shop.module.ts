@@ -40,9 +40,9 @@ const PRIME_NG = [
   imports: [
     CommonModule,
     SharedModule,
-    NyuszkoShopRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NyuszkoShopRoutingModule,
     FontAwesomeModule,
     ...PRIME_NG
   ]
