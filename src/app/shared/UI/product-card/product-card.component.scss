@@ -3,3 +3,26 @@
 .product-card {
   cursor: pointer;
 }
+
+.name {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-family: 'Amatic SC', cursive;
+  font-weight: 700;
+}
+
+.description {
+  margin-bottom: 16px;
+  @include respond(lg) {
+    display: none;
+  }
+}
+
+.price {
+  font-size: 20px;
+}
+
+.cart-button {
+  margin-top: 16px;
+  width: 100%;
+}

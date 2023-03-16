@@ -9,15 +9,12 @@
     > -->
     <img [src]="product.images[0]" class="w-full" />
   </div>
-  <div class="flex justify-content-between align-items-center mb-3">
-    <span class="">{{ product.name | titlecase }}</span>
-    <!-- <span>
-      <i class="pi pi-star-fill text-yellow-500 mr-1"></i>
-      <span class="font-medium">5.0</span>
-    </span> -->
-  </div>
-  <p class="hidden md:block mt-0 mb-3 text-600">
+  <p class="name">{{ product.name | titlecase }}</p>
+  <p class="description text-600">
     {{ product.description[0] }}
   </p>
-  <span class="text-primary">{{ product.price }} Ft</span>
+  <p class="price text-primary">{{ product.price }} Ft</p>
+  <button class="cart-button primary-button shadow-2">
+    <i class="pi pi-shopping-cart"></i> Kosárba
+  </button>
 </div>

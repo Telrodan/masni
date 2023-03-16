@@ -7,6 +7,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
 // font-family: 'Dancing Script', cursive;
 
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+// font-family: 'Amatic SC', cursive;
+
 body {
   color: var(--color-text);
   font-family: 'Nunito', sans-serif;
@@ -20,16 +23,17 @@ body {
 .heading-primary,
 .heading-secondary,
 .heading-tertiary {
-  font-family: 'Dancing Script', cursive;
-  font-weight: 400;
+  font-family: 'Amatic SC', cursive;
+  font-weight: 700;
 }
 
 .heading-primary {
   color: var(--color-text);
-  font-size: 44px;
+  font-size: 60px;
+  line-height: 60px;
 
-  @include respond(sm) {
-    font-size: 30px;
+  @include respond(lg) {
+    font-size: 48px;
   }
 }
 
@@ -45,15 +49,15 @@ body {
   display: inline-block;
   padding: 10px 20px;
   color: var(--color-text);
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.843);
   box-shadow: 0 3px 5px rgba(139, 139, 139, 0.8);
-  font-size: 40px;
+  font-size: 60px;
   border-radius: 5px;
   text-align: center;
   z-index: 1;
 
   @include respond(sm) {
-    font-size: 30px;
+    font-size: 36px;
   }
 }
 

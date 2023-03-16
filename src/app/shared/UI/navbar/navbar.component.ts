@@ -29,7 +29,7 @@ import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.s
 })
 export class NavbarComponent implements OnInit {
   public isAuthenticated = false;
-  public itemCounter$: Observable<number>;
+  public itemCounter$: Observable<string>;
 
   public faChevronDown = faChevronDown;
   public faCartShopping = faCartShopping;
@@ -53,7 +53,7 @@ export class NavbarComponent implements OnInit {
     this.isAuthenticated = this.authService.getIsAuthenticated();
     this.itemCounter$ = this.store$.select(shoppingCartItemsSelector).pipe(
       filter((items) => !!items),
-      map((items) => items.length)
+      map((items) => items.length.toString())
     );
 
     this.authService.getAuthStatus$().subscribe((response) => {

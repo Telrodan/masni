@@ -22,24 +22,24 @@
       <li>
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           routerLink="/home"
           (click)="closeNavbar()">
-          <fa-icon [icon]="faHouse" class="mr-2"></fa-icon>
+          <i class="pi pi-home mr-2"></i>
           <span>Főoldal</span>
         </a>
       </li>
       <li class="lg:relative">
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           pStyleClass="@next"
           enterClass="hidden"
           enterActiveClass="scalein"
           leaveToClass="hidden"
           leaveActiveClass="fadeout"
           [hideOnOutsideClick]="true">
-          <fa-icon [icon]="faShop" class="mr-2"></fa-icon>
+          <i class="pi pi-shopping-bag mr-2"></i>
           <span>Termékek</span>
           <i class="pi pi-angle-down ml-auto lg:ml-3"></i>
         </a>
@@ -51,7 +51,7 @@
               class="flex p-3 align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
               routerLink="/nyuszko-shop"
               (click)="closeNavbar()">
-              <span class="font-medium">Nyuszkó Kuckó</span>
+              <span>Nyuszkó Kuckó</span>
             </a>
           </li>
           <li>
@@ -61,7 +61,7 @@
               href="https://www.facebook.com/profile.php?id=100087389177967"
               target="_blank"
               (click)="closeNavbar()">
-              <span class="font-medium">Masni Handmade Dolls</span>
+              <span>Masni Handmade Dolls</span>
             </a>
           </li>
           <li>
@@ -70,7 +70,7 @@
               class="flex p-3 align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
               routerLink="/shop"
               (click)="closeNavbar()">
-              <span class="font-medium">Termékek készleten</span>
+              <span>Termékek készleten</span>
             </a>
           </li>
         </ul>
@@ -78,20 +78,20 @@
       <li>
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           routerLink="/samples"
           (click)="closeNavbar()">
-          <fa-icon [icon]="faPalette" class="mr-2"></fa-icon>
+          <i class="pi pi-palette mr-2"></i>
           <span>Minták</span>
         </a>
       </li>
       <li>
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           routerLink="/contact"
           (click)="closeNavbar()">
-          <fa-icon [icon]="faPhone" class="mr-2"></fa-icon>
+          <i class="pi pi-phone mr-2"></i>
           <span>Kapcsolat</span>
         </a>
       </li>
@@ -101,44 +101,51 @@
       <li *ngIf="!isAuthenticated">
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           routerLink="auth/signup"
           (click)="closeNavbar()">
-          <fa-icon [icon]="faUserPlus" class="mr-2"></fa-icon>
+          <i class="pi pi-user-plus mr-2"></i>
           <span>Regisztráció</span>
         </a>
       </li>
       <li *ngIf="!isAuthenticated">
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           routerLink="auth/login"
           (click)="closeNavbar()">
-          <fa-icon [icon]="faRightToBracket" class="mr-2"></fa-icon>
+          <i class="pi pi-sign-in mr-2"></i>
           <span>Belépés</span>
         </a>
       </li>
       <li *ngIf="isAuthenticated">
         <a
           pRipple
-          class="shopping-cart flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          class="shopping-cart flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 border-round cursor-pointer transition-colors transition-duration-150"
           routerLink="/shopping-cart"
           (click)="closeNavbar()">
           <p class="item-counter" *ngIf="itemCounter$ | async as counter">
             {{ counter }}
           </p>
-          <fa-icon
-            [icon]="faCartShopping"
-            class="text-base lg:text-2xl mr-2 lg:mr-0"></fa-icon>
+          <i class="pi pi-shopping-cart mr-2"></i>
           <span class="block lg:hidden font-medium">Kosár</span>
         </a>
       </li>
       <li *ngIf="isAuthenticated">
         <a
           pRipple
-          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center font-medium border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          routerLink="user">
+          <i class="pi pi-user mr-2"></i>
+          <span>Profil</span>
+        </a>
+      </li>
+      <li *ngIf="isAuthenticated">
+        <a
+          pRipple
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
           (click)="onLogout()">
-          <fa-icon [icon]="faRightToBracket" class="mr-2"></fa-icon>
+          <i class="pi pi-sign-out mr-2"></i>
           <span>Kilépés</span>
         </a>
       </li>

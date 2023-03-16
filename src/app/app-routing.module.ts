@@ -11,6 +11,7 @@ import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { ProductDetailsComponent } from './shared/UI/product-details/product-details.component';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
+import { UserProfileComponent } from './features/user-profile/user-profile.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: authModule
+  },
+  {
+    path: 'user',
+    component: UserProfileComponent
   },
   {
     path: 'nyuszko-shop',

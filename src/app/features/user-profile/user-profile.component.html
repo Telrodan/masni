@@ -1,0 +1,135 @@
+<div class="px-4 py-8 md:px-6 lg:px-8">
+  <div class="p-fluid flex flex-column lg:flex-row">
+    <ul
+      class="list-none m-0 p-0 flex flex-row lg:flex-column justify-content-evenly md:justify-content-between lg:justify-content-start mb-5 lg:pr-8 lg:mb-0">
+      <li>
+        <a
+          pRipple
+          [class.surface-hover]="activeMenu === 'profile'"
+          class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
+          (click)="activeMenu = 'profile'">
+          <i class="pi pi-user md:mr-2"></i>
+          <span class="font-medium hidden md:block">Profil</span>
+        </a>
+      </li>
+      <li>
+        <a
+          pRipple
+          [class.surface-hover]="activeMenu === 'address'"
+          class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
+          (click)="activeMenu = 'address'">
+          <i class="pi pi-truck md:mr-2"></i>
+          <span class="font-medium hidden md:block">Cím</span>
+        </a>
+      </li>
+      <li>
+        <a
+          pRipple
+          [class.surface-hover]="activeMenu === 'settings'"
+          class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
+          (click)="activeMenu = 'settings'">
+          <i class="pi pi-cog md:mr-2"></i>
+          <span class="font-medium hidden md:block">Beállítások</span>
+        </a>
+      </li>
+    </ul>
+    <div
+      class="surface-card p-5 shadow-2 border-round flex-auto"
+      @fadeIn
+      *ngIf="activeMenu === 'profile'">
+      <div class="text-900 font-semibold text-lg mt-3">Profil</div>
+      <p-divider></p-divider>
+      <div class="flex gap-5 flex-column-reverse md:flex-row">
+        <div class="flex-auto p-fluid">
+          <div class="mb-4">
+            <label for="name" class="block text-900 mb-2">Név</label>
+            <input id="name" type="text" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-900 mb-2">Email cím</label>
+            <input id="email" type="email" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="phone" class="block text-900 mb-2">Név</label>
+            <input id="phone" type="text" pInputText />
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              label="Adatok módosítása"
+              class="w-auto"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="surface-card p-5 shadow-2 border-round flex-auto"
+      @fadeIn
+      *ngIf="activeMenu === 'address'">
+      <div class="text-900 font-semibold text-lg mt-3">Cím</div>
+      <p-divider></p-divider>
+      <div class="flex gap-5 flex-column-reverse md:flex-row">
+        <div class="flex-auto p-fluid">
+          <div class="mb-4">
+            <label for="street" class="block text-900 mb-2"
+              >Utca/házszám/épület</label
+            >
+            <input id="street" type="text" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="city" class="block text-900 mb-2">Város</label>
+            <input id="city" type="text" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="postcode" class="block text-900 mb-2"
+              >Irányítószám</label
+            >
+            <input id="postcode" type="text" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="county" class="block text-900 mb-2">Megye</label>
+            <input id="county" type="text" pInputText />
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              label="Adatok módosítása"
+              class="w-auto"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="surface-card p-5 shadow-2 border-round flex-auto"
+      @fadeIn
+      *ngIf="activeMenu === 'settings'">
+      <div class="text-900 font-semibold text-lg mt-3">Profil</div>
+      <p-divider></p-divider>
+      <div class="flex gap-5 flex-column-reverse md:flex-row">
+        <div class="flex-auto p-fluid">
+          <div class="mb-4">
+            <label for="name" class="block text-900 mb-2">Név</label>
+            <input id="name" type="text" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-900 mb-2">Email cím</label>
+            <input id="email" type="email" pInputText />
+          </div>
+          <div class="mb-4">
+            <label for="phone" class="block text-900 mb-2">Név</label>
+            <input id="phone" type="text" pInputText />
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              label="Adatok módosítása"
+              class="w-auto"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

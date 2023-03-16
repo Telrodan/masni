@@ -17,6 +17,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { BadgeModule } from 'primeng/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -40,15 +42,20 @@ import { AuthService } from '@core/services/auth.service';
 import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
 import { AuthModule } from './features/auth/auth.module';
+import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 const PRIME_NG = [
   AccordionModule,
   CarouselModule,
   InputTextModule,
+  InputTextareaModule,
+  DividerModule,
   InputSwitchModule,
   ButtonModule,
   ToastModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  BadgeModule
 ];
 
 @NgModule({
@@ -60,7 +67,8 @@ const PRIME_NG = [
     ContactComponent,
     ShopComponent,
     PrivacyPolicyComponent,
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

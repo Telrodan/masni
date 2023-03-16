@@ -10,7 +10,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const PRIME_NG = [InputTextModule, CheckboxModule, InputSwitchModule];
 
@@ -19,8 +18,7 @@ const PRIME_NG = [InputTextModule, CheckboxModule, InputSwitchModule];
     LoginComponent,
     SignupComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent,
-    UserProfileComponent
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
