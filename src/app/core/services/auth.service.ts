@@ -7,7 +7,7 @@ import jwt_decode from 'jwt-decode';
 
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
-import { AuthData, LoginDTO, TokenPayload } from '../models/auth-data.model';
+import { AuthData, LoginDTO, TokenPayload } from '@core/models/auth-data.model';
 import { User } from '@core/models/user.model';
 
 @Injectable({
@@ -36,11 +36,11 @@ export class AuthService {
   }
 
   public signupUser(newUser: User): Observable<User> {
-    return this.apiService.post('users/signup', newUser);
+    return this.apiService.post('auth/signup', newUser);
   }
 
   public loginUser(authData: AuthData): Observable<LoginDTO> {
-    return this.apiService.post<LoginDTO>('users/login', authData).pipe(
+    return this.apiService.post<LoginDTO>('auth/login', authData).pipe(
       tap((loginDTO) => {
         this.token = loginDTO.data.token;
         if (!this.token) return;
@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   public forgotPassword$(email: string): Observable<null> {
-    return this.apiService.post<null>('users/forgot-password', email).pipe(
+    return this.apiService.post<null>('auth/forgotPassword', email).pipe(
       tap(() => {
         this.messageService.add({
           severity: 'success',
@@ -80,7 +80,7 @@ export class AuthService {
     resetToken: string
   ): Observable<LoginDTO> {
     return this.apiService
-      .patch<LoginDTO>(`users/reset-password/${resetToken}`, {
+      .patch<LoginDTO>(`users/resetPassword/${resetToken}`, {
         password,
         passwordConfirm
       })

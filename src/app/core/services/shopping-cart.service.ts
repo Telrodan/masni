@@ -32,11 +32,43 @@ export class ShoppingCartService {
   public getUserShoppingCartItems(): Observable<ShoppingCartItem[]> {
     const ownerId = this.cookieService.getCookie('userId');
     return this.apiService
-      .get<ShoppingCartItemsDTO>('shopping-cart/get-user-items', { ownerId })
+      .get<ShoppingCartItemsDTO>('shoppingCart/getCurrentUserItems', {
+        ownerId
+      })
       .pipe(map((items) => items.data.items));
   }
 
-  public addBuiltProductToCart(product: BuiltProduct): void {
+  public addReadyProductToShoppingCart(product: Product): void {
+    const item = this.createReadyProductForShoppingCart(product);
+    this.addItemToShoppingCart(item);
+  }
+
+  private createReadyProductForShoppingCart(
+    product: Product
+  ): ShoppingCartItem {
+    const userId = this.cookieService.getCookie('userId');
+    const item: ShoppingCartItem = {
+      ownerId: userId,
+      name: product.name,
+      comment: product.details.comment,
+      details: {
+        baseProduct: product.baseProduct,
+        isExtraNameEmbroidery: product.details.nameEmbroideryCheckbox,
+        nameEmbroideryText: product.details.nameEmbroideryInput
+      },
+      price: product.price
+    };
+    return item;
+  }
+
+  public addBuiltProductToShoppingCart(product: BuiltProduct): void {
+    const item = this.createBuiltProductForShoppingCart(product);
+    this.addItemToShoppingCart(item);
+  }
+
+  private createBuiltProductForShoppingCart(
+    product: BuiltProduct
+  ): ShoppingCartItem {
     const userId = this.cookieService.getCookie('userId');
     const item: ShoppingCartItem = {
       ownerId: userId,
@@ -58,54 +90,17 @@ export class ShoppingCartService {
       },
       price: product.price
     };
-
-    this.apiService
-      .post<ShoppingCartItemDTO>('shopping-cart/add', item)
-      .pipe(
-        tap((productDTO) => {
-          const shoppingCartItem: ShoppingCartItem = productDTO.data.item;
-
-          console.log(shoppingCartItem);
-          this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
-
-          const productName = formatNameInput(item.name);
-
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Siker!',
-            detail: `${productName + ` hozzáadva, ${item.price} Ft értékben.`}`
-          });
-        })
-      )
-      .subscribe();
+    return item;
   }
 
-  public addReadyProductToCart(product: Product): void {
-    console.log(product);
-    const userId = this.cookieService.getCookie('userId');
-    const item: ShoppingCartItem = {
-      ownerId: userId,
-      name: product.name,
-      comment: product.details.comment,
-      details: {
-        baseProduct: product.baseProduct,
-        isExtraNameEmbroidery: product.details.nameEmbroideryCheckbox,
-        nameEmbroideryText: product.details.nameEmbroideryInput
-      },
-      price: product.price
-    };
-
-    console.log(item);
-
+  private addItemToShoppingCart(item: ShoppingCartItem): void {
     this.apiService
-      .post<ShoppingCartItemDTO>('shopping-cart/add', item)
+      .post<ShoppingCartItemDTO>('shoppingCart', item)
       .pipe(
         tap((productDTO) => {
           const shoppingCartItem: ShoppingCartItem = productDTO.data.item;
           this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
-
           const productName = formatNameInput(item.name);
-
           this.messageService.add({
             severity: 'success',
             summary: 'Siker!',
@@ -118,7 +113,7 @@ export class ShoppingCartService {
 
   public deleteProductFromCart(shoppingCartItem: ShoppingCartItem): void {
     this.apiService
-      .delete('shopping-cart', shoppingCartItem._id)
+      .delete('shoppingCart', shoppingCartItem._id)
       .pipe(
         tap(() => {
           const productName =

@@ -17,7 +17,7 @@ export class ProductService {
 
   public getProducts(): Observable<Product[]> {
     return this.apiService
-      .get<ProductsDTO>('products/get')
+      .get<ProductsDTO>('products')
       .pipe(map((productsDTO) => productsDTO.data.products));
   }
 

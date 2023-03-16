@@ -80,7 +80,7 @@ export class ProductDetailsComponent implements OnInit {
       }
     };
 
-    this.shoppingCartService.addReadyProductToCart(item);
+    this.shoppingCartService.addReadyProductToShoppingCart(item);
   }
 
   private createForm(product: Product): void {
