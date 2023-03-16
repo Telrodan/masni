@@ -54,7 +54,7 @@ export class CouponService {
     const owner = {
       couponOwner: this.cookieService.getCookie('userId')
     };
-    return this.apiService.post<CouponsDataType>('coupon/get', owner).pipe(
+    return this.apiService.get<CouponsDataType>('coupon/get', owner).pipe(
       map((result) => {
         const coupons = result.data.coupons;
         return coupons;

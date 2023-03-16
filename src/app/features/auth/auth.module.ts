@@ -8,11 +8,20 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
-const PRIME_NG = [InputTextModule];
+const PRIME_NG = [InputTextModule, CheckboxModule, InputSwitchModule];
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [
+    LoginComponent,
+    SignupComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    UserProfileComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

@@ -39,7 +39,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthService } from '@core/services/auth.service';
 import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
-import { CheckboxModule } from 'primeng/checkbox';
 import { AuthModule } from './features/auth/auth.module';
 
 const PRIME_NG = [
@@ -49,8 +48,7 @@ const PRIME_NG = [
   InputSwitchModule,
   ButtonModule,
   ToastModule,
-  ConfirmDialogModule,
-  CheckboxModule
+  ConfirmDialogModule
 ];
 
 @NgModule({
