@@ -2,41 +2,45 @@ import { Component, OnInit } from '@angular/core';
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
 import { MessageService } from 'primeng/api';
-import { tap } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+import { addCategory, categoriesSelector, deleteCategory } from '@core/store';
 
+@UntilDestroy()
 @Component({
   selector: 'masni-handmade-dolls-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
-  categories: Category[];
+  categories$: Observable<Category[]>;
   categoryName: string;
 
   constructor(
     private categoryService: CategoryService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.categoryService
-      .getAllCategory$()
-      .pipe(
-        tap((categories) => {
-          this.categories = categories;
-        })
-      )
-      .subscribe();
+    this.categories$ = this.store.select(categoriesSelector).pipe(
+      filter((categories) => !!categories),
+      untilDestroyed(this)
+    );
   }
 
-  addCategory(categoryName: string): void {
-    if (this.categoryName) {
+  onAddCategory(): void {
+    if (this.categoryName.trim()) {
       this.categoryService
-        .addCategory$(categoryName)
+        .addCategory$(this.categoryName)
         .pipe(
-          tap((category) => {
-            category.products = [];
-            this.categories.push(category);
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Siker!',
+              detail: `${this.categoryName} hozzáadva`
+            });
             this.categoryName = '';
           })
         )
@@ -44,14 +48,16 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  deleteCategory(id: string): void {
+  onDeleteCategory(id: string, categoryName: string): void {
     this.categoryService
       .deleteCategory$(id)
       .pipe(
         tap(() => {
-          this.categories = this.categories.filter(
-            (category) => category._id !== id
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: `${categoryName} törölve`
+          });
         })
       )
       .subscribe();

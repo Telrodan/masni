@@ -1,5 +1,8 @@
 <div class="categories">
-  <p-card header="Kategóriák" subheader="Összes kategória">
+  <p-card
+    header="Kategóriák"
+    subheader="Összes kategória"
+    *ngIf="categories$ | async as categories">
     <div class="grid">
       <div class="col-12">
         <p-toolbar>
@@ -11,7 +14,7 @@
               label="Hozzáadás"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              (click)="addCategory(categoryName)"></button>
+              (click)="onAddCategory()"></button>
             <input type="text" [(ngModel)]="categoryName" pInputText />
           </div>
         </p-toolbar>
@@ -41,7 +44,9 @@
                   icon="pi pi-cog"
                   class="p-button p-button-warning p-button mr-2"></button
                 ><button
-                  (click)="deleteCategory(category._id)"
+                  (click)="
+                    onDeleteCategory(category._id, category.categoryName)
+                  "
                   pButton
                   pRipple
                   type="button"

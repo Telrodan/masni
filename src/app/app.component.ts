@@ -7,9 +7,6 @@ import { Carousel } from 'primeng/carousel';
 import { filter, of, switchMap } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
-import { CouponService } from './core/services/coupon.service';
-import { MaterialService } from './core/services/material.service';
-import { ShoppingCartService } from './core/services/shopping-cart.service';
 
 @Component({
   selector: 'masni-handmade-dolls-root',

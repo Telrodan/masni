@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@core/models/api-response.model';
 import { Category } from '@core/models/category.model';
-import { map, Observable } from 'rxjs';
+import { addCategory, deleteCategory } from '@core/store';
+import { Store } from '@ngrx/store';
+import { map, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private store: Store) {}
 
   addCategory$(categoryName: string): Observable<Category> {
     const category = { categoryName };
     return this.apiService
       .post<ApiResponse<Category>>('category', category)
-      .pipe(map((categoryDTO) => categoryDTO.data));
+      .pipe(
+        map((categoryDTO) => categoryDTO.data),
+        tap((category) => {
+          category.products = [];
+          this.store.dispatch(addCategory({ category }));
+        })
+      );
   }
 
   getAllCategory$(): Observable<Category[]> {
@@ -24,6 +32,10 @@ export class CategoryService {
   }
 
   deleteCategory$(id: string): Observable<null> {
-    return this.apiService.delete<null>('category', id);
+    return this.apiService.delete<null>('category', id).pipe(
+      tap(() => {
+        this.store.dispatch(deleteCategory({ id }));
+      })
+    );
   }
 }
