@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '@core/models/product.model';
-import { availableProductsSelector } from '@core/store';
+// import { availableProductsSelector } from '@core/store';
 
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
@@ -18,8 +18,8 @@ export class ShopComponent implements OnInit {
   constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.availableProducts$ = this.store$
-      .select(availableProductsSelector)
-      .pipe(filter((products) => !!products));
+    // this.availableProducts$ = this.store$
+    //   .select(availableProductsSelector)
+    //   .pipe(filter((products) => !!products));
   }
 }

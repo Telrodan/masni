@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { filter, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'masni-handmade-dolls-reset-password',
@@ -15,7 +16,8 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private messageService: MessageService
   ) {}
 
   public ngOnInit(): void {
@@ -42,6 +44,15 @@ export class ResetPasswordComponent implements OnInit {
     const { password, passwordConfirm } = this.resetPasswordForm.value;
     this.authService
       .resetPassword$(password, passwordConfirm, this.resetToken)
+      .pipe(
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: 'Új jelszó beállítva.'
+          });
+        })
+      )
       .subscribe();
   }
 }

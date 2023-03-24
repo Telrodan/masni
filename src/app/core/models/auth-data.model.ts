@@ -3,12 +3,6 @@ export interface AuthData {
   password: string;
 }
 
-export interface LoginDTO {
-  data: {
-    token: string;
-  };
-}
-
 export interface TokenPayload {
   id: string;
   role: string;

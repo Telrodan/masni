@@ -4,8 +4,7 @@ import { getProducts, getProductsSuccess } from '../actions';
 import { ProductState } from '../models/product-state.model';
 
 export const productInitialState: ProductState = {
-  products: [],
-  availableProducts: []
+  products: []
 };
 
 export const productReducers = createReducer(
@@ -16,13 +15,9 @@ export const productReducers = createReducer(
   })),
 
   on(getProductsSuccess, (state, action) => {
-    const availableProducts = action.products.filter(
-      (product) => product.status === 'available'
-    );
     return {
       ...state,
-      products: action.products,
-      availableProducts
+      products: [...action.products]
     };
   })
 );

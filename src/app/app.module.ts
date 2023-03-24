@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -22,8 +22,8 @@ import { BadgeModule } from 'primeng/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor } from './core/interceptors/auth-interceptor';
-import { HTTPInterceptor } from './core/interceptors/http.interceptor';
+import { AuthInterceptorProvider } from './core/interceptors/auth-interceptor';
+import { HttpInterceptorProvider } from './core/interceptors/http.interceptor';
 import { LandingComponent } from './features/landing/landing.component';
 import { LandingBrandsComponent } from './features/landing/landing-brands/landing-brands.component';
 import { LandingAboutUsComponent } from './features/landing/landing-about-us/landing-about-us.component';
@@ -85,11 +85,11 @@ const PRIME_NG = [
     ImageModule,
     MatSnackBarModule,
     ...PRIME_NG,
+    StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
     }),
-    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([
       MaterialEffects,
       ShoppingCartEffects,
@@ -108,11 +108,10 @@ const PRIME_NG = [
         };
       }
     },
+    AuthInterceptorProvider,
+    HttpInterceptorProvider,
     MessageService,
     ConfirmationService,
-
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HTTPInterceptor, multi: true },
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

@@ -1,0 +1,87 @@
+<div class="p-fluid flex flex-column lg:flex-row">
+  <div class="surface-card p-5 shadow-2 border-round flex-auto">
+    <div class="text-900 font-semibold text-lg mt-3">Termék hozzáadás</div>
+    <p-divider></p-divider>
+    <div class="flex gap-5 flex-column-reverse md:flex-row">
+      <form
+        class="flex-auto p-fluid"
+        (submit)="onAdd()"
+        [formGroup]="productForm">
+        <div class="mb-4">
+          <label for="name" class="block font-medium text-900 mb-2"
+            >Termék neve</label
+          >
+          <input id="name" type="text" formControlName="name" pInputText />
+        </div>
+
+        <div class="mb-4">
+          <label for="categoryId" class="block font-medium text-900 mb-2"
+            >Termék kategória</label
+          >
+          <p-dropdown
+            id="categoryId"
+            formControlName="categoryId"
+            [options]="categories$ | async"
+            placeholder="Válassz egy kategóriát"
+            optionValue="_id"
+            optionLabel="categoryName"
+            [showClear]="true"></p-dropdown>
+        </div>
+
+        <div class="mb-4">
+          <label for="description" class="block font-medium text-900 mb-2"
+            >Termék leírása</label
+          >
+          <textarea
+            id="description"
+            formControlName="description"
+            type="text"
+            pInputTextarea
+            rows="5"
+            [autoResize]="true"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="bio" class="block font-medium text-900 mb-2"
+            >Termék képek (az első kép lesz mindig a nagy kép)</label
+          >
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Válassz"
+            class="p-button-secondary"
+            (click)="imageInput.click()"></button>
+          <input
+            multiple
+            class="image-input"
+            type="file"
+            (change)="selectImage($event)"
+            #imageInput />
+        </div>
+
+        <div class="mb-4">
+          <label for="price" class="block font-medium text-900 mb-2"
+            >Termék ára</label
+          >
+          <input id="price" formControlName="price" type="text" pInputText />
+        </div>
+        <div class="mb-4">
+          <label for="stock" class="block font-medium text-900 mb-2"
+            >Készleten</label
+          >
+          <input id="stock" formControlName="stock" type="text" pInputText />
+        </div>
+        <div>
+          <button
+            pButton
+            pRipple
+            label="Hozzáadás"
+            type="submit"
+            [disabled]="!productForm.valid"
+            class="w-auto"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

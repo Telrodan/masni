@@ -1,10 +1,12 @@
 <div class="grid">
   <div class="col-12 lg:col-12">
-    <img attr.src="{{ images[selectedImageIndex] }}" class="mb-3 w-full" />
+    <img
+      [src]="productImages + images[selectedImageIndex]"
+      class="mb-3 w-full" />
     <div class="grid">
       <div *ngFor="let image of images; let i = index" class="col-3">
         <img
-          src="{{ image }}"
+          [src]="productImages + image"
           class="w-full cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
           [ngClass]="{ 'border-primary': selectedImageIndex === i }"
           (click)="selectedImageIndex = i" />

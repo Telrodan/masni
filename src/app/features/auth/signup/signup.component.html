@@ -108,19 +108,19 @@
           </p>
         </div>
         <div class="field mb-4 col-12 md:col-6">
-          <label for="postalcode" class="font-medium text-900"
+          <label for="postcode" class="font-medium text-900"
             >Irányítószám</label
           >
           <input
-            id="postalcode"
+            id="postcode"
             type="number"
             pInputText
-            formControlName="postalcode" />
+            formControlName="postcode" />
           <p
             class="form-helper"
             *ngIf="
-              !signupForm.get('postalcode').valid &&
-              signupForm.get('postalcode').dirty
+              !signupForm.get('postcode').valid &&
+              signupForm.get('postcode').dirty
             ">
             Kérlek add meg az irányítószámot.
           </p>

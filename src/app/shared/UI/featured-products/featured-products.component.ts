@@ -3,10 +3,11 @@ import { Product } from '@core/models/product.model';
 import { Store } from '@ngrx/store';
 import { filter, Observable } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { availableProductsSelector } from '@core/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { productsSelector } from '@core/store';
+// import { availableProductsSelector } from '@core/store';
 
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy()
 @Component({
   selector: 'masni-handmade-dolls-featured-products',
   templateUrl: './featured-products.component.html',
@@ -19,7 +20,7 @@ export class FeaturedProductsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.products$ = this.store$
-      .select(availableProductsSelector)
+      .select(productsSelector)
       .pipe(filter((products) => !!products));
   }
 

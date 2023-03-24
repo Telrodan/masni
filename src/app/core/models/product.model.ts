@@ -1,6 +1,6 @@
 export interface ProductsDTO {
   data: {
-    products: Product[];
+    product: Product[];
   };
 }
 
@@ -27,16 +27,10 @@ export interface BuiltProduct {
 
 export interface Product {
   _id?: string;
+  categoryId: string;
   name: string;
-  baseProduct: string;
-  price: number;
-  details: {
-    nameEmbroideryCheckbox?: boolean;
-    nameEmbroideryInput?: string;
-    comment?: string;
-  };
-  description: string[];
+  description: string;
   images: string[];
-  category: string;
-  status: string;
+  price: number;
+  stock: number;
 }

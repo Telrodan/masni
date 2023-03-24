@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Product } from '@core/models/product.model';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'masni-handmade-dolls-product-card',
@@ -11,6 +12,7 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 })
 export class ProductCardComponent {
   @Input() product: Product;
+  productImages = environment.productImages;
   public faCartShopping = faCartShopping;
 
   constructor(private router: Router) {}

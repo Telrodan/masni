@@ -4,19 +4,6 @@ import { Store } from '@ngrx/store';
 import { filter, map, Observable } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
-import {
-  faChevronDown,
-  faCartShopping,
-  faHouse,
-  faShop,
-  faPalette,
-  faPhone,
-  faUser,
-  faUserPlus,
-  faRightToBracket,
-  faBars,
-  faXmark
-} from '@fortawesome/free-solid-svg-icons';
 
 import { AuthService } from '@core/services/auth.service';
 import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
@@ -28,20 +15,8 @@ import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.s
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  public isAuthenticated = false;
+  public isAuthenticated$: Observable<boolean>;
   public itemCounter$: Observable<string>;
-
-  public faChevronDown = faChevronDown;
-  public faCartShopping = faCartShopping;
-  public faBars = faBars;
-  public faXmark = faXmark;
-  public faHouse = faHouse;
-  public faShop = faShop;
-  public faPalette = faPalette;
-  public faPhone = faPhone;
-  public faUser = faUser;
-  public faUserPlus = faUserPlus;
-  public faRightToBracket = faRightToBracket;
 
   constructor(
     private authService: AuthService,
@@ -50,15 +25,12 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.isAuthenticated = this.authService.getIsAuthenticated();
+    this.isAuthenticated$ = this.authService.getAuthStatus$();
+
     this.itemCounter$ = this.store$.select(shoppingCartItemsSelector).pipe(
       filter((items) => !!items),
       map((items) => items.length.toString())
     );
-
-    this.authService.getAuthStatus$().subscribe((response) => {
-      this.isAuthenticated = response;
-    });
   }
 
   public closeNavbar(): void {

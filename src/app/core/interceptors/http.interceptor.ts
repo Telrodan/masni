@@ -4,7 +4,8 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HTTP_INTERCEPTORS
 } from '@angular/common/http';
 
 import { Observable, throwError, catchError, tap, finalize } from 'rxjs';
@@ -52,3 +53,7 @@ export class HTTPInterceptor implements HttpInterceptor {
     );
   }
 }
+
+export const HttpInterceptorProvider = [
+  { provide: HTTP_INTERCEPTORS, useClass: HTTPInterceptor, multi: true }
+];

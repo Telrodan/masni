@@ -74,16 +74,9 @@
           class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
           Termékleírás:
         </li>
-        <li
-          class="line-height-3 p-3 border-bottom-1 border-300"
-          *ngFor="let description of product.description">
-          {{ description }}
-        </li>
         <li class="line-height-3 p-3 border-bottom-1 border-300">
-          Töltőanyagként antiallergén szilikonizált poliészter golyókat kap, ami
-          baba barát, és mosható.
+          {{ product.description }}
         </li>
-        <li class="line-height-3 p-3">Szárítógépbe kérlek ne tedd!</li>
       </ol>
     </div>
   </div>
