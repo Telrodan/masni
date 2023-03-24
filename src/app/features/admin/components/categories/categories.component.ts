@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from '@core/models/category.model';
-import { CategoryService } from '@core/services/category.service';
+
 import { MessageService } from 'primeng/api';
 import { filter, Observable, tap } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { addCategory, categoriesSelector, deleteCategory } from '@core/store';
+
+import { CategoryService } from '@core/services/category.service';
+import { categoriesSelector } from '@core/store';
+import { Category } from '@core/models/category.model';
 
 @UntilDestroy()
 @Component({

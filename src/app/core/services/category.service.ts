@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+import { map, Observable, tap } from 'rxjs';
+
+import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
 import { Category } from '@core/models/category.model';
 import { addCategory, deleteCategory } from '@core/store';
-import { Store } from '@ngrx/store';
-import { map, Observable, tap } from 'rxjs';
-import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class CategoryService {
       .pipe(
         map((categoryDTO) => categoryDTO.data),
         tap((category) => {
+          console.log(category);
           category.products = [];
           this.store.dispatch(addCategory({ category }));
         })

@@ -4,8 +4,10 @@ import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { MaterialService } from './material.service';
-import { Product, ProductsDTO } from '@core/models/product.model';
+import { Product } from '@core/models/product.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { Store } from '@ngrx/store';
+import { addProduct } from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +15,19 @@ import { ApiResponse } from '@core/models/api-response.model';
 export class ProductService {
   constructor(
     private apiService: ApiService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private store: Store
   ) {}
 
-  addProduct(formData: FormData) {
-    this.apiService.post('products/add', formData).subscribe();
+  addProduct(product: FormData): Observable<Product> {
+    return this.apiService
+      .post<ApiResponse<Product>>('products/add', product)
+      .pipe(
+        map((productDTO) => productDTO.data),
+        tap((product) => {
+          this.store.dispatch(addProduct({ product }));
+        })
+      );
   }
 
   public getProducts(): Observable<Product[]> {

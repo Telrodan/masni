@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
 import { ProductService } from '@core/services/product.service';
-import { Observable } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { filter, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'masni-handmade-dolls-product',
@@ -14,11 +15,12 @@ export class ProductComponent implements OnInit {
   categories$: Observable<Category[]>;
   uploadedFiles = [];
   productForm: FormGroup;
-  images;
+  images: FileList;
 
   constructor(
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -31,29 +33,47 @@ export class ProductComponent implements OnInit {
       categoryId: new FormControl(null, Validators.required),
       name: new FormControl(null, Validators.required),
       description: new FormControl(null, Validators.required),
-
       price: new FormControl(null, Validators.required),
       stock: new FormControl(null, Validators.required)
     });
   }
 
-  onAdd() {
-    const product = new FormData();
-    product.append('categoryId', this.productForm.get('categoryId').value);
-    product.append('name', this.productForm.get('name').value);
-    product.append('description', this.productForm.get('description').value);
-    for (const img of this.images) {
-      product.append('images', img);
-    }
-    product.append('price', this.productForm.get('price').value);
-    product.append('stock', this.productForm.get('stock').value);
+  onAddProduct(): void {
+    console.log(this.productForm.valid);
+    if (this.productForm.valid) {
+      const rawProduct = new FormData();
+      rawProduct.append('categoryId', this.productForm.get('categoryId').value);
+      rawProduct.append('name', this.productForm.get('name').value);
+      rawProduct.append(
+        'description',
+        this.productForm.get('description').value
+      );
+      for (let i = 0; i < this.images.length; i++) {
+        const image = this.images[i];
+        rawProduct.append('images', image);
+      }
+      rawProduct.append('price', this.productForm.get('price').value);
+      rawProduct.append('stock', this.productForm.get('stock').value);
 
-    this.productService.addProduct(product);
+      this.productService
+        .addProduct(rawProduct)
+        .pipe(
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Siker!',
+              detail: `${this.productForm.get('name').value} hozzáadva`
+            });
+            this.productForm.reset();
+          })
+        )
+        .subscribe();
+    }
   }
 
-  selectImage(event) {
-    if (event.target.files.length > 0) {
-      const files = event.target.files;
+  selectImage(event: Event): void {
+    const files = (event.target as HTMLInputElement).files;
+    if (files.length > 0) {
       this.images = files;
     }
   }

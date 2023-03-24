@@ -15,12 +15,9 @@ export class ProductEffects {
     this.actions$.pipe(
       ofType(getProducts),
       exhaustMap(() =>
-        this.productService.getProducts().pipe(
-          map((products) => getProductsSuccess({ products })),
-          tap((products) => {
-            console.log(products);
-          })
-        )
+        this.productService
+          .getProducts()
+          .pipe(map((products) => getProductsSuccess({ products })))
       )
     )
   );

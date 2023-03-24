@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { getProducts, getProductsSuccess } from '../actions';
+import { addProduct, getProducts, getProductsSuccess } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
 
@@ -14,10 +14,13 @@ export const productReducers = createReducer(
     ...state
   })),
 
-  on(getProductsSuccess, (state, action) => {
-    return {
-      ...state,
-      products: [...action.products]
-    };
-  })
+  on(getProductsSuccess, (state, action) => ({
+    ...state,
+    products: [...action.products]
+  })),
+
+  on(addProduct, (state, action) => ({
+    ...state,
+    products: [...state.products, action.product]
+  }))
 );
