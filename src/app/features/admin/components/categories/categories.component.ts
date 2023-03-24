@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
+import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs';
 
 @Component({
@@ -12,7 +13,10 @@ export class CategoriesComponent implements OnInit {
   categories: Category[];
   categoryName: string;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.categoryService

@@ -39,7 +39,11 @@ import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthService } from '@core/services/auth.service';
-import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
+import {
+  CategoryEffects,
+  MaterialEffects,
+  ShoppingCartEffects
+} from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
 import { AuthModule } from './features/auth/auth.module';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
@@ -93,7 +97,8 @@ const PRIME_NG = [
     EffectsModule.forRoot([
       MaterialEffects,
       ShoppingCartEffects,
-      ProductEffects
+      ProductEffects,
+      CategoryEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
