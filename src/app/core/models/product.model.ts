@@ -1,3 +1,5 @@
+import { Category } from './category.model';
+
 export interface ProductsDTO {
   data: {
     product: Product[];
@@ -29,8 +31,10 @@ export interface Product {
   _id?: string;
   categoryId: string;
   name: string;
+  shortDescription: string;
   description: string;
   images: string[];
+  category?: Category;
   price: number;
   stock: number;
 }

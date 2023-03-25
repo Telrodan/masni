@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { filter, Observable, tap } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
@@ -18,10 +18,14 @@ import { Category } from '@core/models/category.model';
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
   categoryName: string;
+  newCategoryName: string;
+  editedCategory: Category;
+  isDialogVisible = false;
 
   constructor(
     private categoryService: CategoryService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private store: Store
   ) {}
 
@@ -50,18 +54,55 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  onDeleteCategory(id: string, categoryName: string): void {
-    this.categoryService
-      .deleteCategory$(id)
-      .pipe(
-        tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Siker!',
-            detail: `${categoryName} törölve`
-          });
-        })
-      )
-      .subscribe();
+  onDeleteCategory(category: Category): void {
+    this.confirmationService.confirm({
+      message: `Biztos törölni szeretnéd ${category.categoryName} kategóriát?`,
+      header: 'Megerősítés',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Igen',
+      rejectLabel: 'Nem',
+      accept: () => {
+        this.categoryService
+          .deleteCategory$(category._id)
+          .pipe(
+            tap(() => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Siker!',
+                detail: `${category.categoryName} törölve`
+              });
+            })
+          )
+          .subscribe();
+      }
+    });
+  }
+
+  onEditCategory(category: Category): void {
+    this.newCategoryName = category.categoryName;
+    this.editedCategory = {
+      ...category,
+      categoryName: this.newCategoryName
+    };
+    this.isDialogVisible = true;
+  }
+
+  onUpdateCategory(): void {
+    if (this.newCategoryName.trim() !== '') {
+      this.editedCategory.categoryName = this.newCategoryName;
+      this.categoryService
+        .updateCategory$(this.editedCategory)
+        .pipe(
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Siker!',
+              detail: `${this.editedCategory.categoryName} módosítva`
+            });
+            this.isDialogVisible = false;
+          })
+        )
+        .subscribe();
+    }
   }
 }

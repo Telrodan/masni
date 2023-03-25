@@ -31,7 +31,7 @@ export class ApiService {
 
   public patch<T>(endpoint: string, data: any): Observable<T> {
     return <Observable<T>>(
-      this.http.patch(`${environment.apiUrl}${endpoint}`, data)
+      this.http.patch(`${environment.apiUrl}${endpoint}`, data, data.id)
     );
   }
 }

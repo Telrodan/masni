@@ -131,6 +131,15 @@
           <span class="block lg:hidden font-medium">Kosár</span>
         </a>
       </li>
+      <li *ngIf="(isAuthenticated$ | async) && isAdmin">
+        <a
+          pRipple
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          routerLink="admin">
+          <i class="pi pi-shield mr-2"></i>
+          <span>Admin</span>
+        </a>
+      </li>
       <li *ngIf="isAuthenticated$ | async">
         <a
           pRipple

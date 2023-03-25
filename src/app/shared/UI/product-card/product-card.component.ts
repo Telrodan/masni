@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ProductCardComponent {
   @Input() product: Product;
-  productImages = environment.productImages;
+  productImagesUrl = environment.productImagesUrl;
   public faCartShopping = faCartShopping;
 
   constructor(private router: Router) {}

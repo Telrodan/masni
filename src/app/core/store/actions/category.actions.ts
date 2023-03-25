@@ -5,6 +5,7 @@ export enum CategoryActionsTypes {
   GET_CATEGORIES = '[Category] Get Categories',
   GET_CATEGORIES_SUCCESS = '[Category] Get Categories Success',
   ADD_CATEGORY = '[Category] Add Category',
+  UPDATE_CATEGORY = '[Category] Update Category',
   DELETE_CATEGORY = '[Category] Delete Category'
 }
 
@@ -23,4 +24,9 @@ export const addCategory = createAction(
 export const deleteCategory = createAction(
   CategoryActionsTypes.DELETE_CATEGORY,
   props<{ id: string }>()
+);
+
+export const updateCategory = createAction(
+  CategoryActionsTypes.UPDATE_CATEGORY,
+  props<{ category: Category }>()
 );

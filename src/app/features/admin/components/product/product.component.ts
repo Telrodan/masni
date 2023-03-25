@@ -32,6 +32,7 @@ export class ProductComponent implements OnInit {
     this.productForm = new FormGroup({
       categoryId: new FormControl(null, Validators.required),
       name: new FormControl(null, Validators.required),
+      shortDescription: new FormControl(null, Validators.required),
       description: new FormControl(null, Validators.required),
       price: new FormControl(null, Validators.required),
       stock: new FormControl(null, Validators.required)
@@ -39,7 +40,6 @@ export class ProductComponent implements OnInit {
   }
 
   onAddProduct(): void {
-    console.log(this.productForm.valid);
     if (this.productForm.valid) {
       const rawProduct = new FormData();
       rawProduct.append('categoryId', this.productForm.get('categoryId').value);
@@ -47,6 +47,10 @@ export class ProductComponent implements OnInit {
       rawProduct.append(
         'description',
         this.productForm.get('description').value
+      );
+      rawProduct.append(
+        'shortDescription',
+        this.productForm.get('shortDescription').value
       );
       for (let i = 0; i < this.images.length; i++) {
         const image = this.images[i];

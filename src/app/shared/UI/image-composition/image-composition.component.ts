@@ -8,6 +8,6 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ImageCompositionComponent {
   @Input() public images: string[];
-  productImages = environment.productImages;
+  productImagesUrl = environment.productImagesUrl;
   public selectedImageIndex = 0;
 }

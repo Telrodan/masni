@@ -7,7 +7,7 @@ import { MaterialService } from './material.service';
 import { Product } from '@core/models/product.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { Store } from '@ngrx/store';
-import { addProduct } from '@core/store';
+import { addProduct, deleteProduct, updateProduct } from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,25 @@ export class ProductService {
           this.store.dispatch(addProduct({ product }));
         })
       );
+  }
+
+  updateProduct$(product: Product): Observable<Product> {
+    return this.apiService
+      .patch<ApiResponse<Product>>(`products/${product._id}`, product)
+      .pipe(
+        map((productDTO) => productDTO.data),
+        tap((product) => {
+          this.store.dispatch(updateProduct({ product }));
+        })
+      );
+  }
+
+  deleteProduct$(product: Product): Observable<null> {
+    return this.apiService.delete<null>('products', product._id).pipe(
+      tap(() => {
+        this.store.dispatch(deleteProduct({ product }));
+      })
+    );
   }
 
   public getProducts(): Observable<Product[]> {

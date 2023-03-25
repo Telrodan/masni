@@ -3,7 +3,8 @@ import {
   addCategory,
   deleteCategory,
   getCategories,
-  getCategoriesSuccess
+  getCategoriesSuccess,
+  updateCategory
 } from '../actions';
 import { CategoryState } from '../models/category-state.model';
 
@@ -31,6 +32,18 @@ export const categoryReducers = createReducer(
     const index = state.categories.findIndex((item) => item._id === action.id);
     const categories = [...state.categories];
     categories.splice(index, 1);
+    return {
+      ...state,
+      categories
+    };
+  }),
+
+  on(updateCategory, (state, action) => {
+    const index = state.categories.findIndex(
+      (category) => category._id === action.category._id
+    );
+    const categories = [...state.categories];
+    categories.splice(index, 1, action.category);
     return {
       ...state,
       categories
