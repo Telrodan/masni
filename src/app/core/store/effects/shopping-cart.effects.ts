@@ -26,14 +26,13 @@ export class ShoppingCartEffects {
     this.actions$.pipe(
       ofType(getShoppingCartItems),
       exhaustMap(() =>
-        this.shoppingCartService.getUserShoppingCartItems().pipe(
-          tap((items) => {
-            console.log(items);
-          }),
-          map((shoppingCartItems) =>
-            getShoppingCartItemsSuccess({ shoppingCartItems })
+        this.shoppingCartService
+          .getUserShoppingCartItems()
+          .pipe(
+            map((shoppingCartItems) =>
+              getShoppingCartItemsSuccess({ shoppingCartItems })
+            )
           )
-        )
       )
     )
   );

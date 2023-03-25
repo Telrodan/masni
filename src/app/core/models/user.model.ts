@@ -1,3 +1,5 @@
+import { ShoppingCartItem } from './shopping-cart.model';
+
 interface Address {
   street: string;
   city: string;
@@ -12,6 +14,7 @@ export class User {
   phone: string;
   password?: string;
   passwordConfirm?: string;
+  shoppingCart?: ShoppingCartItem[];
   address: Address;
 
   constructor(data: any) {

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'masni-handmade-dolls-image-composition',
