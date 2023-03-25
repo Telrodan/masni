@@ -39,26 +39,24 @@ export class ShoppingCartService {
   }
 
   public addReadyProductToShoppingCart(product: Product): void {
-    const item = this.createReadyProductForShoppingCart(product);
-    this.addItemToShoppingCart(item);
+    // const item = this.createReadyProductForShoppingCart(product);
+    // this.addItemToShoppingCart(item);
   }
 
-  private createReadyProductForShoppingCart(
-    product: Product
-  ): ShoppingCartItem {
+  private createReadyProductForShoppingCart(product: Product): void {
     const userId = this.cookieService.getCookie('userId');
-    const item: ShoppingCartItem = {
-      ownerId: userId,
-      name: product.name,
-      comment: product.details.comment,
-      details: {
-        baseProduct: product.baseProduct,
-        isExtraNameEmbroidery: product.details.nameEmbroideryCheckbox,
-        nameEmbroideryText: product.details.nameEmbroideryInput
-      },
-      price: product.price
-    };
-    return item;
+    // const item: ShoppingCartItem = {
+    //   ownerId: userId,
+    //   name: product.name,
+    //   comment: product.details.comment,
+    //   details: {
+    //     baseProduct: product.baseProduct,
+    //     isExtraNameEmbroidery: product.details.nameEmbroideryCheckbox,
+    //     nameEmbroideryText: product.details.nameEmbroideryInput
+    //   },
+    //   price: product.price
+    // };
+    // return item;
   }
 
   public addBuiltProductToShoppingCart(product: BuiltProduct): void {

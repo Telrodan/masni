@@ -2,7 +2,8 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -24,3 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authRequest);
   }
 }
+
+export const AuthInterceptorProvider = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+];

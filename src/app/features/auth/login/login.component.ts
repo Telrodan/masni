@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     };
 
     this.authService
-      .loginUser(authData)
+      .login$(authData)
       .pipe(
         tap(() => {
           this.messageService.add({
@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
             summary: 'Siker!',
             detail: 'Sikeres belépés, átirányítva a főoldra'
           });
-          this.router.navigate(['/']);
           this.loginForm.reset();
         })
       )
@@ -52,14 +51,8 @@ export class LoginComponent implements OnInit {
   public createForm(): void {
     const emailRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     this.loginForm = new FormGroup({
-      email: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(emailRegex)
-      ]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(8)
-      ])
+      email: new FormControl(null, [Validators.required, Validators.pattern(emailRegex)]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)])
     });
   }
 }

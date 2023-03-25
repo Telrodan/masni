@@ -7,13 +7,16 @@
       style="border-radius: 1.5rem; left: 1rem; top: 1rem"
       >{{ product.category | titlecase }}</span
     > -->
-    <img [src]="product.images[0]" class="w-full" />
+    <img [src]="productImagesUrl + product.images[0]" class="w-full" />
   </div>
   <p class="name">{{ product.name | titlecase }}</p>
   <p class="description text-600">
-    {{ product.description[0] }}
+    {{ product.shortDescription }}
   </p>
-  <p class="price text-primary">{{ product.price }} Ft</p>
+  <div class="flex align-items-center justify-content-between">
+    <p class="price text-primary">{{ product.price }} Ft</p>
+    <p class="primary-paragraph">Készleten: {{ product.stock }}</p>
+  </div>
   <button class="cart-button primary-button shadow-2">
     <i class="pi pi-shopping-cart"></i> Kosárba
   </button>

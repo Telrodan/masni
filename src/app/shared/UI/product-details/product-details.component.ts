@@ -69,24 +69,23 @@ export class ProductDetailsComponent implements OnInit {
       this.builderForm.get('nameEmbroideryInput').value
     );
 
-    const item: Product = {
-      ...product,
-      price: this.price,
-      details: {
-        nameEmbroideryCheckbox: this.builderForm.get('nameEmbroideryCheckbox')
-          .value,
-        nameEmbroideryInput: name,
-        comment: this.builderForm.get('comment').value
-      }
-    };
+    // const item: Product = {
+    //   // ...product,
+    //   // price: this.price,
+    //   // details: {
+    //   //   nameEmbroideryCheckbox: this.builderForm.get('nameEmbroideryCheckbox')
+    //   //     .value,
+    //   //   nameEmbroideryInput: name,
+    //   //   comment: this.builderForm.get('comment').value
+    //   // }
+    // };
 
-    this.shoppingCartService.addReadyProductToShoppingCart(item);
+    // this.shoppingCartService.addReadyProductToShoppingCart(item);
   }
 
   private createForm(product: Product): void {
     this.builderForm = new FormGroup({
-      baseProduct: new FormControl(product.baseProduct),
-      nameEmbroideryCheckbox: new FormControl(false, Validators.required),
+      nameEmbroideryCheckbox: new FormControl(false),
       nameEmbroideryInput: new FormControl(''),
       comment: new FormControl('')
     });

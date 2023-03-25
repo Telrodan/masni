@@ -98,7 +98,7 @@
     </ul>
     <ul
       class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row border-top-1 border-400 lg:border-top-none">
-      <li *ngIf="!isAuthenticated">
+      <li *ngIf="(isAuthenticated$ | async) !== true">
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
@@ -108,7 +108,7 @@
           <span>Regisztráció</span>
         </a>
       </li>
-      <li *ngIf="!isAuthenticated">
+      <li *ngIf="(isAuthenticated$ | async) !== true">
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
@@ -118,7 +118,7 @@
           <span>Belépés</span>
         </a>
       </li>
-      <li *ngIf="isAuthenticated">
+      <li *ngIf="isAuthenticated$ | async">
         <a
           pRipple
           class="shopping-cart flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 border-round cursor-pointer transition-colors transition-duration-150"
@@ -131,7 +131,16 @@
           <span class="block lg:hidden font-medium">Kosár</span>
         </a>
       </li>
-      <li *ngIf="isAuthenticated">
+      <li *ngIf="(isAuthenticated$ | async) && isAdmin">
+        <a
+          pRipple
+          class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
+          routerLink="admin">
+          <i class="pi pi-shield mr-2"></i>
+          <span>Admin</span>
+        </a>
+      </li>
+      <li *ngIf="isAuthenticated$ | async">
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
@@ -140,7 +149,7 @@
           <span>Profil</span>
         </a>
       </li>
-      <li *ngIf="isAuthenticated">
+      <li *ngIf="isAuthenticated$ | async">
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"

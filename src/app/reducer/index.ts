@@ -1,4 +1,5 @@
-import { materialReducers, userReducers } from '@core/store';
+import { categoryReducers, materialReducers, userReducers } from '@core/store';
+import { CategoryState } from '@core/store/models/category-state.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import { ProductState } from '@core/store/models/product-state.model';
 import { ShoppingCartState } from '@core/store/models/shopping-cart-state.model';
@@ -13,6 +14,7 @@ export interface AppState {
   materials: MaterialState;
   shoppingCart: ShoppingCartState;
   products: ProductState;
+  categories: CategoryState;
   user: UserState;
 }
 
@@ -20,6 +22,7 @@ export const reducers: ActionReducerMap<AppState> = {
   materials: materialReducers,
   shoppingCart: shoppingCartReducers,
   products: productReducers,
+  categories: categoryReducers,
   user: userReducers
 };
 

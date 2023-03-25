@@ -7,8 +7,9 @@ import jwt_decode from 'jwt-decode';
 
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
-import { AuthData, LoginDTO, TokenPayload } from '@core/models/auth-data.model';
+import { AuthData, TokenPayload } from '@core/models/auth-data.model';
 import { User } from '@core/models/user.model';
+import { ApiResponse } from '@core/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,33 @@ export class AuthService {
     private cookieService: CookieService
   ) {}
 
+  public signup$(newUser: User): Observable<ApiResponse<string>> {
+    return this.apiService.post<ApiResponse<string>>('auth/signup', newUser);
+  }
+
+  public login$(authData: AuthData): Observable<ApiResponse<string>> {
+    return this.apiService.post<ApiResponse<string>>('auth/login', authData).pipe(
+      tap((response) => {
+        this.token = response.data;
+        if (this.token) {
+          this.tokenPayload = jwt_decode(response.data);
+          this.setAuthData();
+          this.setAuthenticationTimer(this.tokenPayload.expiresIn);
+          this.router.navigate(['/']);
+        }
+      })
+    );
+  }
+
+  public logout(): void {
+    clearTimeout(this.tokenTimer);
+    this.token = null;
+    this.tokenPayload = null;
+    this.cookieService.clearCookies();
+    this.router.navigate(['/']);
+    this.setAuthStatus(false);
+  }
+
   public getIsAuthenticated(): boolean {
     return this.isAuthenticated;
   }
@@ -35,81 +63,43 @@ export class AuthService {
     return this.authStatusListener.asObservable();
   }
 
-  public signupUser(newUser: User): Observable<User> {
-    return this.apiService.post('auth/signup', newUser);
-  }
-
-  public loginUser(authData: AuthData): Observable<LoginDTO> {
-    return this.apiService.post<LoginDTO>('auth/login', authData).pipe(
-      tap((loginDTO) => {
-        this.token = loginDTO.data.token;
-        if (!this.token) return;
-        this.tokenPayload = jwt_decode(loginDTO.data.token);
-        this.setAuthData();
-        this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-        this.isAuthenticated = true;
-        this.authStatusListener.next(this.isAuthenticated);
-      })
-    );
-  }
-
-  public logout(): void {
-    this.token = null;
-    this.isAuthenticated = false;
+  private setAuthStatus(status: boolean): void {
+    this.isAuthenticated = status;
     this.authStatusListener.next(this.isAuthenticated);
-    this.cookieService.clearCookies();
-    this.router.navigate(['/']);
-    clearTimeout(this.tokenTimer);
   }
 
-  public forgotPassword$(email: string): Observable<null> {
-    return this.apiService.post<null>('auth/forgotPassword', email).pipe(
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Siker!',
-          detail: 'Az emailt elküldtük.'
-        });
-      })
-    );
+  public forgotPassword$(email: string): Observable<ApiResponse<null>> {
+    return this.apiService.post<ApiResponse<null>>('auth/forgotPassword', email);
   }
 
   public resetPassword$(
     password: string,
     passwordConfirm: string,
     resetToken: string
-  ): Observable<LoginDTO> {
+  ): Observable<ApiResponse<string>> {
     return this.apiService
-      .patch<LoginDTO>(`users/resetPassword/${resetToken}`, {
+      .patch<ApiResponse<string>>(`auth/resetPassword/${resetToken}`, {
         password,
         passwordConfirm
       })
       .pipe(
-        tap((loginDTO) => {
-          this.token = loginDTO.data.token;
-          if (!this.token) return;
-          this.tokenPayload = jwt_decode(loginDTO.data.token);
-          this.setAuthData();
-          this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-          this.isAuthenticated = true;
-          this.authStatusListener.next(this.isAuthenticated);
-          this.router.navigate(['home']);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Siker!',
-            detail: 'Új jelszó beállítva.'
-          });
+        tap((response) => {
+          this.token = response.data;
+          if (this.token) {
+            this.tokenPayload = jwt_decode(response.data);
+            this.setAuthData();
+            this.setAuthenticationTimer(this.tokenPayload.expiresIn);
+            this.router.navigate(['/']);
+          }
         })
       );
   }
 
   private setAuthData(): void {
     const currentDate = new Date();
-    const expirationDate = new Date(
-      currentDate.getTime() + this.tokenPayload.expiresIn * 1000
-    );
-
+    const expirationDate = new Date(currentDate.getTime() + this.tokenPayload.expiresIn * 1000);
     this.saveAuthenticationData(expirationDate);
+    this.setAuthStatus(true);
   }
 
   private saveAuthenticationData(expirationDate: Date): void {
@@ -141,12 +131,9 @@ export class AuthService {
 
   public autoAuthentication(): void {
     const authenticationInformation = this.getAuthenticationData();
-    console.log(authenticationInformation);
     if (!authenticationInformation) return;
     const currentDate = new Date();
-    const expiresIn =
-      authenticationInformation.expirationDate.getTime() -
-      currentDate.getTime();
+    const expiresIn = authenticationInformation.expirationDate.getTime() - currentDate.getTime();
     if (expiresIn > 0) {
       this.setAuthenticationTimer(expiresIn / 1000);
       this.isAuthenticated = true;

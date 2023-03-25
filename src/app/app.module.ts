@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -19,11 +19,12 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor } from './core/interceptors/auth-interceptor';
-import { HTTPInterceptor } from './core/interceptors/http.interceptor';
+import { AuthInterceptorProvider } from './core/interceptors/auth-interceptor';
+import { HttpInterceptorProvider } from './core/interceptors/http.interceptor';
 import { LandingComponent } from './features/landing/landing.component';
 import { LandingBrandsComponent } from './features/landing/landing-brands/landing-brands.component';
 import { LandingAboutUsComponent } from './features/landing/landing-about-us/landing-about-us.component';
@@ -39,7 +40,11 @@ import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy
 import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthService } from '@core/services/auth.service';
-import { MaterialEffects, ShoppingCartEffects } from '@core/store/effects';
+import {
+  CategoryEffects,
+  MaterialEffects,
+  ShoppingCartEffects
+} from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
 import { AuthModule } from './features/auth/auth.module';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
@@ -55,7 +60,8 @@ const PRIME_NG = [
   ButtonModule,
   ToastModule,
   ConfirmDialogModule,
-  BadgeModule
+  BadgeModule,
+  SelectButtonModule
 ];
 
 @NgModule({
@@ -85,15 +91,16 @@ const PRIME_NG = [
     ImageModule,
     MatSnackBarModule,
     ...PRIME_NG,
+    StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
     }),
-    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([
       MaterialEffects,
       ShoppingCartEffects,
-      ProductEffects
+      ProductEffects,
+      CategoryEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
@@ -108,11 +115,10 @@ const PRIME_NG = [
         };
       }
     },
+    AuthInterceptorProvider,
+    HttpInterceptorProvider,
     MessageService,
     ConfirmationService,
-
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HTTPInterceptor, multi: true },
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

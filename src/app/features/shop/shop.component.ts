@@ -1,25 +1,49 @@
 import { Component, OnInit } from '@angular/core';
+import { Category } from '@core/models/category.model';
 import { Product } from '@core/models/product.model';
-import { availableProductsSelector } from '@core/store';
+import { categoriesSelector, productsSelector } from '@core/store';
+// import { availableProductsSelector } from '@core/store';
 
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { Observable, filter, tap } from 'rxjs';
+import { Observable, filter, tap, map } from 'rxjs';
 
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy()
 @Component({
   selector: 'masni-handmade-dolls-shop',
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-  public availableProducts$: Observable<Product[]>;
+  products$: Observable<Product[]>;
+  categories$: Observable<Category[]>;
 
-  constructor(private store$: Store) {}
+  constructor(private store: Store) {}
 
   public ngOnInit(): void {
-    this.availableProducts$ = this.store$
-      .select(availableProductsSelector)
-      .pipe(filter((products) => !!products));
+    this.categories$ = this.store.select(categoriesSelector).pipe(
+      filter((categories) => !!categories),
+      map((categories) => {
+        const all: Category = {
+          categoryName: 'Összes'
+        };
+        categories = categories.filter(
+          (category) => category.categoryName !== 'egyedi termékek'
+        );
+        categories.unshift(all);
+        return categories;
+      })
+    );
+
+    this.products$ = this.store.select(productsSelector).pipe(
+      filter((products) => !!products),
+      map((products) => {
+        products = products.filter(
+          (product) => product.category.categoryName !== 'egyedi termékek'
+        );
+        return products;
+      }),
+      untilDestroyed(this)
+    );
   }
 }

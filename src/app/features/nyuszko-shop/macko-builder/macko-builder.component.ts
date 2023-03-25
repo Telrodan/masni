@@ -24,7 +24,7 @@ export class MackoBuilderComponent implements OnInit {
   public sortedMaterials$: Observable<SortedMaterials>;
   public price = 0;
   public builderForm: FormGroup = new FormGroup({});
-  public productImages = [
+  public productImagesUrl = [
     '../../../../assets/images/nyuszko-shop/macko-builder/image-1.jpg',
     '../../../../assets/images/nyuszko-shop/macko-builder/image-2.jpg',
     '../../../../assets/images/nyuszko-shop/macko-builder/image-3.jpg'

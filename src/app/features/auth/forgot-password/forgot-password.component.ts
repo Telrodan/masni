@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
+import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs';
 
 @Component({
@@ -13,7 +14,10 @@ export class ForgotPasswordComponent implements OnInit {
   public forgotPasswordForm: FormGroup;
   public isEmailSent = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   public ngOnInit(): void {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -31,6 +35,11 @@ export class ForgotPasswordComponent implements OnInit {
       .pipe(
         tap(() => {
           this.isEmailSent = true;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: 'Az emailt elküldtük.'
+          });
         })
       )
       .subscribe();
