@@ -61,7 +61,7 @@ export class MackoBuilderComponent implements OnInit {
   public onSubmit(): void {
     if (!this.builderForm.valid) return;
     const item = { ...this.builderForm.value, price: this.price };
-    this.shoppingCartService.addBuiltProductToShoppingCart(item);
+    // this.shoppingCartService.addBuiltProductToShoppingCart(item);
   }
 
   private createForm(product: MackoProduct): void {

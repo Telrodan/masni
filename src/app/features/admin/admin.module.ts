@@ -23,6 +23,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { ProductComponent } from './components/product/product.component';
 import { AllProductComponent } from './components/all-product/all-product.component';
+import { UsersComponent } from './components/users/users.component';
 
 const PRIME_NG = [
   AccordionModule,
@@ -47,7 +48,8 @@ const PRIME_NG = [
     ReportsComponent,
     CategoriesComponent,
     ProductComponent,
-    AllProductComponent
+    AllProductComponent,
+    UsersComponent
   ],
   imports: [
     CommonModule,

@@ -43,7 +43,8 @@ import { AuthService } from '@core/services/auth.service';
 import {
   CategoryEffects,
   MaterialEffects,
-  ShoppingCartEffects
+  ShoppingCartEffects,
+  UserEffects
 } from '@core/store/effects';
 import { ProductEffects } from '@core/store/effects/product.effects';
 import { AuthModule } from './features/auth/auth.module';
@@ -100,7 +101,8 @@ const PRIME_NG = [
       MaterialEffects,
       ShoppingCartEffects,
       ProductEffects,
-      CategoryEffects
+      CategoryEffects,
+      UserEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

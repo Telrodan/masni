@@ -1,5 +1,7 @@
-<div class="px-4 py-8 md:px-6 lg:px-8" *ngIf="product">
-  <div class="grid">
+<div
+  class="px-4 py-8 md:px-6 lg:px-8"
+  *ngIf="productData$ | async as productData">
+  <div class="grid" *ngIf="productData.product as product">
     <div class="w-full lg:w-5">
       <masni-handmade-dolls-image-composition
         [images]="product.images"></masni-handmade-dolls-image-composition>
@@ -7,7 +9,10 @@
 
     <div class="col-12 lg:col-6 py-3 lg:pl-6">
       <div class="flex align-items-center mb-4">
-        <h1 class="heading-primary">{{ product.name | titlecase }}</h1>
+        <div class="flex-column">
+          <h1 class="heading-primary">{{ product.name | titlecase }}</h1>
+          <p class="paragraph-primary">{{ product.shortDescription }}</p>
+        </div>
         <!-- <i
           class="pi ml-3 cursor-pointer"
           [ngClass]="{
@@ -17,10 +22,10 @@
           (click)="liked1 = !liked1"></i> -->
       </div>
       <span class="text-primary font-medium text-3xl block mb-5"
-        >{{ price }} Ft</span
+        >{{ productData.price }} Ft</span
       >
 
-      <form (submit)="onSubmit(product)" [formGroup]="builderForm">
+      <form (submit)="onAddToCart(product)" [formGroup]="builderForm">
         <div class="field-checkbox">
           <p-checkbox
             [binary]="true"
@@ -59,7 +64,7 @@
         <button
           class="primary-button shadow-2 mb-3 w-full"
           *ngIf="isAuthenticated$ | async">
-          <fa-icon [icon]="faShoppingCart"></fa-icon>
+          <i class="pi pi-shopping-cart"></i>
           Kosárba
         </button>
         <button

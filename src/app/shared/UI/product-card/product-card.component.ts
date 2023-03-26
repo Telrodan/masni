@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Product } from '@core/models/product.model';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'masni-handmade-dolls-product-card',

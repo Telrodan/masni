@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { getCategories, getMaterials, getProducts } from '@core/store';
+import { getCategories, getMaterials, getProducts, getUser } from '@core/store';
 import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
 
 import { Store } from '@ngrx/store';
@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
         switchMap(() => of(this.store$.dispatch(getProducts()))),
         switchMap(() => this.authService.getAuthStatus$()),
         filter((isAuth) => isAuth),
+        switchMap(() => of(this.store$.dispatch(getUser()))),
         switchMap(() => of(this.store$.dispatch(getShoppingCartItems())))
       )
       .subscribe();
