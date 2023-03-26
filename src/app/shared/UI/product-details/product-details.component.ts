@@ -4,70 +4,105 @@ import { ActivatedRoute } from '@angular/router';
 
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
-import { filter, map, Observable, switchMap, tap } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  filter,
+  map,
+  Observable,
+  startWith,
+  switchMap,
+  tap
+} from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
-import { productByIdSelector } from '@core/store';
+import { productByIdSelector, userSelector } from '@core/store';
 import { Product } from '@core/models/product.model';
-import { formatNameInput } from '../../util/input-formatter';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ProductExtra } from '@core/models/product-extra.model';
 
+interface ProductData {
+  product: Product;
+  price: number;
+}
+
+@UntilDestroy()
 @Component({
   selector: 'masni-handmade-dolls-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  public product: Product;
-  public price = 0;
-  public builderForm: FormGroup = new FormGroup({});
-  public isAuthenticated$: Observable<boolean>;
-
-  public images = [
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-1.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-2.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-3.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-4.jpg'
-  ];
-  public faShoppingCart = faShoppingCart;
+  userCartId: string;
+  isAuthenticated$: Observable<boolean>;
+  productData$: Observable<ProductData>;
+  builderForm: FormGroup;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private store$: Store,
+    private store: Store,
     private shoppingCartService: ShoppingCartService,
     private productService: ProductService
   ) {}
 
   public ngOnInit(): void {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
-    this.route.params
+
+    this.initForm();
+
+    this.productData$ = this.route.params.pipe(
+      map((params) => params['id']),
+      switchMap((productId) =>
+        combineLatest([
+          this.store
+            .select(productByIdSelector(productId))
+            .pipe(filter((product) => !!product)),
+          this.builderForm.valueChanges.pipe(
+            startWith(0),
+            debounceTime(300),
+            map((value) => (value.nameEmbroideryCheckbox ? 500 : 0))
+          )
+        ])
+      ),
+      map(([product, price]) => ({
+        product,
+        price: product.price + price
+      }))
+    );
+
+    this.store
+      .select(userSelector)
       .pipe(
-        map((params) => params['id']),
-        switchMap((productId) =>
-          this.store$.select(productByIdSelector(productId))
-        ),
-        filter((product) => !!product),
-        tap((product) => {
-          this.product = product;
-          this.createForm(this.product);
+        filter((user) => !!user),
+        map((user) => user.shoppingCart._id),
+        tap((id) => {
+          this.userCartId = id;
         }),
-        switchMap(() => this.builderForm.valueChanges),
-        tap(
-          (changes) =>
-            (this.price = this.productService.getProductPrice(changes))
-        )
+        untilDestroyed(this)
       )
       .subscribe();
   }
 
-  public onSubmit(product: Product): void {
-    if (!this.builderForm.valid) return;
+  public onAddToCart(product: Product): void {
+    let nameEmbroidery = '';
 
-    const name = formatNameInput(
-      this.builderForm.get('nameEmbroideryInput').value
-    );
+    if (this.builderForm.value.nameEmbroideryCheckbox) {
+      nameEmbroidery = this.builderForm.value.nameEmbroideryInput.trim();
+    }
+
+    const productExtra: ProductExtra = {
+      comment: this.builderForm.value.comment,
+      nameEmbroidery
+    };
+
+    this.shoppingCartService
+      .addItemToCart(product, productExtra)
+      .subscribe((res) => {
+        console.log(res);
+      });
 
     // const item: Product = {
     //   // ...product,
@@ -83,26 +118,11 @@ export class ProductDetailsComponent implements OnInit {
     // this.shoppingCartService.addReadyProductToShoppingCart(item);
   }
 
-  private createForm(product: Product): void {
+  private initForm(): void {
     this.builderForm = new FormGroup({
       nameEmbroideryCheckbox: new FormControl(false),
       nameEmbroideryInput: new FormControl(''),
       comment: new FormControl('')
     });
-
-    this.price = this.productService.getProductPrice(this.builderForm.value);
-    console.log(this.price);
   }
-
-  // public getProductDetails(): void {
-  //   const currentUrl = this.location.path();
-  //   const urlSegments = currentUrl.split('/');
-  //   const lastSegment = urlSegments[urlSegments.length - 1];
-  //   const details = this.detailsArr.find(
-  //     (item: ProductDetails) => item.slug === lastSegment
-  //   );
-  //   if (details) {
-  //     this.productDetails = details;
-  //   }
-  // }
 }

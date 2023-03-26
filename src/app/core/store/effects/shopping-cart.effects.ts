@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ShoppingCartService } from '@core/services/shopping-cart.service';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  filter,
-  switchMap,
-  tap,
-  map,
-  mergeMap,
-  Observable,
-  exhaustMap
-} from 'rxjs';
+import { map, exhaustMap } from 'rxjs';
+
+import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import {
   getShoppingCartItems,
   getShoppingCartItemsSuccess
@@ -27,7 +21,7 @@ export class ShoppingCartEffects {
       ofType(getShoppingCartItems),
       exhaustMap(() =>
         this.shoppingCartService
-          .getUserShoppingCartItems()
+          .getUserCartItems()
           .pipe(
             map((shoppingCartItems) =>
               getShoppingCartItemsSuccess({ shoppingCartItems })

@@ -1,4 +1,4 @@
-import { ShoppingCartItem } from '@core/models/shopping-cart.model';
+import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 import { createAction, props } from '@ngrx/store';
 
 export enum ShoppingCartActionTypes {

@@ -12,6 +12,12 @@ import { ApiService } from './api.service';
 export class UserService {
   constructor(private apiService: ApiService, private store: Store) {}
 
+  getUser$(): Observable<User> {
+    return this.apiService
+      .get<ApiResponse<User>>('users/getMe')
+      .pipe(map((userDTO) => userDTO.data));
+  }
+
   getAllUsers$(): Observable<User[]> {
     return this.apiService.get<ApiResponse<User[]>>('users').pipe(
       map((usersDTO) => usersDTO.data),

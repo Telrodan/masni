@@ -1,7 +1,5 @@
-<div
-  class="shadow-2 p-3 surface-card border-round product-card max-w-25rem"
-  (click)="productDetails()">
-  <div class="relative mb-3">
+<div class="product-card max-w-25rem" (click)="productDetails()">
+  <div class="relative">
     <!-- <span
       class="surface-card text-900 shadow-2 px-3 py-2 absolute"
       style="border-radius: 1.5rem; left: 1rem; top: 1rem"
@@ -9,15 +7,17 @@
     > -->
     <img [src]="productImagesUrl + product.images[0]" class="w-full" />
   </div>
-  <p class="name">{{ product.name | titlecase }}</p>
+  <p class="name my-2">{{ product.name | titlecase }}</p>
   <p class="description text-600">
     {{ product.shortDescription }}
   </p>
   <div class="flex align-items-center justify-content-between">
     <p class="price text-primary">{{ product.price }} Ft</p>
-    <p class="primary-paragraph">Készleten: {{ product.stock }}</p>
+    <p class="primary-paragraph hidden md:block">
+      Készleten: {{ product.stock }}
+    </p>
   </div>
-  <button class="cart-button primary-button shadow-2">
-    <i class="pi pi-shopping-cart"></i> Kosárba
+  <button class="cart-button primary-button shadow-2 hidden sm:block">
+    <i class="pi pi-shopping-cart"></i>
   </button>
 </div>

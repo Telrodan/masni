@@ -8,7 +8,7 @@ import {
 } from 'primeng/api';
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 
-import { ShoppingCartItem } from '@core/models/shopping-cart.model';
+import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
 
 import { filter, map, Observable, tap, first } from 'rxjs';
@@ -18,6 +18,12 @@ import { Coupon } from '@core/models/coupon.model';
 import { CouponService } from 'src/app/core/services/coupon.service';
 import { OrderService } from 'src/app/core/services/order.service';
 import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service';
+import { environment } from 'src/environments/environment';
+
+interface ShoppingCartData {
+  items: ShoppingCartItem[];
+  price: number;
+}
 
 @Component({
   selector: 'masni-handmade-dolls-shopping-cart',
@@ -25,13 +31,8 @@ import { ShoppingCartService } from 'src/app/core/services/shopping-cart.service
   styleUrls: ['./shopping-cart.component.scss']
 })
 export class ShoppingCartComponent implements OnInit {
-  public products$: Observable<ShoppingCartItem[]>;
-  public coupons: Coupon[];
-  public discount = 0;
-  public totalPrice = 0;
-  private nyuszkoSett = ['nyuszkó', 'nyuszkó-szundikendő'];
-  private mackoSett = ['mackó', 'mackó-szundikendő'];
-  public faCreditCard = faCreditCard;
+  shoppingCartData$: Observable<ShoppingCartData>;
+  productImagesUrl = environment.productImagesUrl;
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -43,14 +44,18 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.products$ = this.store$.select(shoppingCartItemsSelector).pipe(
+    this.shoppingCartData$ = this.store$.select(shoppingCartItemsSelector).pipe(
       filter((items) => !!items),
-      tap((items) => {
-        this.totalPrice = 0;
+      map((items) => {
+        let price = 0;
         items.map((item) => {
-          console.log(item);
-          this.totalPrice += item.price;
+          price += item.price;
         });
+
+        return {
+          items,
+          price
+        };
       })
     );
 
@@ -64,56 +69,71 @@ export class ShoppingCartComponent implements OnInit {
     //     })
     //   )
     //   .subscribe();
+    // }
+
+    // private checkSettCouponConditions(): boolean {
+    //   this.discount = 0;
+    //   let isValid = false;
+    //   let nyuszkoSettCounter = 0;
+    //   let mackoSettCounter = 0;
+    //   this.orders.forEach((order) => {
+    //     if (this.nyuszkoSett.includes(order.productName)) nyuszkoSettCounter++;
+    //     if (this.mackoSett.includes(order.productName)) mackoSettCounter++;
+    //   });
+    //   if (nyuszkoSettCounter >= 2) isValid = true;
+    //   if (mackoSettCounter >= 2) isValid = true;
+    //   return isValid;
+    // }
   }
 
-  // private checkSettCouponConditions(): boolean {
-  //   this.discount = 0;
-  //   let isValid = false;
-  //   let nyuszkoSettCounter = 0;
-  //   let mackoSettCounter = 0;
-  //   this.orders.forEach((order) => {
-  //     if (this.nyuszkoSett.includes(order.productName)) nyuszkoSettCounter++;
-  //     if (this.mackoSett.includes(order.productName)) mackoSettCounter++;
-  //   });
-  //   if (nyuszkoSettCounter >= 2) isValid = true;
-  //   if (mackoSettCounter >= 2) isValid = true;
-  //   return isValid;
-  // }
-
-  public onDeleteOrder(product: ShoppingCartItem): void {
+  onDeleteOrder(item: ShoppingCartItem): void {
     const productName =
-      product.name.charAt(0).toUpperCase() + product.name.slice(1);
+      item.product['name'].charAt(0).toUpperCase() +
+      item.product['name'].slice(1);
 
     this.confirmationService.confirm({
-      message: `Biztos törölni szeretnéd ${productName} terméket, ${product.price} Ft értékben?`,
+      message: `Biztos törölni szeretnéd ${productName} terméket, ${item.price} Ft értékben?`,
       header: 'Megerősítés',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Igen',
       rejectLabel: 'Nem',
       accept: () => {
-        this.shoppingCartService.deleteProductFromCart(product);
+        this.shoppingCartService
+          .deleteItemFromCart(item)
+          .pipe(
+            tap(() => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Siker!',
+                detail: `${
+                  productName + ` termék törölve, ${item.price} Ft értékben.`
+                }`
+              });
+            })
+          )
+          .subscribe();
       }
     });
-
-    // this.orderService
-    //   .deleteOrder(id)
-    //   .pipe(
-    //     tap(() => {
-    //       const index = this.orders.findIndex((order) => order.id === id);
-    //       this.discountedCartPrice -= this.orders[index].price;
-    //       this.originalCartPrice -= this.orders[index].price;
-    //       this.orders.splice(index, 1);
-    //       if (!this.checkSettCouponConditions()) {
-    //         this.discountedCartPrice = this.originalCartPrice;
-    //       }
-    //     }),
-    //     takeUntil(this.destroy)
-    //   )
-    //   .subscribe(() => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Termék törölve!'
-    //     });
-    //   });
   }
+
+  // this.orderService
+  //   .deleteOrder(id)
+  //   .pipe(
+  //     tap(() => {
+  //       const index = this.orders.findIndex((order) => order.id === id);
+  //       this.discountedCartPrice -= this.orders[index].price;
+  //       this.originalCartPrice -= this.orders[index].price;
+  //       this.orders.splice(index, 1);
+  //       if (!this.checkSettCouponConditions()) {
+  //         this.discountedCartPrice = this.originalCartPrice;
+  //       }
+  //     }),
+  //     takeUntil(this.destroy)
+  //   )
+  //   .subscribe(() => {
+  //     this.messageService.add({
+  //       severity: 'success',
+  //       summary: 'Termék törölve!'
+  //     });
+  //   });
 }
