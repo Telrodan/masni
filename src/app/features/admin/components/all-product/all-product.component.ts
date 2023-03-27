@@ -3,8 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from '@core/models/category.model';
 import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
-import { categoriesSelector, productsSelector } from '@core/store';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import {
+  categoriesSelector,
+  getCategories,
+  productsSelector
+} from '@core/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { combineLatest, filter, map, Observable, tap } from 'rxjs';
@@ -97,6 +101,7 @@ export class AllProductComponent implements OnInit {
                 summary: 'Siker!',
                 detail: `${product.name} törölve`
               });
+              this.store.dispatch(getCategories());
             })
           )
           .subscribe();

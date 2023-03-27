@@ -30,10 +30,9 @@ export class CategoriesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.store.select(categoriesSelector).pipe(
-      filter((categories) => !!categories),
-      untilDestroyed(this)
-    );
+    this.categories$ = this.store
+      .select(categoriesSelector)
+      .pipe(filter((categories) => !!categories));
   }
 
   onAddCategory(): void {
