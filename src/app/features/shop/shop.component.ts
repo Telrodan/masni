@@ -32,25 +32,25 @@ export class ShopComponent implements OnInit {
       map((user) => user.shoppingCart._id)
     );
 
-    this.categories$ = this.store.select(categoriesSelector).pipe(
-      filter((categories) => !!categories),
-      map((categories) => {
-        const all: Category = {
-          categoryName: 'Összes'
-        };
-        categories = categories.filter(
-          (category) => category.categoryName !== 'egyedi termékek'
-        );
-        categories.unshift(all);
-        return categories;
-      })
-    );
+    // this.categories$ = this.store.select(categoriesSelector).pipe(
+    //   filter((categories) => !!categories),
+    //   map((categories) => {
+    //     const all: Category = {
+    //       categoryName: 'Összes'
+    //     };
+    //     categories = categories.filter(
+    //       (category) => category.categoryName !== 'egyedi termékek'
+    //     );
+    //     categories.unshift(all);
+    //     return categories;
+    //   })
+    // );
 
     this.products$ = this.store.select(productsSelector).pipe(
       filter((products) => !!products),
       map((products) => {
         products = products.filter(
-          (product) => product.category.categoryName !== 'egyedi termékek'
+          (product) => product.category[0].categoryName !== 'egyedi termékek'
         );
         return products;
       }),

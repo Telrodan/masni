@@ -1,4 +1,12 @@
 export interface ProductExtra {
-  comment: string;
-  nameEmbroidery: string;
+  baseColor?: string;
+  earsColor?: string;
+  ribbonColor?: string;
+  szundikendoColor?: string;
+  minkyColorBack?: string;
+  noseColor?: string;
+  earsAndBodyColor?: string;
+  extraMinkyEars?: string;
+  nameEmbroidery?: string;
+  comment?: string;
 }

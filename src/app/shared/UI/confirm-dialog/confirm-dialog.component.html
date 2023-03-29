@@ -1,0 +1,20 @@
+<div class="p-4">
+  <div class="button-row">
+    <i class="pi pi-times close" (click)="cancel()"></i>
+  </div>
+
+  <div class="mb-4">
+    <p class="text-xl font-bold mb-3">{{ data.title }}</p>
+    <p class="">{{ data.message }}</p>
+  </div>
+
+  <div class="controlls">
+    <button class="secondary-button shadow-2 mr-4" (click)="cancel()">
+      {{ data.cancelButtonText }}
+    </button>
+
+    <button class="primary-button shadow-2" (click)="confirm()">
+      {{ data.confirmButtonText }}
+    </button>
+  </div>
+</div>

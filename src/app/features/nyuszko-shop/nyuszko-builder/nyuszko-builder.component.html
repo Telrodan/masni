@@ -15,31 +15,27 @@
 
     <form
       class="form"
-      (submit)="onSubmit()"
+      (submit)="onSubmit(productData.baseProduct, productData.price)"
       [formGroup]="builderForm"
       *ngIf="productData.customProduct as customProduct">
       <div class="form-group">
         <label class="form-label">Alapszín:</label>
-
-        <p-dropdown
-          [options]="customProduct.baseColor"
-          placeholder="Válassz egy alapszínt"
-          optionLabel="nameWithExtra"
-          optionValue="name"></p-dropdown>
-
         <p-dropdown
           styleClass="w-full"
           [options]="customProduct.baseColor"
+          placeholder="Válassz egyet"
           formControlName="baseColor"
           optionLabel="nameWithExtra"
           optionValue="name"></p-dropdown>
       </div>
 
-      <!-- <div class="form-group">
+      <div class="form-group">
         <label class="form-label">Fülek színe mintája:</label>
+
         <p-dropdown
           styleClass="w-full"
           [options]="customProduct.earsColor"
+          placeholder="Válassz egyet"
           formControlName="earsColor"
           optionLabel="nameWithExtra"
           optionValue="name"></p-dropdown>
@@ -50,75 +46,76 @@
         <p-dropdown
           styleClass="w-full"
           [options]="customProduct.ribbonColor"
+          placeholder="Válassz egyet"
           formControlName="ribbonColor"
           optionLabel="nameWithExtra"
           optionValue="name"></p-dropdown>
       </div>
 
-      <div formGroupName="extraOptions">
-        <div class="field-checkbox">
-          <p-checkbox
-            [binary]="true"
-            formControlName="extraMinkyEarsCheckbox"
-            inputId="extraMinkyEarsCheckbox"></p-checkbox>
-          <label for="extraMinkyEarsCheckbox"
-            >Extra minky plüss fülekkel kérem! +400 Ft</label
-          >
-        </div>
-
-        <div
-          class="form-group"
-          *ngIf="builderForm.get('extraOptions.extraMinkyEarsCheckbox').value">
-          <p-dropdown
-            styleClass="w-full"
-            [options]="customProduct.extraMinkyEars"
-            formControlName="extraMinkyEarsInput"
-            optionLabel="name"
-            optionValue="name"></p-dropdown>
-        </div>
-
-        <div class="field-checkbox">
-          <p-checkbox
-            [binary]="true"
-            formControlName="nameEmbroideryCheckbox"
-            inputId="nameEmbroideryCheckbox"></p-checkbox>
-          <label for="nameEmbroideryCheckbox"
-            >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
-          >
-        </div>
-
-        <div
-          class="form-group"
-          *ngIf="builderForm.get('extraOptions.nameEmbroideryCheckbox').value">
-          <input
-            id="nameEmbroideryInput"
-            type="text"
-            pInputText
-            formControlName="nameEmbroideryInput"
-            placeholder="Add meg a nevet" />
-        </div>
-
-        <div class="form-group">
-          <label for="productComment" class="form-label"
-            >Megjegyzés az elkészítéssel kapcsolatban!</label
-          >
-          <textarea
-            rows="5"
-            cols="30"
-            id="productComment"
-            pInputTextarea
-            formControlName="productComment"
-            [autoResize]="true"></textarea>
-        </div>
+      <div class="field-checkbox">
+        <p-checkbox
+          [binary]="true"
+          formControlName="extraMinkyEarsCheckbox"
+          inputId="extraMinkyEarsCheckbox"></p-checkbox>
+        <label for="extraMinkyEarsCheckbox"
+          >Extra minky plüss fülekkel kérem! +400 Ft</label
+        >
       </div>
 
-      <p class="price">Ár: {{ price }} Ft</p>
+      <div
+        class="form-group"
+        *ngIf="builderForm.get('extraMinkyEarsCheckbox').value">
+        <p-dropdown
+          styleClass="w-full"
+          placeholder="Válassz egyet"
+          [options]="customProduct.extraMinkyEars"
+          formControlName="extraMinkyEarsInput"
+          optionLabel="name"
+          optionValue="name"></p-dropdown>
+      </div>
+
+      <div class="field-checkbox">
+        <p-checkbox
+          [binary]="true"
+          formControlName="nameEmbroideryCheckbox"
+          inputId="nameEmbroideryCheckbox"></p-checkbox>
+        <label for="nameEmbroideryCheckbox"
+          >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
+        >
+      </div>
+
+      <div
+        class="form-group"
+        *ngIf="builderForm.get('nameEmbroideryCheckbox').value">
+        <input
+          id="nameEmbroideryInput"
+          cl
+          type="text"
+          pInputText
+          formControlName="nameEmbroideryInput"
+          placeholder="Add meg a nevet" />
+      </div>
+
+      <div class="form-group">
+        <label for="comment" class="form-label"
+          >Megjegyzés az elkészítéssel kapcsolatban!</label
+        >
+        <textarea
+          rows="5"
+          cols="30"
+          id="comment"
+          pInputTextarea
+          formControlName="comment"
+          [autoResize]="true"></textarea>
+      </div>
+
+      <p class="price text-primary">Ár: {{ productData.price }} Ft</p>
       <button
         class="primary-button shadow-2"
         type="submit"
         [disabled]="!builderForm.valid"
         *ngIf="isAuthenticated$ | async">
-        <fa-icon [icon]="faShoppingCart"></fa-icon>
+        <i class="pi pi-shopping-cart"></i>
         Kosárba
       </button>
       <a
@@ -127,7 +124,7 @@
         *ngIf="(isAuthenticated$ | async) === false"
         >Előbb lépj be a rendeléshez</a
       >
-      <a routerLink="/nyuszko-shop" class="secondary-button shadow-2">Vissza</a> -->
+      <a routerLink="/nyuszko-shop" class="secondary-button shadow-2">Vissza</a>
     </form>
     <p-accordion>
       <p-accordionTab header="Termék leírása"

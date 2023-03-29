@@ -13,15 +13,21 @@ import { ProductDetailsComponent } from './shared/UI/product-details/product-det
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 
-const authModule = () => import('./features/auth/auth.module').then((m) => m.AuthModule);
+const authModule = () =>
+  import('./features/auth/auth.module').then((m) => m.AuthModule);
 
 const nyuszkoShopModule = () =>
-  import('./features/nyuszko-shop/nyuszko-shop.module').then((m) => m.NyuszkoShopModule);
+  import('./features/nyuszko-shop/nyuszko-shop.module').then(
+    (m) => m.NyuszkoShopModule
+  );
 
 const masniShopModule = () =>
-  import('./features/masni-shop/masni-shop.module').then((m) => m.MasniShopModule);
+  import('./features/masni-shop/masni-shop.module').then(
+    (m) => m.MasniShopModule
+  );
 
-const adminModule = () => import('./features/admin/admin.module').then((m) => m.AdminModule);
+const adminModule = () =>
+  import('./features/admin/admin.module').then((m) => m.AdminModule);
 
 const routes: Routes = [
   {
@@ -41,6 +47,7 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: adminModule,
     canActivate: [HasRoleGuard],
+
     data: {
       role: 'admin'
     }
