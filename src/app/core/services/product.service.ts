@@ -55,28 +55,21 @@ export class ProductService {
       .pipe(map((response) => response.data));
   }
 
-  public getProductPrice(formValues: any): number {
+  getProductExtraPrice(productExtra): number {
     let price = 0;
 
-    // Ready product price check
-    for (const key in formValues) {
-      const extraPrice = this.materialService.getExtraPriceByName(
-        formValues[key]
-      );
-      price += extraPrice;
-    }
-
-    for (const key in formValues.baseMaterials) {
-      if (key !== 'minkyColorBack') {
+    for (const key in productExtra) {
+      if (key !== 'extraMinkyEarsInput' && key !== 'minkyColorBack') {
+        console.log(key);
         const extraPrice = this.materialService.getExtraPriceByName(
-          formValues.baseMaterials[key]
+          productExtra[key]
         );
         price += extraPrice;
+        console.log(price);
       }
     }
-    price += formValues.extraOptions?.extraMinkyEarsCheckbox ? 400 : 0;
-    price += formValues.extraOptions?.nameEmbroideryCheckbox ? 500 : 0;
-    price += formValues?.nameEmbroideryCheckbox ? 500 : 0;
+    price += productExtra?.extraMinkyEarsCheckbox ? 400 : 0;
+    price += productExtra?.nameEmbroideryCheckbox ? 500 : 0;
     return price;
   }
 }

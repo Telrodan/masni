@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+
+import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { concatMap, filter, Observable, Subject, switchMap, tap } from 'rxjs';
+
 import { User } from '@core/models/user.model';
+import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
 import { usersSelector } from '@core/store/selectors/user.selector';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { concatMap, filter, Observable, Subject, tap } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
 
-interface UsersData {
-  users: User[];
-  selectedUser: User;
-}
-
-@UntilDestroy()
 @Component({
   selector: 'masni-handmade-dolls-users',
   templateUrl: './users.component.html',
@@ -20,22 +17,21 @@ interface UsersData {
 })
 export class UsersComponent implements OnInit {
   users$: Observable<User[]>;
-  isDialogVisible = false;
   selectedUser$: Observable<User>;
+  isDialogVisible = false;
   private selectedUserSubject = new Subject<User>();
 
   constructor(
     private userService: UserService,
     private store: Store,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private toastr: ToastrService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.users$ = this.userService.getAllUsers$().pipe(
       concatMap(() => this.store.select(usersSelector)),
-      filter((users) => !!users),
-      untilDestroyed(this)
+      filter((users) => !!users)
     );
 
     this.selectedUser$ = this.selectedUserSubject.pipe(
@@ -49,26 +45,23 @@ export class UsersComponent implements OnInit {
   }
 
   onDeleteUser(user: User): void {
-    this.confirmationService.confirm({
-      message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`,
-      header: 'Megerősítés',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Igen',
-      rejectLabel: 'Nem',
-      accept: () => {
-        this.userService
-          .deleteUser$(user)
-          .pipe(
-            tap(() => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Siker!',
-                detail: `${user.name} törölve`
-              });
-            })
-          )
-          .subscribe();
-      }
-    });
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Megerősítés',
+          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`,
+          confirmButtonText: 'Igen',
+          cancelButtonText: 'Nem'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => !!confirmed),
+        switchMap(() => this.userService.deleteUser$(user)),
+        tap(() => {
+          this.toastr.success('Siker', `${user.name} törölve`);
+        })
+      )
+      .subscribe();
   }
 }

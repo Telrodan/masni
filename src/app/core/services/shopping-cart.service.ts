@@ -36,11 +36,6 @@ export class ShoppingCartService {
       productExtra
     };
 
-    // extra price check
-    if (item.productExtra.nameEmbroidery) {
-      item.price += 500;
-    }
-
     return this.apiService
       .post<ApiResponse<ShoppingCartItem>>('shoppingCart', item)
       .pipe(

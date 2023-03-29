@@ -14,19 +14,19 @@ const routes: Routes = [
     component: NyuszkoShopComponent
   },
   {
-    path: 'nyuszkok',
+    path: 'nyuszko',
     component: NyuszkoBuilderComponent
   },
   {
-    path: 'nyuszko-szundikendok',
+    path: 'nyuszko-szundikendo',
     component: NyuszkoSzundikendoBuilderComponent
   },
   {
-    path: 'mackok',
+    path: 'macko',
     component: MackoBuilderComponent
   },
   {
-    path: 'macko-szundikendok',
+    path: 'macko-szundikendo',
     component: MackoSzundikendoBuilderComponent
   },
   {

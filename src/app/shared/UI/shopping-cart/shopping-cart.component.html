@@ -17,12 +17,12 @@
       <img
         [src]="productImagesUrl + item.product['images'][0]"
         class="w-12rem flex-shrink-0 mx-auto md:mx-0" />
-      <div class="flex-auto py-5 md:pl-5">
+      <div class="flex-auto py-3 md:pl-5">
         <div
-          class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
+          class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-3">
           <div class="w-full sm:w-6 flex flex-column">
-            <span class="text-900 text-xl font-medium mb-3">{{
-              item.product['name']
+            <span class="text-900 text-xl font-medium mb-2 text-pink-500">{{
+              item.product['name'] | titlecase
             }}</span>
             <span class="text-600">{{ item.product['shortDescription'] }}</span>
           </div>
@@ -43,14 +43,107 @@
           </div>
         </div>
         <div class="flex flex-column">
-          <span class="inline-flex align-items-center mb-3">
-            <span class="text-600 mr-2">Rendeld meg ma.</span>
+          <span class="inline-flex align-items-center mb-1">
+            <span class="text-900 text-primary">Termék adatok:</span>
           </span>
-          <span class="inline-flex align-items-center mb-3">
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.nameEmbroidery">
+            <span class="text-600"
+              >Hímzett név:
+              <span class="font-bold text-800">{{
+                item.productExtra.nameEmbroidery
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.baseColor">
+            <span class="text-600"
+              >Alapszín:
+              <span class="font-bold text-800">{{
+                item.productExtra.baseColor
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.earsColor">
+            <span class="text-600"
+              >Fülek színe/mintája:
+              <span class="font-bold text-800">{{
+                item.productExtra.earsColor
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.ribbonColor">
+            <span class="text-600"
+              >Masni színe:
+              <span class="font-bold text-800">{{
+                item.productExtra.ribbonColor
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.extraMinkyEars">
+            <span class="text-600"
+              >Extra minky plüss fülek:
+              <span class="font-bold text-800">{{
+                item.productExtra.extraMinkyEars
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.szundikendoColor">
+            <span class="text-600"
+              >Szundikendő színe/mintája:
+              <span class="font-bold text-800">{{
+                item.productExtra.szundikendoColor
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.minkyColorBack">
+            <span class="text-600"
+              >Minky plüss színe(szundikendő-hátulja):
+              <span class="font-bold text-800">{{
+                item.productExtra.minkyColorBack
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.earsAndBodyColor">
+            <span class="text-600"
+              >Fülek és test színe/mintája:
+              <span class="font-bold text-800">{{
+                item.productExtra.earsAndBodyColor
+              }}</span>
+            </span>
+          </span>
+          <span
+            class="inline-flex align-items-center mb-2"
+            *ngIf="item.productExtra.noseColor">
+            <span class="text-600"
+              >Orr színe:
+              <span class="font-bold text-800">{{
+                item.productExtra.noseColor
+              }}</span>
+            </span>
+          </span>
+          <!-- <span class="inline-flex align-items-center mb-3">
             <span class="text-600 mr-2">Delivery by </span>
-          </span>
-          <span class="flex align-items-center">
-            <span class="text-600">Only 8 Available.</span>
+          </span>  -->
+          <span class="flex flex-column" *ngIf="item.productExtra.comment">
+            <span class="text-900 text-primary"
+              >Megjegyzés a termékkel kapcsolatban:</span
+            >
+            <span class="text-600">{{ item.productExtra.comment }}</span>
           </span>
         </div>
       </div>
@@ -76,7 +169,9 @@
         >
       </li>
       <li class="flex justify-content-end">
-        <button pButton pRipple label="Check Out"></button>
+        <button class="primary-button shadow-2">
+          <i class="pi pi-credit-card mr-1"></i>Fizetés
+        </button>
       </li>
     </ul>
   </div>

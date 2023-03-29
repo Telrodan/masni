@@ -2,98 +2,133 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { filter, map, Observable, switchMap, tap } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  filter,
+  map,
+  Observable,
+  startWith,
+  tap
+} from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selector';
 import { NyuszkoProduct } from '@core/models/custom-products/nyuszko-product.model';
-import { SortedMaterials } from '@core/models/sorted-materials.model';
+import { Product } from '@core/models/product.model';
+import { categoriesSelector } from '@core/store';
+import { Category } from '@core/models/category.model';
+import { ProductExtra } from '@core/models/product-extra.model';
+import { ToastrService } from '@core/services/toastr.service';
+import { capitalizeFirstLetter } from 'src/app/shared/util/first-letter-capital';
 
-@UntilDestroy({ checkProperties: true })
+interface ProductData {
+  baseProduct: Product;
+  customProduct: NyuszkoProduct;
+  price: number;
+}
+
 @Component({
   selector: 'masni-handmade-dolls-nyuszko-builder',
   templateUrl: './nyuszko-builder.component.html',
   styleUrls: ['./nyuszko-builder.component.scss']
 })
 export class NyuszkoBuilderComponent implements OnInit {
-  public isAuthenticated$: Observable<boolean>;
-  public product: NyuszkoProduct;
-  public sortedMaterials$: Observable<SortedMaterials>;
-  public price = 0;
-  public builderForm: FormGroup = new FormGroup({});
-  public productImagesUrl = [
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-1.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-2.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-3.jpg',
-    '../../../../assets/images/nyuszko-shop/nyuszko-builder/image-4.jpg'
-  ];
-  public faShoppingCart = faShoppingCart;
+  isAuthenticated$: Observable<boolean>;
+  product$: Observable<Product>;
+  productData$: Observable<ProductData>;
+  productOptions: NyuszkoProduct;
+  builderForm: FormGroup;
 
   constructor(
     private store$: Store,
     private authService: AuthService,
     private productService: ProductService,
-    private shoppingCartService: ShoppingCartService
+    private shoppingCartService: ShoppingCartService,
+    private toastr: ToastrService
   ) {}
 
   public ngOnInit(): void {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
-
-    this.store$
-      .select(sortedMaterialsSelector)
-      .pipe(
-        filter((sortedMaterials) => !!sortedMaterials),
-        map((sortedMaterials) =>
-          NyuszkoProduct.setUpMaterials(sortedMaterials)
-        ),
-        tap((product) => {
-          this.product = product;
-          this.createForm(product);
-        }),
-        switchMap(() => this.builderForm.valueChanges),
-        tap((changes) => {
-          this.price = this.productService.getProductPrice(changes);
+    this.initForm();
+    this.productData$ = combineLatest([
+      this.store$.select(categoriesSelector).pipe(
+        filter((categories) => !!categories.length),
+        map((categories) => {
+          return this.findProduct(categories);
         })
+      ),
+      this.store$.select(sortedMaterialsSelector).pipe(
+        filter((sortedMaterials) => !!sortedMaterials),
+        map((sortedMaterials) => NyuszkoProduct.setUpMaterials(sortedMaterials))
+      ),
+      this.builderForm.valueChanges.pipe(
+        startWith(0),
+        debounceTime(300),
+        map((value) => this.productService.getProductExtraPrice(value))
       )
-      .subscribe();
+    ]).pipe(
+      map(([baseProduct, customProduct, price]) => ({
+        baseProduct,
+        customProduct,
+        price: baseProduct.price + price
+      }))
+    );
   }
 
-  public onSubmit(): void {
-    if (!this.builderForm.valid) return;
-    const item = { ...this.builderForm.value, price: this.price };
-    // this.shoppingCartService.addBuiltProductToShoppingCart(item);
-  }
+  onSubmit(product: Product, price: number): void {
+    if (this.builderForm.valid) {
+      let nameEmbroidery = '';
+      if (this.builderForm.value.nameEmbroideryCheckbox) {
+        nameEmbroidery = this.builderForm.value.nameEmbroideryInput.trim();
+      }
+      const productExtra: ProductExtra = {
+        ...this.builderForm.value,
+        nameEmbroidery,
+        extraMinkyEars: this.builderForm.get('extraMinkyEarsInput').value
+      };
+      const priceUpdatedProduct = {
+        ...product,
+        price
+      };
 
-  private createForm(product: NyuszkoProduct): void {
-    this.builderForm = new FormGroup({
-      baseMaterials: new FormGroup({
-        baseProduct: new FormControl(product.baseProduct),
-        baseColor: new FormControl(
-          product.baseColor[0].name,
-          Validators.required
-        ),
-        earsColor: new FormControl(
-          product.earsColor[0].name,
-          Validators.required
-        ),
-        ribbonColor: new FormControl(
-          product.ribbonColor[0].name,
-          Validators.required
+      this.shoppingCartService
+        .addItemToCart(priceUpdatedProduct, productExtra)
+        .pipe(
+          tap(() => {
+            this.toastr.success(
+              'Siker',
+              `${capitalizeFirstLetter(product.name)} hozzáadva a kosárhoz`
+            );
+            this.builderForm.reset();
+          })
         )
-      }),
-      extraOptions: new FormGroup({
-        extraMinkyEarsCheckbox: new FormControl(false, Validators.required),
-        extraMinkyEarsInput: new FormControl(product.extraMinkyEars[0].name),
-        nameEmbroideryCheckbox: new FormControl(false, Validators.required),
-        nameEmbroideryInput: new FormControl(''),
-        productComment: new FormControl('')
-      })
-    });
+        .subscribe();
+    }
+  }
 
-    this.price = this.productService.getProductPrice(this.builderForm.value);
+  private findProduct(categories: Category[]) {
+    const category = categories.find(
+      (category) => category.categoryName === 'egyedi termékek'
+    );
+    const product = category.products.find(
+      (product) => product.name === 'nyuszkó'
+    );
+    return product;
+  }
+
+  private initForm(): void {
+    this.builderForm = new FormGroup({
+      baseColor: new FormControl(null, Validators.required),
+      earsColor: new FormControl(null, Validators.required),
+      ribbonColor: new FormControl(null, Validators.required),
+      extraMinkyEarsCheckbox: new FormControl(false, Validators.required),
+      extraMinkyEarsInput: new FormControl(null),
+      nameEmbroideryCheckbox: new FormControl(false, Validators.required),
+      nameEmbroideryInput: new FormControl(''),
+      comment: new FormControl(null)
+    });
   }
 }

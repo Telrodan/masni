@@ -9,52 +9,52 @@
     flex-direction: column;
     align-items: center;
   }
-}
 
-.image-composition-container {
-  width: 35%;
-  margin-right: 30px;
+  .image-composition-container {
+    width: 35%;
+    margin-right: 30px;
 
-  @include respond(sm) {
-    width: 90%;
-    margin: 30px 0;
-    order: 2;
+    @include respond(sm) {
+      width: 90%;
+      margin: 30px 0;
+      order: 2;
+    }
   }
-}
 
-.container {
-  width: 50%;
-  border: 2px solid var(--color-tertiary);
-  padding: 20px 30px;
-  margin-bottom: 30px;
-  border-radius: 5px;
+  .container {
+    width: 50%;
+    border: 2px solid var(--color-tertiary);
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    border-radius: 5px;
 
-  @include respond(sm) {
-    width: 90%;
+    @include respond(sm) {
+      width: 90%;
+    }
   }
-}
 
-.heading-primary {
-  margin-bottom: 20px;
-}
+  .heading-primary {
+    margin-bottom: 20px;
+  }
 
-.reminder-text {
-  margin-bottom: 30px;
-  color: var(--color-secondary);
-  text-decoration: underline;
-}
+  .reminder-text {
+    margin-bottom: 30px;
+    color: var(--color-secondary);
+    text-decoration: underline;
+  }
 
-.field-checkbox {
-  margin-bottom: 20px;
-}
+  .field-checkbox {
+    margin-bottom: 20px;
+  }
 
-.price {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 500;
-}
+  .price {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 500;
+  }
 
-.primary-button,
-.secondary-button {
-  margin-bottom: 20px;
+  .primary-button,
+  .secondary-button {
+    margin-bottom: 20px;
+  }
 }

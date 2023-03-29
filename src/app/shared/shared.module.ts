@@ -12,6 +12,7 @@ import { MenuModule } from 'primeng/menu';
 import { ImageModule } from 'primeng/image';
 import { BadgeModule } from 'primeng/badge';
 import { GalleriaModule } from 'primeng/galleria';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { NavbarComponent } from './UI/navbar/navbar.component';
 import { FooterComponent } from './UI/footer/footer.component';
@@ -28,6 +29,7 @@ import { ShoppingCartComponent } from './UI/shopping-cart/shopping-cart.componen
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.component';
 
 const PRIME_NG = [
   CarouselModule,
@@ -40,7 +42,8 @@ const PRIME_NG = [
   BadgeModule,
   CheckboxModule,
   InputTextareaModule,
-  InputTextModule
+  InputTextModule,
+  MatDialogModule
 ];
 
 @NgModule({
@@ -56,7 +59,8 @@ const PRIME_NG = [
     ImageCompositionComponent,
     SpinnerComponent,
     CarouselWithHeadingAndButtonComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
