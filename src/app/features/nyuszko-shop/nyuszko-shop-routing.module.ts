@@ -6,7 +6,6 @@ import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.compo
 
 import { NyuszkoShopComponent } from './nyuszko-shop.component';
 import { NyuszkoSzundikendoBuilderComponent } from './nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
-import { SettsComponent } from './setts/setts.component';
 
 const routes: Routes = [
   {
@@ -28,10 +27,6 @@ const routes: Routes = [
   {
     path: 'macko-szundikendo',
     component: MackoSzundikendoBuilderComponent
-  },
-  {
-    path: 'setts',
-    component: SettsComponent
   }
 ];
 

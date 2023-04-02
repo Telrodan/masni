@@ -16,7 +16,6 @@ import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.compo
 import { NyuszkoSzundikendoBuilderComponent } from './nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
 import { MackoBuilderComponent } from './macko-builder/macko-builder.component';
 import { MackoSzundikendoBuilderComponent } from './macko-szundikendo-builder/macko-szundikendo-builder.component';
-import { SettsComponent } from './setts/setts.component';
 import { ButtonModule } from 'primeng/button';
 
 const PRIME_NG = [
@@ -34,8 +33,7 @@ const PRIME_NG = [
     NyuszkoBuilderComponent,
     NyuszkoSzundikendoBuilderComponent,
     MackoBuilderComponent,
-    MackoSzundikendoBuilderComponent,
-    SettsComponent
+    MackoSzundikendoBuilderComponent
   ],
   imports: [
     CommonModule,

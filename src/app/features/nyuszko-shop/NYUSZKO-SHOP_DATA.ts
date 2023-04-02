@@ -35,12 +35,6 @@ export const menuItems = [
       '../../../../assets/images/nyuszko-shop/menu/macko-szundikendo-menu.jpg'
   },
   {
-    name: 'Szettek -%',
-    linkSrc: 'setts',
-    backgroundImage:
-      '../../../../assets/images/nyuszko-shop/menu/szettek-menu.jpg'
-  },
-  {
     name: 'Minták',
     linkSrc: '/samples',
     backgroundImage:
