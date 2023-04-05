@@ -15,7 +15,6 @@ import {
 } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
-import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { productByIdSelector } from '@core/store';
 import { Product } from '@core/models/product.model';
@@ -103,8 +102,7 @@ export class ProductDetailsComponent implements OnInit {
   private initForm(): void {
     this.builderForm = new FormGroup({
       nameEmbroideryCheckbox: new FormControl(false),
-      nameEmbroideryInput: new FormControl(''),
-      comment: new FormControl('')
+      nameEmbroideryInput: new FormControl('')
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '@core/models/product.model';
 import { Store } from '@ngrx/store';
-import { filter, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { productsSelector } from '@core/store';
@@ -19,9 +19,15 @@ export class FeaturedProductsComponent implements OnInit {
   constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.products$ = this.store$
-      .select(productsSelector)
-      .pipe(filter((products) => !!products));
+    this.products$ = this.store$.select(productsSelector).pipe(
+      filter((products) => !!products),
+      map((products) => {
+        products.map(
+          (product) => product.category.categoryName !== 'egyedi termékek'
+        );
+        return products;
+      })
+    );
   }
 
   public responsiveOptions = [

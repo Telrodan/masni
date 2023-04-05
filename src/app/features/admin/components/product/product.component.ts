@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
@@ -15,7 +22,7 @@ export class ProductComponent implements OnInit {
   categories$: Observable<Category[]>;
   uploadedFiles = [];
   productForm: FormGroup;
-  images: FileList;
+  imagesUrl: string[];
 
   constructor(
     private categoryService: CategoryService,
@@ -23,9 +30,18 @@ export class ProductComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
+  @ViewChild('images') images: ElementRef;
+
   ngOnInit(): void {
     this.categories$ = this.categoryService.getAllCategory$();
     this.initForm();
+
+    // image upload
+    const imageInput = document.getElementById('images');
+    imageInput.addEventListener('fileUploadSuccess', (e) => {
+      this.imagesUrl = [...e['detail']['files'].map((file) => file.cdnUrl)];
+      console.log(this.imagesUrl);
+    });
   }
 
   initForm(): void {
@@ -41,24 +57,7 @@ export class ProductComponent implements OnInit {
 
   onAddProduct(): void {
     if (this.productForm.valid) {
-      const rawProduct = new FormData();
-      rawProduct.append('categoryId', this.productForm.get('categoryId').value);
-      rawProduct.append('name', this.productForm.get('name').value);
-      rawProduct.append(
-        'description',
-        this.productForm.get('description').value
-      );
-      rawProduct.append(
-        'shortDescription',
-        this.productForm.get('shortDescription').value
-      );
-      for (let i = 0; i < this.images.length; i++) {
-        const image = this.images[i];
-        rawProduct.append('images', image);
-      }
-      rawProduct.append('price', this.productForm.get('price').value);
-      rawProduct.append('stock', this.productForm.get('stock').value);
-
+      const rawProduct = { ...this.productForm.value, images: this.imagesUrl };
       this.productService
         .addProduct(rawProduct)
         .pipe(
@@ -72,13 +71,6 @@ export class ProductComponent implements OnInit {
           })
         )
         .subscribe();
-    }
-  }
-
-  selectImage(event: Event): void {
-    const files = (event.target as HTMLInputElement).files;
-    if (files.length > 0) {
-      this.images = files;
     }
   }
 }

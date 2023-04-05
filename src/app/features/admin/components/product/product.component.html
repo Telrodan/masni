@@ -56,19 +56,13 @@
           <label for="bio" class="block font-medium text-900 mb-2"
             >Termék képek (az első kép lesz mindig a nagy kép)</label
           >
-          <button
-            pButton
-            pRipple
-            type="button"
-            label="Válassz"
-            class="p-button-secondary"
-            (click)="imageInput.click()"></button>
           <input
-            multiple
-            class="image-input"
-            type="file"
-            (change)="selectImage($event)"
-            #imageInput />
+            type="hidden"
+            data-multiple="true"
+            data-remove-links="true"
+            name="images"
+            id="images"
+            class="simple-file-upload" />
         </div>
 
         <div class="mb-4">

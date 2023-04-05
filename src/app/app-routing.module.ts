@@ -12,6 +12,12 @@ import { TermsAndConditionsComponent } from './features/terms-and-conditions/ter
 import { ProductDetailsComponent } from './shared/UI/product-details/product-details.component';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { DashboardComponent } from './features/admin/components/dashboard/dashboard.component';
+import { ReportsComponent } from './features/admin/components/reports/reports.component';
+import { AllProductComponent } from './features/admin/components/all-product/all-product.component';
+import { CategoriesComponent } from './features/admin/components/categories/categories.component';
+import { ProductComponent } from './features/admin/components/product/product.component';
+import { UsersComponent } from './features/admin/components/users/users.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -45,12 +51,32 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: adminModule,
-    canActivate: [HasRoleGuard],
-
+    component: DashboardComponent,
     data: {
       role: 'admin'
-    }
+    },
+    children: [
+      {
+        path: 'reports',
+        component: ReportsComponent
+      },
+      {
+        path: 'categories',
+        component: CategoriesComponent
+      },
+      {
+        path: 'add-product',
+        component: ProductComponent
+      },
+      {
+        path: 'products',
+        component: AllProductComponent
+      },
+      {
+        path: 'users',
+        component: UsersComponent
+      }
+    ]
   },
   {
     path: 'user',

@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'masni-handmade-dolls-image-composition',
@@ -8,6 +7,5 @@ import { environment } from 'src/environments/environment';
 })
 export class ImageCompositionComponent {
   @Input() public images: string[];
-  productImagesUrl = environment.productImagesUrl;
   public selectedImageIndex = 0;
 }

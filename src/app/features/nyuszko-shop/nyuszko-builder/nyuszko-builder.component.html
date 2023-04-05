@@ -126,25 +126,14 @@
       >
       <a routerLink="/nyuszko-shop" class="secondary-button shadow-2">Vissza</a>
     </form>
-    <p-accordion>
-      <p-accordionTab header="Termék leírása"
-        ><div class="accordion-content">
-          <div class="story-container">
-            <p class="story-paragraph paragraph-primary">
-              A nyuszkókat 100%-ban természetes alapanyagokból, pamutvászon
-              illetve minky plüss anyagokból készítem. Töltőanyagként
-              antiallergén szilikonizált poliészter golyókat használok, ami baba
-              barát, és mosható. Minden nyuszkó kézzel hímzett vidám arcocskát
-              kap. A nyuszkók 24cm magasak, egy-két cm eltérés előfordulhat.
-              Amennyiben szeretnéd, hogy ajándékod még egyedibb legyen, kézzel
-              hímzett névvel ellátva is kérheted. Kézzel hímzett termékek esetén
-              a kézzel való tisztítást részesítem előnyben, de 30°C-on,
-              kímélőprogrammal, mosózsákban mosható. Szárítógépbe kérlek ne
-              tedd!
-            </p>
-          </div>
-        </div>
-      </p-accordionTab>
-    </p-accordion>
+    <ol class="list-none p-0 m-0 text-center text-900">
+      <li
+        class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
+        Termékleírás:
+      </li>
+      <li class="line-height-3 p-3 border-bottom-1 border-300">
+        {{ productData.baseProduct.description }}
+      </li>
+    </ol>
   </div>
 </main>
