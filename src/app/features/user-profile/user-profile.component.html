@@ -1,5 +1,7 @@
 <div class="px-4 py-8 md:px-6 lg:px-8">
-  <div class="p-fluid flex flex-column lg:flex-row">
+  <div
+    class="p-fluid flex flex-column lg:flex-row"
+    *ngIf="user$ | async as user">
     <ul
       class="list-none m-0 p-0 flex flex-row lg:flex-column justify-content-evenly md:justify-content-between lg:justify-content-start mb-5 lg:pr-8 lg:mb-0">
       <li>

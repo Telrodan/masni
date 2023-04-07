@@ -19,6 +19,7 @@ export class User {
     items: ShoppingCartItem[];
   };
   address: Address;
+  subscribed: boolean;
 
   constructor(data: any) {
     this.name = data?.name;
@@ -32,5 +33,6 @@ export class User {
       postcode: data?.postcode,
       county: data?.county
     };
+    this.subscribed = data?.subscribed;
   }
 }

@@ -3,7 +3,6 @@
 .builder {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
 
   @include respond(sm) {
     flex-direction: column;
@@ -25,7 +24,6 @@
     width: 50%;
     border: 2px solid var(--color-tertiary);
     padding: 20px 30px;
-    margin-bottom: 30px;
     border-radius: 5px;
 
     @include respond(sm) {
@@ -35,12 +33,6 @@
 
   .heading-primary {
     margin-bottom: 20px;
-  }
-
-  .reminder-text {
-    margin-bottom: 30px;
-    color: var(--color-secondary);
-    text-decoration: underline;
   }
 
   .field-checkbox {

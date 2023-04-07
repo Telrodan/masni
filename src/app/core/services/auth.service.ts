@@ -33,17 +33,19 @@ export class AuthService {
   }
 
   public login$(authData: AuthData): Observable<ApiResponse<string>> {
-    return this.apiService.post<ApiResponse<string>>('auth/login', authData).pipe(
-      tap((response) => {
-        this.token = response.data;
-        if (this.token) {
-          this.tokenPayload = jwt_decode(response.data);
-          this.setAuthData();
-          this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-          this.router.navigate(['/']);
-        }
-      })
-    );
+    return this.apiService
+      .post<ApiResponse<string>>('auth/login', authData)
+      .pipe(
+        tap((response) => {
+          this.token = response.data;
+          if (this.token) {
+            this.tokenPayload = jwt_decode(response.data);
+            this.setAuthData();
+            this.setAuthenticationTimer(this.tokenPayload.expiresIn);
+            this.router.navigate(['/']);
+          }
+        })
+      );
   }
 
   public logout(): void {
@@ -69,7 +71,10 @@ export class AuthService {
   }
 
   public forgotPassword$(email: string): Observable<ApiResponse<null>> {
-    return this.apiService.post<ApiResponse<null>>('auth/forgotPassword', email);
+    return this.apiService.post<ApiResponse<null>>(
+      'auth/forgotPassword',
+      email
+    );
   }
 
   public resetPassword$(
@@ -97,7 +102,9 @@ export class AuthService {
 
   private setAuthData(): void {
     const currentDate = new Date();
-    const expirationDate = new Date(currentDate.getTime() + this.tokenPayload.expiresIn * 1000);
+    const expirationDate = new Date(
+      currentDate.getTime() + this.tokenPayload.expiresIn * 1000
+    );
     this.saveAuthenticationData(expirationDate);
     this.setAuthStatus(true);
   }
@@ -133,7 +140,9 @@ export class AuthService {
     const authenticationInformation = this.getAuthenticationData();
     if (!authenticationInformation) return;
     const currentDate = new Date();
-    const expiresIn = authenticationInformation.expirationDate.getTime() - currentDate.getTime();
+    const expiresIn =
+      authenticationInformation.expirationDate.getTime() -
+      currentDate.getTime();
     if (expiresIn > 0) {
       this.setAuthenticationTimer(expiresIn / 1000);
       this.isAuthenticated = true;

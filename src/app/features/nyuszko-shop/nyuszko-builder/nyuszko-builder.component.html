@@ -1,4 +1,4 @@
-<main class="builder" *ngIf="productData$ | async as productData">
+<main class="builder my-5" *ngIf="productData$ | async as productData">
   <div class="image-composition-container">
     <masni-handmade-dolls-image-composition
       [images]="
@@ -8,7 +8,7 @@
 
   <div class="container shadow-2">
     <h1 class="heading-primary">Nyuszkó</h1>
-    <p class="paragraph-primary reminder-text">
+    <p class="mb-3 text-pink-400">
       Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a Nyuszkó
       végösszegén!
     </p>
@@ -98,7 +98,7 @@
 
       <div class="form-group">
         <label for="comment" class="form-label"
-          >Megjegyzés az elkészítéssel kapcsolatban!</label
+          >Megjegyzés az elkészítéssel kapcsolatban:</label
         >
         <textarea
           rows="5"

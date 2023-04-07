@@ -1,10 +1,11 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '@core/models/user.model';
 
 import { MessageService } from 'primeng/api';
-import { tap } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -20,7 +21,8 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   public ngOnInit(): void {
@@ -28,6 +30,7 @@ export class SignupComponent implements OnInit {
   }
 
   public onSignup(): void {
+    console.log(this.signupForm.value);
     if (this.signupForm.valid) {
       const newUser = new User(this.signupForm.value);
       this.authService
@@ -39,11 +42,11 @@ export class SignupComponent implements OnInit {
               summary: 'Sikeres regisztráció!',
               detail: 'Átirányítva a főoldalra'
             });
+            this.signupForm.reset();
             this.router.navigate(['/']);
           })
         )
         .subscribe();
-      this.signupForm.reset();
     }
   }
 
@@ -54,16 +57,54 @@ export class SignupComponent implements OnInit {
 
     this.signupForm = new FormGroup({
       name: new FormControl(null, Validators.required),
-      email: new FormControl(null, [Validators.required, Validators.pattern(emailRegex)]),
-      phone: new FormControl(null, [Validators.required, Validators.pattern(phoneRegex)]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+      email: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(emailRegex)
+      ]),
+      phone: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(phoneRegex)
+      ]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(8)
+      ]),
       passwordConfirm: new FormControl(null, Validators.required),
       street: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
       postcode: new FormControl(null, Validators.required),
       county: new FormControl(null, Validators.required),
       privacy: new FormControl(false, Validators.requiredTrue),
-      subscribe: new FormControl(false, Validators.required)
+      subscribed: new FormControl(false, Validators.required)
     });
+  }
+
+  onPostcodeBlur(event: Event): void {
+    console.log(this.signupForm.value);
+    if (this.signupForm.get('postcode').valid) {
+      const postcode = (event.target as HTMLInputElement).value;
+      const headers = new HttpHeaders({
+        'X-RapidAPI-Key': '99eb9da73dmsh0b8a6cae4b15b1ap10dd5ajsnaee21aaff256',
+        'X-RapidAPI-Host': 'community-zippopotamus.p.rapidapi.com'
+      });
+      this.http
+        .get(`https://community-zippopotamus.p.rapidapi.com/hu/${postcode}`, {
+          headers
+        })
+        .pipe(
+          catchError(() => {
+            return throwError(
+              () => new Error('Nem található ilyen irányítószám!')
+            );
+          }),
+          tap((response: any) => {
+            this.signupForm
+              .get('city')
+              .setValue(response.places[0]['place name']);
+            this.signupForm.get('county').setValue(response.places[0].state);
+          })
+        )
+        .subscribe();
+    }
   }
 }

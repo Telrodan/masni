@@ -84,6 +84,26 @@
         </div>
         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
         <div class="field mb-4 col-12 md:col-6">
+          <label for="postcode" class="font-medium text-900"
+            >Irányítószám</label
+          >
+          <input
+            id="postcode"
+            type="number"
+            pInputText
+            formControlName="postcode"
+            (blur)="onPostcodeBlur($event)" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('postcode').valid &&
+              signupForm.get('postcode').dirty
+            ">
+            Kérlek add meg az irányítószámot.
+          </p>
+        </div>
+
+        <div class="field mb-4 col-12 md:col-6">
           <label for="street" class="font-medium text-900"
             >Utca/házszám/épület</label
           >
@@ -105,24 +125,6 @@
               !signupForm.get('city').valid && signupForm.get('city').dirty
             ">
             Kérlek add meg a várost.
-          </p>
-        </div>
-        <div class="field mb-4 col-12 md:col-6">
-          <label for="postcode" class="font-medium text-900"
-            >Irányítószám</label
-          >
-          <input
-            id="postcode"
-            type="number"
-            pInputText
-            formControlName="postcode" />
-          <p
-            class="form-helper"
-            *ngIf="
-              !signupForm.get('postcode').valid &&
-              signupForm.get('postcode').dirty
-            ">
-            Kérlek add meg az irányítószámot.
           </p>
         </div>
 
@@ -160,9 +162,9 @@
         <div class="field mb-4 col-12">
           <div class="flex align-items-center">
             <p-inputSwitch
-              inputId="subscribe"
-              formControlName="subscribe"></p-inputSwitch>
-            <label for="subscribe" class="ml-2 text-900"
+              inputId="subscribed"
+              formControlName="subscribed"></p-inputSwitch>
+            <label for="subscribed" class="ml-2 text-900"
               >Szeretnék feliratkozni a hírlevélre.</label
             >
           </div>

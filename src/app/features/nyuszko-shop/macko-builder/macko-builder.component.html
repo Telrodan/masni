@@ -1,4 +1,4 @@
-<main class="builder" *ngIf="productData$ | async as productData">
+<main class="builder my-5" *ngIf="productData$ | async as productData">
   <div class="image-composition-container">
     <masni-handmade-dolls-image-composition
       [images]="
@@ -7,8 +7,8 @@
   </div>
   <div class="container shadow-2">
     <h1 class="heading-primary">Mackó</h1>
-    <p class="paragraph-primary reminder-text">
-      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a mackó
+    <p class="mb-3 text-pink-400">
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a Mackó
       végösszegén!
     </p>
 
@@ -100,25 +100,14 @@
       >
       <a routerLink="/nyuszko-shop" class="secondary-button shadow-2">Vissza</a>
     </form>
-    <p-accordion>
-      <p-accordionTab header="Termék leírása"
-        ><div class="accordion-content">
-          <div class="story-container">
-            <p class="story-paragraph paragraph-primary">
-              A mackókat 100%-ban természetes alapanyagokból, pamutvászon
-              illetve gyapjúfilc anyagokból készítem. Töltőanyagként
-              antiallergén szilikonizált poliészter golyókat használok, ami baba
-              barát, és mosható. Minden mackó kézzel hímzett szemeket és kézzel
-              felvarrt gyapjúfilc orrot kap. A mackók 25 cm magasak, egy-két cm
-              eltérés előfordulhat. Amennyiben szeretnéd, hogy ajándékod még
-              egyedibb legyen, kézzel hímzett névvel ellátva is kérheted. Kézzel
-              hímzett termékek esetén a kézzel való tisztítást részesítem
-              előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható.
-              Szárítógépbe kérlek ne tedd!
-            </p>
-          </div>
-        </div>
-      </p-accordionTab>
-    </p-accordion>
+    <ol class="list-none p-0 m-0 text-center text-900">
+      <li
+        class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
+        Termékleírás:
+      </li>
+      <li class="line-height-3 p-3 border-bottom-1 border-300">
+        {{ productData.baseProduct.description }}
+      </li>
+    </ol>
   </div>
 </main>

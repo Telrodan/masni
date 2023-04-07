@@ -11,25 +11,25 @@ export const carouselImages = [
 
 export const menuItems = [
   {
-    name: 'Nyuszkók',
+    name: 'Nyuszkó',
     linkSrc: 'nyuszko',
     backgroundImage:
       '../../../../assets/images/nyuszko-shop/menu/nyuszko-menu.jpg'
   },
   {
-    name: 'Nyuszkó Szundikendők',
+    name: 'Nyuszkó Szundikendő',
     linkSrc: 'nyuszko-szundikendo',
     backgroundImage:
       '../../../../assets/images/nyuszko-shop/menu/nyuszko-szundikendo-menu.jpg'
   },
   {
-    name: 'Mackók',
+    name: 'Mackó',
     linkSrc: 'macko',
     backgroundImage:
       '../../../../assets/images/nyuszko-shop/menu/macko-menu.jpg'
   },
   {
-    name: 'Mackó Szundikendők',
+    name: 'Mackó Szundikendő',
     linkSrc: 'macko-szundikendo',
     backgroundImage:
       '../../../../assets/images/nyuszko-shop/menu/macko-szundikendo-menu.jpg'

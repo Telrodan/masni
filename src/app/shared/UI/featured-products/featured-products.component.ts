@@ -20,12 +20,12 @@ export class FeaturedProductsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.products$ = this.store$.select(productsSelector).pipe(
-      filter((products) => !!products),
+      filter((products) => !!products.length),
       map((products) => {
-        products.map(
-          (product) => product.category.categoryName !== 'egyedi termékek'
+        const filteredProducts = products.filter(
+          (product) => product.category[0].categoryName !== 'egyedi termékek'
         );
-        return products;
+        return filteredProducts;
       })
     );
   }
