@@ -17,6 +17,7 @@
       <img
         [src]="item.product['images'][0]"
         class="w-12rem flex-shrink-0 mx-auto md:mx-0" />
+
       <div class="flex-auto py-3 md:pl-5">
         <div
           class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-3">
@@ -31,20 +32,21 @@
             <div></div>
             <div class="flex flex-column sm:align-items-end">
               <span class="text-900 text-2xl font-medium mb-2 sm:mb-3"
-                >{{ item.price }} Ft</span
-              >
+                >{{ item.price }} Ft
+              </span>
+
               <a
                 (click)="onDeleteOrder(item)"
                 class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"
-                tabindex="0"
-                >Törlés</a
-              >
+                tabindex="0">
+                Törlés
+              </a>
             </div>
           </div>
         </div>
         <div class="flex flex-column">
           <span class="inline-flex align-items-center mb-1">
-            <span class="text-900 text-primary">Termék adatok:</span>
+            <span class="text-900 text-primary"> Termék adatok: </span>
           </span>
           <span
             class="inline-flex align-items-center mb-2"
@@ -129,21 +131,23 @@
           <span
             class="inline-flex align-items-center mb-2"
             *ngIf="item.productExtra.noseColor">
-            <span class="text-600"
-              >Orr színe:
-              <span class="font-bold text-800">{{
-                item.productExtra.noseColor
-              }}</span>
+            <span class="text-600">
+              Orr színe:
+              <span class="font-bold text-800">
+                {{ item.productExtra.noseColor }}
+              </span>
             </span>
           </span>
           <!-- <span class="inline-flex align-items-center mb-3">
             <span class="text-600 mr-2">Delivery by </span>
           </span>  -->
           <span class="flex flex-column" *ngIf="item.productExtra.comment">
-            <span class="text-900 text-primary"
-              >Megjegyzés a termékkel kapcsolatban:</span
-            >
-            <span class="text-600">{{ item.productExtra.comment }}</span>
+            <span class="text-900 text-primary">
+              Megjegyzés a termékkel kapcsolatban:
+            </span>
+            <span class="text-600">
+              {{ item.productExtra.comment }}
+            </span>
           </span>
         </div>
       </div>
@@ -154,23 +158,50 @@
     <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
       <li class="flex justify-content-between mb-4">
         <span class="text-xl text-900">Részösszeg</span>
-        <span class="text-xl text-900">{{ cartData.price }} Ft</span>
+        <span class="text-xl text-900"> {{ cartData.price }} Ft </span>
       </li>
-      <li class="flex justify-content-between mb-4">
+      <li class="flex flex-column sm:flex-row justify-content-between mb-4">
         <span class="text-xl text-900">Szállítás</span>
-        <span class="text-xl text-900">Free</span>
+
+        <form [formGroup]="shippingForm" class="flex flex-column w-full md:w-6">
+          <div class="field max-w-full">
+            <p-dropdown
+              styleClass="w-full mb-3"
+              [options]="shippingMethods"
+              formControlName="shippingMethod"
+              optionLabel="method"></p-dropdown>
+          </div>
+
+          <div class="field">
+            <p-dropdown
+              styleClass="w-full"
+              *ngIf="
+                shippingForm.get('shippingMethod').value.value ===
+                'foxpost-collection'
+              "
+              formControlName="foxpost"
+              [options]="foxpostPoints"
+              optionLabel="address"
+              [filter]="true"
+              filterBy="address"
+              [showClear]="true"
+              placeholder="Válassz">
+            </p-dropdown>
+          </div>
+        </form>
       </li>
 
       <li
         class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
-        <span class="text-xl text-900 font-bold text-3xl">Összesen</span>
-        <span class="text-xl text-900 font-bold text-3xl"
-          >{{ cartData.price }} Ft</span
-        >
+        <span class="text-xl text-900 font-bold text-3xl"> Összesen </span>
+        <span class="text-xl text-900 font-bold text-3xl">
+          {{ cartData.price }} Ft
+        </span>
       </li>
       <li class="flex justify-content-end">
-        <button class="primary-button shadow-2">
-          <i class="pi pi-credit-card mr-1"></i>Fizetés
+        <button class="primary-button shadow-2" (click)="onSubmitOrder()">
+          <i class="pi pi-credit-card mr-1"></i>
+          Fizetés
         </button>
       </li>
     </ul>

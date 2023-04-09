@@ -21,6 +21,7 @@ import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -64,7 +65,8 @@ const PRIME_NG = [
   ConfirmDialogModule,
   BadgeModule,
   SelectButtonModule,
-  ChipsModule
+  ChipsModule,
+  DropdownModule
 ];
 
 @NgModule({

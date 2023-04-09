@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -13,6 +13,7 @@ import { ImageModule } from 'primeng/image';
 import { BadgeModule } from 'primeng/badge';
 import { GalleriaModule } from 'primeng/galleria';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { NavbarComponent } from './UI/navbar/navbar.component';
 import { FooterComponent } from './UI/footer/footer.component';
@@ -43,7 +44,8 @@ const PRIME_NG = [
   CheckboxModule,
   InputTextareaModule,
   InputTextModule,
-  MatDialogModule
+  MatDialogModule,
+  DropdownModule
 ];
 
 @NgModule({
@@ -66,6 +68,7 @@ const PRIME_NG = [
     CommonModule,
     FontAwesomeModule,
     RouterModule,
+    FormsModule,
     ReactiveFormsModule,
     ...PRIME_NG
   ],

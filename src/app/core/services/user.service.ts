@@ -25,6 +25,12 @@ export class UserService {
     );
   }
 
+  updateCurrentUser$(user: User): Observable<User> {
+    return this.apiService
+      .patch<ApiResponse<User>>('users/updateMe', user)
+      .pipe(map((userDTO) => userDTO.data));
+  }
+
   deleteUser$(user: User): Observable<null> {
     return this.apiService.delete<null>('users', user._id).pipe(
       tap(() => {
