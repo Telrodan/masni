@@ -11,7 +11,7 @@ export class OrderService {
 
   constructor(private apiService: ApiService) {}
 
-  getCheckoutSession(shippingMethod) {
+  getCheckoutSession(shippingMethod: any) {
     return this.apiService.post('order/addOrder', shippingMethod);
   }
 }
