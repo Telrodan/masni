@@ -6,17 +6,18 @@ import {
   RouterStateSnapshot,
   UrlTree
 } from '@angular/router';
-import { MessageService } from 'primeng/api';
 
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+
+import { AuthService } from '@core/services/auth.service';
+import { ToastrService } from '@core/services/toastr.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
+    private toastr: ToastrService
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -29,11 +30,7 @@ export class AuthGuard implements CanActivate {
     const isAuthenticated = this.authService.getIsAuthenticated();
     if (!isAuthenticated) {
       this.router.navigate(['/login']);
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Figyelem!',
-        detail: 'Előbb lépje be'
-      });
+      this.toastr.warn('Figyelem', 'Előbb lépje be');
     }
     return isAuthenticated;
   }

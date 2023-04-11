@@ -1,13 +1,20 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { User } from '@core/models/user.model';
 
-import { MessageService } from 'primeng/api';
 import { catchError, tap, throwError } from 'rxjs';
 
 import { AuthService } from 'src/app/core/services/auth.service';
+import { User } from '@core/models/user.model';
+import { ToastrService } from '@core/services/toastr.service';
+import { environment } from 'src/environments/environment';
+
+interface PostCodeApiData {
+  places: {
+    'place name': string;
+    state: string;
+  }[];
+}
 
 @Component({
   selector: 'masni-handmade-dolls-signup',
@@ -15,42 +22,38 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-  public signupForm: FormGroup;
-  public isSuccess = false;
+  signupForm: FormGroup;
+  isSuccess = false;
 
   constructor(
     private authService: AuthService,
-    private messageService: MessageService,
-    private router: Router,
+    private toastr: ToastrService,
     private http: HttpClient
   ) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.createForm();
   }
 
-  public onSignup(): void {
-    console.log(this.signupForm.value);
+  onSignup(): void {
     if (this.signupForm.valid) {
-      const newUser = new User(this.signupForm.value);
+      const user = new User(this.signupForm.value);
       this.authService
-        .signup$(newUser)
+        .signup$(user)
         .pipe(
           tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sikeres regisztráció!',
-              detail: 'Átirányítva a főoldalra'
-            });
+            this.toastr.success(
+              'Siker',
+              'Sikeres regisztráció, átirányítva a főoldra'
+            );
             this.signupForm.reset();
-            this.router.navigate(['/']);
           })
         )
         .subscribe();
     }
   }
 
-  public createForm() {
+  createForm(): void {
     // eslint-disable-next-line no-useless-escape
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const phoneRegex = /^06[0-9]{9}$/;
@@ -80,11 +83,10 @@ export class SignupComponent implements OnInit {
   }
 
   onPostcodeBlur(event: Event): void {
-    console.log(this.signupForm.value);
     if (this.signupForm.get('postcode').valid) {
       const postcode = (event.target as HTMLInputElement).value;
       const headers = new HttpHeaders({
-        'X-RapidAPI-Key': '99eb9da73dmsh0b8a6cae4b15b1ap10dd5ajsnaee21aaff256',
+        'X-RapidAPI-Key': environment.zippopotamusApiKey,
         'X-RapidAPI-Host': 'community-zippopotamus.p.rapidapi.com'
       });
       this.http
@@ -97,7 +99,7 @@ export class SignupComponent implements OnInit {
               () => new Error('Nem található ilyen irányítószám!')
             );
           }),
-          tap((response: any) => {
+          tap((response: PostCodeApiData) => {
             this.signupForm
               .get('city')
               .setValue(response.places[0]['place name']);

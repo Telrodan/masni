@@ -22,4 +22,20 @@ export class ToastrService {
       detail: message
     });
   }
+
+  warn(title: string, message: string): void {
+    this.messageService.add({
+      severity: 'warn',
+      summary: title,
+      detail: message
+    });
+  }
+
+  error(title: string, message: string): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: title,
+      detail: message
+    });
+  }
 }

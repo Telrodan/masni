@@ -28,11 +28,15 @@ export class AuthService {
     private cookieService: CookieService
   ) {}
 
-  public signup$(newUser: User): Observable<ApiResponse<string>> {
-    return this.apiService.post<ApiResponse<string>>('auth/signup', newUser);
+  signup$(user: User): Observable<ApiResponse<string>> {
+    return this.apiService.post<ApiResponse<string>>('auth/signup', user).pipe(
+      tap(() => {
+        this.router.navigate(['/']);
+      })
+    );
   }
 
-  public login$(authData: AuthData): Observable<ApiResponse<string>> {
+  login$(authData: AuthData): Observable<ApiResponse<string>> {
     return this.apiService
       .post<ApiResponse<string>>('auth/login', authData)
       .pipe(

@@ -8,7 +8,8 @@ import {
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { CookieService } from '../services/cookie.service';
+
+import { CookieService } from '@core/services/cookie.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -21,7 +22,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const authRequest = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + authToken)
     });
-
     return next.handle(authRequest);
   }
 }

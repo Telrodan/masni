@@ -18,7 +18,7 @@ export class MaterialEffects {
       ofType(getMaterials),
       exhaustMap(() =>
         this.materialService
-          .getMaterials()
+          .fetchMaterials$()
           .pipe(map((materials) => getMaterialsSuccess({ materials })))
       )
     )

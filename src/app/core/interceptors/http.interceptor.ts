@@ -9,15 +9,15 @@ import {
 } from '@angular/common/http';
 
 import { Observable, throwError, catchError, tap, finalize } from 'rxjs';
-import { MessageService } from 'primeng/api';
 
 import { SpinnerService } from '@core/services/spinner.service';
+import { ToastrService } from '@core/services/toastr.service';
 
 @Injectable()
 export class HTTPInterceptor implements HttpInterceptor {
   constructor(
     private spinnerService: SpinnerService,
-    private messageService: MessageService
+    private toastr: ToastrService
   ) {}
 
   intercept(
@@ -32,18 +32,10 @@ export class HTTPInterceptor implements HttpInterceptor {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Error: ${error.error.message}`;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Message Content'
-          });
+          this.toastr.error('Hiba', errorMsg);
         } else {
           errorMsg = `Error Code: ${error.status},  Message: ${error.error.message}`;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Szerver oldali hiba!',
-            detail: error.error.message
-          });
+          this.toastr.error('Szerver oldali hiba', errorMsg);
         }
         return throwError(() => new Error(errorMsg));
       }),

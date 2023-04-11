@@ -5,9 +5,11 @@ import {
   RouterStateSnapshot,
   UrlTree
 } from '@angular/router';
+
+import { Observable } from 'rxjs';
+
 import { CookieService } from '@core/services/cookie.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +35,6 @@ export class HasRoleGuard implements CanActivate {
       return true;
     } else {
       this.toastr.info('Info', 'Nincs jogosultságod ehhez az oldalhoz');
-      console.log('lol');
       return false;
     }
   }

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+
 import { CookieService } from './cookie.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +12,25 @@ import { CookieService } from './cookie.service';
 export class ApiService {
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
-  public post<T>(endpoint: string, data: any): Observable<T> {
+  post<T>(endpoint: string, data: any): Observable<T> {
     return <Observable<T>>(
       this.http.post(`${environment.apiUrl}${endpoint}`, data)
     );
   }
 
-  public get<T>(endpoint: string, params?: any): Observable<T> {
+  get<T>(endpoint: string, params?: any): Observable<T> {
     return <Observable<T>>(
       this.http.get(`${environment.apiUrl}${endpoint}`, { params })
     );
   }
 
-  public delete<T>(endpoint: string, id: string): Observable<T> {
+  delete<T>(endpoint: string, id: string): Observable<T> {
     return <Observable<T>>(
       this.http.delete(`${environment.apiUrl}${endpoint}/` + id)
     );
   }
 
-  public patch<T>(endpoint: string, data: any): Observable<T> {
+  patch<T>(endpoint: string, data: any): Observable<T> {
     return <Observable<T>>(
       this.http.patch(`${environment.apiUrl}${endpoint}`, data, data.id)
     );

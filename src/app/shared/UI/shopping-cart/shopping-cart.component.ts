@@ -175,9 +175,7 @@ export class ShoppingCartComponent implements OnInit {
     this.orderService
       .getCheckoutSession(shipping)
       .subscribe(async (res: any) => {
-        const stripe = await loadStripe(
-          'pk_test_51MsPRyEcSAztbfcgotvUuJ7E7gZDPpWs5oMCDWM8hnLNRu3U7nXVId27QvQZYSz5QHqiQFa7wX6P33zpNc6NCzrp009g6lXHFQ'
-        );
+        const stripe = await loadStripe(environment.stripeKey);
         stripe?.redirectToCheckout({
           sessionId: res.data.id
         });
