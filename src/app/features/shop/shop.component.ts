@@ -52,7 +52,7 @@ export class ShopComponent implements OnInit {
         products = products.filter(
           (product) => product.category[0].categoryName !== 'egyedi termékek'
         );
-        return products;
+        return products.filter((product) => product.stock > 0);
       }),
       untilDestroyed(this)
     );

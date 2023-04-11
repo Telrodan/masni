@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductCardComponent {
   @Input() product: Product;
-  productImagesUrl = environment.productImagesUrl;
   public faCartShopping = faCartShopping;
 
   constructor(private router: Router) {}

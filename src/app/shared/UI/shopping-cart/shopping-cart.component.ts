@@ -48,7 +48,6 @@ interface ShippingOption {
 export class ShoppingCartComponent implements OnInit {
   user: User;
   shoppingCartData$: Observable<ShoppingCartData>;
-  productImagesUrl = environment.productImagesUrl;
 
   shippingForm: FormGroup;
   foxpostPoints: any;

@@ -12,7 +12,6 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { combineLatest, filter, map, Observable, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 interface ProductsData {
   products: Product[];
@@ -29,7 +28,6 @@ export class AllProductComponent implements OnInit {
   product: Product;
   productForm: FormGroup;
   productsData$: Observable<ProductsData>;
-  productImagesUrl = environment.productImagesUrl;
   isDialogVisible = false;
 
   constructor(

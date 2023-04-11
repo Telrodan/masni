@@ -1,0 +1,139 @@
+<div class="categories">
+  <p-card
+    header="Rendelések"
+    subheader="Összes rendelés"
+    *ngIf="orders$ | async as orders">
+    <div class="grid">
+      <div class="col-12">
+        <p-table [value]="orders" styleClass="p-datatable-gridlines">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Rendelés azonosító</th>
+              <th>Rendelő</th>
+              <th>Ár</th>
+              <th>Rendelés státusza</th>
+              <th>Rendelt termék db</th>
+              <th>Részletek</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-order>
+            <tr>
+              <td>{{ order._id }}</td>
+              <td>{{ order.user[0].name }}</td>
+              <td>{{ order.price }} Ft</td>
+              <td>{{ order.status === 'paid' ? 'Fizetve' : 'Függőben' }}</td>
+              <td>{{ order.products.length }} db</td>
+              <td>
+                <p-button
+                  icon="pi pi-info"
+                  [routerLink]="['/admin/order-details', order._id]"></p-button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- <p-dialog
+  header="Header"
+  [(visible)]="isDialogVisible"
+  [draggable]="false"
+  [modal]="true"
+  [style]="{ width: '50vw' }">
+  <ng-template pTemplate="header">
+    <span class="text-xl font-bold">Termék szerkesztése</span>
+  </ng-template>
+
+  <form
+    class="flex-auto p-fluid"
+    [formGroup]="productForm"
+    *ngIf="isDialogVisible">
+    <div class="mb-4">
+      <label for="name" class="block font-medium text-900 mb-2"
+        >Termék neve</label
+      >
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="mb-4">
+      <label for="categoryId" class="block font-medium text-900 mb-2"
+        >Termék kategória</label
+      >
+      <p-dropdown
+        id="categoryId"
+        formControlName="categoryId"
+        [options]="(productsData$ | async).categories"
+        placeholder="Válassz egy kategóriát"
+        optionValue="_id"
+        optionLabel="categoryName"
+        [showClear]="true"></p-dropdown>
+    </div>
+
+    <div class="mb-4">
+      <label for="shortDescription" class="block font-medium text-900 mb-2"
+        >Termék rövid leírása</label
+      >
+      <input
+        id="shortDescription"
+        type="text"
+        formControlName="shortDescription"
+        pInputText />
+    </div>
+
+    <div class="mb-4">
+      <label for="description" class="block font-medium text-900 mb-2"
+        >Termék leírása</label
+      >
+      <textarea
+        id="description"
+        formControlName="description"
+        type="text"
+        pInputTextarea
+        rows="5"
+        [autoResize]="true"></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label for="bio" class="block font-medium text-900 mb-2"
+        >Termék képek (az első kép lesz mindig a nagy kép)</label
+      >
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Válassz"
+        class="p-button-secondary"
+        (click)="imageInput.click()"></button>
+      <input
+        multiple
+        class="image-input"
+        type="file"
+        (change)="selectImage($event)"
+        #imageInput />
+    </div>
+
+    <div class="mb-4">
+      <label for="price" class="block font-medium text-900 mb-2"
+        >Termék ára</label
+      >
+      <input id="price" formControlName="price" type="text" pInputText />
+    </div>
+    <div class="mb-4">
+      <label for="stock" class="block font-medium text-900 mb-2"
+        >Készleten</label
+      >
+      <input id="stock" formControlName="stock" type="text" pInputText />
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      (click)="onUpdateProduct()"
+      icon="pi pi-check"
+      label="Módosítás"
+      [disabled]="!this.productForm.valid"
+      styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog> -->

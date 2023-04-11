@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { map, Observable, tap } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { MaterialService } from './material.service';
@@ -52,7 +52,7 @@ export class ProductService {
   public getProducts(): Observable<Product[]> {
     return this.apiService
       .get<ApiResponse<Product[]>>('products/getAll')
-      .pipe(map((response) => response.data));
+      .pipe(map((productsDTO) => productsDTO.data));
   }
 
   getProductExtraPrice(productExtra): number {

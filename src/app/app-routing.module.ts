@@ -18,6 +18,8 @@ import { AllProductComponent } from './features/admin/components/all-product/all
 import { CategoriesComponent } from './features/admin/components/categories/categories.component';
 import { ProductComponent } from './features/admin/components/product/product.component';
 import { UsersComponent } from './features/admin/components/users/users.component';
+import { OrdersComponent } from './features/admin/components/orders/orders.component';
+import { OrderDetailsComponent } from './features/admin/components/order-details/order-details.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -31,9 +33,6 @@ const masniShopModule = () =>
   import('./features/masni-shop/masni-shop.module').then(
     (m) => m.MasniShopModule
   );
-
-const adminModule = () =>
-  import('./features/admin/admin.module').then((m) => m.AdminModule);
 
 const routes: Routes = [
   {
@@ -57,6 +56,11 @@ const routes: Routes = [
     },
     children: [
       {
+        path: '',
+        redirectTo: 'reports',
+        pathMatch: 'full'
+      },
+      {
         path: 'reports',
         component: ReportsComponent
       },
@@ -75,6 +79,14 @@ const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent
+      },
+      {
+        path: 'orders',
+        component: OrdersComponent
+      },
+      {
+        path: 'order-details/:id',
+        component: OrderDetailsComponent
       }
     ]
   },
