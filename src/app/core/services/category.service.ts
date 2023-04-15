@@ -21,7 +21,6 @@ export class CategoryService {
       .pipe(
         map((categoryDTO) => categoryDTO.data),
         tap((category) => {
-          console.log(category);
           category.products = [];
           this.store.dispatch(addCategory({ category }));
         })

@@ -19,7 +19,7 @@ import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.s
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { environment } from 'src/environments/environment';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/UI/confirm-dialog/confirm-dialog.component';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '@core/services/order.service';
@@ -169,8 +169,6 @@ export class ShoppingCartComponent implements OnInit {
         address: this.shippingForm.get('foxpost').value.address
       };
     }
-
-    console.log(shipping);
 
     this.orderService
       .getCheckoutSession(shipping)

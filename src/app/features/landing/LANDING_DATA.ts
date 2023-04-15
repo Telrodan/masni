@@ -2,12 +2,12 @@ export const firstCarousel = {
   heading: '',
   displayHeading: false,
   images: [
-    '../../../../assets/images/landing-page/first-carousel/image-1.jpg',
-    '../../../../assets/images/landing-page/first-carousel/image-2.jpg',
-    '../../../../assets/images/landing-page/first-carousel/image-3.jpg',
-    '../../../../assets/images/landing-page/first-carousel/image-4.jpg',
-    '../../../../assets/images/landing-page/first-carousel/image-5.jpg',
-    '../../../../assets/images/landing-page/first-carousel/image-6.jpg'
+    '../../../../../assets/images/landing-page/first-carousel/image-1.jpg',
+    '../../../../../assets/images/landing-page/first-carousel/image-2.jpg',
+    '../../../../../assets/images/landing-page/first-carousel/image-3.jpg',
+    '../../../../../assets/images/landing-page/first-carousel/image-4.jpg',
+    '../../../../../assets/images/landing-page/first-carousel/image-5.jpg',
+    '../../../../../assets/images/landing-page/first-carousel/image-6.jpg'
   ],
   isRoundImage: false,
   linkText: '',

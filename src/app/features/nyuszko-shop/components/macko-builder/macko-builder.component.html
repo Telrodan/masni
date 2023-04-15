@@ -5,12 +5,11 @@
         productData.baseProduct.images
       "></masni-handmade-dolls-image-composition>
   </div>
-
   <div class="container shadow-2">
-    <h1 class="heading-primary">Nyuszkó-szundikendő</h1>
-    <p class="mb-3 text-pink-400">
-      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a
-      Nyuszkó-szundikendő végösszegén!
+    <h1 class="heading-primary">Mackó</h1>
+    <p class="mb-4 text-pink-400">
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a Mackó
+      végösszegén!
     </p>
 
     <form
@@ -19,38 +18,40 @@
       [formGroup]="builderForm"
       *ngIf="productData.customProduct as customProduct">
       <div class="form-group">
-        <label class="form-label">Alapszín:</label>
+        <label class="form-label form-highlight mb-3 shadow-2">Alapszín:</label>
         <p-dropdown
           styleClass="w-full"
           [options]="customProduct.baseColor"
-          placeholder="Válassz egyet"
           formControlName="baseColor"
           optionLabel="nameWithExtra"
-          optionValue="name"></p-dropdown>
+          optionValue="name"
+          placeholder="Válassz egyet"></p-dropdown>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Szundikendő színe/mintája:</label>
-        <p-dropdown
-          styleClass="w-full"
-          placeholder="Válassz egyet"
-          [options]="customProduct.szundikendoColor"
-          formControlName="szundikendoColor"
-          optionLabel="nameWithExtra"
-          optionValue="name"></p-dropdown>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label"
-          >Minky plüss színe(szundikendő-hátulja):</label
+        <label class="form-label form-highlight mb-3 shadow-2"
+          >Fülek és test színe/mintája:</label
         >
         <p-dropdown
           styleClass="w-full"
-          placeholder="Válassz egyet"
-          [options]="customProduct.minkyColorBack"
-          formControlName="minkyColorBack"
-          optionLabel="name"
-          optionValue="name"></p-dropdown>
+          [options]="customProduct.earsAndBodyColor"
+          formControlName="earsAndBodyColor"
+          optionLabel="nameWithExtra"
+          optionValue="name"
+          placeholder="Válassz egyet"></p-dropdown>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label form-highlight mb-3 shadow-2"
+          >Orr színe:</label
+        >
+        <p-dropdown
+          styleClass="w-full"
+          [options]="customProduct.noseColor"
+          formControlName="noseColor"
+          optionLabel="nameWithExtra"
+          optionValue="name"
+          placeholder="Válassz egyet"></p-dropdown>
       </div>
 
       <div class="field-checkbox">
@@ -59,7 +60,7 @@
           formControlName="nameEmbroideryCheckbox"
           inputId="nameEmbroideryCheckbox"></p-checkbox>
         <label for="nameEmbroideryCheckbox"
-          >Szeretnék kézzel hímzett nevet a szundikendőre! +500 Ft</label
+          >Szeretnék kézzel hímzett nevet a mackóra! +500 Ft</label
         >
       </div>
 
@@ -75,7 +76,7 @@
       </div>
       <div class="form-group">
         <label for="comment" class="form-label"
-          >Megjegyzés az elkészítéssel kapcsolatban!</label
+          >Megjegyzés az elkészítéssel kapcsolatban:</label
         >
         <textarea
           rows="5"
@@ -108,7 +109,7 @@
         class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
         Termékleírás:
       </li>
-      <li class="line-height-3 p-3 border-bottom-1 border-300">
+      <li class="line-height-3 pt-3 border-300">
         {{ productData.baseProduct.description }}
       </li>
     </ol>

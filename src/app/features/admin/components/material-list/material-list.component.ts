@@ -69,7 +69,6 @@ export class MaterialListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    console.log(this.categoryForm.value);
 
     this.materials$ = combineLatest([
       this.store.select(materialsSelector),

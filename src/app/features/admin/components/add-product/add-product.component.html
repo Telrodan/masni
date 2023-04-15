@@ -56,13 +56,29 @@
           <label for="bio" class="block font-medium text-900 mb-2"
             >Termék képek (az első kép lesz mindig a nagy kép)</label
           >
+          <p-button
+            icon="pi pi-image"
+            styleClass="p-button-secondary"
+            (click)="imagePicker.click()"></p-button>
           <input
-            type="hidden"
-            data-multiple="true"
-            data-remove-links="true"
-            name="images"
-            id="images"
-            class="simple-file-upload" />
+            multiple
+            type="file"
+            class="hidden"
+            #imagePicker
+            (change)="onImagePicked($event)" />
+          <div class="flex-row">
+            <img
+              class="w-2 m-3 inline"
+              *ngFor="let image of imagesPreview"
+              [src]="image"
+              [alt]="productForm.value.name" />
+          </div>
+
+          <p-button
+            *ngIf="imagesPreview.length"
+            icon="pi pi-times"
+            styleClass="p-button-warning"
+            (click)="imagesPreview = []"></p-button>
         </div>
 
         <div class="mb-4">
@@ -83,7 +99,6 @@
             pRipple
             label="Hozzáadás"
             type="submit"
-            [disabled]="!productForm.valid"
             class="w-auto"></button>
         </div>
       </form>

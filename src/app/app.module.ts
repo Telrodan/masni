@@ -29,8 +29,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptorProvider } from './core/interceptors/auth-interceptor';
 import { HttpInterceptorProvider } from './core/interceptors/http.interceptor';
 import { LandingComponent } from './features/landing/landing.component';
-import { LandingBrandsComponent } from './features/landing/landing-brands/landing-brands.component';
-import { LandingAboutUsComponent } from './features/landing/landing-about-us/landing-about-us.component';
+import { LandingBrandsComponent } from './features/landing/components/landing-brands/landing-brands.component';
+import { LandingAboutUsComponent } from './features/landing/components/landing-about-us/landing-about-us.component';
 import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from './features/masni-shop/masni-shop.module';
 import { ContactComponent } from './features/contact/contact.component';
@@ -54,6 +54,13 @@ import { AuthModule } from './features/auth/auth.module';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OrderEffects } from '@core/store/effects/order.effects';
+import { ProductDetailsComponent } from './features/shop/components/product-details/product-details.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { SamplesComponent } from './features/samples/samples.component';
+import { GalleriaModule } from 'primeng/galleria';
+import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
+import { FeaturedProductsComponent } from './features/landing/components/featured-products/featured-products.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const PRIME_NG = [
   AccordionModule,
@@ -69,7 +76,9 @@ const PRIME_NG = [
   SelectButtonModule,
   ChipsModule,
   DropdownModule,
-  CardModule
+  CardModule,
+  CheckboxModule,
+  GalleriaModule
 ];
 
 @NgModule({
@@ -80,9 +89,13 @@ const PRIME_NG = [
     LandingAboutUsComponent,
     ContactComponent,
     ShopComponent,
+    ProductDetailsComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    SamplesComponent,
+    ShoppingCartComponent,
+    FeaturedProductsComponent
   ],
   imports: [
     BrowserModule,
@@ -98,6 +111,7 @@ const PRIME_NG = [
     HttpClientModule,
     ImageModule,
     MatSnackBarModule,
+    MatDialogModule,
     ...PRIME_NG,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({

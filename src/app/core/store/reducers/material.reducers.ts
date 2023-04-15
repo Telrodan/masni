@@ -59,7 +59,6 @@ export const materialReducers = createReducer(
 
     for (const key in sortedMaterials) {
       if (key === action.material.category) {
-        console.log(sortedMaterials[key]);
         const sortedMaterialIndex = sortedMaterials[key].findIndex(
           (material: Material) => material._id === action.material._id
         );
@@ -85,7 +84,6 @@ export const materialReducers = createReducer(
 
     for (const key in sortedMaterials) {
       if (key === action.material.category) {
-        console.log(sortedMaterials[key]);
         const sortedMaterialIndex = sortedMaterials[key].findIndex(
           (material: Material) => material._id === action.material._id
         );

@@ -20,10 +20,7 @@ export class OrderDetailsComponent implements OnInit {
     this.order$ = this.route.params.pipe(
       filter((params) => !!params),
       map((params) => params['id']),
-      switchMap((id) => this.orderService.getOrder(id)),
-      tap((order) => {
-        console.log(order);
-      })
+      switchMap((id) => this.orderService.getOrder(id))
     );
   }
 }

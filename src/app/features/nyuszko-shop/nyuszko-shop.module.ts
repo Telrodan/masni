@@ -12,10 +12,10 @@ import { AccordionModule } from 'primeng/accordion';
 import { NyuszkoShopRoutingModule } from './nyuszko-shop-routing.module';
 import { NyuszkoShopComponent } from './nyuszko-shop.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { NyuszkoBuilderComponent } from './nyuszko-builder/nyuszko-builder.component';
-import { NyuszkoSzundikendoBuilderComponent } from './nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
-import { MackoBuilderComponent } from './macko-builder/macko-builder.component';
-import { MackoSzundikendoBuilderComponent } from './macko-szundikendo-builder/macko-szundikendo-builder.component';
+import { NyuszkoBuilderComponent } from './components/nyuszko-builder/nyuszko-builder.component';
+import { NyuszkoSzundikendoBuilderComponent } from './components/nyuszko-szundikendo-builder/nyuszko-szundikendo-builder.component';
+import { MackoBuilderComponent } from './components/macko-builder/macko-builder.component';
+import { MackoSzundikendoBuilderComponent } from './components/macko-szundikendo-builder/macko-szundikendo-builder.component';
 import { ButtonModule } from 'primeng/button';
 
 const PRIME_NG = [

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { filter, map, Observable, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
+import { ApiResponse } from '@core/models/api-response.model';
 import { MaterialService } from './material.service';
 import { Product } from '@core/models/product.model';
-import { ApiResponse } from '@core/models/api-response.model';
-import { Store } from '@ngrx/store';
 import { addProduct, deleteProduct, updateProduct } from '@core/store';
 
 @Injectable({
@@ -19,9 +19,9 @@ export class ProductService {
     private store: Store
   ) {}
 
-  addProduct(product: FormData): Observable<Product> {
+  addProduct$(product: FormData): Observable<Product> {
     return this.apiService
-      .post<ApiResponse<Product>>('products/add', product)
+      .post<ApiResponse<Product>>('product/addOne', product)
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
@@ -32,7 +32,7 @@ export class ProductService {
 
   updateProduct$(product: Product): Observable<Product> {
     return this.apiService
-      .patch<ApiResponse<Product>>(`products/${product._id}`, product)
+      .patch<ApiResponse<Product>>(`product/${product._id}`, product)
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
@@ -42,7 +42,7 @@ export class ProductService {
   }
 
   deleteProduct$(product: Product): Observable<null> {
-    return this.apiService.delete<null>('products', product._id).pipe(
+    return this.apiService.delete<null>('product', product._id).pipe(
       tap(() => {
         this.store.dispatch(deleteProduct({ product }));
       })
@@ -51,7 +51,7 @@ export class ProductService {
 
   public getProducts(): Observable<Product[]> {
     return this.apiService
-      .get<ApiResponse<Product[]>>('products/getAll')
+      .get<ApiResponse<Product[]>>('product/getAll')
       .pipe(map((productsDTO) => productsDTO.data));
   }
 
@@ -60,12 +60,10 @@ export class ProductService {
 
     for (const key in productExtra) {
       if (key !== 'extraMinkyEarsInput' && key !== 'minkyColorBack') {
-        console.log(key);
         const extraPrice = this.materialService.getExtraPriceByName(
           productExtra[key]
         );
         price += extraPrice;
-        console.log(price);
       }
     }
     price += productExtra?.extraMinkyEarsCheckbox ? 400 : 0;

@@ -1,15 +1,16 @@
-<main class="builder" *ngIf="productData$ | async as productData">
+<main class="builder my-5" *ngIf="productData$ | async as productData">
   <div class="image-composition-container">
     <masni-handmade-dolls-image-composition
       [images]="
         productData.baseProduct.images
       "></masni-handmade-dolls-image-composition>
   </div>
+
   <div class="container shadow-2">
-    <h1 class="heading-primary">Mackó-szundikendő</h1>
-    <p class="mb-3 text-pink-400">
-      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a
-      Mackó-szundikendő végösszegén!
+    <h1 class="heading-primary">Nyuszkó</h1>
+    <p class="mb-4 text-pink-400">
+      Kérlek vedd figyelembe, hogy egyes anyagok változtathatnak a Nyuszkó
+      végösszegén!
     </p>
 
     <form
@@ -18,34 +19,61 @@
       [formGroup]="builderForm"
       *ngIf="productData.customProduct as customProduct">
       <div class="form-group">
-        <label class="form-label">Alapszín:</label>
+        <label class="form-label form-highlight mb-3 shadow-2">Alapszín:</label>
         <p-dropdown
           styleClass="w-full"
           placeholder="Válassz egyet"
-          [options]="customProduct.baseColor"
           formControlName="baseColor"
           optionLabel="nameWithExtra"
-          optionValue="name"></p-dropdown>
+          optionValue="name"
+          [options]="customProduct.baseColor"></p-dropdown>
       </div>
+
       <div class="form-group">
-        <label class="form-label">Szundikendo színe/mintája:</label>
+        <label class="form-label form-highlight mb-3 shadow-2"
+          >Fülek színe mintája:</label
+        >
+
         <p-dropdown
           styleClass="w-full"
-          placeholder="Válassz egyet"
-          [options]="customProduct.szundikendoColor"
-          formControlName="szundikendoColor"
+          [options]="customProduct.earsColor"
+          formControlName="earsColor"
           optionLabel="nameWithExtra"
-          optionValue="name"></p-dropdown>
+          optionValue="name"
+          placeholder="Válassz egyet"></p-dropdown>
       </div>
+
       <div class="form-group">
-        <label class="form-label"
-          >Minky plüss színe(szundikendő-hátulja):</label
+        <label class="form-label form-highlight mb-3 shadow-2"
+          >Masni színe:</label
         >
         <p-dropdown
           styleClass="w-full"
+          [options]="customProduct.ribbonColor"
+          formControlName="ribbonColor"
+          optionLabel="nameWithExtra"
+          optionValue="name"
+          placeholder="Válassz egyet"></p-dropdown>
+      </div>
+
+      <div class="field-checkbox">
+        <p-checkbox
+          [binary]="true"
+          formControlName="extraMinkyEarsCheckbox"
+          inputId="extraMinkyEarsCheckbox"></p-checkbox>
+        <label for="extraMinkyEarsCheckbox"
+          >Extra minky plüss fülekkel kérem! +400 Ft</label
+        >
+      </div>
+
+      <div
+        class="form-group"
+        *ngIf="builderForm.get('extraMinkyEarsCheckbox').value">
+        <p-dropdown
+          styleClass="w-full"
           placeholder="Válassz egyet"
-          [options]="customProduct.minkyColorBack"
-          formControlName="minkyColorBack"
+          [options]="customProduct.extraMinkyEars"
+          formControlName="extraMinkyEarsInput"
           optionLabel="name"
           optionValue="name"></p-dropdown>
       </div>
@@ -56,7 +84,7 @@
           formControlName="nameEmbroideryCheckbox"
           inputId="nameEmbroideryCheckbox"></p-checkbox>
         <label for="nameEmbroideryCheckbox"
-          >Szeretnék kézzel hímzett nevet a szundikendőre! +500 Ft</label
+          >Szeretnék kézzel hímzett nevet a nyuszkóra! +500 Ft</label
         >
       </div>
 
@@ -65,14 +93,16 @@
         *ngIf="builderForm.get('nameEmbroideryCheckbox').value">
         <input
           id="nameEmbroideryInput"
+          cl
           type="text"
           pInputText
           formControlName="nameEmbroideryInput"
           placeholder="Add meg a nevet" />
       </div>
+
       <div class="form-group">
         <label for="comment" class="form-label"
-          >Megjegyzés az elkészítéssel kapcsolatban!</label
+          >Megjegyzés az elkészítéssel kapcsolatban:</label
         >
         <textarea
           rows="5"
@@ -100,26 +130,14 @@
       >
       <a routerLink="/nyuszko-shop" class="secondary-button shadow-2">Vissza</a>
     </form>
-    <p-accordion>
-      <p-accordionTab header="Termék leírása"
-        ><div class="accordion-content">
-          <div class="story-container">
-            <p class="story-paragraph paragraph-primary">
-              A szundikendőket 100%-ban természetes alapanyagokból,
-              pamutvászonból és minky plüss anyagból készítem. Az arc
-              kialakításáshoz gyapjúfilcet használok. A szundikendőhöz tartozó
-              fejecskét antiallergén szilikonizált poliészter golyókkal töltöm
-              meg, ami baba barát és mosható. A mackófej kézzel hímzett szemeket
-              és kézzel felvarrt gyapjúfilc orrot kap. A szundikendő mérete
-              30cm*30cm, plusz a fejecske. Amennyiben szeretnéd, hogy ajándékod
-              még egyedibb legyen, kézzel hímzett névvel ellátva is kérheted.
-              Kézzel hímzett termékek esetén a kézzel való tisztítást részesítem
-              előnyben, de 30°C-on, kímélőprogrammal, mosózsákban mosható.
-              Szárítógépbe kérlek ne tedd! A minky plüss nem vasalható!
-            </p>
-          </div>
-        </div>
-      </p-accordionTab>
-    </p-accordion>
+    <ol class="list-none p-0 m-0 text-center text-900">
+      <li
+        class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
+        Termékleírás:
+      </li>
+      <li class="line-height-3 pt-3 border-300">
+        {{ productData.baseProduct.description }}
+      </li>
+    </ol>
   </div>
 </main>
