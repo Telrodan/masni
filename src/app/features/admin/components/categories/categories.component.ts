@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { filter, Observable, tap } from 'rxjs';
+import { filter, Observable, switchMap, tap } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 
 import { CategoryService } from '@core/services/category.service';
 import { categoriesSelector } from '@core/store';
 import { Category } from '@core/models/category.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ToastrService } from '@core/services/toastr.service';
 
 @UntilDestroy()
 @Component({
@@ -24,8 +27,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
     private store: Store
   ) {}
 
@@ -41,11 +44,7 @@ export class CategoriesComponent implements OnInit {
         .addCategory$(this.categoryName)
         .pipe(
           tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Siker!',
-              detail: `${this.categoryName} hozzáadva`
-            });
+            this.toastr.success('Siker', `${this.categoryName} hozzáadva`);
             this.categoryName = '';
           })
         )
@@ -54,27 +53,24 @@ export class CategoriesComponent implements OnInit {
   }
 
   onDeleteCategory(category: Category): void {
-    this.confirmationService.confirm({
-      message: `Biztos törölni szeretnéd ${category.categoryName} kategóriát?`,
-      header: 'Megerősítés',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Igen',
-      rejectLabel: 'Nem',
-      accept: () => {
-        this.categoryService
-          .deleteCategory$(category._id)
-          .pipe(
-            tap(() => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Siker!',
-                detail: `${category.categoryName} törölve`
-              });
-            })
-          )
-          .subscribe();
-      }
-    });
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Megerősítés',
+          message: `Biztos törölni szeretnéd "${category.categoryName}" kategóriát?`,
+          confirmButtonText: 'Igen',
+          cancelButtonText: 'Nem'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => !!confirmed),
+        switchMap(() => this.categoryService.deleteCategory$(category._id)),
+        tap(() => {
+          this.toastr.success('Siker', `${category.categoryName} törölve`);
+        })
+      )
+      .subscribe();
   }
 
   onEditCategory(category: Category): void {
@@ -93,11 +89,10 @@ export class CategoriesComponent implements OnInit {
         .updateCategory$(this.editedCategory)
         .pipe(
           tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Siker!',
-              detail: `${this.editedCategory.categoryName} módosítva`
-            });
+            this.toastr.success(
+              'Siker',
+              `${this.editedCategory.categoryName} módosítva`
+            );
             this.isDialogVisible = false;
           })
         )

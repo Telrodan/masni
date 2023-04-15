@@ -1,5 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import { deleteUser, getUser, getUsers, getUserSuccess } from '../actions';
+import {
+  deleteUser,
+  getUser,
+  getUsers,
+  getUsersSuccess,
+  getUserSuccess
+} from '../actions';
 
 import { UserState } from '../models/user-state.model';
 
@@ -16,10 +22,10 @@ export const userReducers = createReducer(
     ...state,
     user: action.user
   })),
-
-  on(getUsers, (state, action) => ({
+  on(getUsers, (state) => ({ ...state })),
+  on(getUsersSuccess, (state, action) => ({
     ...state,
-    users: [...action.users]
+    users: action.users
   })),
 
   on(deleteUser, (state, action) => {

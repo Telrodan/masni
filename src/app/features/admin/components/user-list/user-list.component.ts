@@ -7,15 +7,14 @@ import { concatMap, filter, Observable, Subject, switchMap, tap } from 'rxjs';
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
-import { usersSelector } from '@core/store/selectors/user.selector';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'masni-handmade-dolls-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: 'masni-handmade-dolls-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UserListComponent implements OnInit {
   users$: Observable<User[]>;
   selectedUser$: Observable<User>;
   isDialogVisible = false;
@@ -29,11 +28,6 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.users$ = this.userService.getAllUsers$().pipe(
-      concatMap(() => this.store.select(usersSelector)),
-      filter((users) => !!users)
-    );
-
     this.selectedUser$ = this.selectedUserSubject.pipe(
       filter((user) => !!user)
     );

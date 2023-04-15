@@ -23,10 +23,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
-import { DialogModule } from 'primeng/dialog';
-import { ToolbarModule } from 'primeng/toolbar';
-import { PanelModule } from 'primeng/panel';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -57,15 +53,7 @@ import { ProductEffects } from '@core/store/effects/product.effects';
 import { AuthModule } from './features/auth/auth.module';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { AllProductComponent } from './features/admin/components/all-product/all-product.component';
-import { CategoriesComponent } from './features/admin/components/categories/categories.component';
-import { DashboardComponent } from './features/admin/components/dashboard/dashboard.component';
-import { ProductComponent } from './features/admin/components/product/product.component';
-import { ReportsComponent } from './features/admin/components/reports/reports.component';
-import { UsersComponent } from './features/admin/components/users/users.component';
-import { StyleClassModule } from 'primeng/styleclass';
-import { OrdersComponent } from './features/admin/components/orders/orders.component';
-import { OrderDetailsComponent } from './features/admin/components/order-details/order-details.component';
+import { OrderEffects } from '@core/store/effects/order.effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -81,12 +69,7 @@ const PRIME_NG = [
   SelectButtonModule,
   ChipsModule,
   DropdownModule,
-  CardModule,
-  TableModule,
-  DialogModule,
-  ToolbarModule,
-  StyleClassModule,
-  PanelModule
+  CardModule
 ];
 
 @NgModule({
@@ -99,15 +82,7 @@ const PRIME_NG = [
     ShopComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent,
-    UserProfileComponent,
-    AllProductComponent,
-    CategoriesComponent,
-    DashboardComponent,
-    ProductComponent,
-    ReportsComponent,
-    UsersComponent,
-    OrdersComponent,
-    OrderDetailsComponent
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -134,7 +109,8 @@ const PRIME_NG = [
       ShoppingCartEffects,
       ProductEffects,
       CategoryEffects,
-      UserEffects
+      UserEffects,
+      OrderEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

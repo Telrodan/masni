@@ -1,21 +1,29 @@
-import { categoryReducers, materialReducers, userReducers } from '@core/store';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
+
 import { CategoryState } from '@core/store/models/category-state.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import { ProductState } from '@core/store/models/product-state.model';
 import { ShoppingCartState } from '@core/store/models/shopping-cart-state.model';
 import { UserState } from '@core/store/models/user-state.model';
-import { productReducers } from '@core/store/reducers/product.reducers';
-import { shoppingCartReducers } from '@core/store/reducers/shopping-cart.reducers';
-import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import {
+  categoryReducers,
+  materialReducers,
+  userReducers,
+  shoppingCartReducers,
+  productReducers
+} from '@core/store';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+import { environment } from '../../environments/environment';
+import { OrderState } from '@core/store/models/order-state.model';
+import { orderReducers } from '@core/store/reducers/order.reducers';
+
 export interface AppState {
   materials: MaterialState;
   shoppingCart: ShoppingCartState;
   products: ProductState;
   categories: CategoryState;
   user: UserState;
+  order: OrderState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -23,7 +31,8 @@ export const reducers: ActionReducerMap<AppState> = {
   shoppingCart: shoppingCartReducers,
   products: productReducers,
   categories: categoryReducers,
-  user: userReducers
+  user: userReducers,
+  order: orderReducers
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production

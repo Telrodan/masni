@@ -1,96 +1,205 @@
 <main class="samples" *ngIf="sortedMaterials$ | async as sortedMaterials">
-  <h1 class="heading-primary">Mintás pamutvászon</h1>
-  <p-galleria
-    [value]="sortedMaterials.patternedCotton"
-    [(visible)]="displayCustomFirstGalery"
-    [(activeIndex)]="activeIndexFirstGalery"
-    [containerStyle]="{ 'max-width': '850px' }"
-    [circular]="true"
-    [fullScreen]="true"
-    [showItemNavigators]="true"
-    [showThumbnails]="false"
-    [baseZIndex]="50">
-    <ng-template pTemplate="item" let-sample>
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        [alt]="sample.name"
-        style="width: 100%; display: block" />
-    </ng-template>
-  </p-galleria>
-  <div class="grid" style="max-width: 100%">
-    <div
-      *ngFor="let sample of sortedMaterials.patternedCotton; let index = index"
-      class="item-content col-3 lg:col-2"
-      key="index">
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        class="mb-1 shadow-2"
-        style="cursor: pointer"
-        (click)="imageClickFirstGalery(index)" />
-      <p class="name text-center">{{ sample.name | titlecase }}</p>
+  <div *ngIf="sortedMaterials['patternedCotton']">
+    <h1 class="heading-primary">Mintás pamutvászon</h1>
+    <p-galleria
+      [value]="sortedMaterials['patternedCotton']"
+      [(visible)]="displayCustomFirstGalery"
+      [(activeIndex)]="activeIndexFirstGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [baseZIndex]="50">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="
+          let sample of sortedMaterials['patternedCotton'];
+          let index = index
+        "
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickFirstGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
     </div>
   </div>
 
-  <h1 class="heading-primary">Mintás pamutvászon</h1>
-  <p-galleria
-    [value]="sortedMaterials.minkyPlus"
-    [(visible)]="displayCustomSecondGalery"
-    [(activeIndex)]="activeIndexSecondGalery"
-    [containerStyle]="{ 'max-width': '850px' }"
-    [circular]="true"
-    [fullScreen]="true"
-    [showItemNavigators]="true"
-    [showThumbnails]="false"
-    [baseZIndex]="50">
-    <ng-template pTemplate="item" let-sample>
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        [alt]="sample.name"
-        style="width: 100%; display: block" />
-    </ng-template>
-  </p-galleria>
-  <div class="grid" style="max-width: 100%">
-    <div
-      *ngFor="let sample of sortedMaterials.minkyPlus; let index = index"
-      class="item-content col-3 lg:col-2"
-      key="index">
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        class="mb-1 shadow-2"
-        style="cursor: pointer"
-        (click)="imageClickSecondGalery(index)" />
-      <p class="name text-center">{{ sample.name | titlecase }}</p>
+  <div *ngIf="sortedMaterials['plainCotton']">
+    <h1 class="heading-primary">Egyszínű pamutvászon</h1>
+    <p-galleria
+      [value]="sortedMaterials['plainCotton']"
+      [(visible)]="displayCustomFirstGalery"
+      [(activeIndex)]="activeIndexFirstGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [baseZIndex]="50">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let sample of sortedMaterials['plainCotton']; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickFirstGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
     </div>
   </div>
 
-  <h1 class="heading heading-primary">Duplagéz</h1>
-  <p-galleria
-    [value]="sortedMaterials.doubleGauze"
-    [(visible)]="displayCustomThirdGalery"
-    [(activeIndex)]="activeIndexThirdGalery"
-    [containerStyle]="{ 'max-width': '850px' }"
-    [circular]="true"
-    [fullScreen]="true"
-    [showItemNavigators]="true"
-    [showThumbnails]="false">
-    <ng-template pTemplate="item" let-sample>
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        [alt]="sample.name"
-        style="width: 100%; display: block" />
-    </ng-template>
-  </p-galleria>
-  <div class="grid" style="max-width: 100%">
-    <div
-      *ngFor="let sample of sortedMaterials.doubleGauze; let index = index"
-      class="item-content col-3 lg:col-2"
-      key="index">
-      <img
-        [src]="'../../../../assets/images/materials/' + sample.image"
-        class="mb-1 shadow-2"
-        style="cursor: pointer"
-        (click)="imageClickThirdGalery(index)" />
-      <p class="name text-center">{{ sample.name | titlecase }}</p>
+  <div *ngIf="sortedMaterials['minkyPlus']">
+    <h1 class="heading-primary">Minky plüss</h1>
+    <p-galleria
+      [value]="sortedMaterials['minkyPlus']"
+      [(visible)]="displayCustomSecondGalery"
+      [(activeIndex)]="activeIndexSecondGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [baseZIndex]="50">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let sample of sortedMaterials['minkyPlus']; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickSecondGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="sortedMaterials['doubleGauze']">
+    <h1 class="heading heading-primary">Duplagéz</h1>
+    <p-galleria
+      [value]="sortedMaterials['doubleGauze']"
+      [(visible)]="displayCustomThirdGalery"
+      [(activeIndex)]="activeIndexThirdGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let sample of sortedMaterials['doubleGauze']; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickThirdGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="sortedMaterials['ribbon']">
+    <h1 class="heading heading-primary">Szalag</h1>
+    <p-galleria
+      [value]="sortedMaterials['ribbon']"
+      [(visible)]="displayCustomThirdGalery"
+      [(activeIndex)]="activeIndexThirdGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let sample of sortedMaterials['ribbon']; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickThirdGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="sortedMaterials['woolFelt']">
+    <h1 class="heading heading-primary">Gyapjúfilc</h1>
+    <p-galleria
+      [value]="sortedMaterials['woolFelt']"
+      [(visible)]="displayCustomThirdGalery"
+      [(activeIndex)]="activeIndexThirdGalery"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false">
+      <ng-template pTemplate="item" let-sample>
+        <img
+          [src]="sample.image"
+          [alt]="sample.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let sample of sortedMaterials['woolFelt']; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="sample.image"
+          class="mb-1 shadow-2"
+          style="cursor: pointer"
+          (click)="imageClickThirdGalery(index)" />
+        <p class="name text-center">{{ sample.name | titlecase }}</p>
+      </div>
     </div>
   </div>
 </main>

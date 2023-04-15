@@ -12,17 +12,12 @@ import { TermsAndConditionsComponent } from './features/terms-and-conditions/ter
 import { ProductDetailsComponent } from './shared/UI/product-details/product-details.component';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
-import { DashboardComponent } from './features/admin/components/dashboard/dashboard.component';
-import { ReportsComponent } from './features/admin/components/reports/reports.component';
-import { AllProductComponent } from './features/admin/components/all-product/all-product.component';
-import { CategoriesComponent } from './features/admin/components/categories/categories.component';
-import { ProductComponent } from './features/admin/components/product/product.component';
-import { UsersComponent } from './features/admin/components/users/users.component';
-import { OrdersComponent } from './features/admin/components/orders/orders.component';
-import { OrderDetailsComponent } from './features/admin/components/order-details/order-details.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
+
+const adminModule = () =>
+  import('./features/admin/admin.module').then((m) => m.AdminModule);
 
 const nyuszkoShopModule = () =>
   import('./features/nyuszko-shop/nyuszko-shop.module').then(
@@ -50,45 +45,9 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: DashboardComponent,
-    data: {
-      role: 'admin'
-    },
-    children: [
-      {
-        path: '',
-        redirectTo: 'reports',
-        pathMatch: 'full'
-      },
-      {
-        path: 'reports',
-        component: ReportsComponent
-      },
-      {
-        path: 'categories',
-        component: CategoriesComponent
-      },
-      {
-        path: 'add-product',
-        component: ProductComponent
-      },
-      {
-        path: 'products',
-        component: AllProductComponent
-      },
-      {
-        path: 'users',
-        component: UsersComponent
-      },
-      {
-        path: 'orders',
-        component: OrdersComponent
-      },
-      {
-        path: 'order-details/:id',
-        component: OrderDetailsComponent
-      }
-    ]
+    loadChildren: adminModule,
+    canActivate: [HasRoleGuard],
+    data: { role: 'admin' }
   },
   {
     path: 'user',

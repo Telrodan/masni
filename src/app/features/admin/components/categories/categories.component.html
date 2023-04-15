@@ -15,7 +15,11 @@
               icon="pi pi-plus"
               class="p-button-success mr-2"
               (click)="onAddCategory()"></button>
-            <input type="text" [(ngModel)]="categoryName" pInputText />
+            <input
+              type="text"
+              [(ngModel)]="categoryName"
+              placeholder="Adj meg egy kategóriát..."
+              pInputText />
           </div>
         </p-toolbar>
       </div>
@@ -70,22 +74,18 @@
     <span class="text-xl font-bold">Kategória szerkesztése</span>
   </ng-template>
 
-  <div class="my-4">
-    <label for="newCategoryName" class="block font-medium text-900 mb-2"
-      >Kategória neve</label
-    >
-    <input
-      id="newCategoryName"
-      type="text"
-      [(ngModel)]="newCategoryName"
-      pInputText />
-  </div>
+  <label for="newCategoryName" class="block font-medium text-900 mb-2"
+    >Kategória neve</label
+  >
+  <input
+    id="newCategoryName"
+    type="text"
+    [(ngModel)]="newCategoryName"
+    pInputText />
 
   <ng-template pTemplate="footer">
-    <p-button
-      (click)="onUpdateCategory()"
-      icon="pi pi-check"
-      label="Módosítás"
-      styleClass="p-button-text"></p-button>
+    <button (click)="onUpdateCategory()" class="primary-button shadow-2">
+      Módosítás
+    </button>
   </ng-template>
 </p-dialog>

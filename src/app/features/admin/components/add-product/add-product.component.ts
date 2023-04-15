@@ -1,8 +1,11 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
+  Inject,
   OnInit,
   QueryList,
+  Renderer2,
   ViewChild,
   ViewChildren
 } from '@angular/core';
@@ -14,11 +17,11 @@ import { MessageService } from 'primeng/api';
 import { filter, Observable, tap } from 'rxjs';
 
 @Component({
-  selector: 'masni-handmade-dolls-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  selector: 'masni-handmade-dolls-add-product',
+  templateUrl: './add-product.component.html',
+  styleUrls: ['./add-product.component.scss']
 })
-export class ProductComponent implements OnInit {
+export class AddProductComponent implements OnInit {
   categories$: Observable<Category[]>;
   uploadedFiles = [];
   productForm: FormGroup;

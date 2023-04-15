@@ -18,11 +18,10 @@ export class UserService {
       .pipe(map((userDTO) => userDTO.data));
   }
 
-  getAllUsers$(): Observable<User[]> {
-    return this.apiService.get<ApiResponse<User[]>>('users').pipe(
-      map((usersDTO) => usersDTO.data),
-      tap((users) => this.store.dispatch(getUsers({ users })))
-    );
+  getUsers$(): Observable<User[]> {
+    return this.apiService
+      .get<ApiResponse<User[]>>('users')
+      .pipe(map((usersDTO) => usersDTO.data));
   }
 
   updateCurrentUser$(user: User): Observable<User> {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from '@core/services/user.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap, map } from 'rxjs';
-import { getUser, getUserSuccess } from '../actions';
+import { getUser, getUserSuccess, getUsers, getUsersSuccess } from '../actions';
 
 @Injectable()
 export class UserEffects {
@@ -15,6 +15,17 @@ export class UserEffects {
         this.userService
           .getUser$()
           .pipe(map((user) => getUserSuccess({ user })))
+      )
+    )
+  );
+
+  getUsers = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getUsers),
+      exhaustMap(() =>
+        this.userService
+          .getUsers$()
+          .pipe(map((users) => getUsersSuccess({ users })))
       )
     )
   );

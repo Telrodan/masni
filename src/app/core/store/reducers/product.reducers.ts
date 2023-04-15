@@ -32,7 +32,6 @@ export const productReducers = createReducer(
       products: [...state.products, action.product]
     };
   }),
-
   on(deleteProduct, (state, action) => {
     const index = state.products.findIndex(
       (item) => item._id === action.product._id
@@ -44,7 +43,6 @@ export const productReducers = createReducer(
       products
     };
   }),
-
   on(updateProduct, (state, action) => {
     const index = state.products.findIndex(
       (product) => product._id === action.product._id

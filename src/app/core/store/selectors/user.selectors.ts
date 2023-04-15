@@ -9,7 +9,7 @@ export const userSelector = createSelector(
   (state) => state.user
 );
 
-export const usersSelector = createSelector(
+export const selectUsers = createSelector(
   selectUserState,
   (state) => state.users
 );

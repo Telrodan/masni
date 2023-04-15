@@ -4,7 +4,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { map, tap } from 'rxjs';
 
-import { materialsSelector } from '@core/store/selectors/material.selector';
+import { materialsSelector } from '@core/store/selectors/material.selectors';
 
 import {
   firstCarousel,

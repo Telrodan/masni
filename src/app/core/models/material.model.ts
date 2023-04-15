@@ -5,4 +5,5 @@ export interface Material {
   category: string;
   image?: string;
   extra: number;
+  isAvailable: boolean;
 }

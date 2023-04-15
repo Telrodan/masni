@@ -20,11 +20,11 @@ interface ProductsData {
 
 @UntilDestroy()
 @Component({
-  selector: 'masni-handmade-dolls-all-product',
-  templateUrl: './all-product.component.html',
-  styleUrls: ['./all-product.component.scss']
+  selector: 'masni-handmade-dolls-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.scss']
 })
-export class AllProductComponent implements OnInit {
+export class ProductListComponent implements OnInit {
   product: Product;
   productForm: FormGroup;
   productsData$: Observable<ProductsData>;
@@ -59,13 +59,12 @@ export class AllProductComponent implements OnInit {
   }
 
   onUpdateProduct(): void {
-    console.log(this.productForm.valid);
     if (this.productForm.valid) {
       const updatedProduct: Product = {
         ...this.product,
         ...this.productForm.value
       };
-      console.log(updatedProduct);
+
       this.productService
         .updateProduct$(updatedProduct)
         .pipe(
