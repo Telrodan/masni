@@ -15,6 +15,7 @@
       <ng-template let-images pTemplate="item">
         <div class="item-content">
           <div
+            appLazyImage
             class="img shadow-2"
             [style.border-radius]="carouselData.isRoundImage ? '500px' : '0px'"
             [style.background-image]="'url(' + images + ')'"></div>

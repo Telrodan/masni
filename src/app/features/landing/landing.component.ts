@@ -33,9 +33,7 @@ export class LandingComponent implements OnInit {
       .pipe(
         map((materials) => {
           const materialImages = materials.map((material) => {
-            return material.image !== undefined
-              ? `../../../assets/images/materials/${material['image']}`
-              : null;
+            return material.image;
           });
           return materialImages.filter((image) => !!image);
         }),

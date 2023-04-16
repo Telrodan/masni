@@ -61,6 +61,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
 import { FeaturedProductsComponent } from './features/landing/components/featured-products/featured-products.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LazyImageDirective } from './core/directives/lazy-image.directive';
 
 const PRIME_NG = [
   AccordionModule,
@@ -95,7 +96,8 @@ const PRIME_NG = [
     UserProfileComponent,
     SamplesComponent,
     ShoppingCartComponent,
-    FeaturedProductsComponent
+    FeaturedProductsComponent,
+    LazyImageDirective
   ],
   imports: [
     BrowserModule,

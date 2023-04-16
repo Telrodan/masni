@@ -9,7 +9,10 @@
     [autoplayInterval]="5000"
     [responsiveOptions]="responsiveOptions">
     <ng-template let-images pTemplate="item">
-      <div class="img" [style.background-image]="'url(' + images + ')'"></div>
+      <div
+        appLazyImage
+        class="img"
+        [style.background-image]="'url(' + images + ')'"></div>
     </ng-template>
   </p-carousel>
 </section>
