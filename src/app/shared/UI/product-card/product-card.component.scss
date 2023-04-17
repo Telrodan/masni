@@ -2,6 +2,10 @@
 
 .product-card {
   cursor: pointer;
+
+  @include respond(xl) {
+    min-height: 600px;
+  }
 }
 
 .name {

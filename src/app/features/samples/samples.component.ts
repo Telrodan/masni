@@ -17,13 +17,25 @@ interface FilteredAvailableMaterials {
   styleUrls: ['./samples.component.scss']
 })
 export class SamplesComponent implements OnInit {
-  public sortedMaterials$: Observable<FilteredAvailableMaterials>;
-  public activeIndexFirstGalery = 0;
-  public displayCustomFirstGalery: boolean;
-  public activeIndexSecondGalery = 0;
-  public displayCustomSecondGalery: boolean;
-  public activeIndexThirdGalery = 0;
-  public displayCustomThirdGalery: boolean;
+  sortedMaterials$: Observable<FilteredAvailableMaterials>;
+
+  activeIndexGaleryOne = 0;
+  displayCustomGaleryOne: boolean;
+
+  activeIndexGaleryTwo = 0;
+  displayCustomGaleryTwo: boolean;
+
+  activeIndexGaleryThree = 0;
+  displayCustomGaleryThree: boolean;
+
+  activeIndexGaleryFour = 0;
+  displayCustomGaleryFour: boolean;
+
+  activeIndexGaleryFive = 0;
+  displayCustomGaleryFive: boolean;
+
+  activeIndexGalerySix = 0;
+  displayCustomGalerySix: boolean;
 
   constructor(private store$: Store) {}
 
@@ -49,18 +61,33 @@ export class SamplesComponent implements OnInit {
     );
   }
 
-  public imageClickFirstGalery(index: number): void {
-    this.activeIndexFirstGalery = index;
-    this.displayCustomFirstGalery = true;
+  imageClickGaleryOne(index: number): void {
+    this.activeIndexGaleryOne = index;
+    this.displayCustomGaleryOne = true;
   }
 
-  public imageClickSecondGalery(index: number): void {
-    this.activeIndexSecondGalery = index;
-    this.displayCustomSecondGalery = true;
+  imageClickGaleryTwo(index: number): void {
+    this.activeIndexGaleryTwo = index;
+    this.displayCustomGaleryTwo = true;
   }
 
-  public imageClickThirdGalery(index: number): void {
-    this.activeIndexThirdGalery = index;
-    this.displayCustomThirdGalery = true;
+  imageClickGaleryThree(index: number): void {
+    this.activeIndexGaleryThree = index;
+    this.displayCustomGaleryThree = true;
+  }
+
+  imageClickGaleryFour(index: number): void {
+    this.activeIndexGaleryFour = index;
+    this.displayCustomGaleryFour = true;
+  }
+
+  imageClickGaleryFive(index: number): void {
+    this.activeIndexGaleryFive = index;
+    this.displayCustomGaleryFive = true;
+  }
+
+  imageClickGalerySix(index: number): void {
+    this.activeIndexGalerySix = index;
+    this.displayCustomGalerySix = true;
   }
 }

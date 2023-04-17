@@ -8,6 +8,7 @@ import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { selectUsers } from '@core/store';
 
 @Component({
   selector: 'masni-handmade-dolls-user-list',
@@ -28,6 +29,8 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.users$ = this.store.select(selectUsers);
+
     this.selectedUser$ = this.selectedUserSubject.pipe(
       filter((user) => !!user)
     );

@@ -14,6 +14,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TagModule } from 'primeng/tag';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -26,6 +27,9 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { UserListComponent } from './components/user-list/user-list.component';
 import { AddMaterialComponent } from './components/add-material/add-material.component';
 import { MaterialListComponent } from './components/material-list/material-list.component';
+import { CategoryNameDialogComponent } from './components/categories/components/category-name-dialog/category-name-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { RippleModule } from 'primeng/ripple';
 
 const PRIME_NG = [
   CardModule,
@@ -39,7 +43,9 @@ const PRIME_NG = [
   PanelModule,
   DividerModule,
   InputTextModule,
-  ToggleButtonModule
+  ToggleButtonModule,
+  RippleModule,
+  TagModule
 ];
 
 @NgModule({
@@ -53,13 +59,15 @@ const PRIME_NG = [
     AddProductComponent,
     UserListComponent,
     AddMaterialComponent,
-    MaterialListComponent
+    MaterialListComponent,
+    CategoryNameDialogComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule,
     ...PRIME_NG
   ]
 })

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { filter, Observable, switchMap, tap } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 
 import { CategoryService } from '@core/services/category.service';
@@ -11,6 +10,7 @@ import { Category } from '@core/models/category.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from '@core/services/toastr.service';
+import { CategoryNameDialogComponent } from './components/category-name-dialog/category-name-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -55,6 +55,7 @@ export class CategoriesComponent implements OnInit {
   onDeleteCategory(category: Category): void {
     this.dialog
       .open(ConfirmDialogComponent, {
+        minWidth: '50vw',
         data: {
           title: 'Megerősítés',
           message: `Biztos törölni szeretnéd "${category.categoryName}" kategóriát?`,
@@ -74,12 +75,10 @@ export class CategoriesComponent implements OnInit {
   }
 
   onEditCategory(category: Category): void {
-    this.newCategoryName = category.categoryName;
-    this.editedCategory = {
-      ...category,
-      categoryName: this.newCategoryName
-    };
-    this.isDialogVisible = true;
+    this.dialog.open(CategoryNameDialogComponent, {
+      minWidth: '50vw',
+      data: category
+    });
   }
 
   onUpdateCategory(): void {

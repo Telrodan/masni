@@ -17,8 +17,10 @@ import { ImageCompositionComponent } from './UI/image-composition/image-composit
 import { SpinnerComponent } from './UI/spinner/spinner.component';
 import { CarouselWithHeadingAndButtonComponent } from './UI/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
 import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonModule } from 'primeng/button';
 
-const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule];
+const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule];
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule,
     ...PRIME_NG
   ],
   exports: [

@@ -1,8 +1,8 @@
-<div class="material-list">
-  <p-card header="Minták" *ngIf="materials$ | async as materials">
+<p-card header="Minták" *ngIf="materials$ | async as materials">
+  <div class="flex">
     <form [formGroup]="categoryForm">
       <p-dropdown
-        styleClass="mb-5"
+        styleClass="mb-5 mr-5"
         id="categoryId"
         [options]="categories"
         formControlName="category"
@@ -10,55 +10,60 @@
         optionLabel="name"
         [showClear]="true"></p-dropdown>
     </form>
-    <div class="grid">
-      <div class="col-12">
-        <p-table [value]="materials" styleClass="p-datatable-gridlines">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Kép</th>
-              <th>Név</th>
-              <th>Kategória</th>
-              <th>Extra ár</th>
-              <th>Rendelhető</th>
-              <th>Opciók</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-material>
-            <tr>
-              <td>
-                <img
-                  appLazyImage
-                  class="material-image"
-                  [src]="material.image"
-                  [alt]="material.name" />
-              </td>
-              <td>{{ material.name }}</td>
-              <td>{{ material.category }}</td>
-              <td>{{ material.extra }} Ft</td>
-              <td>{{ material.isAvailable ? 'igen' : 'nem' }}</td>
-              <td>
-                <button
-                  (click)="onEditMaterial(material)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-cog"
-                  class="p-button p-button-warning p-button mr-2"></button
-                ><button
-                  (click)="onDeleteMaterial(material)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-button p-button-danger p-button"></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
+    <p-button
+      routerLink="../add-material"
+      icon="pi pi-plus"
+      label="Hozzáadás"
+      styleClass="p-button-raised p-button-success"></p-button>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <p-table [value]="materials" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Kép</th>
+            <th>Név</th>
+            <th>Kategória</th>
+            <th>Extra ár</th>
+            <th>Rendelhető</th>
+            <th>Opciók</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-material>
+          <tr>
+            <td>
+              <img
+                appLazyImage
+                class="material-image"
+                [src]="material.image"
+                [alt]="material.name" />
+            </td>
+            <td>{{ material.name }}</td>
+            <td>{{ material.category }}</td>
+            <td>{{ material.extra }} Ft</td>
+            <td>{{ material.isAvailable ? 'igen' : 'nem' }}</td>
+            <td>
+              <button
+                (click)="onEditMaterial(material)"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-cog"
+                class="p-button p-button-warning p-button mr-2"></button
+              ><button
+                (click)="onDeleteMaterial(material)"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-button p-button-danger p-button"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-  </p-card>
-</div>
+  </div>
+</p-card>
 
 <p-dialog
   header="Header"
@@ -105,18 +110,16 @@
         >Rendelhető?</label
       >
       <p-toggleButton
+        styleClass="w-auto"
         formControlName="isAvailable"
         onLabel="Igen"
         offLabel="Nem"></p-toggleButton>
     </div>
-  </form>
 
-  <ng-template pTemplate="footer">
-    <button
-      (click)="onUpdateMaterial()"
-      class="primary-button shadow-2"
-      [disabled]="!this.materialForm.valid">
-      Módosítás
-    </button>
-  </ng-template>
+    <p-button
+      label="Módosítás"
+      styleClass="p-button-raised w-auto"
+      [disabled]="!materialForm.valid"
+      (click)="onUpdateMaterial()"></p-button>
+  </form>
 </p-dialog>

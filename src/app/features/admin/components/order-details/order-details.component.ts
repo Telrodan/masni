@@ -20,7 +20,14 @@ export class OrderDetailsComponent implements OnInit {
     this.order$ = this.route.params.pipe(
       filter((params) => !!params),
       map((params) => params['id']),
-      switchMap((id) => this.orderService.getOrder(id))
+      switchMap((id) => this.orderService.getOrder(id)),
+      map((order) => {
+        order.user[0].phone = order.user[0].phone.replace(
+          /^(\d{4})(\d{3})(\d{4})$/,
+          '$1/$2-$3'
+        );
+        return order;
+      })
     );
   }
 }

@@ -1,73 +1,82 @@
-<div class="categories">
-  <p-card
-    header="Termékek"
-    subheader="Összes termék"
-    *ngIf="(productsData$ | async).products as products">
-    <div class="grid">
-      <div class="col-12">
-        <p-table [value]="products" styleClass="p-datatable-gridlines">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Kép</th>
-              <th>Név</th>
-              <th>Kategória</th>
-              <th>Készlet</th>
-              <th>Ár</th>
-              <th>Készlet érteke</th>
-              <th>Opciók</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-product>
-            <tr>
-              <td>
-                <img
-                  appLazyImage
-                  [src]="product.images[0]"
-                  alt="product.name"
-                  class="product-image" />
-              </td>
-              <td>{{ product.name | titlecase }}</td>
-              <td>{{ product.category[0].categoryName }}</td>
-              <td>{{ product.stock }} db</td>
-              <td>{{ product.price }} Ft</td>
-              <td>{{ product.price * product.stock }} Ft</td>
-              <td>
-                <button
-                  (click)="onEditProduct(product)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-cog"
-                  class="p-button p-button-warning p-button mr-2"></button
-                ><button
-                  (click)="onDeleteProduct(product)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-button p-button-danger p-button"></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+<p-card header="Termékek" *ngIf="productsData$ | async as productsData">
+  <div class="flex">
+    <form [formGroup]="categoryForm">
+      <p-dropdown
+        styleClass="mb-5 mr-5"
+        [options]="productsData.categories"
+        formControlName="category"
+        optionValue="_id"
+        optionLabel="categoryName"
+        [showClear]="true"></p-dropdown>
+    </form>
+    <p-button
+      routerLink="../add-product"
+      icon="pi pi-plus"
+      label="Hozzáadás"
+      styleClass="p-button-raised p-button-success"></p-button>
+  </div>
+  <div class="grid" *ngIf="productsData.products as products">
+    <div class="col-12">
+      <p-table [value]="products" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Kép</th>
+            <th>Név</th>
+            <th>Kategória</th>
+            <th>Készlet</th>
+            <th>Ár</th>
+            <th>Készlet érteke</th>
+            <th>Opciók</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>
+              <img
+                appLazyImage
+                [src]="product.images[0]"
+                alt="product.name"
+                class="product-image" />
+            </td>
+            <td>{{ product.name | titlecase }}</td>
+            <td>{{ product.category[0].categoryName }}</td>
+            <td>{{ product.stock }} db</td>
+            <td>{{ product.price }} Ft</td>
+            <td>{{ product.price * product.stock }} Ft</td>
+            <td>
+              <button
+                (click)="onEditProduct(product)"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-cog"
+                class="p-button p-button-warning p-button mr-2"></button
+              ><button
+                (click)="onDeleteProduct(product)"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-button p-button-danger p-button"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-        <div
-          class="no-products flex-column text-center"
-          *ngIf="!products.length">
-          <p class="text-xl mt-3">Jelenleg még nincsennek termékek</p>
-          <button
-            routerLink="../add-product"
-            pButton
-            pRipple
-            type="button"
-            label="Új hozzáadás"
-            icon="pi pi-plus"
-            class="p-button-success mt-2"></button>
-        </div>
+      <div class="no-products flex-column text-center" *ngIf="!products.length">
+        <p class="text-xl mt-3">Jelenleg még nincsennek termékek</p>
+        <button
+          routerLink="../add-product"
+          pButton
+          pRipple
+          type="button"
+          label="Új hozzáadás"
+          icon="pi pi-plus"
+          class="p-button-success mt-2"></button>
       </div>
     </div>
-  </p-card>
-</div>
+  </div>
+</p-card>
 
 <p-dialog
   header="Header"

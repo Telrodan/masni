@@ -8,10 +8,17 @@ import {
   getCategories,
   productsSelector
 } from '@core/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { combineLatest, filter, map, Observable, tap } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  map,
+  Observable,
+  startWith,
+  tap
+} from 'rxjs';
 
 interface ProductsData {
   products: Product[];
@@ -29,6 +36,7 @@ export class ProductListComponent implements OnInit {
   productForm: FormGroup;
   productsData$: Observable<ProductsData>;
   isDialogVisible = false;
+  categoryForm: FormGroup;
 
   constructor(
     private store: Store,
@@ -38,15 +46,35 @@ export class ProductListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.categoryForm = new FormGroup({
+      category: new FormControl(null)
+    });
+
     this.productsData$ = combineLatest([
       this.store.select(productsSelector),
-      this.store.select(categoriesSelector)
+      this.store.select(categoriesSelector),
+      this.categoryForm.valueChanges.pipe(
+        startWith({ category: 'all' }),
+        debounceTime(300)
+      )
     ]).pipe(
-      filter(([products, categories]) => !!products && !!categories),
-      map(([products, categories]) => ({
-        products,
-        categories
-      }))
+      map(([products, categories, category]) => {
+        let filteredProducts: Product[] = [];
+
+        if (category.category === 'all') {
+          console.log('all products');
+          filteredProducts = products;
+        } else {
+          filteredProducts = products.filter(
+            (product) => product.categoryId === category.category
+          );
+        }
+
+        return {
+          products: filteredProducts,
+          categories: [{ categoryName: 'Összes', _id: 'all' }, ...categories]
+        };
+      })
     );
   }
 

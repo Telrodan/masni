@@ -1,0 +1,28 @@
+<div class="category-name-dialog">
+  <i class="pi pi-times close" (click)="onClose()"></i>
+  <h2 mat-dialog-title>Kategória szerkesztése</h2>
+  <mat-dialog-content>
+    <form [formGroup]="categoryForm">
+      <label for="categoryName" class="block font-medium text-900 mb-2"
+        >Kategória neve</label
+      >
+      <input
+        id="categoryName"
+        formControlName="categoryName"
+        type="text"
+        pInputText />
+    </form>
+
+    <div class="dialog-actions flex justify-content-end mt-4">
+      <p-button
+        label="Mégsem"
+        styleClass="p-button-raised p-button-warning mr-4"
+        (click)="onClose()"></p-button>
+      <p-button
+        label="Módosítás"
+        styleClass="p-button-raised"
+        [disabled]="!categoryForm.valid"
+        (click)="onAction()"></p-button>
+    </div>
+  </mat-dialog-content>
+</div>

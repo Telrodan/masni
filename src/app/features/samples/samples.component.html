@@ -3,8 +3,8 @@
     <h1 class="heading-primary">Mintás pamutvászon</h1>
     <p-galleria
       [value]="sortedMaterials['patternedCotton']"
-      [(visible)]="displayCustomFirstGalery"
-      [(activeIndex)]="activeIndexFirstGalery"
+      [(visible)]="displayCustomGaleryOne"
+      [(activeIndex)]="activeIndexGaleryOne"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -32,7 +32,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickFirstGalery(index)" />
+          (click)="imageClickGaleryOne(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
@@ -42,8 +42,8 @@
     <h1 class="heading-primary">Egyszínű pamutvászon</h1>
     <p-galleria
       [value]="sortedMaterials['plainCotton']"
-      [(visible)]="displayCustomFirstGalery"
-      [(activeIndex)]="activeIndexFirstGalery"
+      [(visible)]="displayCustomGaleryTwo"
+      [(activeIndex)]="activeIndexGaleryTwo"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -68,7 +68,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickFirstGalery(index)" />
+          (click)="imageClickGaleryTwo(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
@@ -78,8 +78,8 @@
     <h1 class="heading-primary">Minky plüss</h1>
     <p-galleria
       [value]="sortedMaterials['minkyPlus']"
-      [(visible)]="displayCustomSecondGalery"
-      [(activeIndex)]="activeIndexSecondGalery"
+      [(visible)]="displayCustomGaleryThree"
+      [(activeIndex)]="activeIndexGaleryThree"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -104,7 +104,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickSecondGalery(index)" />
+          (click)="imageClickGaleryThree(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
@@ -114,8 +114,8 @@
     <h1 class="heading heading-primary">Duplagéz</h1>
     <p-galleria
       [value]="sortedMaterials['doubleGauze']"
-      [(visible)]="displayCustomThirdGalery"
-      [(activeIndex)]="activeIndexThirdGalery"
+      [(visible)]="displayCustomGaleryFour"
+      [(activeIndex)]="activeIndexGaleryFour"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -139,7 +139,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickThirdGalery(index)" />
+          (click)="imageClickGaleryFour(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
@@ -149,8 +149,8 @@
     <h1 class="heading heading-primary">Szalag</h1>
     <p-galleria
       [value]="sortedMaterials['ribbon']"
-      [(visible)]="displayCustomThirdGalery"
-      [(activeIndex)]="activeIndexThirdGalery"
+      [(visible)]="displayCustomGaleryFive"
+      [(activeIndex)]="activeIndexGaleryFive"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -174,7 +174,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickThirdGalery(index)" />
+          (click)="imageClickGaleryFive(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
@@ -184,8 +184,8 @@
     <h1 class="heading heading-primary">Gyapjúfilc</h1>
     <p-galleria
       [value]="sortedMaterials['woolFelt']"
-      [(visible)]="displayCustomThirdGalery"
-      [(activeIndex)]="activeIndexThirdGalery"
+      [(visible)]="displayCustomGalerySix"
+      [(activeIndex)]="activeIndexGalerySix"
       [containerStyle]="{ 'max-width': '850px' }"
       [circular]="true"
       [fullScreen]="true"
@@ -209,7 +209,7 @@
           [src]="sample.image"
           class="mb-1 shadow-2"
           style="cursor: pointer"
-          (click)="imageClickThirdGalery(index)" />
+          (click)="imageClickGalerySix(index)" />
         <p class="name text-center">{{ sample.name | titlecase }}</p>
       </div>
     </div>
