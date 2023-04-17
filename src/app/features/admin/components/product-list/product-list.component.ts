@@ -62,7 +62,6 @@ export class ProductListComponent implements OnInit {
         let filteredProducts: Product[] = [];
 
         if (category.category === 'all') {
-          console.log('all products');
           filteredProducts = products;
         } else {
           filteredProducts = products.filter(

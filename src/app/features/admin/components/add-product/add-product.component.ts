@@ -42,7 +42,6 @@ export class AddProductComponent implements OnInit {
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
-          console.log(e.target.result);
           this.imagesPreview.push(e.target.result);
         };
 
