@@ -10,6 +10,8 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { AdminComponent } from './admin.component';
 import { AddMaterialComponent } from './components/add-material/add-material.component';
 import { MaterialListComponent } from './components/material-list/material-list.component';
+import { AddInspirationComponent } from './components/add-inspiration/add-inspiration.component';
+import { InspirationListComponent } from './components/inspiration-list/inspiration-list.component';
 
 const routes: Routes = [
   {
@@ -31,6 +33,14 @@ const routes: Routes = [
       {
         path: 'materials',
         component: MaterialListComponent
+      },
+      {
+        path: 'add-inspiration',
+        component: AddInspirationComponent
+      },
+      {
+        path: 'inspirations',
+        component: InspirationListComponent
       },
       {
         path: 'add-product',

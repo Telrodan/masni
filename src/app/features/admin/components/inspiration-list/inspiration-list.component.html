@@ -1,0 +1,41 @@
+<p-card
+  header="Inspirációk"
+  subheader="Összes inspiráció"
+  *ngIf="inspirations$ | async as inspirations">
+  <p-button
+    routerLink="../add-inspiration"
+    icon="pi pi-plus"
+    label="Hozzáadás"
+    styleClass="p-button-raised p-button-success mb-5"></p-button>
+  <div class="grid">
+    <div class="col-12">
+      <p-table [value]="inspirations" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Kép</th>
+            <th>Opciók</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-inspiration>
+          <tr>
+            <td>
+              <img
+                appLazyImage
+                class="inspiration-image"
+                [src]="inspiration.image" />
+            </td>
+            <td>
+              <button
+                (click)="onDeleteInspiration(inspiration)"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-button p-button-danger p-button"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-card>

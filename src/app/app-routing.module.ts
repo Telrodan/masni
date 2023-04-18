@@ -12,6 +12,7 @@ import { TermsAndConditionsComponent } from './features/terms-and-conditions/ter
 import { ProductDetailsComponent } from './features/shop/components/product-details/product-details.component';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -82,6 +83,10 @@ const routes: Routes = [
   {
     path: 'samples',
     component: SamplesComponent
+  },
+  {
+    path: 'inspiration',
+    component: InspirationPageComponent
   },
   {
     path: 'contact',

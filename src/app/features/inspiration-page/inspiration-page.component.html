@@ -1,0 +1,33 @@
+<main class="samples" *ngIf="inspirations$ | async as inspirations">
+  <h1 class="heading-primary">Inspirációk</h1>
+  <p-galleria
+    [value]="inspirations"
+    [(visible)]="displayCustomGaleryOne"
+    [(activeIndex)]="activeIndexGaleryOne"
+    [containerStyle]="{ 'max-width': '850px' }"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false"
+    [baseZIndex]="50">
+    <ng-template pTemplate="item" let-inspiration>
+      <img
+        appLazyImage
+        [src]="inspiration.image"
+        style="width: 100%; display: block" />
+    </ng-template>
+  </p-galleria>
+  <div class="grid" style="max-width: 100%">
+    <div
+      *ngFor="let inspiration of inspirations; let index = index"
+      class="item-content col-3 lg:col-2"
+      key="index">
+      <img
+        appLazyImage
+        [src]="inspiration.image"
+        class="mb-1 shadow-2"
+        style="cursor: pointer"
+        (click)="imageClickGaleryOne(index)" />
+    </div>
+  </div>
+</main>

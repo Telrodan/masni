@@ -62,6 +62,7 @@ import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.co
 import { FeaturedProductsComponent } from './features/landing/components/featured-products/featured-products.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LazyImageDirective } from './core/directives/lazy-image.directive';
+import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
 
 const PRIME_NG = [
   AccordionModule,
@@ -97,7 +98,8 @@ const PRIME_NG = [
     SamplesComponent,
     ShoppingCartComponent,
     FeaturedProductsComponent,
-    LazyImageDirective
+    LazyImageDirective,
+    InspirationPageComponent
   ],
   imports: [
     BrowserModule,

@@ -30,6 +30,8 @@ import { MaterialListComponent } from './components/material-list/material-list.
 import { CategoryNameDialogComponent } from './components/categories/components/category-name-dialog/category-name-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RippleModule } from 'primeng/ripple';
+import { AddInspirationComponent } from './components/add-inspiration/add-inspiration.component';
+import { InspirationListComponent } from './components/inspiration-list/inspiration-list.component';
 
 const PRIME_NG = [
   CardModule,
@@ -60,7 +62,9 @@ const PRIME_NG = [
     UserListComponent,
     AddMaterialComponent,
     MaterialListComponent,
-    CategoryNameDialogComponent
+    CategoryNameDialogComponent,
+    AddInspirationComponent,
+    InspirationListComponent
   ],
   imports: [
     CommonModule,
