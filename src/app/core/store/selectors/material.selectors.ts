@@ -2,7 +2,7 @@ import { AppState } from 'src/app/reducer';
 
 import { createSelector } from '@ngrx/store';
 
-export const selectMaterialState = (state: AppState) => state.materials;
+export const selectMaterialState = (state: AppState) => state.material;
 
 export const materialsSelector = createSelector(
   selectMaterialState,

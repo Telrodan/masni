@@ -14,15 +14,15 @@ export const getShoppingCartItems = createAction(
 
 export const getShoppingCartItemsSuccess = createAction(
   ShoppingCartActionTypes.GET_ITEMS_SUCCESS,
-  props<{ shoppingCartItems: ShoppingCartItem[] }>()
+  props<{ items: ShoppingCartItem[] }>()
 );
 
 export const addShoppingCartItem = createAction(
   ShoppingCartActionTypes.ADD_ITEM,
-  props<{ shoppingCartItem: ShoppingCartItem }>()
+  props<{ item: ShoppingCartItem }>()
 );
 
 export const deleteShoppingCartItem = createAction(
   ShoppingCartActionTypes.DELETE_ITEM,
-  props<{ shoppingCartItem: ShoppingCartItem }>()
+  props<{ item: ShoppingCartItem }>()
 );

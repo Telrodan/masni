@@ -18,11 +18,7 @@ import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
   providedIn: 'root'
 })
 export class ShoppingCartService {
-  constructor(
-    private cookieService: CookieService,
-    private store$: Store,
-    private apiService: ApiService
-  ) {}
+  constructor(private store$: Store, private apiService: ApiService) {}
 
   addItemToCart(
     product: Product,
@@ -38,8 +34,8 @@ export class ShoppingCartService {
       .post<ApiResponse<ShoppingCartItem>>('shoppingCart', item)
       .pipe(
         map((shoppingCartItemDTO) => shoppingCartItemDTO.data),
-        tap((shoppingCartItem) => {
-          this.store$.dispatch(addShoppingCartItem({ shoppingCartItem }));
+        tap((item) => {
+          this.store$.dispatch(addShoppingCartItem({ item }));
         })
       );
   }
@@ -50,25 +46,11 @@ export class ShoppingCartService {
       .pipe(map((cartItemsDTO) => cartItemsDTO.data));
   }
 
-  public getUserShoppingCartItems(): Observable<ShoppingCartItem[]> {
-    const ownerId = this.cookieService.getCookie('userId');
-    return this.apiService
-      .get<ApiResponse<ShoppingCartItem[]>>(
-        'shoppingCart/getCurrentUserItems',
-        {
-          ownerId
-        }
-      )
-      .pipe(map((items) => items.data));
-  }
-
-  deleteItemFromCart(shoppingCartItem: ShoppingCartItem): Observable<null> {
-    return this.apiService
-      .delete<null>('shoppingCart', shoppingCartItem._id)
-      .pipe(
-        tap(() => {
-          this.store$.dispatch(deleteShoppingCartItem({ shoppingCartItem }));
-        })
-      );
+  deleteItemFromCart(item: ShoppingCartItem): Observable<null> {
+    return this.apiService.delete<null>('shoppingCart', item._id).pipe(
+      tap(() => {
+        this.store$.dispatch(deleteShoppingCartItem({ item }));
+      })
+    );
   }
 }

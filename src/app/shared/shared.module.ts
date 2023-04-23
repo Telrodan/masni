@@ -19,6 +19,7 @@ import { CarouselWithHeadingAndButtonComponent } from './UI/carousel-with-headin
 import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
+import { OrderSuccessComponent } from './UI/order-success/order-success.component';
 
 const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
 
@@ -32,7 +33,8 @@ const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
     ImageCompositionComponent,
     SpinnerComponent,
     CarouselWithHeadingAndButtonComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    OrderSuccessComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Log } from '@core/models/log.model';
 import { TrackData } from '@core/models/track.model';
+import { LogService } from '@core/services/log.service';
 import { TrackService } from '@core/services/track.service';
 import { selectOrders, selectUsers } from '@core/store';
 import { Store } from '@ngrx/store';
@@ -19,8 +21,13 @@ export class ReportsComponent implements OnInit {
   usersCount$: Observable<number>;
   ordersCount$: Observable<number>;
   trackingData$: Observable<TrackingData>;
+  logs$: Observable<Log[]>;
 
-  constructor(private trackService: TrackService, private store: Store) {}
+  constructor(
+    private trackService: TrackService,
+    private store: Store,
+    private logService: LogService
+  ) {}
 
   ngOnInit(): void {
     this.usersCount$ = this.store.select(selectUsers).pipe(
@@ -32,6 +39,17 @@ export class ReportsComponent implements OnInit {
       filter((orders) => !!orders.length),
       map((orders) => orders.length)
     );
+
+    this.logs$ = this.logService
+      .getLogs()
+      .pipe(
+        map((logs) =>
+          logs.sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
+        )
+      );
 
     this.trackingData$ = this.trackService.getTrackingData().pipe(
       map((trackingData) => {

@@ -17,7 +17,7 @@ export class CategoryEffects {
       ofType(getCategories),
       exhaustMap(() =>
         this.categoryService
-          .getAllCategory$()
+          .getCategories$()
           .pipe(map((categories) => getCategoriesSuccess({ categories })))
       )
     )

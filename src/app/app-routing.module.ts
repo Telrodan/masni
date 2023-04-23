@@ -13,6 +13,7 @@ import { ProductDetailsComponent } from './features/shop/components/product-deta
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
+import { OrderSuccessComponent } from './shared/UI/order-success/order-success.component';
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -99,6 +100,10 @@ const routes: Routes = [
   {
     path: 'terms-and-conditions',
     component: TermsAndConditionsComponent
+  },
+  {
+    path: 'order-success/:id',
+    component: OrderSuccessComponent
   }
 ];
 

@@ -26,7 +26,7 @@ export class AddProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.categoryService.getAllCategory$();
+    this.categories$ = this.categoryService.getCategories$();
     this.initForm();
   }
 

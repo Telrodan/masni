@@ -9,7 +9,7 @@ import {
 } from '../actions/shopping-cart.actions';
 
 export const shoppingCartInitialState: ShoppingCartState = {
-  shoppingCartItems: []
+  items: []
 };
 
 export const shoppingCartReducers = createReducer(
@@ -21,23 +21,21 @@ export const shoppingCartReducers = createReducer(
 
   on(getShoppingCartItemsSuccess, (state, action) => ({
     ...state,
-    shoppingCartItems: action.shoppingCartItems
+    items: action.items
   })),
 
   on(addShoppingCartItem, (state, action) => ({
     ...state,
-    shoppingCartItems: [...state.shoppingCartItems, action.shoppingCartItem]
+    items: [...state.items, action.item]
   })),
 
   on(deleteShoppingCartItem, (state, action) => {
-    const index = state.shoppingCartItems.findIndex(
-      (item) => item._id === action.shoppingCartItem._id
-    );
-    const shoppingCartItems = [...state.shoppingCartItems];
-    shoppingCartItems.splice(index, 1);
+    const index = state.items.findIndex((item) => item._id === action.item._id);
+    const items = [...state.items];
+    items.splice(index, 1);
     return {
       ...state,
-      shoppingCartItems: shoppingCartItems
+      items
     };
   })
 );

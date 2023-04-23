@@ -20,13 +20,11 @@ export class ShoppingCartEffects {
     this.actions$.pipe(
       ofType(getShoppingCartItems),
       exhaustMap(() =>
-        this.shoppingCartService
-          .getUserCartItems()
-          .pipe(
-            map((shoppingCartItems) =>
-              getShoppingCartItemsSuccess({ shoppingCartItems })
-            )
-          )
+        this.shoppingCartService.getUserCartItems().pipe(
+          map((items) => {
+            return getShoppingCartItemsSuccess({ items });
+          })
+        )
       )
     )
   );

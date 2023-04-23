@@ -18,19 +18,19 @@ import { OrderState } from '@core/store/models/order-state.model';
 import { orderReducers } from '@core/store/reducers/order.reducers';
 
 export interface AppState {
-  materials: MaterialState;
+  material: MaterialState;
   shoppingCart: ShoppingCartState;
-  products: ProductState;
-  categories: CategoryState;
+  product: ProductState;
+  category: CategoryState;
   user: UserState;
   order: OrderState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  materials: materialReducers,
+  material: materialReducers,
   shoppingCart: shoppingCartReducers,
-  products: productReducers,
-  categories: categoryReducers,
+  product: productReducers,
+  category: categoryReducers,
   user: userReducers,
   order: orderReducers
 };
