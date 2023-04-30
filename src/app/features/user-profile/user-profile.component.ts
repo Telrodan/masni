@@ -41,6 +41,7 @@ export class UserProfileComponent implements OnInit {
     this.user$ = this.store.select(userSelector).pipe(
       filter((user) => !!user),
       tap((user) => {
+        console.log(user);
         this.initForm(user);
       })
     );
@@ -52,6 +53,7 @@ export class UserProfileComponent implements OnInit {
         .updateCurrentUser$(this.form.value)
         .pipe(
           tap(() => {
+            console.log(this.form.value);
             this.toastr.success('Siker', 'Adatok módosítva');
           })
         )
@@ -84,12 +86,34 @@ export class UserProfileComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(user.name, Validators.required),
       phone: new FormControl(user.phone, Validators.required),
-      address: new FormGroup({
-        street: new FormControl(user.address.street, Validators.required),
-        city: new FormControl(user.address.city, Validators.required),
-        postcode: new FormControl(user.address.postcode, Validators.required),
-        county: new FormControl(user.address.county, Validators.required)
+      shippingAddress: new FormGroup({
+        street: new FormControl(
+          user.shippingAddress.street,
+          Validators.required
+        ),
+        city: new FormControl(user.shippingAddress.city, Validators.required),
+        postcode: new FormControl(
+          user.shippingAddress.postcode,
+          Validators.required
+        ),
+        county: new FormControl(
+          user.shippingAddress.county,
+          Validators.required
+        )
       }),
+      billingAddress: new FormGroup({
+        street: new FormControl(
+          user.billingAddress.street,
+          Validators.required
+        ),
+        city: new FormControl(user.billingAddress.city, Validators.required),
+        postcode: new FormControl(
+          user.billingAddress.postcode,
+          Validators.required
+        ),
+        county: new FormControl(user.billingAddress.county, Validators.required)
+      }),
+
       subscribed: new FormControl(user.subscribed, Validators.required)
     });
   }

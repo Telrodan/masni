@@ -1,18 +1,11 @@
 export const firstCarousel = {
-  heading: '',
-  displayHeading: false,
-  images: [
-    '../../../../../assets/images/landing-page/first-carousel/image-1.jpg',
-    '../../../../../assets/images/landing-page/first-carousel/image-2.jpg',
-    '../../../../../assets/images/landing-page/first-carousel/image-3.jpg',
-    '../../../../../assets/images/landing-page/first-carousel/image-4.jpg',
-    '../../../../../assets/images/landing-page/first-carousel/image-5.jpg',
-    '../../../../../assets/images/landing-page/first-carousel/image-6.jpg'
-  ],
+  heading: 'Inspirációk',
+  displayHeading: true,
+  images: [],
   isRoundImage: false,
-  linkText: '',
-  linkRoute: '',
-  displayLink: false
+  linkText: 'Mindet megnézem',
+  linkRoute: '/inspirations',
+  displayLink: true
 };
 
 export const secondCarousel = {
@@ -37,7 +30,7 @@ export const thirdCarousel = {
     '../../../../assets/images/landing-page/first-carousel/test-product-image-6.jpg'
   ],
   isRoundImage: false,
-  linkText: 'Mindet Megnézem',
+  linkText: 'Mindet megnézem',
   linkRoute: '/samples',
   displayLink: true
 };

@@ -12,6 +12,7 @@ import {
   thirdCarousel,
   fourthCarousel
 } from './LANDING_DATA';
+import { InspirationService } from '@core/services/inspiration.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -25,7 +26,10 @@ export class LandingComponent implements OnInit {
   public thirdCarousel = thirdCarousel;
   public fourthCarousel = fourthCarousel;
 
-  constructor(private store$: Store) {}
+  constructor(
+    private store$: Store,
+    private inspirationService: InspirationService
+  ) {}
 
   public ngOnInit(): void {
     this.store$
@@ -39,6 +43,19 @@ export class LandingComponent implements OnInit {
         }),
         tap((materialImages) => {
           this.secondCarousel.images = materialImages;
+        })
+      )
+      .subscribe();
+
+    this.inspirationService
+      .fetchInspirations$()
+      .pipe(
+        tap((inspirations) => {
+          console.log(inspirations);
+
+          this.firstCarousel.images = inspirations.map(
+            (inspiration) => inspiration.image
+          );
         })
       )
       .subscribe();

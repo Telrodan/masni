@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { concatMap, filter, Observable, Subject, switchMap, tap } from 'rxjs';
+import { filter, Observable, Subject, switchMap, tap } from 'rxjs';
 
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
@@ -19,6 +19,7 @@ export class UserListComponent implements OnInit {
   users$: Observable<User[]>;
   selectedUser$: Observable<User>;
   isDialogVisible = false;
+
   private selectedUserSubject = new Subject<User>();
 
   constructor(

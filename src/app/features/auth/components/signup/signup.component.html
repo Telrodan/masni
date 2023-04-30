@@ -82,59 +82,148 @@
             Megadott jelszó nem egyezik
           </p>
         </div>
+        <p class="font-medium text-900 mb-1">Szállítási cím</p>
         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
         <div class="field mb-4 col-12 md:col-6">
-          <label for="postcode" class="font-medium text-900"
+          <label for="shippingPostcode" class="font-medium text-900"
             >Irányítószám</label
           >
           <input
-            id="postcode"
+            id="shippingPostcode"
             type="number"
             pInputText
-            formControlName="postcode"
-            (blur)="onPostcodeBlur($event)" />
+            formControlName="shippingPostcode"
+            (blur)="onShippingPostcodeBlur($event)" />
           <p
             class="form-helper"
             *ngIf="
-              !signupForm.get('postcode').valid &&
-              signupForm.get('postcode').dirty
+              !signupForm.get('shippingPostcode').valid &&
+              signupForm.get('shippingPostcode').dirty
             ">
             Kérlek add meg az irányítószámot.
           </p>
         </div>
 
         <div class="field mb-4 col-12 md:col-6">
-          <label for="street" class="font-medium text-900"
+          <label for="shippingStreet" class="font-medium text-900"
             >Utca/házszám/épület</label
           >
-          <input id="street" type="text" pInputText formControlName="street" />
+          <input
+            id="shippingStreet"
+            type="text"
+            pInputText
+            formControlName="shippingStreet" />
           <p
             class="form-helper"
             *ngIf="
-              !signupForm.get('street').valid && signupForm.get('street').dirty
+              !signupForm.get('shippingStreet').valid &&
+              signupForm.get('shippingStreet').dirty
             ">
             Kérlek add meg a címed.
           </p>
         </div>
         <div class="field mb-4 col-12 md:col-6">
-          <label for="city" class="font-medium text-900">Város</label>
-          <input id="city" type="text" pInputText formControlName="city" />
+          <label for="shippingCity" class="font-medium text-900">Város</label>
+          <input
+            id="shippingCity"
+            type="text"
+            pInputText
+            formControlName="shippingCity" />
           <p
             class="form-helper"
             *ngIf="
-              !signupForm.get('city').valid && signupForm.get('city').dirty
+              !signupForm.get('shippingCity').valid &&
+              signupForm.get('shippingCity').dirty
             ">
             Kérlek add meg a várost.
           </p>
         </div>
 
         <div class="field mb-4 col-12 md:col-6">
-          <label for="county" class="font-medium text-900">Megye</label>
-          <input id="county" type="text" pInputText formControlName="county" />
+          <label for="shippingCounty" class="font-medium text-900">Megye</label>
+          <input
+            id="shippingCounty"
+            type="text"
+            pInputText
+            formControlName="shippingCounty" />
           <p
             class="form-helper"
             *ngIf="
-              !signupForm.get('county').valid && signupForm.get('county').dirty
+              !signupForm.get('shippingCounty').valid &&
+              signupForm.get('shippingCounty').dirty
+            ">
+            Kérlek add meg a megyét.
+          </p>
+        </div>
+        <p class="font-medium text-900 mb-1">Számlázási cím</p>
+        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="billingPostcode" class="font-medium text-900"
+            >Irányítószám</label
+          >
+          <input
+            id="billingPostcode"
+            type="number"
+            pInputText
+            formControlName="billingPostcode"
+            (blur)="onBillingPostcodeBlur($event)" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('billingPostcode').valid &&
+              signupForm.get('billingPostcode').dirty
+            ">
+            Kérlek add meg az irányítószámot.
+          </p>
+        </div>
+
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="billingStreet" class="font-medium text-900"
+            >Utca/házszám/épület</label
+          >
+          <input
+            id="billingStreet"
+            type="text"
+            pInputText
+            formControlName="billingStreet" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('billingStreet').valid &&
+              signupForm.get('billingStreet').dirty
+            ">
+            Kérlek add meg a címed.
+          </p>
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="billingCity" class="font-medium text-900">Város</label>
+          <input
+            id="billingCity"
+            type="text"
+            pInputText
+            formControlName="billingCity" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('billingCity').valid &&
+              signupForm.get('billingCity').dirty
+            ">
+            Kérlek add meg a várost.
+          </p>
+        </div>
+
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="billingCounty" class="font-medium text-900">Megye</label>
+          <input
+            id="billingCounty"
+            type="text"
+            pInputText
+            formControlName="billingCounty" />
+          <p
+            class="form-helper"
+            *ngIf="
+              !signupForm.get('billingCounty').valid &&
+              signupForm.get('billingCounty').dirty
             ">
             Kérlek add meg a megyét.
           </p>

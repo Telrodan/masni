@@ -6,10 +6,14 @@ interface UserSignupForm {
   phone: string;
   password?: string;
   passwordConfirm?: string;
-  street: string;
-  city: string;
-  postcode: number;
-  county: string;
+  shippingStreet: string;
+  shippingCity: string;
+  shippingPostcode: number;
+  shippingCounty: string;
+  billingStreet: string;
+  billingCity: string;
+  billingPostcode: number;
+  billingCounty: string;
   subscribed: boolean;
 }
 
@@ -31,7 +35,8 @@ export class User {
     _id: string;
     items: ShoppingCartItem[];
   };
-  address: Address;
+  shippingAddress: Address;
+  billingAddress: Address;
   subscribed: boolean;
 
   constructor(data: UserSignupForm) {
@@ -40,11 +45,17 @@ export class User {
     this.phone = data.phone;
     this.password = data.password;
     this.passwordConfirm = data.passwordConfirm;
-    this.address = {
-      street: data.street,
-      city: data.city,
-      postcode: data.postcode,
-      county: data.county
+    this.shippingAddress = {
+      street: data.shippingStreet,
+      city: data.shippingCity,
+      postcode: data.shippingPostcode,
+      county: data.shippingCounty
+    };
+    this.billingAddress = {
+      street: data.billingStreet,
+      city: data.billingCity,
+      postcode: data.billingPostcode,
+      county: data.billingCounty
     };
     this.subscribed = data.subscribed;
   }

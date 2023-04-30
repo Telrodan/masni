@@ -73,17 +73,21 @@ export class SignupComponent implements OnInit {
         Validators.minLength(8)
       ]),
       passwordConfirm: new FormControl(null, Validators.required),
-      street: new FormControl(null, Validators.required),
-      city: new FormControl(null, Validators.required),
-      postcode: new FormControl(null, Validators.required),
-      county: new FormControl(null, Validators.required),
+      shippingStreet: new FormControl(null, Validators.required),
+      shippingCity: new FormControl(null, Validators.required),
+      shippingPostcode: new FormControl(null, Validators.required),
+      shippingCounty: new FormControl(null, Validators.required),
+      billingStreet: new FormControl(null, Validators.required),
+      billingCity: new FormControl(null, Validators.required),
+      billingPostcode: new FormControl(null, Validators.required),
+      billingCounty: new FormControl(null, Validators.required),
       privacy: new FormControl(false, Validators.requiredTrue),
       subscribed: new FormControl(false, Validators.required)
     });
   }
 
-  onPostcodeBlur(event: Event): void {
-    if (this.signupForm.get('postcode').valid) {
+  onShippingPostcodeBlur(event: Event): void {
+    if (this.signupForm.get('shippingPostcode').valid) {
       const postcode = (event.target as HTMLInputElement).value;
       const headers = new HttpHeaders({
         'X-RapidAPI-Key': environment.zippopotamusApiKey,
@@ -101,9 +105,41 @@ export class SignupComponent implements OnInit {
           }),
           tap((response: PostCodeApiData) => {
             this.signupForm
-              .get('city')
+              .get('shippingCity')
               .setValue(response.places[0]['place name']);
-            this.signupForm.get('county').setValue(response.places[0].state);
+            this.signupForm
+              .get('shippingCounty')
+              .setValue(response.places[0].state);
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  onBillingPostcodeBlur(event: Event): void {
+    if (this.signupForm.get('billingPostcode').valid) {
+      const postcode = (event.target as HTMLInputElement).value;
+      const headers = new HttpHeaders({
+        'X-RapidAPI-Key': environment.zippopotamusApiKey,
+        'X-RapidAPI-Host': 'community-zippopotamus.p.rapidapi.com'
+      });
+      this.http
+        .get(`https://community-zippopotamus.p.rapidapi.com/hu/${postcode}`, {
+          headers
+        })
+        .pipe(
+          catchError(() => {
+            return throwError(
+              () => new Error('Nem található ilyen irányítószám!')
+            );
+          }),
+          tap((response: PostCodeApiData) => {
+            this.signupForm
+              .get('billingCity')
+              .setValue(response.places[0]['place name']);
+            this.signupForm
+              .get('billingCounty')
+              .setValue(response.places[0].state);
           })
         )
         .subscribe();

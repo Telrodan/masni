@@ -156,7 +156,7 @@ export class ShoppingCartComponent implements OnInit {
   onSubmitOrder(): void {
     let shipping;
     if (this.shippingForm.get('shippingMethod').value.value === 'delivery') {
-      const userAddress = this.user.address;
+      const userAddress = this.user.shippingAddress;
       shipping = {
         method: this.shippingForm.get('shippingMethod').value.method,
         price: this.shippingForm.get('shippingMethod').value.price,

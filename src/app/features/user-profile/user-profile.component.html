@@ -81,7 +81,6 @@
       </div>
 
       <div
-        formGroupName="address"
         class="surface-card p-5 shadow-2 border-round flex-auto"
         @fadeIn
         *ngIf="activeMenu === 'address'">
@@ -89,37 +88,86 @@
         <p-divider></p-divider>
         <div class="flex gap-5 flex-column-reverse md:flex-row">
           <div class="flex-auto p-fluid">
-            <div class="mb-4">
-              <label for="street" class="block text-900 mb-2"
-                >Utca/házszám/épület</label
-              >
-              <input
-                id="street"
-                type="text"
-                formControlName="street"
-                pInputText />
+            <p class="font-medium text-primary">Szállítási cím</p>
+            <p-divider></p-divider>
+            <div formGroupName="shippingAddress">
+              <div class="mb-4">
+                <label for="street" class="block text-900 mb-2"
+                  >Utca/házszám/épület</label
+                >
+                <input
+                  id="street"
+                  type="text"
+                  formControlName="street"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="city" class="block text-900 mb-2">Város</label>
+                <input
+                  id="city"
+                  type="text"
+                  formControlName="city"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="postcode" class="block text-900 mb-2"
+                  >Irányítószám</label
+                >
+                <input
+                  id="postcode"
+                  type="text"
+                  formControlName="postcode"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="county" class="block text-900 mb-2">Megye</label>
+                <input
+                  id="county"
+                  type="text"
+                  formControlName="county"
+                  pInputText />
+              </div>
             </div>
-            <div class="mb-4">
-              <label for="city" class="block text-900 mb-2">Város</label>
-              <input id="city" type="text" formControlName="city" pInputText />
-            </div>
-            <div class="mb-4">
-              <label for="postcode" class="block text-900 mb-2"
-                >Irányítószám</label
-              >
-              <input
-                id="postcode"
-                type="text"
-                formControlName="postcode"
-                pInputText />
-            </div>
-            <div class="mb-4">
-              <label for="county" class="block text-900 mb-2">Megye</label>
-              <input
-                id="county"
-                type="text"
-                formControlName="county"
-                pInputText />
+            <p-divider></p-divider>
+            <p class="font-medium text-primary">Számlázási cím</p>
+            <p-divider></p-divider>
+            <div formGroupName="billingAddress">
+              <div class="mb-4">
+                <label for="street" class="block text-900 mb-2"
+                  >Utca/házszám/épület</label
+                >
+                <input
+                  id="street"
+                  type="text"
+                  formControlName="street"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="city" class="block text-900 mb-2">Város</label>
+                <input
+                  id="city"
+                  type="text"
+                  formControlName="city"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="postcode" class="block text-900 mb-2"
+                  >Irányítószám</label
+                >
+                <input
+                  id="postcode"
+                  type="text"
+                  formControlName="postcode"
+                  pInputText />
+              </div>
+              <div class="mb-4">
+                <label for="county" class="block text-900 mb-2">Megye</label>
+                <input
+                  id="county"
+                  type="text"
+                  formControlName="county"
+                  pInputText />
+              </div>
             </div>
             <div>
               <button
