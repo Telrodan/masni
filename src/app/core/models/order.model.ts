@@ -8,6 +8,7 @@ export interface Order {
     method: string;
     address: string;
   };
+  billing: string;
   products: ShoppingCartItem[];
   price: number;
   status: string;

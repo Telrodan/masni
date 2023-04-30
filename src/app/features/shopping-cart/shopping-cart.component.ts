@@ -155,18 +155,21 @@ export class ShoppingCartComponent implements OnInit {
 
   onSubmitOrder(): void {
     let shipping;
+    const billing = `${this.user.billingAddress.postcode}, ${this.user.billingAddress.city} ${this.user.billingAddress.street} ${this.user.billingAddress.county}`;
     if (this.shippingForm.get('shippingMethod').value.value === 'delivery') {
       const userAddress = this.user.shippingAddress;
       shipping = {
         method: this.shippingForm.get('shippingMethod').value.method,
         price: this.shippingForm.get('shippingMethod').value.price,
-        address: `${userAddress.postcode} ${userAddress.city}, ${userAddress.street}`
+        address: `${userAddress.postcode} ${userAddress.city}, ${userAddress.street}`,
+        billing
       };
     } else {
       shipping = {
         method: this.shippingForm.get('shippingMethod').value.method,
         price: this.shippingForm.get('shippingMethod').value.price,
-        address: this.shippingForm.get('foxpost').value.address
+        address: this.shippingForm.get('foxpost').value.address,
+        billing
       };
     }
 

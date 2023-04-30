@@ -5,7 +5,7 @@ import { LogService } from '@core/services/log.service';
 import { TrackService } from '@core/services/track.service';
 import { selectOrders, selectUsers } from '@core/store';
 import { Store } from '@ngrx/store';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 
 interface TrackingData {
   visitors: number;
@@ -23,6 +23,7 @@ export class ReportsComponent implements OnInit {
   ordersCount$: Observable<number>;
   trackingData$: Observable<TrackingData>;
   logs$: Observable<Log[]>;
+  totalSales = 0;
 
   constructor(
     private trackService: TrackService,
@@ -38,6 +39,13 @@ export class ReportsComponent implements OnInit {
 
     this.ordersCount$ = this.store.select(selectOrders).pipe(
       filter((orders) => !!orders.length),
+      tap((orders) => {
+        orders.forEach((order) => {
+          if (order.status === 'paid') {
+            this.totalSales += order.price;
+          }
+        });
+      }),
       map((orders) => orders.length)
     );
 
