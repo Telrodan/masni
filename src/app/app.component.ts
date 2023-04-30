@@ -26,8 +26,16 @@ export class AppComponent implements OnInit {
     Carousel.prototype.onTouchMove = () => {};
   }
 
-  public ngOnInit(): void {
-    this.trackService.trackVisitor();
+  ngOnInit(): void {
+    if (sessionStorage.getItem('visit') === null) {
+      const isNewVisitor = true;
+      this.trackService.trackVisitor({ isNewVisitor });
+    } else {
+      const isNewVisitor = false;
+      this.trackService.trackVisitor({ isNewVisitor });
+    }
+
+    sessionStorage.setItem('visit', 'x');
 
     of(this.store$.dispatch(getCategories()))
       .pipe(

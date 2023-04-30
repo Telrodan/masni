@@ -8,8 +8,9 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, map } from 'rxjs';
 
 interface TrackingData {
-  thisMonthVisitors: number;
-  allVisitors: number;
+  visitors: number;
+  pageView: number;
+  sameVisitors: number;
 }
 
 @Component({
@@ -51,23 +52,55 @@ export class ReportsComponent implements OnInit {
         )
       );
 
-    this.trackingData$ = this.trackService.getTrackingData().pipe(
+    this.trackingData$ = this.trackService.getTrackingData$().pipe(
       map((trackingData) => {
-        const thisMonthVisitors: TrackData[] = [];
-        const currentDate = new Date();
-        const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
-        trackingData.forEach((data) => {
-          const itemCreated = new Date(data.createdAt);
-          const timeDifference = currentDate.getTime() - itemCreated.getTime();
-          if (timeDifference < oneMonthInMilliseconds) {
-            thisMonthVisitors.push(data);
+        let visitors = 0;
+        let pageView = 0;
+        let sameVisitors = 0;
+
+        trackingData.forEach((tracking) => {
+          if (tracking.visitor) {
+            visitors++;
+            pageView++;
+          } else {
+            pageView++;
           }
         });
+        for (let i = 0; i < trackingData.length; i++) {
+          if (trackingData[i].visitor) {
+            const currentIp = trackingData[i].ip;
+            for (let j = i + 1; j < trackingData.length; j++) {
+              if (currentIp === trackingData[j].ip) {
+                sameVisitors++;
+                break;
+              }
+            }
+          }
+        }
+
         return {
-          thisMonthVisitors: thisMonthVisitors.length,
-          allVisitors: trackingData.length
+          visitors,
+          pageView,
+          sameVisitors
         };
       })
+      // map((trackingData) => {
+      //   console.log(trackingData);
+      //   const thisMonthVisitors: TrackData[] = [];
+      //   const currentDate = new Date();
+      //   const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+      //   trackingData.forEach((data) => {
+      //     const itemCreated = new Date(data.createdAt);
+      //     const timeDifference = currentDate.getTime() - itemCreated.getTime();
+      //     if (timeDifference < oneMonthInMilliseconds) {
+      //       thisMonthVisitors.push(data);
+      //     }
+      //   });
+      //   return {
+      //     thisMonthVisitors: thisMonthVisitors.length,
+      //     allVisitors: trackingData.length
+      //   };
+      // })
     );
   }
 }

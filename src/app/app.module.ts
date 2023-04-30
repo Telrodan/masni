@@ -63,6 +63,7 @@ import { FeaturedProductsComponent } from './features/landing/components/feature
 import { MatDialogModule } from '@angular/material/dialog';
 import { LazyImageDirective } from './core/directives/lazy-image.directive';
 import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 const PRIME_NG = [
   AccordionModule,
@@ -80,7 +81,8 @@ const PRIME_NG = [
   DropdownModule,
   CardModule,
   CheckboxModule,
-  GalleriaModule
+  GalleriaModule,
+  ToggleButtonModule
 ];
 
 @NgModule({

@@ -57,6 +57,17 @@
                 formControlName="phone"
                 pInputText />
             </div>
+            <div class="mb-4">
+              <label for="subscribed" class="block text-900 mb-2"
+                >Hírlevél feliratkozás</label
+              >
+              <p-toggleButton
+                id="subscribed"
+                styleClass="p-button-raised w-auto"
+                formControlName="subscribed"
+                onLabel="Igen"
+                offLabel="Nem"></p-toggleButton>
+            </div>
             <div>
               <button
                 pButton
@@ -125,28 +136,50 @@
         class="surface-card p-5 shadow-2 border-round flex-auto"
         @fadeIn
         *ngIf="activeMenu === 'settings'">
-        <div class="text-900 font-semibold text-lg mt-3">Profil</div>
+        <div class="heading-primary mt-3 mt-3">Beállítások</div>
         <p-divider></p-divider>
         <div class="flex gap-5 flex-column-reverse md:flex-row">
           <div class="flex-auto p-fluid">
             <div class="mb-4">
-              <label for="name" class="block text-900 mb-2">Név</label>
-              <input id="name" type="text" pInputText />
-            </div>
-            <div class="mb-4">
-              <label for="email" class="block text-900 mb-2">Email cím</label>
-              <input id="email" type="email" pInputText />
-            </div>
-            <div class="mb-4">
-              <label for="phone" class="block text-900 mb-2">Név</label>
-              <input id="phone" type="text" pInputText />
-            </div>
-            <div>
+              <label class="block text-900 mb-2">Új jelszó beállítás</label>
+              <input
+                class="mb-2"
+                type="password"
+                placeholder="Új jelszó"
+                pInputText
+                #newPassword />
+              <input
+                class="mb-2"
+                type="password"
+                placeholder="Új jelszó megerősítése"
+                pInputText
+                #newPasswordConfirm />
+              <input
+                class="mb-3"
+                type="password"
+                placeholder="Régi jelszó "
+                pInputText
+                #oldPassword />
               <button
                 pButton
                 pRipple
-                label="Adatok módosítása"
-                class="w-auto"></button>
+                type="button"
+                label="Jelszó módosítása"
+                class="w-auto p-button-raised"
+                (click)="
+                  onChangePassword(
+                    newPassword.value,
+                    newPasswordConfirm.value,
+                    oldPassword.value
+                  )
+                "></button>
+            </div>
+            <div class="mb-4">
+              <p
+                class="text-red-300 underline cursor-pointer"
+                (click)="onDeleteCurrentUser()">
+                Fiók törléséhez kattints ide.
+              </p>
             </div>
           </div>
         </div>

@@ -30,6 +30,18 @@ export class UserService {
       .pipe(map((userDTO) => userDTO.data));
   }
 
+  updateCurrentUserPassword$(passwordObj): Observable<string> {
+    return this.apiService
+      .patch<ApiResponse<string>>('users/updateMyPassword', passwordObj)
+      .pipe(map((responseDTO) => responseDTO.data));
+  }
+
+  deleteCurrentUser$(): Observable<null> {
+    return this.apiService
+      .post<ApiResponse<null>>('users/deleteMe', '')
+      .pipe(map((responseDTO) => responseDTO.data));
+  }
+
   deleteUser$(user: User): Observable<null> {
     return this.apiService.delete<null>('users', user._id).pipe(
       tap(() => {

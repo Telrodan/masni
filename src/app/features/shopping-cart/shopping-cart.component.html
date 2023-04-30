@@ -204,6 +204,18 @@
                 placeholder="Válassz">
               </p-dropdown>
             </div>
+            <p
+              *ngIf="
+                shippingForm.get('shippingMethod').value.value === 'delivery'
+              ">
+              Házhozszállítás esetén a regisztráció során megadott címre
+              szállítunk, kérlek ha most másik szállítási címet szeretnél
+              használnál, azt fizetés előtt a profilodban a cím
+              megváltoztatásával tudod módosítani.
+              <a routerLink="/user" class="underline text-primary"
+                >Vagy kattints ide.</a
+              >
+            </p>
           </form>
         </li>
 

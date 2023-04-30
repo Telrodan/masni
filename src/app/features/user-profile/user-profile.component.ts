@@ -59,6 +59,27 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  onChangePassword(
+    newPassword: string,
+    newPasswordConfirm: string,
+    oldPassword: string
+  ) {
+    const passwordObj = {
+      passwordCurrent: oldPassword,
+      password: newPassword,
+      passwordConfirm: newPasswordConfirm
+    };
+
+    this.userService
+      .updateCurrentUserPassword$(passwordObj)
+      .pipe(tap(() => this.toastr.success('Siker', 'Jelszó módosítva')))
+      .subscribe();
+  }
+
+  onDeleteCurrentUser(): void {
+    this.userService.deleteCurrentUser$().subscribe();
+  }
+
   private initForm(user: User): void {
     this.form = new FormGroup({
       name: new FormControl(user.name, Validators.required),
@@ -68,7 +89,8 @@ export class UserProfileComponent implements OnInit {
         city: new FormControl(user.address.city, Validators.required),
         postcode: new FormControl(user.address.postcode, Validators.required),
         county: new FormControl(user.address.county, Validators.required)
-      })
+      }),
+      subscribed: new FormControl(user.subscribed, Validators.required)
     });
   }
 }

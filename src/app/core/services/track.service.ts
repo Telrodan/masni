@@ -10,11 +10,11 @@ import { ApiResponse } from '@core/models/api-response.model';
 export class TrackService {
   constructor(private apiService: ApiService) {}
 
-  trackVisitor(): void {
-    this.apiService.get('track').subscribe();
+  trackVisitor(data: any): void {
+    this.apiService.post('track/trackVisitor', data).subscribe();
   }
 
-  getTrackingData(): Observable<TrackData[]> {
+  getTrackingData$(): Observable<TrackData[]> {
     return this.apiService
       .get<ApiResponse<TrackData[]>>('track/getData')
       .pipe(map((trackingDTO) => trackingDTO.data));
