@@ -40,6 +40,7 @@ export class ReportsComponent implements OnInit {
     this.ordersCount$ = this.store.select(selectOrders).pipe(
       filter((orders) => !!orders.length),
       tap((orders) => {
+        this.totalSales = 0;
         orders.forEach((order) => {
           if (order.status === 'paid') {
             this.totalSales += order.price;

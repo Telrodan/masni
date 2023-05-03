@@ -51,8 +51,6 @@ export class LandingComponent implements OnInit {
       .fetchInspirations$()
       .pipe(
         tap((inspirations) => {
-          console.log(inspirations);
-
           this.firstCarousel.images = inspirations.map(
             (inspiration) => inspiration.image
           );

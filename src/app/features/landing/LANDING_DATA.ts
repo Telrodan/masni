@@ -4,7 +4,7 @@ export const firstCarousel = {
   images: [],
   isRoundImage: false,
   linkText: 'Mindet megnézem',
-  linkRoute: '/inspirations',
+  linkRoute: '/inspiration',
   displayLink: true
 };
 

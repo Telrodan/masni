@@ -38,7 +38,6 @@ export class SignupComponent implements OnInit {
   onSignup(): void {
     if (this.signupForm.valid) {
       const user = new User(this.signupForm.value);
-      console.log(user);
       this.authService
         .signup$(user)
         .pipe(

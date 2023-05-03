@@ -41,7 +41,6 @@ export class UserProfileComponent implements OnInit {
     this.user$ = this.store.select(userSelector).pipe(
       filter((user) => !!user),
       tap((user) => {
-        console.log(user);
         this.initForm(user);
       })
     );
@@ -53,7 +52,6 @@ export class UserProfileComponent implements OnInit {
         .updateCurrentUser$(this.form.value)
         .pipe(
           tap(() => {
-            console.log(this.form.value);
             this.toastr.success('Siker', 'Adatok módosítva');
           })
         )
