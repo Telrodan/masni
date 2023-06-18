@@ -1,23 +1,36 @@
-<div class="product-card max-w-25rem" (click)="productDetails()">
-  <div class="relative">
-    <!-- <span
-      class="surface-card text-900 shadow-2 px-3 py-2 absolute"
-      style="border-radius: 1.5rem; left: 1rem; top: 1rem"
-      >{{ product.category | titlecase }}</span
-    > -->
-    <img appLazyImage [src]="product.images[0]" class="w-full" />
+<div class="product-card" (click)="productDetails()">
+  <img
+    [src]="product.images[0]"
+    [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
+    (load)="changeSkeletonLoad()" />
+  <ngx-skeleton-loader
+    *ngIf="isImageLoading"
+    appearance="circle"
+    animation="pulse"
+    [theme]="{
+      margin: '0',
+      width: '100%',
+      paddingBottom: '100%',
+      aspectRatio: '1 / 1',
+      borderRadius: '5px',
+      background: 'lightGrey'
+    }"></ngx-skeleton-loader>
+  <div class="content">
+    <div class="details">
+      <p class="title">
+        {{ product.name | titlecase }}
+      </p>
+      <p class="description text-600">
+        {{ product.shortDescription }}
+      </p>
+      <div class="wrapper">
+        <p class="price text-primary">{{ product.price }} Ft</p>
+        <p class="primary-paragraph stock">Készleten: {{ product.stock }}</p>
+      </div>
+    </div>
+
+    <button class="primary-button shadow-2">
+      <i class="pi pi-shopping-cart"></i>
+    </button>
   </div>
-  <p class="name my-2">{{ product.name | titlecase }}</p>
-  <p class="description text-600 h-3rem">
-    {{ product.shortDescription }}
-  </p>
-  <div class="flex align-items-center justify-content-between">
-    <p class="price text-primary">{{ product.price }} Ft</p>
-    <p class="primary-paragraph hidden md:block">
-      Készleten: {{ product.stock }}
-    </p>
-  </div>
-  <button class="cart-button primary-button shadow-2 hidden sm:block">
-    <i class="pi pi-shopping-cart"></i>
-  </button>
 </div>

@@ -6,7 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -23,47 +27,44 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { GalleriaModule } from 'primeng/galleria';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptorProvider } from './core/interceptors/auth-interceptor';
-import { HttpInterceptorProvider } from './core/interceptors/http.interceptor';
-import { LandingComponent } from './features/landing/landing.component';
-import { LandingBrandsComponent } from './features/landing/components/landing-brands/landing-brands.component';
-import { LandingAboutUsComponent } from './features/landing/components/landing-about-us/landing-about-us.component';
-import { NyuszkoShopModule } from './features/nyuszko-shop/nyuszko-shop.module';
-import { MasniShopModule } from './features/masni-shop/masni-shop.module';
-import { ContactComponent } from './features/contact/contact.component';
-import { SharedModule } from './shared/shared.module';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from 'src/environments/environment';
-import { reducers } from './reducer';
-import { ShopComponent } from './features/shop/shop.component';
-import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
-import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
-import { EffectsModule } from '@ngrx/effects';
+import { AuthInterceptorProvider } from '@core/interceptors/auth-interceptor';
+import { HttpInterceptorProvider } from '@core/interceptors/http.interceptor';
 import { AuthService } from '@core/services/auth.service';
+import { ProductEffects } from '@core/store/effects/product.effects';
+import { OrderEffects } from '@core/store/effects/order.effects';
 import {
   CategoryEffects,
   MaterialEffects,
   ShoppingCartEffects,
   UserEffects
 } from '@core/store/effects';
-import { ProductEffects } from '@core/store/effects/product.effects';
-import { AuthModule } from './features/auth/auth.module';
-import { UserProfileComponent } from './features/user-profile/user-profile.component';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { OrderEffects } from '@core/store/effects/order.effects';
-import { ProductDetailsComponent } from './features/shop/components/product-details/product-details.component';
-import { CheckboxModule } from 'primeng/checkbox';
-import { SamplesComponent } from './features/samples/samples.component';
-import { GalleriaModule } from 'primeng/galleria';
-import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
-import { FeaturedProductsComponent } from './features/landing/components/featured-products/featured-products.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { LazyImageDirective } from './core/directives/lazy-image.directive';
-import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
-import { ToggleButtonModule } from 'primeng/togglebutton';
+import { LazyImageDirective } from '@core/directives/lazy-image.directive';
+import { LandingComponent } from '@features/landing/landing.component';
+import { LandingBrandsComponent } from '@features/landing/components/landing-brands/landing-brands.component';
+import { LandingAboutUsComponent } from '@features/landing/components/landing-about-us/landing-about-us.component';
+import { NyuszkoShopModule } from '@features/nyuszko-shop/nyuszko-shop.module';
+import { MasniShopModule } from '@features/masni-shop/masni-shop.module';
+import { ContactComponent } from '@features/contact/contact.component';
+import { ShopComponent } from '@features/shop/shop.component';
+import { PrivacyPolicyComponent } from '@features/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from '@features/terms-and-conditions/terms-and-conditions.component';
+import { AuthModule } from '@features/auth/auth.module';
+import { UserProfileComponent } from '@features/user-profile/user-profile.component';
+import { ProductDetailsComponent } from '@features/shop/components/product-details/product-details.component';
+import { SamplesComponent } from '@features/samples/samples.component';
+import { ShoppingCartComponent } from '@features/shopping-cart/shopping-cart.component';
+import { FeaturedProductsComponent } from '@features/landing/components/featured-products/featured-products.component';
+import { InspirationPageComponent } from '@features/inspiration-page/inspiration-page.component';
+import { environment } from 'src/environments/environment';
+import { reducers } from './reducer';
+import { SharedModule } from './shared/shared.module';
 
 const PRIME_NG = [
   AccordionModule,
@@ -84,6 +85,8 @@ const PRIME_NG = [
   GalleriaModule,
   ToggleButtonModule
 ];
+
+const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
 @NgModule({
   declarations: [
@@ -116,8 +119,9 @@ const PRIME_NG = [
     AuthModule,
     HttpClientModule,
     ImageModule,
-    MatSnackBarModule,
-    MatDialogModule,
+    NgxSkeletonLoaderModule,
+
+    ...MATERIAL,
     ...PRIME_NG,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
