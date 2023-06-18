@@ -20,6 +20,7 @@ import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.compo
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
 import { OrderSuccessComponent } from './UI/order-success/order-success.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
 
@@ -43,6 +44,7 @@ const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    NgxSkeletonLoaderModule,
     ...PRIME_NG
   ],
   exports: [

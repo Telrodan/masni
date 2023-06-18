@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from '@core/models/product.model';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
-import { environment } from 'src/environments/environment';
+
+import { Product } from '@core/models/product.model';
 
 @Component({
   selector: 'masni-handmade-dolls-product-card',
@@ -12,11 +12,19 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductCardComponent {
   @Input() product: Product;
-  public faCartShopping = faCartShopping;
+
+  isImageLoading = true;
+
+  faCartShopping = faCartShopping;
 
   constructor(private router: Router) {}
 
-  public productDetails() {
+  productDetails(): void {
     this.router.navigate(['/shop', this.product._id]);
+  }
+
+  changeSkeletonLoad(): void {
+    this.isImageLoading = false;
+    console.log('image loaded');
   }
 }

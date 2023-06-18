@@ -31,7 +31,7 @@ export class LandingComponent implements OnInit {
     private inspirationService: InspirationService
   ) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.store$
       .select(materialsSelector)
       .pipe(
