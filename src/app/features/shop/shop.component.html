@@ -1,21 +1,9 @@
-<div class="px-4 mt-5 mb-8 md:px-6 lg:px-8">
+<div class="shop">
   <h1 class="heading-primary mb-4">Azonnal rendelhető termékek</h1>
-  <div class="categories">
-    <!-- <p-selectButton
-      [options]="categories$ | async"
-      [multiple]="false"
-      styleClass="category-menu"
-      optionLabel="categoryName"
-      optionValue="_id"></p-selectButton> -->
-  </div>
-  <div
-    class="grid grid-nogutter -mt-3 -ml-3 -mr-3"
-    *ngIf="products$ | async as products">
-    <div class="col-6 lg:col-3" *ngFor="let product of products">
-      <div class="p-2 sm:p-5">
-        <masni-handmade-dolls-product-card
-          [product]="product"></masni-handmade-dolls-product-card>
-      </div>
-    </div>
+
+  <div class="products-container" *ngIf="products$ | async as products">
+    <masni-handmade-dolls-product-card
+      *ngFor="let product of products"
+      [product]="product"></masni-handmade-dolls-product-card>
   </div>
 </div>

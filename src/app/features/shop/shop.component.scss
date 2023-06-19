@@ -1,11 +1,19 @@
-.category-menu {
-  .p-button {
-    font-family: 'Amatic SC', cursive;
-    font-size: 24px;
-    background-color: var(--color-secondary);
-  }
+@import '../../../scss/mixins';
 
-  .p-highlight {
-    background-color: var(--color-tertiary);
+.shop {
+  width: 90%;
+  margin: 40px auto;
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 28px;
+  grid-row-gap: 28px;
+
+  @include respond(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 14px;
+    grid-row-gap: 0;
   }
 }
