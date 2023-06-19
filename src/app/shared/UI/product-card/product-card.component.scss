@@ -1,7 +1,11 @@
 @import '../../../../scss/mixins';
 
+:host {
+  width: 100%;
+}
+
 .product-card {
-  width: 400px;
+  width: 100%;
   overflow: hidden;
   cursor: pointer;
 
@@ -41,6 +45,10 @@ img {
   font-size: 28px;
   font-weight: 700;
   font-family: 'Amatic SC', cursive;
+
+  @include respond(sm) {
+    margin: 0;
+  }
 }
 
 .description {
