@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import { Store } from '@ngrx/store';
-import { map, Observable, pipe, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
-import { ApiService } from './api.service';
+import { addCategory, deleteCategory, updateCategory } from '@core/store';
 import { ApiResponse } from '@core/models/api-response.model';
 import { Category } from '@core/models/category.model';
-import { addCategory, deleteCategory, updateCategory } from '@core/store';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,11 @@ import { addCategory, deleteCategory, updateCategory } from '@core/store';
 export class CategoryService {
   constructor(private apiService: ApiService, private store: Store) {}
 
-  addCategory$(categoryName: string): Observable<Category> {
+  addCategory$(name: string): Observable<Category> {
     return this.apiService
-      .post<ApiResponse<Category>>('category/addOne', { categoryName })
+      .post<ApiResponse<Category>>('category/addOne', {
+        name
+      })
       .pipe(
         map((categoryDTO) => categoryDTO.data),
         tap((category) => {
@@ -28,7 +30,7 @@ export class CategoryService {
   updateCategory$(category: Category): Observable<Category> {
     return this.apiService
       .patch<ApiResponse<Category>>(
-        `category/updateOne/${category._id}`,
+        `category/updateOne/${category.id}`,
         category
       )
       .pipe(

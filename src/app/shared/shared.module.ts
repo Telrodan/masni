@@ -4,12 +4,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { StyleClassModule } from 'primeng/styleclass';
 import { CarouselModule } from 'primeng/carousel';
 import { RippleModule } from 'primeng/ripple';
 
-import { NavbarComponent } from './UI/navbar/navbar.component';
-import { FooterComponent } from './UI/footer/footer.component';
 import { ProductCardComponent } from './UI/product-card/product-card.component';
 import { CarouselComponent } from './UI/carousel/carousel.component';
 import { MenuItemComponent } from './UI/menu-item/menu-item.component';
@@ -21,13 +18,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
 import { OrderSuccessComponent } from './UI/order-success/order-success.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { CarouselItemComponent } from './UI/carousel-with-heading-and-button/components/carousel-item/carousel-item.component';
 
-const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
+const PRIME_NG = [CarouselModule, RippleModule, ButtonModule];
 
 @NgModule({
   declarations: [
-    NavbarComponent,
-    FooterComponent,
     ProductCardComponent,
     CarouselComponent,
     MenuItemComponent,
@@ -35,7 +31,8 @@ const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
     SpinnerComponent,
     CarouselWithHeadingAndButtonComponent,
     ConfirmDialogComponent,
-    OrderSuccessComponent
+    OrderSuccessComponent,
+    CarouselItemComponent
   ],
   imports: [
     CommonModule,
@@ -48,8 +45,6 @@ const PRIME_NG = [CarouselModule, StyleClassModule, RippleModule, ButtonModule];
     ...PRIME_NG
   ],
   exports: [
-    NavbarComponent,
-    FooterComponent,
     ProductCardComponent,
     CarouselComponent,
     MenuItemComponent,

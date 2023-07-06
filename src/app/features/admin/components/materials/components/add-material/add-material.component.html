@@ -1,0 +1,95 @@
+<i class="pi pi-times close" mat-dialog-close></i>
+<h2 mat-dialog-title>Minta hozzáadás</h2>
+
+<mat-dialog-content>
+  <form class="flex-auto p-fluid" [formGroup]="addMaterialForm">
+    <div class="mb-4">
+      <label for="name" class="block font-medium text-900 mb-2">
+        Minta neve
+      </label>
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="category" class="block font-medium text-900 mb-2">
+        Minta kategóriája
+      </label>
+      <p-dropdown
+        id="categoryId"
+        formControlName="category"
+        placeholder="Válassz egy kategóriát"
+        [options]="categories"
+        optionValue="value"
+        optionLabel="name"
+        [showClear]="true"></p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-900 mb-2"> Minta képe </label>
+
+      <p-button
+        icon="pi pi-image"
+        styleClass="p-button p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <input
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <img
+        *ngIf="imagePreview"
+        class="my-3 image-preview"
+        [src]="imagePreview"
+        [alt]="addMaterialForm.value.name" />
+
+      <button
+        *ngIf="imagePreview"
+        pButton
+        pRipple
+        pTooltip="Kép törlése"
+        tooltipPosition="bottom"
+        (click)="imagePreview = ''"
+        type="button"
+        icon="pi pi-times"
+        class="p-button p-button-danger p-button"></button>
+    </div>
+
+    <div class="form-group">
+      <label for="extra" class="block font-medium text-900 mb-2">
+        Minta extra ára
+      </label>
+
+      <input id="extra" formControlName="extra" type="number" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="stock" class="block font-medium text-900 mb-2">
+        Rendelhető?
+      </label>
+
+      <p-toggleButton
+        styleClass="p-button w-auto"
+        formControlName="isAvailable"
+        onLabel="Igen"
+        offLabel="Nem"></p-toggleButton>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-content-end">
+  <p-button
+    label="Mégsem"
+    styleClass="p-button p-button-danger mr-4"
+    mat-dialog-close>
+  </p-button>
+
+  <p-button
+    label="Hozzáadás"
+    styleClass="p-button w-auto"
+    [disabled]="!addMaterialForm.valid"
+    (click)="onAddMaterial()">
+  </p-button>
+</mat-dialog-actions>

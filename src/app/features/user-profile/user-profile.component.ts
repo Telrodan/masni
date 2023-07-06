@@ -52,7 +52,7 @@ export class UserProfileComponent implements OnInit {
         .updateCurrentUser$(this.form.value)
         .pipe(
           tap(() => {
-            this.toastr.success('Siker', 'Adatok módosítva');
+            this.toastr.success('Adatok módosítva');
           })
         )
         .subscribe();
@@ -72,7 +72,7 @@ export class UserProfileComponent implements OnInit {
 
     this.userService
       .updateCurrentUserPassword$(passwordObj)
-      .pipe(tap(() => this.toastr.success('Siker', 'Jelszó módosítva')))
+      .pipe(tap(() => this.toastr.success('Jelszó módosítva')))
       .subscribe();
   }
 

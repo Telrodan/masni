@@ -1,0 +1,51 @@
+<i class="pi pi-times close" (click)="onClose()"></i>
+<h2 mat-dialog-title>Inspiráció hozzáadás</h2>
+
+<mat-dialog-content>
+  <form
+    class="flex-auto p-fluid"
+    (submit)="onAddInspiration()"
+    [formGroup]="addInspirationForm">
+    <div class="form-group">
+      <label class="block font-medium text-900 mb-2"> Inspiráció képe </label>
+
+      <p-button
+        icon="pi pi-image"
+        styleClass="p-button p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <input
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <img
+        *ngIf="imagePreview"
+        class="my-3 image-preview"
+        [src]="imagePreview"
+        alt="Inspiration" />
+
+      <button
+        *ngIf="imagePreview"
+        pButton
+        pRipple
+        pTooltip="Kép törlése"
+        tooltipPosition="bottom"
+        (click)="onImageClear()"
+        type="button"
+        icon="pi pi-times"
+        class="p-button p-button-danger p-button"></button>
+    </div>
+
+    <div>
+      <p-button
+        label="Hozzáadás"
+        styleClass="p-button w-auto"
+        [disabled]="!addInspirationForm.valid"
+        type="submit">
+      </p-button>
+    </div>
+  </form>
+</mat-dialog-content>

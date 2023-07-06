@@ -1,0 +1,39 @@
+@import 'mixins';
+
+.navbar,
+.sidebar {
+  background-color: var(--color-primary);
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.shopping-cart {
+  position: relative;
+}
+
+.item-counter {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  background-color: var(--color-red);
+  color: white;
+  border-radius: 500px;
+  font-size: 12px;
+
+  @include respond(lg) {
+    top: 18px;
+    left: 28px;
+    transform: translateX(0);
+  }
+}
+
+.logo {
+  cursor: pointer;
+}

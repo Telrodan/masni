@@ -42,10 +42,7 @@ export class SignupComponent implements OnInit {
         .signup$(user)
         .pipe(
           tap(() => {
-            this.toastr.success(
-              'Siker',
-              'Sikeres regisztráció, átirányítva a főoldra'
-            );
+            this.toastr.success('Sikeres regisztráció, átirányítva a főoldra');
             this.signupForm.reset();
           })
         )

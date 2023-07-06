@@ -18,11 +18,11 @@ import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selectors';
 import { NyuszkoSzundikendoProduct } from '@core/models/custom-products/nyuszko-szundikendo-product.model';
 import { Product } from '@core/models/product.model';
-import { categoriesSelector } from '@core/store';
+import { selectCustomProductByName } from '@core/store';
 import { Category } from '@core/models/category.model';
 import { ProductExtra } from '@core/models/product-extra.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalizeFirstLetter } from 'src/app/shared/util/first-letter-capital';
+import { capitalize } from 'src/app/shared/util/first-letter-capital';
 
 interface ProductData {
   baseProduct: Product;
@@ -31,7 +31,7 @@ interface ProductData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-nyuszko-szundikendo-builder',
+  selector: 'mhd-nyuszko-szundikendo-builder',
   templateUrl: './nyuszko-szundikendo-builder.component.html',
   styleUrls: ['./nyuszko-szundikendo-builder.component.scss']
 })
@@ -54,12 +54,9 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
     this.initForm();
     this.productData$ = combineLatest([
-      this.store$.select(categoriesSelector).pipe(
-        filter((categories) => !!categories.length),
-        map((categories) => {
-          return this.findProduct(categories);
-        })
-      ),
+      this.store$
+        .select(selectCustomProductByName('nyuszkó-szundikendő'))
+        .pipe(filter((product) => !!product)),
       this.store$.select(sortedMaterialsSelector).pipe(
         filter((sortedMaterials) => !!sortedMaterials),
         map((sortedMaterials) =>
@@ -100,8 +97,7 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit {
         .pipe(
           tap(() => {
             this.toastr.success(
-              'Siker',
-              `${capitalizeFirstLetter(product.name)} hozzáadva a kosárhoz`
+              `${capitalize(product.name)} hozzáadva a kosárhoz`
             );
             this.builderForm.reset();
           })
@@ -112,10 +108,10 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit {
 
   private findProduct(categories: Category[]) {
     const category = categories.find(
-      (category) => category.categoryName === 'egyedi termékek'
+      (category) => category.name === 'egyedi termékek'
     );
     const product = category.products.find(
-      (product) => product.name === 'nyuszkó-szundikendő'
+      (product) => product === 'nyuszkó-szundikendő'
     );
     return product;
   }

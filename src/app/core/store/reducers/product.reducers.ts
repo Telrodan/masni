@@ -10,7 +10,8 @@ import {
 import { ProductState } from '../models/product-state.model';
 
 export const productInitialState: ProductState = {
-  products: []
+  allProducts: [],
+  availableProducts: []
 };
 
 export const productReducers = createReducer(
@@ -22,32 +23,35 @@ export const productReducers = createReducer(
 
   on(getProductsSuccess, (state, action) => ({
     ...state,
-    products: [...action.products]
+    allProducts: action.products,
+    availableProducts: action.products.filter((product) => product.stock > 0)
   })),
 
-  on(addProduct, (state, action) => {
-    return {
-      ...state,
-      products: [...state.products, action.product]
-    };
-  }),
+  on(addProduct, (state, action) => ({
+    ...state,
+    allProducts: [...state.allProducts, action.product]
+  })),
+
   on(deleteProduct, (state, action) => {
-    const index = state.products.findIndex(
-      (item) => item._id === action.product._id
+    const index = state.allProducts.findIndex(
+      (item) => item.id === action.product.id
     );
-    const products = [...state.products];
+    const products = [...state.allProducts];
     products.splice(index, 1);
+
     return {
       ...state,
-      products
+      allProducts: products
     };
   }),
+
   on(updateProduct, (state, action) => {
-    const index = state.products.findIndex(
-      (product) => product._id === action.product._id
+    const index = state.allProducts.findIndex(
+      (product) => product.id === action.product.id
     );
-    const products = [...state.products];
+    const products = [...state.allProducts];
     products.splice(index, 1, action.product);
+
     return {
       ...state,
       products

@@ -1,13 +1,5 @@
 @import '../../../scss/mixins';
 
-.nyuszko-shop {
-  margin-top: 15px;
-
-  @include respond(sm) {
-    margin-bottom: 50px;
-  }
-}
-
 .carousel {
   position: relative;
   margin-bottom: 50px;

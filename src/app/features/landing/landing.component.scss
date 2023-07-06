@@ -1,9 +1,20 @@
-@import '../../../scss/mixins';
+@import 'mixins';
 
-.paragraph-primary {
-  width: 90%;
-  margin: -100px auto 28px;
+p {
+  margin: 20px 0 120px;
   text-align: center;
+
+  @include respond(sm) {
+    margin: 20px 0 80px;
+  }
+}
+
+.materials-carousel {
+  margin: 120px 0;
+
+  @include respond(sm) {
+    margin: 80px 0;
+  }
 }
 
 .primary-button {

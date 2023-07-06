@@ -32,6 +32,9 @@
               "node_modules/primeflex/primeflex.css",
               "src/scss/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/scss"]
+            },
             "scripts": []
           },
           "configurations": {

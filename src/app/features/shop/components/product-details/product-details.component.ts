@@ -92,7 +92,7 @@ export class ProductDetailsComponent implements OnInit {
       .addItemToCart(modifiedProduct, productExtra)
       .pipe(
         tap(() => {
-          this.toastr.success('Siker', `${product.name} hozzáadva a kosárhoz`);
+          this.toastr.success(`${product.name} hozzáadva a kosárhoz`);
           this.builderForm.reset();
         })
       )

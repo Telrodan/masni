@@ -13,6 +13,7 @@ import { Material } from '@core/models/material.model';
 
 export const materialInitialState: MaterialState = {
   materials: [],
+  availableMaterials: [],
   sortedMaterials: null
 };
 
@@ -22,13 +23,16 @@ export const materialReducers = createReducer(
     ...state
   })),
   on(getMaterialsSuccess, (state, action) => {
-    const sortedMaterials: SortedMaterials = SortedMaterials.sortMaterials(
-      action.materials
+    const availableMaterials = action.materials.filter(
+      (material) => material.isAvailable
     );
+    const sortedMaterials: SortedMaterials =
+      SortedMaterials.sortMaterials(availableMaterials);
 
     return {
       ...state,
       materials: action.materials,
+      availableMaterials,
       sortedMaterials
     };
   }),
@@ -49,7 +53,7 @@ export const materialReducers = createReducer(
   }),
   on(updateMaterial, (state, action) => {
     const materialIndex = state.materials.findIndex(
-      (material) => material._id === action.material._id
+      (material) => material.id === action.material.id
     );
 
     const materials = [...state.materials];
@@ -60,7 +64,7 @@ export const materialReducers = createReducer(
     for (const key in sortedMaterials) {
       if (key === action.material.category) {
         const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material._id === action.material._id
+          (material: Material) => material.id === action.material.id
         );
         sortedMaterials[key].splice(sortedMaterialIndex, 1, action.material);
       }
@@ -74,7 +78,7 @@ export const materialReducers = createReducer(
   }),
   on(deleteMaterial, (state, action) => {
     const materialIndex = state.materials.findIndex(
-      (material) => material._id === action.material._id
+      (material) => material.id === action.material.id
     );
 
     const materials = [...state.materials];
@@ -85,7 +89,7 @@ export const materialReducers = createReducer(
     for (const key in sortedMaterials) {
       if (key === action.material.category) {
         const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material._id === action.material._id
+          (material: Material) => material.id === action.material.id
         );
         sortedMaterials[key].splice(sortedMaterialIndex, 1);
       }

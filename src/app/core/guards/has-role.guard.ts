@@ -28,7 +28,7 @@ export class HasRoleGuard implements CanActivate {
     if (isAllowed) {
       return true;
     } else {
-      this.toastr.info('Info', 'Nincs jogosultságod ehhez az oldalhoz');
+      this.toastr.warn('Nincs jogosultságod ehhez a művelethez');
       return false;
     }
   }

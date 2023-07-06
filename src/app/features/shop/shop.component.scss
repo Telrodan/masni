@@ -1,8 +1,9 @@
-@import '../../../scss/mixins';
+@import 'mixins';
 
 .shop {
-  width: 90%;
-  margin: 40px auto;
+  @include respond(sm) {
+    padding: 0 10px;
+  }
 }
 
 .products-container {

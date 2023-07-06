@@ -1,8 +1,9 @@
 <div class="product-card" (click)="productDetails()">
   <img
-    [src]="product.images[0]"
     [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
+    [src]="product.images[0]"
     (load)="changeSkeletonLoad()" />
+
   <ngx-skeleton-loader
     *ngIf="isImageLoading"
     appearance="circle"
@@ -15,22 +16,25 @@
       borderRadius: '5px',
       background: 'lightGrey'
     }"></ngx-skeleton-loader>
-  <div class="content">
-    <div class="details">
-      <p class="title">
-        {{ product.name | titlecase }}
-      </p>
-      <p class="description text-600">
-        {{ product.shortDescription }}
-      </p>
-      <div class="wrapper">
-        <p class="price text-primary">{{ product.price }} Ft</p>
-        <p class="primary-paragraph stock">Készleten: {{ product.stock }}</p>
-      </div>
-    </div>
 
-    <button class="primary-button shadow-2">
-      <i class="pi pi-shopping-cart"></i>
-    </button>
+  <div class="details">
+    <p class="title">
+      {{ product.name | titlecase }}
+    </p>
+
+    <p class="description">
+      {{ product.shortDescription }}
+    </p>
+
+    <div class="wrapper">
+      <div class="price-wrapper">
+        <p class="price text-primary">{{ product.price }} Ft</p>
+        <p class="stock">Készleten: {{ product.stock }}</p>
+      </div>
+
+      <button class="primary-button shadow-2">
+        <i class="pi pi-shopping-cart"></i>
+      </button>
+    </div>
   </div>
 </div>

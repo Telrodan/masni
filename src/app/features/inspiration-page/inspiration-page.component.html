@@ -2,8 +2,8 @@
   <h1 class="heading-primary">Inspirációk</h1>
   <p-galleria
     [value]="inspirations"
-    [(visible)]="displayCustomGaleryOne"
-    [(activeIndex)]="activeIndexGaleryOne"
+    [(visible)]="displayCustomGalery"
+    [(activeIndex)]="activeIndexGalery"
     [containerStyle]="{ 'max-width': '850px' }"
     [circular]="true"
     [fullScreen]="true"
@@ -11,10 +11,7 @@
     [showThumbnails]="false"
     [baseZIndex]="50">
     <ng-template pTemplate="item" let-inspiration>
-      <img
-        appLazyImage
-        [src]="inspiration.image"
-        style="width: 100%; display: block" />
+      <img [src]="inspiration.image" style="width: 100%; display: block" />
     </ng-template>
   </p-galleria>
   <div class="grid" style="max-width: 100%">
@@ -27,7 +24,7 @@
         [src]="inspiration.image"
         class="mb-1 shadow-2"
         style="cursor: pointer"
-        (click)="imageClickGaleryOne(index)" />
+        (click)="imageClickGalery(index)" />
     </div>
   </div>
 </main>

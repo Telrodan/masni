@@ -17,11 +17,11 @@ import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selectors';
 import { Product } from '@core/models/product.model';
-import { categoriesSelector } from '@core/store';
+import { selectAllCategories, selectCustomProductByName } from '@core/store';
 import { Category } from '@core/models/category.model';
 import { ProductExtra } from '@core/models/product-extra.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalizeFirstLetter } from 'src/app/shared/util/first-letter-capital';
+import { capitalize } from 'src/app/shared/util/first-letter-capital';
 import { MackoProduct } from '@core/models/custom-products/macko-product';
 
 interface ProductData {
@@ -31,7 +31,7 @@ interface ProductData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-macko-builder',
+  selector: 'mhd-macko-builder',
   templateUrl: './macko-builder.component.html',
   styleUrls: ['./macko-builder.component.scss']
 })
@@ -54,12 +54,9 @@ export class MackoBuilderComponent implements OnInit {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
     this.initForm();
     this.productData$ = combineLatest([
-      this.store$.select(categoriesSelector).pipe(
-        filter((categories) => !!categories.length),
-        map((categories) => {
-          return this.findProduct(categories);
-        })
-      ),
+      this.store$
+        .select(selectCustomProductByName('mackó'))
+        .pipe(filter((product) => !!product)),
       this.store$.select(sortedMaterialsSelector).pipe(
         filter((sortedMaterials) => !!sortedMaterials),
         map((sortedMaterials) => MackoProduct.setUpMaterials(sortedMaterials))
@@ -98,24 +95,13 @@ export class MackoBuilderComponent implements OnInit {
         .pipe(
           tap(() => {
             this.toastr.success(
-              'Siker',
-              `${capitalizeFirstLetter(product.name)} hozzáadva a kosárhoz`
+              `${capitalize(product.name)} hozzáadva a kosárhoz`
             );
             this.builderForm.reset();
           })
         )
         .subscribe();
     }
-  }
-
-  private findProduct(categories: Category[]) {
-    const category = categories.find(
-      (category) => category.categoryName === 'egyedi termékek'
-    );
-    const product = category.products.find(
-      (product) => product.name === 'mackó'
-    );
-    return product;
   }
 
   private initForm(): void {

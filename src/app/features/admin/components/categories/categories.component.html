@@ -1,65 +1,73 @@
-<div class="categories">
-  <p-card
-    header="Kategóriák"
-    subheader="Összes kategória"
-    *ngIf="categories$ | async as categories">
-    <div class="grid">
-      <div class="col-12">
-        <p-toolbar>
-          <div class="p-toolbar-group-end">
-            <button
-              pButton
-              pRipple
-              type="button"
-              label="Hozzáadás"
-              icon="pi pi-plus"
-              class="p-button-raised p-button-success mr-2"
-              (click)="onAddCategory()"></button>
-            <input
-              type="text"
-              [(ngModel)]="categoryName"
-              placeholder="Adj meg egy kategóriát..."
-              pInputText />
-          </div>
-        </p-toolbar>
+<p-card header="Kategóriák" *ngIf="categories$ | async as categories">
+  <p-table
+    #table
+    styleClass="p-datatable-gridlines"
+    [value]="categories"
+    [globalFilterFields]="['id', 'categoryName']"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-button
+          icon="pi pi-plus"
+          label="Hozzáadás"
+          styleClass="p-button p-button-success"
+          (click)="onAddCategory()">
+        </p-button>
+
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            pTooltip="Kereshető mezők: Azonosító, Név"
+            tooltipPosition="bottom"
+            type="text"
+            (input)="applyTableGlobalFilter($event, 'contains', table)"
+            placeholder="Keresés" />
+        </span>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
-        <p-table [value]="categories" styleClass="p-datatable-gridlines">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>ID</th>
-              <th>Név</th>
-              <th>Termékek</th>
-              <th>Opciók</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-category>
-            <tr>
-              <td>{{ category._id }}</td>
-              <td>{{ category.categoryName | titlecase }}</td>
-              <td>{{ category.products.length }}</td>
-              <td>
-                <button
-                  (click)="onEditCategory(category)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-cog"
-                  class="p-button-raised p-button p-button-warning p-button mr-2"></button
-                ><button
-                  (click)="onDeleteCategory(category)"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-button-raised p-button p-button-danger p-button"></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-card>
-</div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Azonosító</th>
+        <th>Név</th>
+        <th pSortableColumn="products">
+          Termékek
+          <p-sortIcon field="products"></p-sortIcon>
+        </th>
+        <th>Opciók</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-category>
+      <tr>
+        <td>{{ category._id }}</td>
+        <td>{{ category.name }}</td>
+        <td>{{ category.products.length }}</td>
+        <td>
+          <button
+            (click)="onEditCategory(category)"
+            pButton
+            pRipple
+            pTooltip="Kategória módosítás"
+            tooltipPosition="bottom"
+            type="button"
+            icon="pi pi-cog"
+            class="p-button p-button p-button-warning p-button mr-1"></button>
+
+          <button
+            (click)="onDeleteCategory(category)"
+            pButton
+            pRipple
+            pTooltip="Kategória törlés"
+            tooltipPosition="bottom"
+            type="button"
+            icon="pi pi-times"
+            class="p-button p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

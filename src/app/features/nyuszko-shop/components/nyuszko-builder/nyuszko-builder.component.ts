@@ -18,11 +18,10 @@ import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { sortedMaterialsSelector } from '@core/store/selectors/material.selectors';
 import { NyuszkoProduct } from '@core/models/custom-products/nyuszko-product.model';
 import { Product } from '@core/models/product.model';
-import { categoriesSelector } from '@core/store';
-import { Category } from '@core/models/category.model';
+import { selectCustomProductByName } from '@core/store';
 import { ProductExtra } from '@core/models/product-extra.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalizeFirstLetter } from 'src/app/shared/util/first-letter-capital';
+import { capitalize } from 'src/app/shared/util/first-letter-capital';
 
 interface ProductData {
   baseProduct: Product;
@@ -31,7 +30,7 @@ interface ProductData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-nyuszko-builder',
+  selector: 'mhd-nyuszko-builder',
   templateUrl: './nyuszko-builder.component.html',
   styleUrls: ['./nyuszko-builder.component.scss']
 })
@@ -54,10 +53,10 @@ export class NyuszkoBuilderComponent implements OnInit {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
     this.initForm();
     this.productData$ = combineLatest([
-      this.store$.select(categoriesSelector).pipe(
-        filter((categories) => !!categories.length),
-        map((categories) => {
-          return this.findProduct(categories);
+      this.store$.select(selectCustomProductByName('nyuszkó')).pipe(
+        filter((product) => !!product),
+        tap((product) => {
+          console.log(product);
         })
       ),
       this.store$.select(sortedMaterialsSelector).pipe(
@@ -99,24 +98,13 @@ export class NyuszkoBuilderComponent implements OnInit {
         .pipe(
           tap(() => {
             this.toastr.success(
-              'Siker',
-              `${capitalizeFirstLetter(product.name)} hozzáadva a kosárhoz`
+              `${capitalize(product.name)} hozzáadva a kosárhoz`
             );
             this.builderForm.reset();
           })
         )
         .subscribe();
     }
-  }
-
-  private findProduct(categories: Category[]) {
-    const category = categories.find(
-      (category) => category.categoryName === 'egyedi termékek'
-    );
-    const product = category.products.find(
-      (product) => product.name === 'nyuszkó'
-    );
-    return product;
   }
 
   private initForm(): void {

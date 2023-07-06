@@ -6,7 +6,7 @@ import { getUsers } from '@core/store';
 import { getOrders } from '@core/store/actions/order.actions';
 
 @Component({
-  selector: 'masni-handmade-dolls-admin',
+  selector: 'mhd-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })

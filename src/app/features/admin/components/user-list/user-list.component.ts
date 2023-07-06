@@ -11,7 +11,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm
 import { selectUsers } from '@core/store';
 
 @Component({
-  selector: 'masni-handmade-dolls-user-list',
+  selector: 'mhd-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
@@ -57,7 +57,7 @@ export class UserListComponent implements OnInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.userService.deleteUser$(user)),
         tap(() => {
-          this.toastr.success('Siker', `${user.name} törölve`);
+          this.toastr.success(`${user.name} törölve`);
         })
       )
       .subscribe();

@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-interface CarouselData {
+export interface CarouselData {
   heading: string;
   displayHeading: boolean;
   images: string[];
@@ -11,24 +11,16 @@ interface CarouselData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-carousel-with-heading-and-button',
+  selector: 'mhd-carousel-with-heading-and-button',
   templateUrl: './carousel-with-heading-and-button.component.html',
   styleUrls: ['./carousel-with-heading-and-button.component.scss']
 })
-export class CarouselWithHeadingAndButtonComponent implements OnInit {
-  @Input() public carouselData: CarouselData;
-  public images: string[];
+export class CarouselWithHeadingAndButtonComponent {
+  @Input() carouselData: CarouselData;
 
-  public ngOnInit(): void {
-    this.images = this.carouselData.images;
-  }
+  isImageLoading = true;
 
-  public responsiveOptions = [
-    {
-      breakpoint: '1024px',
-      numVisible: 3,
-      numScroll: 3
-    },
+  responsiveOptions = [
     {
       breakpoint: '768px',
       numVisible: 2,

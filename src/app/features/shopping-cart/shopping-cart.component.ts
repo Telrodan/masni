@@ -147,7 +147,7 @@ export class ShoppingCartComponent implements OnInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.shoppingCartService.deleteItemFromCart(item)),
         tap(() => {
-          this.toastr.success('Siker', `${productName} törölve`);
+          this.toastr.success(`${productName} törölve`);
         })
       )
       .subscribe();

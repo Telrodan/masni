@@ -1,0 +1,18 @@
+<ngx-skeleton-loader
+  *ngIf="isImageLoading"
+  appearance="circle"
+  animation="pulse"
+  [theme]="{
+    margin: '0',
+    width: '100%',
+    paddingBottom: '100%',
+    aspectRatio: '1 / 1',
+    borderRadius: '5px',
+    background: 'lightGrey'
+  }"></ngx-skeleton-loader>
+<div
+  *ngIf="!isImageLoading"
+  class="item"
+  [style.border-radius]="isRoundImage ? '500px' : '5px'"
+  [style.background-image]="'url(' + imageSrc + ')'"></div>
+<img [src]="imageSrc" alt="Helper Image" (load)="imageLoaded()" />

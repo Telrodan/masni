@@ -2,16 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './components/reports/reports.component';
 import { CategoriesComponent } from './components/categories/categories.component';
-import { OrderDetailsComponent } from './components/order-details/order-details.component';
-import { OrderListComponent } from './components/order-list/order-list.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { AddProductComponent } from './components/add-product/add-product.component';
+import { OrderDetailsComponent } from './components/order/order-details/order-details.component';
+import { OrderListComponent } from './components/order/order-list/order-list.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { AdminComponent } from './admin.component';
-import { AddMaterialComponent } from './components/add-material/add-material.component';
-import { MaterialListComponent } from './components/material-list/material-list.component';
-import { AddInspirationComponent } from './components/add-inspiration/add-inspiration.component';
-import { InspirationListComponent } from './components/inspiration-list/inspiration-list.component';
+import { MaterialsComponent } from './components/materials/materials.component';
+import { InspirationsComponent } from './components/inspirations/inspirations.component';
+import { ProductsComponent } from './components/products/products.component';
 
 const routes: Routes = [
   {
@@ -20,6 +17,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        redirectTo: 'reports',
+        pathMatch: 'full'
+      },
+      {
+        path: 'reports',
         component: ReportsComponent
       },
       {
@@ -27,28 +29,16 @@ const routes: Routes = [
         component: CategoriesComponent
       },
       {
-        path: 'add-material',
-        component: AddMaterialComponent
-      },
-      {
         path: 'materials',
-        component: MaterialListComponent
-      },
-      {
-        path: 'add-inspiration',
-        component: AddInspirationComponent
+        component: MaterialsComponent
       },
       {
         path: 'inspirations',
-        component: InspirationListComponent
-      },
-      {
-        path: 'add-product',
-        component: AddProductComponent
+        component: InspirationsComponent
       },
       {
         path: 'products',
-        component: ProductListComponent
+        component: ProductsComponent
       },
       {
         path: 'users',

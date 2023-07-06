@@ -25,7 +25,7 @@ export class ShoppingCartService {
     productExtra: ProductExtra
   ): Observable<ShoppingCartItem> {
     const item: ShoppingCartItem = {
-      product: product._id,
+      product: product.id,
       price: product.price,
       productExtra
     };

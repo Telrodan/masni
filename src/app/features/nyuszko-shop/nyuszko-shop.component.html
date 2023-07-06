@@ -1,10 +1,9 @@
-<main class="nyuszko-shop">
-  <section class="carousel">
+<div class="nyuszko-shop">
+  <div class="carousel">
     <h1 class="carousel-heading heading-tertiary">Nyuszkó-Kuckó</h1>
-    <masni-handmade-dolls-carousel
-      [images]="carouselImages"></masni-handmade-dolls-carousel>
-  </section>
-  <section class="container">
+    <mhd-carousel [images]="carouselImages"> </mhd-carousel>
+  </div>
+  <div class="container">
     <p class="paragraph-primary">
       Szeretném nektek bemutatni a Nyuszkó-Kuckót, ahol egyedi, akár kézzel
       hímzett névvel ellátott textil figurákat, pihe-puha szundikendőket
@@ -16,11 +15,11 @@
       elalvásban, csupa öröm hozzájuk bújni. Kiváló ajándék lehet babaváró
       bulira, keresztelőre, de újszülött fotózásokra is remek kellék lehet.
     </p>
-  </section>
-  <section class="menu">
+  </div>
+  <div class="menu">
     <div class="wrapper" *ngFor="let item of menuItems">
-      <masni-handmade-dolls-menu-item
-        [menuItemData]="item"></masni-handmade-dolls-menu-item>
+      <masni-handmade-dolls-menu-item [menuItemData]="item">
+      </masni-handmade-dolls-menu-item>
     </div>
-  </section>
-</main>
+  </div>
+</div>
