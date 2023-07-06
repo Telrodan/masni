@@ -48,7 +48,7 @@ export class AddCategoryComponent implements OnInit {
 
   initAddCategoryForm(): void {
     this.addCategoryForm = new FormGroup({
-      name: new FormControl('', Validators.required)
+      name: new FormControl(null, Validators.required)
     });
   }
 }

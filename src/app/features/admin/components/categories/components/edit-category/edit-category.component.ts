@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { tap } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
@@ -34,6 +34,7 @@ export class EditCategoryComponent implements OnInit {
         ...this.data,
         ...this.editCategoryForm.value
       };
+
       this.categoryService
         .updateCategory$(category)
         .pipe(
@@ -46,10 +47,6 @@ export class EditCategoryComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  onClose(): void {
-    this.dialogRef.close();
   }
 
   initEditCategoryForm(): void {
