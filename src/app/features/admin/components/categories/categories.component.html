@@ -3,7 +3,7 @@
     #table
     styleClass="p-datatable-gridlines"
     [value]="categories"
-    [globalFilterFields]="['id', 'categoryName']"
+    [globalFilterFields]="['id', 'name']"
     [paginator]="true"
     [rows]="5"
     [rowsPerPageOptions]="[5, 10, 20]">
@@ -11,7 +11,7 @@
       <div class="flex">
         <p-button
           icon="pi pi-plus"
-          label="Hozzáadás"
+          label="Kategória hozzáadása"
           styleClass="p-button p-button-success"
           (click)="onAddCategory()">
         </p-button>
@@ -32,11 +32,14 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Azonosító</th>
+
         <th>Név</th>
+
         <th pSortableColumn="products">
           Termékek
           <p-sortIcon field="products"></p-sortIcon>
         </th>
+
         <th>Opciók</th>
       </tr>
     </ng-template>
@@ -44,8 +47,11 @@
     <ng-template pTemplate="body" let-category>
       <tr>
         <td>{{ category._id }}</td>
+
         <td>{{ category.name }}</td>
+
         <td>{{ category.products.length }}</td>
+
         <td>
           <button
             (click)="onEditCategory(category)"

@@ -73,6 +73,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
-    table.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+    const filter = ($event.target as HTMLInputElement).value;
+    table.filterGlobal(filter, stringVal);
   }
 }
