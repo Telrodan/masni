@@ -1,5 +1,5 @@
 export interface Material {
-  _id?: string;
+  id?: string;
   name: string;
   nameWithExtra: string;
   category: string;

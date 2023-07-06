@@ -47,8 +47,7 @@ import {
 } from '@core/store/effects';
 import { LazyImageDirective } from '@core/directives/lazy-image.directive';
 import { LandingComponent } from '@features/landing/landing.component';
-import { LandingBrandsComponent } from '@features/landing/components/landing-brands/landing-brands.component';
-import { LandingAboutUsComponent } from '@features/landing/components/landing-about-us/landing-about-us.component';
+import { AboutMeComponent } from '@features/landing/components/about-me/about-me.component';
 import { NyuszkoShopModule } from '@features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from '@features/masni-shop/masni-shop.module';
 import { ContactComponent } from '@features/contact/contact.component';
@@ -60,11 +59,17 @@ import { UserProfileComponent } from '@features/user-profile/user-profile.compon
 import { ProductDetailsComponent } from '@features/shop/components/product-details/product-details.component';
 import { SamplesComponent } from '@features/samples/samples.component';
 import { ShoppingCartComponent } from '@features/shopping-cart/shopping-cart.component';
-import { FeaturedProductsComponent } from '@features/landing/components/featured-products/featured-products.component';
+import { ProductsCarouselComponent } from '@features/landing/components/products-carousel/products-carousel.component';
 import { InspirationPageComponent } from '@features/inspiration-page/inspiration-page.component';
 import { environment } from 'src/environments/environment';
 import { reducers } from './reducer';
 import { SharedModule } from './shared/shared.module';
+import { BrandsMenuComponent } from '@features/landing/components/brands-menu/brands-menu.component';
+import { LayoutComponent } from './features/layout/layout.component';
+import { NavbarComponent } from '@features/layout/components/navbar/navbar.component';
+import { FooterComponent } from '@features/layout/components/footer/footer.component';
+import { StyleClassModule } from 'primeng/styleclass';
+import { InspirationEffects } from '@core/store/effects/inspiration.effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -83,7 +88,8 @@ const PRIME_NG = [
   CardModule,
   CheckboxModule,
   GalleriaModule,
-  ToggleButtonModule
+  ToggleButtonModule,
+  StyleClassModule
 ];
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
@@ -91,9 +97,11 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
 @NgModule({
   declarations: [
     AppComponent,
+    NavbarComponent,
+    FooterComponent,
     LandingComponent,
-    LandingBrandsComponent,
-    LandingAboutUsComponent,
+    BrandsMenuComponent,
+    AboutMeComponent,
     ContactComponent,
     ShopComponent,
     ProductDetailsComponent,
@@ -102,9 +110,10 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
     UserProfileComponent,
     SamplesComponent,
     ShoppingCartComponent,
-    FeaturedProductsComponent,
+    ProductsCarouselComponent,
     LazyImageDirective,
-    InspirationPageComponent
+    InspirationPageComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -134,7 +143,8 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
       ProductEffects,
       CategoryEffects,
       UserEffects,
-      OrderEffects
+      OrderEffects,
+      InspirationEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

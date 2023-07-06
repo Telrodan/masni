@@ -1,36 +1,36 @@
-@import '../../../../scss/mixins';
+@import 'mixins';
+
+:host {
+  display: block;
+}
 
 .carousel {
   width: 100%;
-  margin-bottom: 132px;
   text-align: center;
 }
 
-.heading-primary {
+h1 {
   margin-bottom: 20px;
-}
-
-.carousel-container {
-  margin-bottom: 50px;
-}
-
-.item-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
+  text-align: center;
 
   @include respond(sm) {
-    padding: 20px;
+    margin-bottom: 12px;
   }
 }
 
-.img {
-  width: 70%;
+.item-content {
+  margin: 0 28px 20px;
+
+  @include respond(sm) {
+    margin: 0 0 20px;
+  }
+}
+
+.item {
+  width: 100%;
   background-size: cover;
   background-position: center center;
-  border-radius: 5px;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
 
   @include respond(sm) {
     width: 100%;

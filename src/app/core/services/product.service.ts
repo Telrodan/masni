@@ -32,7 +32,7 @@ export class ProductService {
 
   updateProduct$(product: Product): Observable<Product> {
     return this.apiService
-      .patch<ApiResponse<Product>>(`product/${product._id}`, product)
+      .patch<ApiResponse<Product>>(`product/${product.id}`, product)
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
@@ -42,7 +42,7 @@ export class ProductService {
   }
 
   deleteProduct$(product: Product): Observable<null> {
-    return this.apiService.delete<null>('product', product._id).pipe(
+    return this.apiService.delete<null>('product', product.id).pipe(
       tap(() => {
         this.store.dispatch(deleteProduct({ product }));
       })

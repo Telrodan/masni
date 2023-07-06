@@ -1,64 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-
-import { filter, Observable, switchMap, tap } from 'rxjs';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
-
-import { CategoryService } from '@core/services/category.service';
-import { categoriesSelector } from '@core/store';
-import { Category } from '@core/models/category.model';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+
+import { Store } from '@ngrx/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
+import { Table } from 'primeng/table';
+
+import { selectAllCategories } from '@core/store';
+import { Category } from '@core/models/category.model';
+import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { CategoryNameDialogComponent } from './components/category-name-dialog/category-name-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'masni-handmade-dolls-categories',
+  selector: 'mhd-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
-  categoryName: string;
-  newCategoryName: string;
-  editedCategory: Category;
-  isDialogVisible = false;
 
   constructor(
+    private store: Store,
     private categoryService: CategoryService,
     private toastr: ToastrService,
-    private dialog: MatDialog,
-    private store: Store
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.store
-      .select(categoriesSelector)
-      .pipe(filter((categories) => !!categories));
+    this.categories$ = this.store.select(selectAllCategories).pipe(
+      filter((categories) => !!categories),
+      map((categories) => [...categories]),
+      untilDestroyed(this)
+    );
   }
 
   onAddCategory(): void {
-    if (this.categoryName.trim()) {
-      this.categoryService
-        .addCategory$(this.categoryName)
-        .pipe(
-          tap(() => {
-            this.toastr.success('Siker', `${this.categoryName} hozzáadva`);
-            this.categoryName = '';
-          })
-        )
-        .subscribe();
-    }
+    this.dialog.open(AddCategoryComponent, {
+      minWidth: '40vw'
+    });
+  }
+
+  onEditCategory(category: Category): void {
+    this.dialog.open(EditCategoryComponent, {
+      minWidth: '40vw',
+      data: category
+    });
   }
 
   onDeleteCategory(category: Category): void {
     this.dialog
       .open(ConfirmDialogComponent, {
-        minWidth: '50vw',
+        minWidth: '40vw',
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd "${category.categoryName}" kategóriát?`,
+          message: `Biztos törölni szeretnéd "${category.name}" kategóriát?`,
           confirmButtonText: 'Igen',
           cancelButtonText: 'Nem'
         }
@@ -66,36 +64,15 @@ export class CategoriesComponent implements OnInit {
       .afterClosed()
       .pipe(
         filter((confirmed) => !!confirmed),
-        switchMap(() => this.categoryService.deleteCategory$(category._id)),
+        switchMap(() => this.categoryService.deleteCategory$(category.id)),
         tap(() => {
-          this.toastr.success('Siker', `${category.categoryName} törölve`);
+          this.toastr.success(`${category.name} kategória törölve`);
         })
       )
       .subscribe();
   }
 
-  onEditCategory(category: Category): void {
-    this.dialog.open(CategoryNameDialogComponent, {
-      minWidth: '50vw',
-      data: category
-    });
-  }
-
-  onUpdateCategory(): void {
-    if (this.newCategoryName.trim() !== '') {
-      this.editedCategory.categoryName = this.newCategoryName;
-      this.categoryService
-        .updateCategory$(this.editedCategory)
-        .pipe(
-          tap(() => {
-            this.toastr.success(
-              'Siker',
-              `${this.editedCategory.categoryName} módosítva`
-            );
-            this.isDialogVisible = false;
-          })
-        )
-        .subscribe();
-    }
+  applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
+    table.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
 }

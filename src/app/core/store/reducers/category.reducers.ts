@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import {
   addCategory,
   deleteCategory,
+  deleteProductFromCategory,
   getCategories,
   getCategoriesSuccess,
   updateCategory
@@ -17,19 +18,33 @@ export const categoryReducers = createReducer(
   on(getCategories, (state) => ({
     ...state
   })),
+
   on(getCategoriesSuccess, (state, action) => {
     return {
       ...state,
       categories: [...action.categories]
     };
   }),
+
   on(addCategory, (state, action) => ({
     ...state,
     categories: [...state.categories, action.category]
   })),
 
+  on(updateCategory, (state, action) => {
+    const index = state.categories.findIndex(
+      (category) => category.id === action.category.id
+    );
+    const categories = [...state.categories];
+    categories.splice(index, 1, action.category);
+    return {
+      ...state,
+      categories
+    };
+  }),
+
   on(deleteCategory, (state, action) => {
-    const index = state.categories.findIndex((item) => item._id === action.id);
+    const index = state.categories.findIndex((item) => item.id === action.id);
     const categories = [...state.categories];
     categories.splice(index, 1);
     return {
@@ -38,12 +53,16 @@ export const categoryReducers = createReducer(
     };
   }),
 
-  on(updateCategory, (state, action) => {
-    const index = state.categories.findIndex(
-      (category) => category._id === action.category._id
-    );
+  on(deleteProductFromCategory, (state, action) => {
     const categories = [...state.categories];
-    categories.splice(index, 1, action.category);
+    categories.forEach((category) => {
+      const index = category.products.findIndex(
+        (product) => product === action.product.id
+      );
+      if (index !== -1) {
+        category.products.splice(index, 1);
+      }
+    });
     return {
       ...state,
       categories

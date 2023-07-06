@@ -9,7 +9,7 @@ export interface ConfirmDialogData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-confirm-dialog',
+  selector: 'mhd-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss']
 })

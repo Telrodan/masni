@@ -2,8 +2,8 @@
   <h1 class="heading-primary mb-4">Azonnal rendelhető termékek</h1>
 
   <div class="products-container" *ngIf="products$ | async as products">
-    <masni-handmade-dolls-product-card
+    <mhd-product-card
       *ngFor="let product of products"
-      [product]="product"></masni-handmade-dolls-product-card>
+      [product]="product"></mhd-product-card>
   </div>
 </div>

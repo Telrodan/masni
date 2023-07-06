@@ -1,0 +1,117 @@
+<p-card header="Minták" *ngIf="materials$ | async as materials">
+  <p-table
+    #table
+    styleClass="p-datatable-gridlines"
+    [value]="materials"
+    [globalFilterFields]="['id', 'name', 'category']"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-button
+          icon="pi pi-plus"
+          label="Hozzáadás"
+          styleClass="p-button p-button-success"
+          (click)="onAddMaterial()">
+        </p-button>
+
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            pTooltip="Kereshető mezők: Azonosító, Név, Kategória(angol)"
+            tooltipPosition="bottom"
+            type="text"
+            (input)="applyFilterGlobal($event, 'contains', table)"
+            placeholder="Keresés" />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="w-9rem">Kép</th>
+        <th>Azonosító</th>
+        <th>Név</th>
+        <th>Kategória</th>
+        <th pSortableColumn="extra" class="w-8rem">
+          Extra ár
+          <p-sortIcon field="extra"></p-sortIcon>
+        </th>
+        <th pSortableColumn="isAvailable" class="w-10rem">
+          Rendelhető
+          <p-sortIcon field="isAvailable"></p-sortIcon>
+        </th>
+        <th class="w-3rem">Opciók</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-material let-i="rowIndex">
+      <tr>
+        <td>
+          <img
+            class="hidden"
+            [src]="images[i]"
+            [alt]="material.name"
+            (load)="imageLoaded(i)" />
+
+          <p-image
+            *ngIf="imageLoadedStatus[i]"
+            [src]="images[i]"
+            [alt]="material.name"
+            [preview]="true">
+          </p-image>
+
+          <ngx-skeleton-loader
+            *ngIf="!imageLoadedStatus[i]"
+            appearance="circle"
+            animation="pulse"
+            [theme]="{
+              margin: '0',
+              width: '100%',
+              paddingBottom: '100%',
+              aspectRatio: '1 / 1',
+              borderRadius: '0',
+              background: 'lightGrey'
+            }">
+          </ngx-skeleton-loader>
+        </td>
+        <td>{{ material._id }}</td>
+        <td>{{ material.name }}</td>
+        <td>{{ material.category }}</td>
+        <td class="font-bold">{{ material.extra }} Ft</td>
+        <td>
+          <div class="is-available">
+            <p-badge
+              size="large"
+              [value]="material.isAvailable ? 'igen' : 'nem'"
+              [severity]="material.isAvailable ? 'success' : 'danger'">
+            </p-badge>
+          </div>
+        </td>
+        <td>
+          <button
+            (click)="onEditMaterial(material)"
+            pButton
+            pRipple
+            pTooltip="Minta módosítása"
+            tooltipPosition="bottom"
+            type="button"
+            icon="pi pi-cog"
+            class="p-button p-button-warning p-button mb-1"></button>
+
+          <button
+            (click)="onDeleteMaterial(material)"
+            pButton
+            pRipple
+            pTooltip="Minta törlése"
+            tooltipPosition="bottom"
+            type="button"
+            icon="pi pi-times"
+            class="p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

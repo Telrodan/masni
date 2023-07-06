@@ -1,26 +1,31 @@
 import { Component, OnInit } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+import { Observable, filter } from 'rxjs';
+
 import { Inspiration } from '@core/models/inspiration.model';
-import { InspirationService } from '@core/services/inspiration.service';
-import { Observable } from 'rxjs';
+import { selectAllInspiration } from '@core/store/selectors/inspiration.selectors';
 
 @Component({
-  selector: 'masni-handmade-dolls-inspiration-page',
+  selector: 'mhd-inspiration-page',
   templateUrl: './inspiration-page.component.html',
   styleUrls: ['./inspiration-page.component.scss']
 })
 export class InspirationPageComponent implements OnInit {
   inspirations$: Observable<Inspiration[]>;
-  activeIndexGaleryOne = 0;
-  displayCustomGaleryOne: boolean;
+  activeIndexGalery = 0;
+  displayCustomGalery: boolean;
 
-  constructor(private inspirationService: InspirationService) {}
+  constructor(private store$: Store) {}
 
   ngOnInit(): void {
-    this.inspirations$ = this.inspirationService.fetchInspirations$();
+    this.inspirations$ = this.store$
+      .select(selectAllInspiration)
+      .pipe(filter((inspirations) => !!inspirations));
   }
 
-  imageClickGaleryOne(index: number): void {
-    this.activeIndexGaleryOne = index;
-    this.displayCustomGaleryOne = true;
+  imageClickGalery(index: number): void {
+    this.activeIndexGalery = index;
+    this.displayCustomGalery = true;
   }
 }

@@ -1,33 +1,27 @@
 <main class="landing">
-  <masni-handmade-dolls-landing-brands></masni-handmade-dolls-landing-brands>
-  <masni-handmade-dolls-featured-products></masni-handmade-dolls-featured-products>
-  <masni-handmade-dolls-landing-about-us></masni-handmade-dolls-landing-about-us>
-  <masni-handmade-dolls-carousel-with-heading-and-button
-    [carouselData]="
-      firstCarousel
-    "></masni-handmade-dolls-carousel-with-heading-and-button>
-  <p class="paragraph-primary">
-    Kérlek vedd figyelembe, hogy az egyedi tervezésű termékek elkészítési ideje
-    1-2 hét!
-  </p>
-  <button class="primary-button shadow-2" (click)="scrollToTop()">
-    Vásárolok
-  </button>
-  <masni-handmade-dolls-carousel-with-heading-and-button
-    [carouselData]="
-      secondCarousel
-    "></masni-handmade-dolls-carousel-with-heading-and-button>
+  <mhd-brands-menu></mhd-brands-menu>
 
-  <!-- <masni-handmade-dolls-carousel-with-heading-and-button
-    [carouselData]="
-      thirdCarousel
-    "></masni-handmade-dolls-carousel-with-heading-and-button> -->
+  <mhd-products-carousel></mhd-products-carousel>
 
-  <masni-handmade-dolls-carousel-with-heading-and-button
-    [carouselData]="
-      fourthCarousel
-    "></masni-handmade-dolls-carousel-with-heading-and-button>
-  <button class="primary-button shadow-2" (click)="scrollToTop()">
-    Vásárolok
-  </button>
+  <mhd-about-me></mhd-about-me>
+
+  <div class="inspirations-carousel-wrapper">
+    <mhd-carousel-with-heading-and-button
+      [carouselData]="inspirationsCarouselData$ | async">
+    </mhd-carousel-with-heading-and-button>
+
+    <p class="paragraph-primary">
+      Kérlek vedd figyelembe, hogy az egyedi tervezésű termékek elkészítési
+      ideje 1-2 hét!
+    </p>
+  </div>
+
+  <mhd-carousel-with-heading-and-button
+    class="materials-carousel"
+    [carouselData]="this.materialsCarouselData$ | async">
+  </mhd-carousel-with-heading-and-button>
+
+  <mhd-carousel-with-heading-and-button
+    [carouselData]="theyAlreadyGotOneCarouselData">
+  </mhd-carousel-with-heading-and-button>
 </main>

@@ -29,7 +29,7 @@ export class MaterialService {
   updateMaterial$(material: Material): Observable<Material> {
     return this.apiService
       .patch<ApiResponse<Material>>(
-        `material/updateOne/${material._id}`,
+        `material/updateOne/${material.id}`,
         material
       )
       .pipe(
@@ -41,13 +41,11 @@ export class MaterialService {
   }
 
   deleteMaterial$(material: Material): Observable<null> {
-    return this.apiService
-      .delete<null>('material/deleteOne', material._id)
-      .pipe(
-        tap(() => {
-          this.store.dispatch(deleteMaterial({ material }));
-        })
-      );
+    return this.apiService.delete<null>('material/deleteOne', material.id).pipe(
+      tap(() => {
+        this.store.dispatch(deleteMaterial({ material }));
+      })
+    );
   }
 
   fetchMaterials$(): Observable<Material[]> {

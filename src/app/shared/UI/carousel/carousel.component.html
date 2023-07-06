@@ -1,18 +1,15 @@
 <section class="carousel">
   <p-carousel
     [value]="images"
-    [numVisible]="8"
+    [numVisible]="6"
     [numScroll]="1"
     [showNavigators]="false"
     [showIndicators]="false"
     [circular]="true"
-    [autoplayInterval]="5000"
+    [autoplayInterval]="10000"
     [responsiveOptions]="responsiveOptions">
     <ng-template let-images pTemplate="item">
-      <div
-        appLazyImage
-        class="img"
-        [style.background-image]="'url(' + images + ')'"></div>
+      <div class="img" [style.background-image]="'url(' + images + ')'"></div>
     </ng-template>
   </p-carousel>
 </section>

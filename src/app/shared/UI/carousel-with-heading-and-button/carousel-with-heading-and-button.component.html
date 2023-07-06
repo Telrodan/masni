@@ -1,33 +1,32 @@
-<section class="carousel">
-  <div class="carousel-container">
-    <p-carousel
-      [value]="carouselData.images"
-      [showIndicators]="false"
-      [numVisible]="3"
-      [numScroll]="1"
-      [circular]="true"
-      [autoplayInterval]="3000"
-      [showNavigators]="false"
-      [responsiveOptions]="responsiveOptions">
-      <ng-template pTemplate="header" *ngIf="carouselData.displayHeading">
-        <h5 class="heading-primary">{{ carouselData.heading }}</h5>
-      </ng-template>
-      <ng-template let-images pTemplate="item">
-        <div class="item-content">
-          <div
-            appLazyImage
-            class="img shadow-2"
-            [style.border-radius]="carouselData.isRoundImage ? '500px' : '0px'"
-            [style.background-image]="'url(' + images + ')'"></div>
-        </div>
-      </ng-template>
-    </p-carousel>
-  </div>
+<section class="carousel" *ngIf="carouselData">
+  <p-carousel
+    [value]="carouselData.images"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="10000"
+    [showNavigators]="true"
+    [showIndicators]="false"
+    [responsiveOptions]="responsiveOptions">
+    <ng-template pTemplate="header">
+      <h1 class="heading-primary">
+        {{ carouselData.heading }}
+      </h1>
+    </ng-template>
+    <ng-template let-image pTemplate="item">
+      <div class="item-content">
+        <mhd-carousel-item
+          [imageSrc]="image"
+          [isRoundImage]="carouselData.isRoundImage">
+        </mhd-carousel-item>
+      </div>
+    </ng-template>
+  </p-carousel>
 
-  <a
+  <button
     [routerLink]="carouselData.linkRoute"
     class="secondary-button shadow-2"
-    *ngIf="carouselData.displayLink"
-    >{{ carouselData.linkText }}</a
-  >
+    *ngIf="carouselData.displayLink">
+    {{ carouselData.linkText }}
+  </button>
 </section>

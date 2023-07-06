@@ -1,12 +1,15 @@
-import { Category } from '@core/models/category.model';
 import { createAction, props } from '@ngrx/store';
+
+import { Category } from '@core/models/category.model';
+import { Product } from '@core/models/product.model';
 
 export enum CategoryActionsTypes {
   GET_CATEGORIES = '[Category] Get Categories',
   GET_CATEGORIES_SUCCESS = '[Category] Get Categories Success',
   ADD_CATEGORY = '[Category] Add Category',
   UPDATE_CATEGORY = '[Category] Update Category',
-  DELETE_CATEGORY = '[Category] Delete Category'
+  DELETE_CATEGORY = '[Category] Delete Category',
+  DELETE_PRODUCT_FROM_CATEGORY = '[Category] Delete Product From Category'
 }
 
 export const getCategories = createAction(CategoryActionsTypes.GET_CATEGORIES);
@@ -29,4 +32,9 @@ export const deleteCategory = createAction(
 export const updateCategory = createAction(
   CategoryActionsTypes.UPDATE_CATEGORY,
   props<{ category: Category }>()
+);
+
+export const deleteProductFromCategory = createAction(
+  CategoryActionsTypes.DELETE_PRODUCT_FROM_CATEGORY,
+  props<{ product: Product }>()
 );

@@ -35,10 +35,7 @@ export class LoginComponent implements OnInit {
       .login$(authData)
       .pipe(
         tap(() => {
-          this.toastr.success(
-            'Siker',
-            'Sikeres belépés, átirányítva a főoldra'
-          );
+          this.toastr.success('Sikeres belépés, átirányítva a főoldra');
           this.loginForm.reset();
         })
       )

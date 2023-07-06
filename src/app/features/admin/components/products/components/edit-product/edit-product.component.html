@@ -1,0 +1,101 @@
+<i class="pi pi-times close" (click)="onClose()"></i>
+<h2 mat-dialog-title>Termék szerkesztése</h2>
+
+<mat-dialog-content>
+  <form class="flex-auto p-fluid" [formGroup]="editProductForm">
+    <div class="mb-4">
+      <label for="name" class="block font-medium text-900 mb-2"
+        >Termék neve</label
+      >
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="mb-4">
+      <label for="categoryId" class="block font-medium text-900 mb-2"
+        >Termék kategória</label
+      >
+      <p-dropdown
+        id="categoryId"
+        formControlName="categoryId"
+        [options]="categories$ | async"
+        placeholder="Válassz egy kategóriát"
+        optionValue="name"
+        optionLabel="name"
+        [showClear]="true"></p-dropdown>
+    </div>
+
+    <div class="mb-4">
+      <label for="shortDescription" class="block font-medium text-900 mb-2"
+        >Termék rövid leírása</label
+      >
+      <input
+        id="shortDescription"
+        type="text"
+        formControlName="shortDescription"
+        pInputText />
+    </div>
+
+    <div class="mb-4">
+      <label for="description" class="block font-medium text-900 mb-2"
+        >Termék leírása</label
+      >
+      <textarea
+        id="description"
+        formControlName="description"
+        type="text"
+        pInputTextarea
+        rows="5"
+        [autoResize]="true"></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label for="bio" class="block font-medium text-900 mb-2"
+        >Termék képek (az első kép lesz mindig a nagy kép)</label
+      >
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Válassz"
+        class="p-button-secondary"
+        (click)="imageInput.click()"></button>
+
+      <input
+        multiple
+        class="image-input"
+        type="file"
+        (change)="onImagesPicked($event)"
+        #imageInput />
+
+      <div class="flex-row images-preview">
+        <img
+          class="w-2 m-2 inline"
+          *ngFor="let image of imagesPreview"
+          [src]="image"
+          [alt]="editProductForm.value.name" />
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="price" class="block font-medium text-900 mb-2"
+        >Termék ára</label
+      >
+      <input id="price" formControlName="price" type="text" pInputText />
+    </div>
+    <div class="mb-4">
+      <label for="stock" class="block font-medium text-900 mb-2"
+        >Készleten</label
+      >
+      <input id="stock" formControlName="stock" type="text" pInputText />
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      (click)="onUpdateProduct()"
+      icon="pi pi-check"
+      label="Módosítás"
+      [disabled]="!this.editProductForm.valid"
+      styleClass="p-button-text"></p-button>
+  </ng-template>
+</mat-dialog-content>

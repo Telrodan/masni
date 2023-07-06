@@ -1,0 +1,122 @@
+<i class="pi pi-times close" mat-dialog-close></i>
+<h2 mat-dialog-title>Termék hozzáadása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="addProductForm">
+    <div class="form-group">
+      <label for="name" class="block font-medium text-900 mb-2">
+        Termék neve
+      </label>
+
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="category" class="block font-medium text-900 mb-2">
+        Termék kategória
+      </label>
+
+      <p-dropdown
+        id="category"
+        formControlName="category"
+        [options]="categories$ | async"
+        placeholder="Válassz egy kategóriát"
+        optionValue="id"
+        optionLabel="name">
+      </p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="shortDescription" class="block font-medium text-900 mb-2">
+        Termék rövid leírás
+      </label>
+
+      <input
+        id="shortDescription"
+        formControlName="shortDescription"
+        type="text"
+        pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="description" class="block font-medium text-900 mb-2">
+        Termék leírás
+      </label>
+
+      <textarea
+        id="description"
+        formControlName="description"
+        type="text"
+        pInputTextarea
+        rows="5"
+        [autoResize]="true"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="bio" class="block font-medium text-900 mb-2">
+        Termék képek (az első kép lesz mindig a nagy kép)
+      </label>
+
+      <p-button
+        icon="pi pi-image"
+        styleClass="p-button-raised p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <input
+        multiple
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <div class="flex-row images-preview">
+        <img
+          class="w-2 m-3 inline"
+          *ngFor="let image of imagesPreview"
+          [src]="image"
+          [alt]="addProductForm.value.name" />
+      </div>
+
+      <p-button
+        *ngIf="imagesPreview.length"
+        icon="pi pi-times"
+        styleClass="p-button-danger"
+        (click)="imagesPreview = []">
+      </p-button>
+    </div>
+
+    <div class="form-group">
+      <label for="price" class="block font-medium text-900 mb-2">
+        Termék ára
+      </label>
+
+      <input id="price" formControlName="price" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="stock" class="block font-medium text-900 mb-2">
+        Készleten
+      </label>
+
+      <input id="stock" formControlName="stock" type="text" pInputText />
+    </div>
+
+    <div class="flex justify-content-end"></div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-content-end">
+  <p-button
+    label="Mégsem"
+    styleClass="p-button p-button-danger mr-4"
+    mat-dialog-close>
+  </p-button>
+
+  <p-button
+    label="Hozzáadás"
+    styleClass="p-button"
+    [disabled]="!addProductForm.valid || !addProductForm.dirty"
+    (click)="onAddProduct()">
+  </p-button>
+</mat-dialog-actions>

@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Category } from '@core/models/category.model';
 import { Product } from '@core/models/product.model';
-import {
-  categoriesSelector,
-  productsSelector,
-  userSelector
-} from '@core/store';
+import { selectAllProducts, userSelector } from '@core/store';
 // import { availableProductsSelector } from '@core/store';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -32,26 +28,13 @@ export class ShopComponent implements OnInit {
       map((user) => user.shoppingCart._id)
     );
 
-    // this.categories$ = this.store.select(categoriesSelector).pipe(
-    //   filter((categories) => !!categories),
-    //   map((categories) => {
-    //     const all: Category = {
-    //       categoryName: 'Összes'
-    //     };
-    //     categories = categories.filter(
-    //       (category) => category.categoryName !== 'egyedi termékek'
-    //     );
-    //     categories.unshift(all);
-    //     return categories;
-    //   })
-    // );
-
-    this.products$ = this.store.select(productsSelector).pipe(
+    this.products$ = this.store.select(selectAllProducts).pipe(
       filter((products) => !!products),
       map((products) => {
         products = products.filter(
-          (product) => product.category[0].categoryName !== 'egyedi termékek'
+          (product) => product.category !== 'egyedi termékek'
         );
+
         return products.filter((product) => product.stock > 0);
       }),
       untilDestroyed(this)

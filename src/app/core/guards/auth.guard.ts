@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     const isAuthenticated = this.authService.getIsAuthenticated();
     if (!isAuthenticated) {
       this.router.navigate(['/login']);
-      this.toastr.warn('Figyelem', 'Előbb lépje be');
+      this.toastr.warn('Előbb lépje be');
     }
     return isAuthenticated;
   }

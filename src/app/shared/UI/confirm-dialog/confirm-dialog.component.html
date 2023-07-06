@@ -1,19 +1,20 @@
 <div class="confirm-dialog">
   <i class="pi pi-times close" (click)="cancel()"></i>
 
-  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <h2 mat-dialog-title class="mb-2">Megerősítés</h2>
 
   <mat-dialog-content>
-    <p class="">{{ data.message }}</p>
+    <p>{{ data.message }}</p>
 
-    <div class="dialog-actions flex justify-content-end mt-4">
+    <div class="dialog-actions flex justify-content-end mt-5">
       <p-button
         [label]="data.cancelButtonText"
-        styleClass="p-button-raised p-button-warning mr-4"
+        styleClass="p-button p-button-danger mr-4"
         (click)="cancel()"></p-button>
+
       <p-button
         [label]="data.confirmButtonText"
-        styleClass="p-button-raised"
+        styleClass="p-button"
         (click)="confirm()"></p-button>
     </div>
   </mat-dialog-content>

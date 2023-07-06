@@ -10,27 +10,31 @@ import {
   materialReducers,
   userReducers,
   shoppingCartReducers,
-  productReducers
+  productReducers,
+  inspirationReducers
 } from '@core/store';
 
 import { environment } from '../../environments/environment';
 import { OrderState } from '@core/store/models/order-state.model';
 import { orderReducers } from '@core/store/reducers/order.reducers';
+import { InspirationState } from '@core/store/models/inspiration-state.model';
 
 export interface AppState {
   material: MaterialState;
+  inspiration: InspirationState;
   shoppingCart: ShoppingCartState;
-  product: ProductState;
-  category: CategoryState;
+  products: ProductState;
+  categories: CategoryState;
   user: UserState;
   order: OrderState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
   material: materialReducers,
+  inspiration: inspirationReducers,
   shoppingCart: shoppingCartReducers,
-  product: productReducers,
-  category: categoryReducers,
+  products: productReducers,
+  categories: categoryReducers,
   user: userReducers,
   order: orderReducers
 };

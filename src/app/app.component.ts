@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
-import { getCategories, getMaterials, getProducts, getUser } from '@core/store';
+import {
+  getCategories,
+  getInspirations,
+  getMaterials,
+  getProducts,
+  getUser
+} from '@core/store';
 import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
 
 import { Store } from '@ngrx/store';
@@ -40,6 +46,7 @@ export class AppComponent implements OnInit {
     of(this.store$.dispatch(getCategories()))
       .pipe(
         switchMap(() => of(this.store$.dispatch(getMaterials()))),
+        switchMap(() => of(this.store$.dispatch(getInspirations()))),
         switchMap(() => of(this.store$.dispatch(getProducts()))),
         switchMap(() => this.authService.getAuthStatus$()),
         filter((isAuth) => isAuth),

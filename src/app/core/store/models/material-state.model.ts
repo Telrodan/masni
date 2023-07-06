@@ -3,5 +3,6 @@ import { SortedMaterials } from '@core/models/sorted-materials.model';
 
 export interface MaterialState {
   materials: Material[];
+  availableMaterials: Material[];
   sortedMaterials: SortedMaterials;
 }

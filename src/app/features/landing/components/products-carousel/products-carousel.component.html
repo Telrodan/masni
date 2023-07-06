@@ -1,0 +1,27 @@
+<section class="products-carousel">
+  <p-carousel
+    [value]="products$ | async"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="10000"
+    [showNavigators]="true"
+    [showIndicators]="false"
+    [responsiveOptions]="responsiveOptions">
+    <ng-template pTemplate="header">
+      <h1 class="heading-primary">Termékek készleten</h1>
+    </ng-template>
+    <ng-template let-products pTemplate="item">
+      <div class="item-content">
+        <mhd-product-card [product]="products"></mhd-product-card>
+      </div>
+    </ng-template>
+  </p-carousel>
+  <p class="text-center mb-5">
+    A készleten levő termékek előnye, hogy 3-4 munkanap alatt kiszállításra
+    kerülnek!
+  </p>
+  <button routerLink="/shop" class="secondary-button shadow-2">
+    Mindet Megnézem
+  </button>
+</section>
