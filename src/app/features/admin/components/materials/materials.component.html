@@ -11,7 +11,7 @@
       <div class="flex">
         <p-button
           icon="pi pi-plus"
-          label="Hozzáadás"
+          label="Minta hozzáadása"
           styleClass="p-button p-button-success"
           (click)="onAddMaterial()">
         </p-button>
@@ -32,17 +32,23 @@
     <ng-template pTemplate="header">
       <tr>
         <th class="w-9rem">Kép</th>
+
         <th>Azonosító</th>
+
         <th>Név</th>
+
         <th>Kategória</th>
+
         <th pSortableColumn="extra" class="w-8rem">
           Extra ár
           <p-sortIcon field="extra"></p-sortIcon>
         </th>
+
         <th pSortableColumn="isAvailable" class="w-10rem">
           Rendelhető
           <p-sortIcon field="isAvailable"></p-sortIcon>
         </th>
+
         <th class="w-3rem">Opciók</th>
       </tr>
     </ng-template>
@@ -77,10 +83,15 @@
             }">
           </ngx-skeleton-loader>
         </td>
-        <td>{{ material._id }}</td>
+
+        <td>{{ material.id }}</td>
+
         <td>{{ material.name }}</td>
+
         <td>{{ material.category }}</td>
+
         <td class="font-bold">{{ material.extra }} Ft</td>
+
         <td>
           <div class="is-available">
             <p-badge
@@ -90,6 +101,7 @@
             </p-badge>
           </div>
         </td>
+
         <td>
           <button
             (click)="onEditMaterial(material)"

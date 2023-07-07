@@ -43,31 +43,25 @@ export class AddMaterialComponent implements OnInit {
 
   onImageClear(): void {
     this.imagePreview = '';
+    this.addMaterialForm.value.image = '';
     this.addMaterialForm.patchValue({ image: '' });
     this.addMaterialForm.get('image').updateValueAndValidity();
   }
 
   onAddMaterial(): void {
     if (this.addMaterialForm.valid) {
-      const materialData = new FormData();
-      materialData.append('name', this.addMaterialForm.value.name);
-      materialData.append(
-        'category',
-        this.addMaterialForm.get('category').value
-      );
-      materialData.append('image', this.addMaterialForm.get('image').value);
-      materialData.append('extra', this.addMaterialForm.get('extra').value);
-      materialData.append(
-        'isAvailable',
-        this.addMaterialForm.get('isAvailable').value
-      );
+      const material = new FormData();
+      material.append('name', this.addMaterialForm.value.name);
+      material.append('category', this.addMaterialForm.value.category);
+      material.append('image', this.addMaterialForm.value.image);
+      material.append('extra', this.addMaterialForm.value.extra);
+      material.append('isAvailable', this.addMaterialForm.value.isAvailable);
+
       this.materialService
-        .addMaterial$(materialData)
+        .addMaterial$(material)
         .pipe(
           tap(() => {
-            this.toastr.success(
-              `${this.addMaterialForm.get('name').value} hozzáadva`
-            );
+            this.toastr.success(`${this.addMaterialForm.value.name} hozzáadva`);
             this.dialogRef.close();
           })
         )
