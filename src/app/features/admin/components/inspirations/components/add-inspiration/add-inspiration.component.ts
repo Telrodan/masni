@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+
+import { tap } from 'rxjs';
+
 import { InspirationService } from '@core/services/inspiration.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'mhd-add-inspiration',
@@ -46,10 +48,9 @@ export class AddInspirationComponent implements OnInit {
   onAddInspiration(): void {
     if (this.addInspirationForm.valid) {
       const inspirationData = new FormData();
-      inspirationData.append(
-        'image',
-        this.addInspirationForm.get('image').value
-      );
+
+      inspirationData.append('image', this.addInspirationForm.value.image);
+
       this.inspirationService
         .addInspiration$(inspirationData)
         .pipe(
@@ -60,10 +61,6 @@ export class AddInspirationComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  onClose(): void {
-    this.dialogRef.close();
   }
 
   initAddInspirationForm(): void {

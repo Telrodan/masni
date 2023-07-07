@@ -19,7 +19,9 @@
     <ng-template pTemplate="header">
       <tr>
         <th class="w-9rem">Kép</th>
+
         <th>Azonosító</th>
+
         <th>Opciók</th>
       </tr>
     </ng-template>
@@ -54,7 +56,9 @@
             }">
           </ngx-skeleton-loader>
         </td>
+
         <td>{{ inspiration.id }}</td>
+
         <td>
           <button
             (click)="onDeleteInspiration(inspiration)"
