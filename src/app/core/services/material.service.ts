@@ -26,10 +26,11 @@ export class MaterialService {
       );
   }
 
-  updateMaterial$(material: Material): Observable<Material> {
+  updateMaterial$(material: any, materialId: string): Observable<Material> {
+    console.log(material);
     return this.apiService
       .patch<ApiResponse<Material>>(
-        `material/updateOne/${material.id}`,
+        `material/updateOne/${materialId}`,
         material
       )
       .pipe(
@@ -50,7 +51,7 @@ export class MaterialService {
 
   fetchMaterials$(): Observable<Material[]> {
     return this.apiService
-      .get<ApiResponse<Material[]>>('material')
+      .get<ApiResponse<Material[]>>('material/getAll')
       .pipe(map((materialsDTO) => materialsDTO.data));
   }
 

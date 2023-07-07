@@ -13,8 +13,9 @@ import { categories } from 'src/app/shared/util/material-categories';
   styleUrls: ['./edit-material.component.scss']
 })
 export class EditMaterialComponent implements OnInit {
-  categories = categories;
   editMaterialForm: FormGroup;
+  imagePreview: string;
+  categories = categories;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Material,
@@ -25,22 +26,43 @@ export class EditMaterialComponent implements OnInit {
 
   ngOnInit(): void {
     this.initEditMaterialForm(this.data);
+    this.imagePreview = this.data.image;
   }
 
-  onClose(): void {
-    this.dialogRef.close();
+  onImagePicked(event: Event): void {
+    const file = (event.target as HTMLInputElement).files[0];
+
+    this.editMaterialForm.patchValue({ image: file });
+    this.editMaterialForm.get('image').updateValueAndValidity();
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onImageClear(): void {
+    this.imagePreview = '';
+    this.editMaterialForm.value.image = '';
+    this.editMaterialForm.patchValue({ image: '' });
+    this.editMaterialForm.get('image').updateValueAndValidity();
   }
 
   onUpdateMaterial(): void {
-    console.log(this.data.id);
     if (this.editMaterialForm.valid) {
-      const updatedMaterial: Material = {
-        ...this.data,
-        ...this.editMaterialForm.value
-      };
+      const updatedMaterial = new FormData();
+      updatedMaterial.append('name', this.editMaterialForm.value.name);
+      updatedMaterial.append('category', this.editMaterialForm.value.category);
+      updatedMaterial.append('image', this.editMaterialForm.value.image);
+      updatedMaterial.append('extra', this.editMaterialForm.value.extra);
+      updatedMaterial.append(
+        'isAvailable',
+        this.editMaterialForm.value.isAvailable
+      );
 
       this.materialService
-        .updateMaterial$(updatedMaterial)
+        .updateMaterial$(updatedMaterial, this.data.id)
         .pipe(
           tap((material) => {
             this.toastr.success(`${material.name} módosítva`);
@@ -55,6 +77,7 @@ export class EditMaterialComponent implements OnInit {
     this.editMaterialForm = new FormGroup({
       name: new FormControl(material.name, Validators.required),
       category: new FormControl(material.category, Validators.required),
+      image: new FormControl(material.image, Validators.required),
       extra: new FormControl(material.extra, Validators.required),
       isAvailable: new FormControl(material.isAvailable, Validators.required)
     });
