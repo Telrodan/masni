@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
-import { getCategories, selectAllProducts } from '@core/store';
+import { selectAllProducts } from '@core/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { filter, map, Observable, switchMap, tap } from 'rxjs';
 import { AddProductComponent } from './components/add-product/add-product.component';

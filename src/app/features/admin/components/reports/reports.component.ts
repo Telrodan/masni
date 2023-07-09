@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Log } from '@core/models/log.model';
-import { TrackData } from '@core/models/track.model';
 import { LogService } from '@core/services/log.service';
 import { TrackService } from '@core/services/track.service';
-import { selectOrders, selectUsers } from '@core/store';
+import { selectAllOrders, selectUsers } from '@core/store';
 import { Store } from '@ngrx/store';
 import { Observable, filter, map, tap } from 'rxjs';
 
@@ -37,7 +36,7 @@ export class ReportsComponent implements OnInit {
       map((users) => users.length)
     );
 
-    this.ordersCount$ = this.store.select(selectOrders).pipe(
+    this.ordersCount$ = this.store.select(selectAllOrders).pipe(
       filter((orders) => !!orders.length),
       tap((orders) => {
         this.totalSales = 0;
