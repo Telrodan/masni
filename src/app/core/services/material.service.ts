@@ -27,7 +27,6 @@ export class MaterialService {
   }
 
   updateMaterial$(material: any, materialId: string): Observable<Material> {
-    console.log(material);
     return this.apiService
       .patch<ApiResponse<Material>>(
         `material/updateOne/${materialId}`,

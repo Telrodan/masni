@@ -51,21 +51,21 @@ export class EditMaterialComponent implements OnInit {
 
   onUpdateMaterial(): void {
     if (this.editMaterialForm.valid) {
-      const updatedMaterial = new FormData();
-      updatedMaterial.append('name', this.editMaterialForm.value.name);
-      updatedMaterial.append('category', this.editMaterialForm.value.category);
-      updatedMaterial.append('image', this.editMaterialForm.value.image);
-      updatedMaterial.append('extra', this.editMaterialForm.value.extra);
-      updatedMaterial.append(
+      const editedMaterial = new FormData();
+      editedMaterial.append('name', this.editMaterialForm.value.name);
+      editedMaterial.append('category', this.editMaterialForm.value.category);
+      editedMaterial.append('image', this.editMaterialForm.value.image);
+      editedMaterial.append('extra', this.editMaterialForm.value.extra);
+      editedMaterial.append(
         'isAvailable',
         this.editMaterialForm.value.isAvailable
       );
 
       this.materialService
-        .updateMaterial$(updatedMaterial, this.data.id)
+        .updateMaterial$(editedMaterial, this.data.id)
         .pipe(
           tap((material) => {
-            this.toastr.success(`${material.name} módosítva`);
+            this.toastr.success(`${material.name} minta módosítva`);
             this.dialogRef.close();
           })
         )
