@@ -65,7 +65,11 @@
         <td>{{ order.addedAt | date : 'medium' }}</td>
 
         <td>
-          <p-button icon="pi pi-info" (click)="onOrderDetails(order)">
+          <p-button
+            icon="pi pi-info-circle"
+            (click)="onOrderDetails(order)"
+            pTooltip="Rendelés információ"
+            tooltipPosition="bottom">
           </p-button>
         </td>
       </tr>

@@ -77,6 +77,7 @@
 
     <li class="py-2 px-3 border-top-1 surface-border">
       <div class="text-400 font-medium">Szállítás módja</div>
+
       <div class="text-900 font-normal">
         {{ order.shipping.method.split(' ')[0] }}
       </div>
@@ -136,7 +137,9 @@
             </div>
           </li>
 
-          <li class="py-2 px-3" *ngIf="product.product['category']">
+          <li
+            class="py-2 px-3 border-top-1 surface-border"
+            *ngIf="product.product['category']">
             <div class="text-400 font-medium">Kategória</div>
 
             <div class="text-900 font-normal">
@@ -144,7 +147,7 @@
             </div>
           </li>
 
-          <li class="py-2 px-3">
+          <li class="py-2 px-3 border-top-1 surface-border">
             <div class="text-400 font-medium">Rövid leírás</div>
 
             <div class="text-900 font-normal">

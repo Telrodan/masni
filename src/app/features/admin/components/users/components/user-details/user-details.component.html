@@ -1,0 +1,118 @@
+<i class="pi pi-times close" mat-dialog-close></i>
+<h2 mat-dialog-title>Felhasználó információ</h2>
+
+<mat-dialog-content>
+  <ul>
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Azonosító</div>
+
+      <div class="text-900 font-bold">
+        {{ user.id }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Név</div>
+
+      <div class="text-900 font-normal">
+        {{ user.name }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Email</div>
+
+      <div class="text-900 font-normal">
+        {{ user.email }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Telefon</div>
+
+      <div class="text-900 font-normal">
+        {{ user.phone }}
+      </div>
+    </li>
+
+    <li class="py-2 px-1 border-top-1 surface-border">
+      <div class="text-400 font-medium">Szállítási cím</div>
+    </li>
+
+    <li class="py-2 px-3">
+      <div class="text-400 font-medium">Utca</div>
+
+      <div class="text-900 font-normal">
+        {{ user.shippingAddress.street }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Város</div>
+
+      <div class="text-900 font-normal">
+        {{ user.shippingAddress.city }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Irányítószám</div>
+
+      <div class="text-900 font-normal">
+        {{ user.shippingAddress.postcode }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Megye</div>
+
+      <div class="text-900 font-normal">
+        {{ user.shippingAddress.county }}
+      </div>
+    </li>
+
+    <li class="py-2 px-1 border-top-1 surface-border">
+      <div class="text-400 font-medium">Számlázási cím</div>
+    </li>
+
+    <li class="py-2 px-3">
+      <div class="text-400 font-medium">Utca</div>
+
+      <div class="text-900 font-normal">
+        {{ user.billingAddress.street }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Város</div>
+
+      <div class="text-900 font-normal">
+        {{ user.billingAddress.city }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Irányítószám</div>
+
+      <div class="text-900 font-normal">
+        {{ user.billingAddress.postcode }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Megye</div>
+
+      <div class="text-900 font-normal">
+        {{ user.billingAddress.county }}
+      </div>
+    </li>
+  </ul>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <p-button
+    label="Vissza"
+    styleClass="p-button p-button-danger"
+    mat-dialog-close>
+  </p-button>
+</mat-dialog-actions>

@@ -25,14 +25,14 @@ interface Address {
 }
 
 export class User {
-  _id?: string;
+  id?: string;
   name: string;
   email: string;
   phone: string;
   password?: string;
   passwordConfirm?: string;
   shoppingCart: {
-    _id: string;
+    id: string;
     items: ShoppingCartItem[];
   };
   shippingAddress: Address;

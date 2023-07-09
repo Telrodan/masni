@@ -10,7 +10,7 @@ import { Observable, filter, tap, map } from 'rxjs';
 
 @UntilDestroy()
 @Component({
-  selector: 'masni-handmade-dolls-shop',
+  selector: 'mhd-shop',
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -25,7 +25,7 @@ export class ShopComponent implements OnInit {
   public ngOnInit(): void {
     this.store.select(userSelector).pipe(
       filter((user) => !!user),
-      map((user) => user.shoppingCart._id)
+      map((user) => user.shoppingCart.id)
     );
 
     this.products$ = this.store.select(selectAllProducts).pipe(

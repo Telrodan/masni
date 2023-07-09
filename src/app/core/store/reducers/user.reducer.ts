@@ -8,6 +8,7 @@ import {
 } from '../actions';
 
 import { UserState } from '../models/user-state.model';
+import { formatPhoneNumber } from 'src/app/shared/util/format-phone-number';
 
 export const userInitialState: UserState = {
   user: null,
@@ -23,17 +24,18 @@ export const userReducers = createReducer(
     user: action.user
   })),
   on(getUsers, (state) => ({ ...state })),
+
   on(getUsersSuccess, (state, action) => {
-    action.users.map((user) => ({
+    const users = action.users.map((user) => ({
       ...user,
-      phone: user.phone.replace(/^(\d{4})(\d{3})(\d{4})$/, '$1/$2-$3')
+      phone: formatPhoneNumber(user.phone)
     }));
 
-    return { ...state, users: action.users };
+    return { ...state, users };
   }),
 
   on(deleteUser, (state, action) => {
-    const index = state.users.findIndex((item) => item._id === action.user._id);
+    const index = state.users.findIndex((item) => item.id === action.user.id);
     const users = [...state.users];
     users.splice(index, 1);
     return {
