@@ -1,0 +1,74 @@
+<p-card header="Rendelések" *ngIf="orders$ | async as orders">
+  <p-table
+    #table
+    [value]="orders"
+    styleClass="p-datatable-gridlines"
+    [globalFilterFields]="['id', 'userEmail']"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            pTooltip="Kereshető mezők: Azonosító, Rendelő"
+            tooltipPosition="bottom"
+            type="text"
+            (input)="applyFilterGlobal($event, 'contains', table)"
+            placeholder="Keresés" />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Azonosító</th>
+
+        <th>Rendelő</th>
+
+        <th pSortableColumn="price" class="w-8rem">
+          Ár
+          <p-sortIcon field="price"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="status" class="w-8rem">
+          Státusz <p-sortIcon field="status"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="addedAt" class="w-15rem">
+          Dátum <p-sortIcon field="addedAt"></p-sortIcon>
+        </th>
+
+        <th>Részletek</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>{{ order.id }}</td>
+
+        <td>{{ order.userEmail }}</td>
+
+        <td class="font-bold">{{ order.price }} Ft</td>
+
+        <td>
+          <div class="status">
+            <p-tag
+              [severity]="order.status === 'paid' ? 'success' : 'warning'"
+              [value]="order.status === 'paid' ? 'Fizetve' : 'Függőben'">
+            </p-tag>
+          </div>
+        </td>
+
+        <td>{{ order.addedAt | date : 'medium' }}</td>
+
+        <td>
+          <p-button icon="pi pi-info" (click)="onOrderDetails(order)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

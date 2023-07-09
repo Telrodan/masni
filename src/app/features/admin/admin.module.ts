@@ -25,8 +25,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { CategoriesComponent } from './components/categories/categories.component';
-import { OrderDetailsComponent } from './components/order/order-details/order-details.component';
-import { OrderListComponent } from './components/order/order-list/order-list.component';
+import { OrderDetailsComponent } from './components/orders/components/order-details/order-details.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { AddMaterialComponent } from './components/materials/components/add-material/add-material.component';
 import { AddInspirationComponent } from './components/inspirations/components/add-inspiration/add-inspiration.component';
@@ -39,6 +38,7 @@ import { EditMaterialComponent } from './components/materials/components/edit-ma
 import { ProductsComponent } from './components/products/products.component';
 import { AddProductComponent } from './components/products/components/add-product/add-product.component';
 import { EditProductComponent } from './components/products/components/edit-product/edit-product.component';
+import { OrdersComponent } from './components/orders/orders.component';
 
 const PRIME_NG = [
   CardModule,
@@ -67,7 +67,6 @@ const PRIME_NG = [
     CategoriesComponent,
     EditCategoryComponent,
     OrderDetailsComponent,
-    OrderListComponent,
     UserListComponent,
     AddMaterialComponent,
     AddInspirationComponent,
@@ -78,7 +77,8 @@ const PRIME_NG = [
     EditMaterialComponent,
     ProductsComponent,
     AddProductComponent,
-    EditProductComponent
+    EditProductComponent,
+    OrdersComponent
   ],
   imports: [
     CommonModule,

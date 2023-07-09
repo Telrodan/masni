@@ -1,0 +1,268 @@
+<i class="pi pi-times close" mat-dialog-close></i>
+<h2 mat-dialog-title>Rendelés részletei</h2>
+
+<mat-dialog-content>
+  <ul>
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Azonosító</div>
+
+      <div class="text-900 font-bold">
+        {{ order.id }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-user mr-2"></i>
+        Vásárló
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.user.name }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-phone mr-2"></i>
+        Telefon
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.user.phone }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-envelope mr-2"></i>
+        Email
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.user.email }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-calendar mr-2"></i>
+        Dátum
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.addedAt | date : 'medium' }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-money-bill mr-2"></i>
+        Ár
+      </div>
+
+      <div class="text-900 font-normal">{{ order.price }} Ft</div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Státusz</div>
+
+      <div class="text-900 font-normal">
+        <p-tag
+          [severity]="order.status === 'paid' ? 'success' : 'warning'"
+          [value]="order.status === 'paid' ? 'Fizetve' : 'Függőben'">
+        </p-tag>
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">Szállítás módja</div>
+      <div class="text-900 font-normal">
+        {{ order.shipping.method.split(' ')[0] }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-truck mr-2"></i>
+        Cím
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.shipping.address }}
+      </div>
+    </li>
+
+    <li class="py-2 px-3 border-top-1 surface-border">
+      <div class="text-400 font-medium">
+        <i class="pi pi-exclamation-circle mr-2"></i>
+        Számlázási Cím
+      </div>
+
+      <div class="text-900 font-normal">
+        {{ order.billing }}
+      </div>
+    </li>
+
+    <li
+      class="py-2 px-3 border-top-1 surface-border"
+      *ngIf="order.products as products">
+      <div class="text-400 font-medium">Termékek</div>
+
+      <div class="w-full">
+        <p-panel
+          styleClass="mb-2"
+          header="
+          Név: {{ product.product['name'] }} - 
+          Azonosító: {{ product.product['id'] }}
+          "
+          [toggleable]="true"
+          [collapsed]="true"
+          toggler="header"
+          *ngFor="let product of products">
+          <li class="py-2 px-3">
+            <div class="text-400 font-medium">Kép</div>
+            <img
+              class="w-5"
+              [src]="product.product['images'][0]"
+              [alt]="product.product['name']" />
+          </li>
+
+          <li class="py-2 px-3">
+            <div class="text-400 font-medium">Termék</div>
+
+            <div class="text-900 font-normal">
+              {{ product.product['name'] }}
+            </div>
+          </li>
+
+          <li class="py-2 px-3" *ngIf="product.product['category']">
+            <div class="text-400 font-medium">Kategória</div>
+
+            <div class="text-900 font-normal">
+              {{ product.product['category'] }}
+            </div>
+          </li>
+
+          <li class="py-2 px-3">
+            <div class="text-400 font-medium">Rövid leírás</div>
+
+            <div class="text-900 font-normal">
+              {{ product.product['shortDescription'] }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.nameEmbroidery"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Hímzett név</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.nameEmbroidery }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.baseColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Alapszín</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.baseColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.earsColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Fülek színe</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.earsColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.ribbonColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Masni színe</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.ribbonColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.szundikendoColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Szundikendő színe/mintája</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.szundikendoColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.minkyColorBack"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">
+              Minky plüss színe(szundikendő-hátulja)
+            </div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.minkyColorBack }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.noseColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Orr színe</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.noseColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.earsAndBodyColor"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Fülek és test színe/mintája:</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.earsAndBodyColor }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.extraMinkyEars"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Minky fül</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.extraMinkyEars }}
+            </div>
+          </li>
+
+          <li
+            *ngIf="product.productExtra.comment"
+            class="py-2 px-3 border-top-1 surface-border">
+            <div class="text-400 font-medium">Megjegyzés</div>
+
+            <div class="text-900 font-normal">
+              {{ product.productExtra.comment }}
+            </div>
+          </li>
+        </p-panel>
+      </div>
+    </li>
+  </ul>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <p-button
+    label="Vissza"
+    styleClass="p-button p-button-danger"
+    mat-dialog-close>
+  </p-button>
+</mat-dialog-actions>

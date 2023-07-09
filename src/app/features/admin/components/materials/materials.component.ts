@@ -66,8 +66,7 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
 
   onAddMaterial(): void {
     this.dialog.open(AddMaterialComponent, {
-      minWidth: '40vw',
-      maxHeight: '90vh'
+      minWidth: '40vw'
     });
   }
 
