@@ -8,9 +8,12 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { filter, map, Observable, tap } from 'rxjs';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { EditProductComponent } from './components/edit-product/edit-product.component';
+import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { capitalize } from 'src/app/shared/util/first-letter-capital';
+import { ToastrService } from '@core/services/toastr.service';
 
 @UntilDestroy()
 @Component({
@@ -23,30 +26,22 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
   products$: Observable<Product[]>;
 
-  product: Product;
-  productForm: FormGroup;
-  isDialogVisible = false;
-  categoryForm: FormGroup;
-
   images: string[];
   imageLoadedStatus: boolean[] = [];
 
-  matchModeOptions: SelectItem[];
-
   constructor(
-    private store: Store,
+    private store$: Store,
     private productService: ProductService,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.products$ = this.store.select(selectAllProducts).pipe(
+    this.products$ = this.store$.select(selectAllProducts).pipe(
       filter((products) => !!products),
       map((products) => {
         this.reloadProductsImages(products);
-
+        console.log(products);
         return [...products];
       }),
       untilDestroyed(this)
@@ -83,52 +78,28 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onUpdateProduct(): void {
-    if (this.productForm.valid) {
-      const updatedProduct: Product = {
-        ...this.product,
-        ...this.productForm.value
-      };
-
-      this.productService
-        .updateProduct$(updatedProduct)
-        .pipe(
-          tap((product) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Siker!',
-              detail: `${product.name} módosítva`
-            });
-            this.isDialogVisible = false;
-          })
-        )
-        .subscribe();
-    }
-  }
-
   onDeleteProduct(product: Product): void {
-    this.confirmationService.confirm({
-      message: `Biztos törölni szeretnéd ${product.name} terméket?`,
-      header: 'Megerősítés',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Igen',
-      rejectLabel: 'Nem',
-      accept: () => {
-        this.productService
-          .deleteProduct$(product)
-          .pipe(
-            tap(() => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Siker!',
-                detail: `${product.name} törölve`
-              });
-              this.store.dispatch(getCategories());
-            })
-          )
-          .subscribe();
-      }
-    });
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        minWidth: '40vw',
+        data: {
+          title: 'Megerősítés',
+          message: `Biztos törölni szeretnéd 
+          "${capitalize(product.name)}"
+           terméket?`,
+          confirmButtonText: 'Igen',
+          cancelButtonText: 'Nem'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => !!confirmed),
+        switchMap(() => this.productService.deleteProduct$(product)),
+        tap(() => {
+          this.toastr.success(`${capitalize(product.name)} termék törölve`);
+        })
+      )
+      .subscribe();
   }
 
   imageLoaded(index: number) {

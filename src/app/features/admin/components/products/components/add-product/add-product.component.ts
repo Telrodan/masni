@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Observable, tap } from 'rxjs';
-import { MessageService } from 'primeng/api';
-
-import { CategoryService } from '@core/services/category.service';
-import { ProductService } from '@core/services/product.service';
-import { Category } from '@core/models/category.model';
-import { ToastrService } from '@core/services/toastr.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
+import { Store } from '@ngrx/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Observable, filter, tap } from 'rxjs';
+
+import { ProductService } from '@core/services/product.service';
+import { ToastrService } from '@core/services/toastr.service';
+import { Category } from '@core/models/category.model';
+import { selectAllCategories } from '@core/store';
+import { capitalize } from 'src/app/shared/util/first-letter-capital';
+
+@UntilDestroy()
 @Component({
   selector: 'mhd-add-product',
   templateUrl: './add-product.component.html',
@@ -17,19 +20,24 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AddProductComponent implements OnInit {
   categories$: Observable<Category[]>;
+
   addProductForm: FormGroup;
   imagesPreview: string[] = [];
 
   constructor(
+    private store$: Store,
     private dialogRef: MatDialogRef<AddProductComponent>,
-    private categoryService: CategoryService,
     private productService: ProductService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.categoryService.getCategories$();
-    this.initForm();
+    this.initAddProductForm();
+
+    this.categories$ = this.store$.select(selectAllCategories).pipe(
+      filter((categories) => !!categories),
+      untilDestroyed(this)
+    );
   }
 
   async onImagePicked(event: Event): Promise<void> {
@@ -52,7 +60,14 @@ export class AddProductComponent implements OnInit {
     }
   }
 
-  initForm(): void {
+  onImageClear(): void {
+    this.imagesPreview = [];
+    this.addProductForm.value.images = null;
+    this.addProductForm.patchValue({ images: null });
+    this.addProductForm.get('images').updateValueAndValidity();
+  }
+
+  initAddProductForm(): void {
     this.addProductForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       category: new FormControl(null, Validators.required),
@@ -65,32 +80,28 @@ export class AddProductComponent implements OnInit {
   }
 
   onAddProduct(): void {
-    console.log(this.addProductForm.get('category').value);
     if (this.addProductForm.valid) {
       const product = new FormData();
-      product.append('category', this.addProductForm.get('category').value);
-      product.append('name', this.addProductForm.get('name').value);
+      product.append('name', this.addProductForm.value.name);
+      product.append('categoryId', this.addProductForm.value.category);
       product.append(
         'shortDescription',
-        this.addProductForm.get('shortDescription').value
+        this.addProductForm.value.shortDescription
       );
-      product.append(
-        'description',
-        this.addProductForm.get('description').value
-      );
-      this.addProductForm.get('images').value.map((image) => {
+      product.append('description', this.addProductForm.value.description);
+
+      this.addProductForm.value.images.map((image: string) => {
         product.append('images', image);
       });
-      product.append('price', this.addProductForm.get('price').value);
-      product.append('stock', this.addProductForm.get('stock').value);
-      product.append('categoryId', this.addProductForm.get('category').value);
+      product.append('price', this.addProductForm.value.price);
+      product.append('stock', this.addProductForm.value.stock);
 
       this.productService
         .addProduct$(product)
         .pipe(
           tap(() => {
             this.toastr.success(
-              `${this.addProductForm.get('name').value} hozzáadva`
+              `${capitalize(this.addProductForm.value.name)} hozzáadva`
             );
             this.dialogRef.close();
           })

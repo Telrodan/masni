@@ -9,7 +9,9 @@ export enum CategoryActionsTypes {
   ADD_CATEGORY = '[Category] Add Category',
   UPDATE_CATEGORY = '[Category] Update Category',
   DELETE_CATEGORY = '[Category] Delete Category',
-  DELETE_PRODUCT_FROM_CATEGORY = '[Category] Delete Product From Category'
+  ADD_PRODUCT_TO_CATEGORY = '[Category] Add Product To Category',
+  DELETE_PRODUCT_FROM_CATEGORY = '[Category] Delete Product From Category',
+  MOVE_PRODUCT_TO_CATEGORY = '[Category] Move Product To Category'
 }
 
 export const getCategories = createAction(CategoryActionsTypes.GET_CATEGORIES);
@@ -34,7 +36,17 @@ export const updateCategory = createAction(
   props<{ category: Category }>()
 );
 
+export const addProductToCategory = createAction(
+  CategoryActionsTypes.ADD_PRODUCT_TO_CATEGORY,
+  props<{ product: Product }>()
+);
+
 export const deleteProductFromCategory = createAction(
   CategoryActionsTypes.DELETE_PRODUCT_FROM_CATEGORY,
+  props<{ product: Product }>()
+);
+
+export const moveProductToCategory = createAction(
+  CategoryActionsTypes.MOVE_PRODUCT_TO_CATEGORY,
   props<{ product: Product }>()
 );

@@ -7,7 +7,14 @@ import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
 import { MaterialService } from './material.service';
 import { Product } from '@core/models/product.model';
-import { addProduct, deleteProduct, updateProduct } from '@core/store';
+import {
+  addProduct,
+  addProductToCategory,
+  deleteProduct,
+  deleteProductFromCategory,
+  moveProductToCategory,
+  updateProduct
+} from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -26,30 +33,34 @@ export class ProductService {
         map((productDTO) => productDTO.data),
         tap((product) => {
           this.store.dispatch(addProduct({ product }));
+          this.store.dispatch(addProductToCategory({ product }));
         })
       );
   }
 
-  updateProduct$(product: Product): Observable<Product> {
+  updateProduct$(product: FormData, productId: string): Observable<Product> {
     return this.apiService
-      .patch<ApiResponse<Product>>(`product/${product.id}`, product)
+      .patch<ApiResponse<Product>>(`product/updateOne/${productId}`, product)
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
+          console.log('BACKEND PRODUCT RESPONSE', product);
           this.store.dispatch(updateProduct({ product }));
+          this.store.dispatch(moveProductToCategory({ product }));
         })
       );
   }
 
   deleteProduct$(product: Product): Observable<null> {
-    return this.apiService.delete<null>('product', product.id).pipe(
+    return this.apiService.delete<null>('product/deleteOne', product.id).pipe(
       tap(() => {
         this.store.dispatch(deleteProduct({ product }));
+        this.store.dispatch(deleteProductFromCategory({ product }));
       })
     );
   }
 
-  public getProducts(): Observable<Product[]> {
+  getProducts(): Observable<Product[]> {
     return this.apiService
       .get<ApiResponse<Product[]>>('product/getAll')
       .pipe(map((productsDTO) => productsDTO.data));

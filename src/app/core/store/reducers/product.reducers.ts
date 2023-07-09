@@ -27,10 +27,17 @@ export const productReducers = createReducer(
     availableProducts: action.products.filter((product) => product.stock > 0)
   })),
 
-  on(addProduct, (state, action) => ({
-    ...state,
-    allProducts: [...state.allProducts, action.product]
-  })),
+  on(addProduct, (state, action) => {
+    const availableProducts = [...state.availableProducts];
+    if (action.product.stock > 0) {
+      availableProducts.push(action.product);
+    }
+    return {
+      ...state,
+      allProducts: [...state.allProducts, action.product],
+      availableProducts
+    };
+  }),
 
   on(deleteProduct, (state, action) => {
     const index = state.allProducts.findIndex(
@@ -46,15 +53,33 @@ export const productReducers = createReducer(
   }),
 
   on(updateProduct, (state, action) => {
+    const availableProducts = [...state.availableProducts];
+    if (action.product.stock > 0) {
+      if (!availableProducts.includes(action.product)) {
+        availableProducts.push(action.product);
+      } else {
+        const index = availableProducts.findIndex(
+          (product) => product.id === action.product.id
+        );
+        availableProducts.splice(index, 1, action.product);
+      }
+    } else {
+      const index = availableProducts.findIndex(
+        (product) => product.id === action.product.id
+      );
+      availableProducts.splice(index, 1);
+    }
+
     const index = state.allProducts.findIndex(
       (product) => product.id === action.product.id
     );
-    const products = [...state.allProducts];
-    products.splice(index, 1, action.product);
+    const allProducts = [...state.allProducts];
+    allProducts.splice(index, 1, action.product);
 
     return {
       ...state,
-      products
+      allProducts,
+      availableProducts
     };
   })
 );
