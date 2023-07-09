@@ -39,6 +39,8 @@ import { ProductsComponent } from './components/products/products.component';
 import { AddProductComponent } from './components/products/components/add-product/add-product.component';
 import { EditProductComponent } from './components/products/components/edit-product/edit-product.component';
 import { OrdersComponent } from './components/orders/orders.component';
+import { UsersComponent } from './components/users/users.component';
+import { UserDetailsComponent } from './components/users/components/user-details/user-details.component';
 
 const PRIME_NG = [
   CardModule,
@@ -78,7 +80,9 @@ const PRIME_NG = [
     ProductsComponent,
     AddProductComponent,
     EditProductComponent,
-    OrdersComponent
+    OrdersComponent,
+    UsersComponent,
+    UserDetailsComponent
   ],
   imports: [
     CommonModule,

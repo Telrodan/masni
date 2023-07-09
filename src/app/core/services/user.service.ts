@@ -43,7 +43,7 @@ export class UserService {
   }
 
   deleteUser$(user: User): Observable<null> {
-    return this.apiService.delete<null>('users', user._id).pipe(
+    return this.apiService.delete<null>('users', user.id).pipe(
       tap(() => {
         this.store.dispatch(deleteUser({ user }));
       })
