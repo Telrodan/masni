@@ -12,7 +12,7 @@ interface FilteredAvailableMaterials {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-samples',
+  selector: 'mhd-samples',
   templateUrl: './samples.component.html',
   styleUrls: ['./samples.component.scss']
 })

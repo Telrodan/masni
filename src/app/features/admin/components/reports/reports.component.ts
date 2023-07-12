@@ -3,6 +3,7 @@ import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
 import { TrackService } from '@core/services/track.service';
 import { selectAllOrders, selectUsers } from '@core/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { Observable, filter, map, tap } from 'rxjs';
 
@@ -12,8 +13,9 @@ interface TrackingData {
   sameVisitors: number;
 }
 
+@UntilDestroy()
 @Component({
-  selector: 'masni-handmade-dolls-reports',
+  selector: 'mhd-reports',
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
@@ -33,13 +35,15 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     this.usersCount$ = this.store.select(selectUsers).pipe(
       filter((users) => !!users.length),
-      map((users) => users.length)
+      map((users) => users.length),
+      untilDestroyed(this)
     );
 
     this.ordersCount$ = this.store.select(selectAllOrders).pipe(
       filter((orders) => !!orders.length),
       tap((orders) => {
         this.totalSales = 0;
+
         orders.forEach((order) => {
           if (order.status === 'paid') {
             this.totalSales += order.price;

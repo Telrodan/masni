@@ -30,13 +30,9 @@ export class HTTPInterceptor implements HttpInterceptor {
       }),
       catchError((error: HttpErrorResponse) => {
         let errorMsg = '';
-        if (error.error instanceof ErrorEvent) {
-          errorMsg = `Error: ${error.error.message}`;
-          this.toastr.error(errorMsg);
-        } else {
-          errorMsg = `Error Code: ${error.status},  Message: ${error.error.message}`;
-          this.toastr.error(errorMsg);
-        }
+        errorMsg = error.error.message;
+        this.toastr.error(errorMsg);
+
         return throwError(() => new Error(errorMsg));
       }),
       finalize(() => {

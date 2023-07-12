@@ -8,7 +8,7 @@ import {
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
-  selector: 'masni-handmade-dolls-contact',
+  selector: 'mhd-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })

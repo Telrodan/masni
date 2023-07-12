@@ -31,6 +31,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { GalleriaModule } from 'primeng/galleria';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -45,7 +46,6 @@ import {
   ShoppingCartEffects,
   UserEffects
 } from '@core/store/effects';
-import { LazyImageDirective } from '@core/directives/lazy-image.directive';
 import { LandingComponent } from '@features/landing/landing.component';
 import { AboutMeComponent } from '@features/landing/components/about-me/about-me.component';
 import { NyuszkoShopModule } from '@features/nyuszko-shop/nyuszko-shop.module';
@@ -89,7 +89,8 @@ const PRIME_NG = [
   CheckboxModule,
   GalleriaModule,
   ToggleButtonModule,
-  StyleClassModule
+  StyleClassModule,
+  ScrollTopModule
 ];
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
@@ -111,7 +112,6 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
     SamplesComponent,
     ShoppingCartComponent,
     ProductsCarouselComponent,
-    LazyImageDirective,
     InspirationPageComponent,
     LayoutComponent
   ],

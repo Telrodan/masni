@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'masni-handmade-dolls-image-composition',
+  selector: 'mhd-image-composition',
   templateUrl: './image-composition.component.html',
   styleUrls: ['./image-composition.component.scss']
 })

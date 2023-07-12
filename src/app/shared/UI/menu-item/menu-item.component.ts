@@ -7,7 +7,7 @@ interface MenuItemData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-menu-item',
+  selector: 'mhd-menu-item',
   templateUrl: './menu-item.component.html',
   styleUrls: ['./menu-item.component.scss']
 })

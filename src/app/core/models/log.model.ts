@@ -4,7 +4,6 @@ export interface Log {
   timestamp: Date;
   meta: {
     user?: string;
-    email?: string;
     module: string;
   };
 }

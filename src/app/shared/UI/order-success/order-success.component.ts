@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
 @Component({
-  selector: 'masni-handmade-dolls-order-success',
+  selector: 'mhd-order-success',
   templateUrl: './order-success.component.html',
   styleUrls: ['./order-success.component.scss']
 })

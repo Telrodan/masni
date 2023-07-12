@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { tap } from 'rxjs';
 
 @Component({
-  selector: 'masni-handmade-dolls-forgot-password',
+  selector: 'mhd-forgot-password',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })

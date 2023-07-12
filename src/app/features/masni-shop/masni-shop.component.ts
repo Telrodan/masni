@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { carouselImages, menuItems } from './MASNI-SHOP_DATA';
 
 @Component({
-  selector: 'masni-handmade-dolls-masni-shop',
+  selector: 'mhd-masni-shop',
   templateUrl: './masni-shop.component.html',
   styleUrls: ['./masni-shop.component.scss']
 })

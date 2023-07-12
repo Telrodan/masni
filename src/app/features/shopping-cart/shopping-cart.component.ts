@@ -41,7 +41,7 @@ interface ShippingOption {
 
 @UntilDestroy()
 @Component({
-  selector: 'masni-handmade-dolls-shopping-cart',
+  selector: 'mhd-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss']
 })

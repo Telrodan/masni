@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { ToastrService } from '@core/services/toastr.service';
 
 @Component({
-  selector: 'masni-handmade-dolls-login',
+  selector: 'mhd-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

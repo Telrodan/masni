@@ -1,9 +1,7 @@
 <main class="builder my-5" *ngIf="productData$ | async as productData">
   <div class="image-composition-container">
-    <masni-handmade-dolls-image-composition
-      [images]="
-        productData.baseProduct.images
-      "></masni-handmade-dolls-image-composition>
+    <mhd-image-composition
+      [images]="productData.baseProduct.images"></mhd-image-composition>
   </div>
   <div class="container shadow-2">
     <h1 class="heading-primary">Mackó</h1>
