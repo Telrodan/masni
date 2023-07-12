@@ -14,7 +14,7 @@ import {
   inspirationReducers
 } from '@core/store';
 
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { OrderState } from '@core/store/models/order-state.model';
 import { orderReducers } from '@core/store/reducers/order.reducers';
 import { InspirationState } from '@core/store/models/inspiration-state.model';

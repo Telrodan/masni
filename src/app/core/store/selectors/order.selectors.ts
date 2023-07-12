@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/reducer';
+import { AppState } from '@core/store/app-state';
 
 export const selectOrderState = (state: AppState) => state.order;
 

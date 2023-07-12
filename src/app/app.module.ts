@@ -62,7 +62,7 @@ import { ShoppingCartComponent } from '@features/shopping-cart/shopping-cart.com
 import { ProductsCarouselComponent } from '@features/landing/components/products-carousel/products-carousel.component';
 import { InspirationPageComponent } from '@features/inspiration-page/inspiration-page.component';
 import { environment } from 'src/environments/environment';
-import { reducers } from './reducer';
+import { reducers } from './core/store/app-state';
 import { SharedModule } from './shared/shared.module';
 import { BrandsMenuComponent } from '@features/landing/components/brands-menu/brands-menu.component';
 import { LayoutComponent } from './features/layout/layout.component';

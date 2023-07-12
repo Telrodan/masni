@@ -1,4 +1,4 @@
-import { AppState } from 'src/app/reducer';
+import { AppState } from '@core/store/app-state';
 
 import { createSelector } from '@ngrx/store';
 
