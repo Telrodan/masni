@@ -6,7 +6,7 @@ import { AuthService } from '@core/services/auth.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'masni-handmade-dolls-reset-password',
+  selector: 'mhd-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })

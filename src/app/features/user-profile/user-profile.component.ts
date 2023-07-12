@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { filter, Observable, tap } from 'rxjs';
 
 @Component({
-  selector: 'masni-handmade-dolls-user-profile',
+  selector: 'mhd-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
   animations: [

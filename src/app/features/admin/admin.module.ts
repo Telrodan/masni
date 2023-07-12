@@ -20,6 +20,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ImageModule } from 'primeng/image';
 import { BadgeModule } from 'primeng/badge';
 import { RippleModule } from 'primeng/ripple';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -41,6 +42,7 @@ import { EditProductComponent } from './components/products/components/edit-prod
 import { OrdersComponent } from './components/orders/orders.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailsComponent } from './components/users/components/user-details/user-details.component';
+import { LogsComponent } from './components/reports/components/logs/logs.component';
 
 const PRIME_NG = [
   CardModule,
@@ -59,7 +61,8 @@ const PRIME_NG = [
   TagModule,
   TooltipModule,
   ImageModule,
-  BadgeModule
+  BadgeModule,
+  MultiSelectModule
 ];
 
 @NgModule({
@@ -82,7 +85,8 @@ const PRIME_NG = [
     EditProductComponent,
     OrdersComponent,
     UsersComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    LogsComponent
   ],
   imports: [
     CommonModule,

@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SpinnerService } from 'src/app/core/services/spinner.service';
 
 @Component({
-  selector: 'masni-handmade-dolls-spinner',
+  selector: 'mhd-spinner',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss']
 })

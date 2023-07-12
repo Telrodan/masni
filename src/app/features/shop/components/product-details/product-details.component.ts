@@ -27,7 +27,7 @@ interface ProductData {
 }
 
 @Component({
-  selector: 'masni-handmade-dolls-product-details',
+  selector: 'mhd-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })

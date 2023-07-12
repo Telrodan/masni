@@ -16,7 +16,7 @@ import { AuthService } from './core/services/auth.service';
 import { TrackService } from '@core/services/track.service';
 
 @Component({
-  selector: 'masni-handmade-dolls-root',
+  selector: 'mhd-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

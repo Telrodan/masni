@@ -3,8 +3,7 @@
   *ngIf="productData$ | async as productData">
   <div class="grid" *ngIf="productData.product as product">
     <div class="w-full lg:w-5">
-      <masni-handmade-dolls-image-composition
-        [images]="product.images"></masni-handmade-dolls-image-composition>
+      <mhd-image-composition [images]="product.images"></mhd-image-composition>
     </div>
 
     <div class="col-12 lg:col-6 py-3 lg:pl-6">
