@@ -6,6 +6,7 @@ import { Product } from '@core/models/product.model';
 export enum CategoryActionsTypes {
   GET_CATEGORIES = '[Category] Get Categories',
   GET_CATEGORIES_SUCCESS = '[Category] Get Categories Success',
+  GET_CATEGORIES_ERROR = '[Category] Get Categories Error',
   ADD_CATEGORY = '[Category] Add Category',
   UPDATE_CATEGORY = '[Category] Update Category',
   DELETE_CATEGORY = '[Category] Delete Category',
@@ -19,6 +20,10 @@ export const getCategories = createAction(CategoryActionsTypes.GET_CATEGORIES);
 export const getCategoriesSuccess = createAction(
   CategoryActionsTypes.GET_CATEGORIES_SUCCESS,
   props<{ categories: Category[] }>()
+);
+
+export const getCategoriesError = createAction(
+  CategoryActionsTypes.GET_CATEGORIES_ERROR
 );
 
 export const addCategory = createAction(
