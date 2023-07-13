@@ -102,7 +102,15 @@
           </div>
         </td>
 
-        <td class="font-bold">{{ product.price }} Ft</td>
+        <td class="font-bold">
+          <span [ngClass]="{ 'line-through': product.discountedPrice > 0 }">
+            {{ product.price }} Ft
+          </span>
+          <br />
+          <span *ngIf="product.discountedPrice > 0" class="text-red-500">
+            {{ product.discountedPrice }} Ft
+          </span>
+        </td>
 
         <td>
           <button

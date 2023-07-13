@@ -5,12 +5,25 @@
 }
 
 .product-card {
+  position: relative;
   width: 100%;
   cursor: pointer;
 
   @include respond(sm) {
     width: 100%;
   }
+}
+
+.discount-wrapper {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  background-color: var(--color-primary);
+  aspect-ratio: 1 / 1;
+  border-radius: 500px;
 }
 
 img {
@@ -52,20 +65,17 @@ img {
 
 .price-wrapper {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
-}
-
-.price {
-  font-size: 20px;
-
-  @include respond(sm) {
-    font-size: 18px;
-  }
 }
 
 .stock {
   font-size: 16px;
+  margin-left: auto;
+
+  @include respond(sm) {
+    display: none;
+  }
 }
 
 button {

@@ -44,7 +44,6 @@ export class ProductService {
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
-          console.log('BACKEND PRODUCT RESPONSE', product);
           this.store.dispatch(updateProduct({ product }));
           this.store.dispatch(moveProductToCategory({ product }));
         })

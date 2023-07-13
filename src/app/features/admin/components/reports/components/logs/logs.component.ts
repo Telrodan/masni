@@ -36,8 +36,4 @@ export class LogsComponent implements OnInit {
       }))
     );
   }
-
-  filter() {
-    console.log('ASDasd');
-  }
 }

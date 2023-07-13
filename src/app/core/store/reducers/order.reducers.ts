@@ -27,8 +27,6 @@ export const orderReducers = createReducer(
       user: { ...order.user[0], phone: formatPhoneNumber(order.user[0].phone) }
     }));
 
-    console.log(orders);
-
     return {
       ...state,
       orders: orders,

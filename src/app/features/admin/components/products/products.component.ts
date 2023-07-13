@@ -39,7 +39,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       filter((products) => !!products),
       map((products) => {
         this.reloadProductsImages(products);
-        console.log(products);
+
         return [...products];
       }),
       untilDestroyed(this)
