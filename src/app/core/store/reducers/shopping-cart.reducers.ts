@@ -5,23 +5,33 @@ import {
   addShoppingCartItem,
   deleteShoppingCartItem,
   getShoppingCartItems,
+  getShoppingCartItemsError,
   getShoppingCartItemsSuccess
 } from '../actions/shopping-cart.actions';
+import { StatusTypes } from '../status-types';
 
 export const shoppingCartInitialState: ShoppingCartState = {
-  items: []
+  items: [],
+  status: StatusTypes.INIT
 };
 
 export const shoppingCartReducers = createReducer(
   shoppingCartInitialState,
 
   on(getShoppingCartItems, (state) => ({
-    ...state
+    ...state,
+    status: StatusTypes.LOADING
   })),
 
   on(getShoppingCartItemsSuccess, (state, action) => ({
     ...state,
-    items: action.items
+    items: action.items,
+    status: StatusTypes.LOADED
+  })),
+
+  on(getShoppingCartItemsError, (state) => ({
+    ...state,
+    status: StatusTypes.ERROR
   })),
 
   on(addShoppingCartItem, (state, action) => ({

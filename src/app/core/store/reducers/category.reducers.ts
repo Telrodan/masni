@@ -1,33 +1,43 @@
 import { createReducer, on } from '@ngrx/store';
+
 import {
   addCategory,
   addProductToCategory,
   deleteCategory,
   deleteProductFromCategory,
   getCategories,
+  getCategoriesError,
   getCategoriesSuccess,
   moveProductToCategory,
   updateCategory
 } from '../actions';
 import { CategoryState } from '../models/category-state.model';
-import { Category } from '@core/models/category.model';
+import { StatusTypes } from '../status-types';
 
 export const categoryInitialState: CategoryState = {
-  categories: []
+  categories: [],
+  status: StatusTypes.INIT
 };
 
 export const categoryReducers = createReducer(
   categoryInitialState,
   on(getCategories, (state) => ({
-    ...state
+    ...state,
+    status: StatusTypes.LOADING
   })),
 
   on(getCategoriesSuccess, (state, action) => {
     return {
       ...state,
-      categories: [...action.categories]
+      categories: [...action.categories],
+      status: StatusTypes.LOADED
     };
   }),
+
+  on(getCategoriesError, (state) => ({
+    ...state,
+    status: StatusTypes.ERROR
+  })),
 
   on(addCategory, (state, action) => ({
     ...state,

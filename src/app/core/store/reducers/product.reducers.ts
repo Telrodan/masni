@@ -3,28 +3,38 @@ import {
   addProduct,
   deleteProduct,
   getProducts,
+  getProductsError,
   getProductsSuccess,
   updateProduct
 } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
+import { StatusTypes } from '../status-types';
 
 export const productInitialState: ProductState = {
   allProducts: [],
-  availableProducts: []
+  availableProducts: [],
+  status: StatusTypes.INIT
 };
 
 export const productReducers = createReducer(
   productInitialState,
 
   on(getProducts, (state) => ({
-    ...state
+    ...state,
+    status: StatusTypes.LOADING
   })),
 
   on(getProductsSuccess, (state, action) => ({
     ...state,
     allProducts: action.products,
-    availableProducts: action.products.filter((product) => product.stock > 0)
+    availableProducts: action.products.filter((product) => product.stock > 0),
+    status: StatusTypes.LOADED
+  })),
+
+  on(getProductsError, (state) => ({
+    ...state,
+    status: StatusTypes.ERROR
   })),
 
   on(addProduct, (state, action) => {

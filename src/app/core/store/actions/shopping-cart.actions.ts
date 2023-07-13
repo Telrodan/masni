@@ -4,6 +4,7 @@ import { createAction, props } from '@ngrx/store';
 export enum ShoppingCartActionTypes {
   GET_ITEMS = '[Shopping Cart] Get Items',
   GET_ITEMS_SUCCESS = '[Shopping Cart] Get Items Success',
+  GET_ITEMS_ERROR = '[Shopping Cart] Get Items Error',
   ADD_ITEM = '[Shopping Cart] Add Item',
   DELETE_ITEM = '[Shopping Cart] Delete Item'
 }
@@ -15,6 +16,10 @@ export const getShoppingCartItems = createAction(
 export const getShoppingCartItemsSuccess = createAction(
   ShoppingCartActionTypes.GET_ITEMS_SUCCESS,
   props<{ items: ShoppingCartItem[] }>()
+);
+
+export const getShoppingCartItemsError = createAction(
+  ShoppingCartActionTypes.GET_ITEMS_ERROR
 );
 
 export const addShoppingCartItem = createAction(

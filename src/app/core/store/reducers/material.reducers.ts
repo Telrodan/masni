@@ -6,36 +6,49 @@ import {
   addMaterial,
   deleteMaterial,
   getMaterials,
+  getMaterialsError,
   getMaterialsSuccess,
   updateMaterial
 } from '@core/store/actions/';
 import { Material } from '@core/models/material.model';
+import { StatusTypes } from '../status-types';
 
 export const materialInitialState: MaterialState = {
   materials: [],
   availableMaterials: [],
-  sortedMaterials: null
+  sortedMaterials: null,
+  status: StatusTypes.INIT
 };
 
 export const materialReducers = createReducer(
   materialInitialState,
   on(getMaterials, (state) => ({
-    ...state
+    ...state,
+    status: StatusTypes.LOADING
   })),
+
   on(getMaterialsSuccess, (state, action) => {
     const availableMaterials = action.materials.filter(
       (material) => material.isAvailable
     );
+
     const sortedMaterials: SortedMaterials =
       SortedMaterials.sortMaterials(availableMaterials);
 
     return {
       ...state,
-      materials: action.materials,
+      materials: [...action.materials],
       availableMaterials,
-      sortedMaterials
+      sortedMaterials,
+      status: StatusTypes.LOADED
     };
   }),
+
+  on(getMaterialsError, (state) => ({
+    ...state,
+    status: StatusTypes.ERROR
+  })),
+
   on(addMaterial, (state, action) => {
     const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
 
