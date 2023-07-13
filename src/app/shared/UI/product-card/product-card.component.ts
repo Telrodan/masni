@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,14 +16,7 @@ export class ProductCardComponent {
 
   faCartShopping = faCartShopping;
 
-  constructor(private router: Router) {}
-
-  productDetails(): void {
-    this.router.navigate(['/shop', this.product.id]);
-  }
-
   changeSkeletonLoad(): void {
     this.isImageLoading = false;
-    console.log('image loaded');
   }
 }

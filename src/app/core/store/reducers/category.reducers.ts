@@ -120,17 +120,13 @@ export const categoryReducers = createReducer(
   on(moveProductToCategory, (state, action) => {
     const categories = [...state.categories];
 
-    console.log('ACTION', action.product);
     // Find the original category that contains the product
     const originalCategory = categories.find((category) =>
       category.products.includes(action.product.id)
     );
 
-    console.log('original category', originalCategory);
-
     // Check if the product needs to be moved to a different category
-    console.log('originalCategory.id', originalCategory.id);
-    console.log('action.product.categoryId', action.product.categoryId);
+
     if (originalCategory.id !== action.product.categoryId) {
       // Find the index of the original category in the categories array
       const originalCategoryIndex = categories.findIndex(

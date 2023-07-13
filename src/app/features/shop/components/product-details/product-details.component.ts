@@ -63,18 +63,20 @@ export class ProductDetailsComponent implements OnInit {
       ),
       map(([product, price]) => ({
         product,
-        price: product.price + price
+        price:
+          product.discountedPrice > 0
+            ? product.discountedPrice + price
+            : product.price + price
       }))
     );
   }
 
-  /**
-   *
-   * @param product
-   * @author
-   */
   onAddToCart(product: Product): void {
-    const modifiedProduct = { ...product };
+    const modifiedProduct = {
+      ...product,
+      price:
+        product.discountedPrice > 0 ? product.discountedPrice : product.price
+    };
     let nameEmbroidery = '';
     if (this.builderForm.value.nameEmbroideryCheckbox) {
       nameEmbroidery = this.builderForm.value.nameEmbroideryInput.trim();
@@ -88,6 +90,7 @@ export class ProductDetailsComponent implements OnInit {
     if (productExtra.nameEmbroidery) {
       modifiedProduct.price += 500;
     }
+
     this.shoppingCartService
       .addItemToCart(modifiedProduct, productExtra)
       .pipe(

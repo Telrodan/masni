@@ -75,6 +75,7 @@ export class AddProductComponent implements OnInit {
       description: new FormControl(null, Validators.required),
       images: new FormControl(null, Validators.required),
       price: new FormControl(null, Validators.required),
+      discountedPrice: new FormControl(0, Validators.required),
       stock: new FormControl(null, Validators.required)
     });
   }
@@ -94,6 +95,10 @@ export class AddProductComponent implements OnInit {
         product.append('images', image);
       });
       product.append('price', this.addProductForm.value.price);
+      product.append(
+        'discountedPrice',
+        this.addProductForm.value.discountedPrice
+      );
       product.append('stock', this.addProductForm.value.stock);
 
       this.productService

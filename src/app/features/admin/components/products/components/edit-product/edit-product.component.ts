@@ -86,8 +86,12 @@ export class EditProductComponent implements OnInit {
         editedProduct.append('images', image);
       });
       editedProduct.append('price', this.editProductForm.value.price);
+      editedProduct.append(
+        'discountedPrice',
+        this.editProductForm.value.discountedPrice
+      );
       editedProduct.append('stock', this.editProductForm.value.stock);
-      console.log('editedProduct', editedProduct.getAll('images'));
+
       this.productService
         .updateProduct$(editedProduct, this.data.id)
         .pipe(
@@ -111,6 +115,10 @@ export class EditProductComponent implements OnInit {
       description: new FormControl(product.description, Validators.required),
       images: new FormControl(product.images, Validators.required),
       price: new FormControl(product.price, Validators.required),
+      discountedPrice: new FormControl(
+        product.discountedPrice,
+        Validators.required
+      ),
       stock: new FormControl(product.stock, Validators.required)
     });
   }

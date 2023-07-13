@@ -53,12 +53,9 @@ export class NyuszkoBuilderComponent implements OnInit {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
     this.initForm();
     this.productData$ = combineLatest([
-      this.store$.select(selectCustomProductByName('nyuszkó')).pipe(
-        filter((product) => !!product),
-        tap((product) => {
-          console.log(product);
-        })
-      ),
+      this.store$
+        .select(selectCustomProductByName('nyuszkó'))
+        .pipe(filter((product) => !!product)),
       this.store$.select(sortedMaterialsSelector).pipe(
         filter((sortedMaterials) => !!sortedMaterials),
         map((sortedMaterials) => NyuszkoProduct.setUpMaterials(sortedMaterials))

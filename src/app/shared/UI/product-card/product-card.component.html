@@ -1,4 +1,8 @@
-<div class="product-card" (click)="productDetails()">
+<div class="product-card" [routerLink]="product.id">
+  <div *ngIf="product.discountedPrice > 0" class="discount-wrapper shadow-5">
+    <p>-{{ product.discountPercentage }}%</p>
+  </div>
+
   <img
     [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
     [src]="product.images[0]"
@@ -15,7 +19,8 @@
       aspectRatio: '1 / 1',
       borderRadius: '5px',
       background: 'lightGrey'
-    }"></ngx-skeleton-loader>
+    }">
+  </ngx-skeleton-loader>
 
   <div class="details">
     <p class="title">
@@ -28,7 +33,22 @@
 
     <div class="wrapper">
       <div class="price-wrapper">
-        <p class="price text-primary">{{ product.price }} Ft</p>
+        <p
+          class="mr-3"
+          [ngClass]="
+            product.discountedPrice > 0
+              ? 'text-red-500 line-through'
+              : 'text-primary'
+          ">
+          {{ product.price }} Ft
+        </p>
+
+        <p
+          *ngIf="product.discountedPrice > 0"
+          class="discounted-price text-primary">
+          {{ product.discountedPrice }} Ft
+        </p>
+
         <p class="stock">Készleten: {{ product.stock }}</p>
       </div>
 
