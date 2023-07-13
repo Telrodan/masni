@@ -1,26 +1,21 @@
-<div class="product-card" [routerLink]="product.id">
+<div class="product-card" (click)="onProductDetails()">
   <div *ngIf="product.discountedPrice > 0" class="discount-wrapper shadow-5">
     <p>-{{ product.discountPercentage }}%</p>
   </div>
 
-  <img
-    [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
-    [src]="product.images[0]"
-    (load)="changeSkeletonLoad()" />
+  <div class="image-wrapper">
+    <img
+      [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
+      [src]="product.images[0]"
+      (load)="changeSkeletonLoad()" />
 
-  <ngx-skeleton-loader
-    *ngIf="isImageLoading"
-    appearance="circle"
-    animation="pulse"
-    [theme]="{
-      margin: '0',
-      width: '100%',
-      paddingBottom: '100%',
-      aspectRatio: '1 / 1',
-      borderRadius: '5px',
-      background: 'lightGrey'
-    }">
-  </ngx-skeleton-loader>
+    <p-skeleton
+      *ngIf="isImageLoading"
+      styleClass="skeleton"
+      width="w-full"
+      height="h-full">
+    </p-skeleton>
+  </div>
 
   <div class="details">
     <p class="title">
