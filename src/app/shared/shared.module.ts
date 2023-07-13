@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CarouselModule } from 'primeng/carousel';
 import { RippleModule } from 'primeng/ripple';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { ProductCardComponent } from './UI/product-card/product-card.component';
 import { CarouselComponent } from './UI/carousel/carousel.component';
@@ -20,7 +21,7 @@ import { OrderSuccessComponent } from './UI/order-success/order-success.componen
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { CarouselItemComponent } from './UI/carousel-with-heading-and-button/components/carousel-item/carousel-item.component';
 
-const PRIME_NG = [CarouselModule, RippleModule, ButtonModule];
+const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
 
 @NgModule({
   declarations: [
