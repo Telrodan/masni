@@ -35,6 +35,7 @@ export class ShopComponent implements OnInit {
 
   first = 0;
   rows = 8;
+  elementRef: any;
 
   constructor(private store$: Store) {}
 
@@ -89,6 +90,10 @@ export class ShopComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent): void {
+    const shop = document.getElementById('shop');
+    if (shop) {
+      shop.scrollIntoView({ behavior: 'smooth' });
+    }
     this.first = event.first;
     this.rows = event.rows;
   }
