@@ -18,3 +18,11 @@
     grid-row-gap: 0;
   }
 }
+
+.categories-form {
+  display: flex;
+
+  @include respond(sm) {
+    flex-direction: column;
+  }
+}

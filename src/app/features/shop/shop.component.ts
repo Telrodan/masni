@@ -1,12 +1,19 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Category } from '@core/models/category.model';
-import { Product } from '@core/models/product.model';
-import { selectAllProducts, userSelector } from '@core/store';
-// import { availableProductsSelector } from '@core/store';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { Observable, filter, tap, map } from 'rxjs';
+import { filter, map, combineLatest, startWith } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { Product } from '@core/models/product.model';
+import { selectAvailableProducts } from '@core/store';
+
+interface PageEvent {
+  first: number;
+  rows: number;
+  page: number;
+  pageCount: number;
+}
 
 @UntilDestroy()
 @Component({
@@ -16,28 +23,73 @@ import { Observable, filter, tap, map } from 'rxjs';
   encapsulation: ViewEncapsulation.None
 })
 export class ShopComponent implements OnInit {
-  products$: Observable<Product[]>;
-  categories$: Observable<Category[]>;
-  cartId: string;
+  products: Product[];
+  categories: {
+    category: string;
+  }[];
+  categoriesForm = new FormGroup({
+    category: new FormControl('Összes', Validators.required),
+    price: new FormControl('Növekvő', Validators.required)
+  });
+  prices = [{ price: 'Csökkenő' }, { price: 'Növekvő' }];
 
-  constructor(private store: Store) {}
+  first = 0;
+  rows = 8;
 
-  public ngOnInit(): void {
-    this.store.select(userSelector).pipe(
-      filter((user) => !!user),
-      map((user) => user.shoppingCart.id)
-    );
+  constructor(private store$: Store) {}
 
-    this.products$ = this.store.select(selectAllProducts).pipe(
-      filter((products) => !!products),
-      map((products) => {
-        products = products.filter(
-          (product) => product.category !== 'egyedi termékek'
-        );
+  ngOnInit(): void {
+    combineLatest([
+      this.store$.select(selectAvailableProducts).pipe(
+        filter((products) => !!products),
+        map((products) =>
+          products.filter((product) => product.category !== 'egyedi termékek')
+        )
+      ),
+      this.categoriesForm
+        .get('category')
+        .valueChanges.pipe(
+          startWith(this.categoriesForm.get('category').value)
+        ),
+      this.categoriesForm
+        .get('price')
+        .valueChanges.pipe(startWith(this.categoriesForm.get('price').value))
+    ])
+      .pipe(
+        map(([products, category, price]) => {
+          const categoriesArr = [
+            ...new Set(products.map((product) => product.category))
+          ];
+          this.first = 0;
 
-        return products.filter((product) => product.stock > 0);
-      }),
-      untilDestroyed(this)
-    );
+          this.categories = categoriesArr.map((category) => ({
+            category
+          }));
+
+          this.categories.unshift({ category: 'Összes' });
+          this.products = products;
+
+          if (category === 'Összes') {
+            this.products = products;
+          } else {
+            this.products = products.filter(
+              (product) => product.category === category
+            );
+          }
+
+          if (price === 'Csökkenő') {
+            this.products = this.products.sort((a, b) => b.price - a.price);
+          } else if (price === 'Növekvő') {
+            this.products = this.products.sort((a, b) => a.price - b.price);
+          }
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.first = event.first;
+    this.rows = event.rows;
   }
 }
