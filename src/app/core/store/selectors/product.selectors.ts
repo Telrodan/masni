@@ -8,6 +8,11 @@ export const selectAllProducts = createSelector(
   (state) => state.allProducts
 );
 
+export const selectAvailableProducts = createSelector(
+  selectProductState,
+  (state) => state.availableProducts
+);
+
 export const selectCustomProductByName = (name: string) =>
   createSelector(selectAllProducts, (products) =>
     products.find((product) => {

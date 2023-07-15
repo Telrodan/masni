@@ -32,6 +32,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ScrollTopModule } from 'primeng/scrolltop';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -90,7 +91,8 @@ const PRIME_NG = [
   GalleriaModule,
   ToggleButtonModule,
   StyleClassModule,
-  ScrollTopModule
+  ScrollTopModule,
+  PaginatorModule
 ];
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
