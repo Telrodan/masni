@@ -35,7 +35,6 @@ export class ShopComponent implements OnInit {
 
   first = 0;
   rows = 8;
-  elementRef: any;
 
   constructor(private store$: Store) {}
 
