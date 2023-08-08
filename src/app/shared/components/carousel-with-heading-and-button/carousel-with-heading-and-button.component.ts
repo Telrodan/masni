@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 export interface CarouselData {
   heading: string;
@@ -15,8 +15,12 @@ export interface CarouselData {
   templateUrl: './carousel-with-heading-and-button.component.html',
   styleUrls: ['./carousel-with-heading-and-button.component.scss']
 })
-export class CarouselWithHeadingAndButtonComponent {
+export class CarouselWithHeadingAndButtonComponent implements OnInit {
   @Input() carouselData: CarouselData;
+
+  ngOnInit(): void {
+    console.log('CAROUSEL DATA', this.carouselData);
+  }
 
   isImageLoading = true;
 

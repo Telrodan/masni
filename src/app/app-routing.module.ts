@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { LandingComponent } from './features/landing/landing.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { SamplesComponent } from './features/samples/samples.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -14,6 +13,11 @@ import { HasRoleGuard } from '@core/guards/has-role.guard';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
 import { OrderSuccessComponent } from './shared/UI/order-success/order-success.component';
+
+const landingPageModule = () =>
+  import('./features/landing-page/landing-page.module').then(
+    (m) => m.LandingPageModule
+  );
 
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
@@ -39,7 +43,7 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: LandingComponent
+    loadChildren: landingPageModule
   },
   {
     path: 'auth',

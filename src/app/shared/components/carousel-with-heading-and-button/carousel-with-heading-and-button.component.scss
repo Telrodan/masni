@@ -1,12 +1,7 @@
 @import 'mixins';
 
-:host {
-  display: block;
-}
-
-.carousel {
-  width: 100%;
-  text-align: center;
+section {
+  @include section;
 }
 
 h1 {

@@ -13,13 +13,14 @@ import { CarouselComponent } from './UI/carousel/carousel.component';
 import { MenuItemComponent } from './UI/menu-item/menu-item.component';
 import { ImageCompositionComponent } from './UI/image-composition/image-composition.component';
 import { SpinnerComponent } from './UI/spinner/spinner.component';
-import { CarouselWithHeadingAndButtonComponent } from './UI/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
+import { CarouselWithHeadingAndButtonComponent } from './components/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
 import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
 import { OrderSuccessComponent } from './UI/order-success/order-success.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { CarouselItemComponent } from './UI/carousel-with-heading-and-button/components/carousel-item/carousel-item.component';
+import { CarouselItemComponent } from './components/carousel-with-heading-and-button/components/carousel-item/carousel-item.component';
+import { ScrollableImageWithTitleComponent } from './components/scrollable-image-with-title/scrollable-image-with-title.component';
 
 const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
 
@@ -33,7 +34,8 @@ const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
     CarouselWithHeadingAndButtonComponent,
     ConfirmDialogComponent,
     OrderSuccessComponent,
-    CarouselItemComponent
+    CarouselItemComponent,
+    ScrollableImageWithTitleComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +53,8 @@ const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
     MenuItemComponent,
     ImageCompositionComponent,
     SpinnerComponent,
-    CarouselWithHeadingAndButtonComponent
+    CarouselWithHeadingAndButtonComponent,
+    ScrollableImageWithTitleComponent
   ]
 })
 export class SharedModule {}

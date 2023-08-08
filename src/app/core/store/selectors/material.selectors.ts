@@ -4,7 +4,7 @@ import { createSelector } from '@ngrx/store';
 
 export const selectMaterialState = (state: AppState) => state.material;
 
-export const materialsSelector = createSelector(
+export const selectAllMaterial = createSelector(
   selectMaterialState,
   (state) => state.materials
 );
@@ -15,7 +15,7 @@ export const sortedMaterialsSelector = createSelector(
 );
 
 export const materialExtraByNameSelector = (materialName: string) =>
-  createSelector(materialsSelector, (materials) => {
+  createSelector(selectAllMaterial, (materials) => {
     const material = materials.find(
       (material) => material.name === materialName
     );

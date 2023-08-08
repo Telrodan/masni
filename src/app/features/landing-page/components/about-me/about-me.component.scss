@@ -1,8 +1,7 @@
 @import 'mixins';
 
-.about-me {
-  margin: 0 auto 120px;
-  width: 70%;
+section {
+  @include section;
 
   @include respond(sm) {
     margin: 0 auto 80px;
