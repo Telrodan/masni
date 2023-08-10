@@ -1,4 +1,5 @@
-@import '../../../../../scss/mixins';
+@import 'mixins';
+@import 'colors';
 
 .builder {
   display: flex;
@@ -22,7 +23,7 @@
 
   .container {
     width: 50%;
-    border: 2px solid var(--color-tertiary);
+    border: 2px solid $color-tertiary;
     padding: 20px 30px;
     border-radius: 5px;
 

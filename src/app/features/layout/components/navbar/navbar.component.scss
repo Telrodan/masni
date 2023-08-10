@@ -1,8 +1,9 @@
 @import 'mixins';
+@import 'colors';
 
 .navbar,
 .sidebar {
-  background-color: var(--color-primary);
+  background-color: $color-primary;
 
   i {
     font-size: 20px;
@@ -22,7 +23,7 @@
   justify-content: center;
   height: 18px;
   width: 18px;
-  background-color: var(--color-red);
+  background-color: $color-red;
   color: white;
   border-radius: 500px;
   font-size: 12px;

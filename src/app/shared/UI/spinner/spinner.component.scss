@@ -1,3 +1,5 @@
+@import 'colors';
+
 .container {
   position: fixed;
   top: 0;
@@ -7,7 +9,7 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: var(--color-primary-transparent);
+  background-color: rgba($color-primary, 0.3);
   backdrop-filter: blur(2px);
   z-index: 10000000;
 }
@@ -29,7 +31,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--color-secondary);
+  background: $color-secondary;
   margin: -4px 0 0 -4px;
 }
 .spinner div:nth-child(1) {
