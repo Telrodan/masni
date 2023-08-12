@@ -14,11 +14,9 @@ import { ApiService } from './api.service';
 export class CategoryService {
   constructor(private apiService: ApiService, private store: Store) {}
 
-  addCategory$(name: string): Observable<Category> {
+  addCategory$(category: FormData): Observable<Category> {
     return this.apiService
-      .post<ApiResponse<Category>>('category/addOne', {
-        name
-      })
+      .post<ApiResponse<Category>>('category/addOne', category)
       .pipe(
         map((categoryDTO) => categoryDTO.data),
         tap((category) => {
@@ -27,15 +25,18 @@ export class CategoryService {
       );
   }
 
-  updateCategory$(category: Category): Observable<Category> {
+  updateCategory$(
+    category: FormData,
+    categoryId: string
+  ): Observable<Category> {
     return this.apiService
       .patch<ApiResponse<Category>>(
-        `category/updateOne/${category.id}`,
+        `category/updateOne/${categoryId}`,
         category
       )
       .pipe(
         map((categoriesDTO) => categoriesDTO.data),
-        tap(() => {
+        tap((category) => {
           this.store.dispatch(updateCategory({ category }));
         })
       );

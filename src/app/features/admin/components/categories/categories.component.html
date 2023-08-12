@@ -31,6 +31,8 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th class="w-9rem">Kép</th>
+
         <th>Azonosító</th>
 
         <th>Név</th>
@@ -44,8 +46,37 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-category>
+    <ng-template pTemplate="body" let-category let-i="rowIndex">
       <tr>
+        <td>
+          <img
+            class="hidden"
+            [src]="images[i]"
+            [alt]="'Inspiráció ' + i"
+            (load)="imageLoaded(i)" />
+
+          <p-image
+            *ngIf="imageLoadedStatus[i]"
+            [src]="category.image"
+            [alt]="'Inspiráció ' + i"
+            [preview]="true">
+          </p-image>
+
+          <ngx-skeleton-loader
+            *ngIf="!imageLoadedStatus[i]"
+            appearance="circle"
+            animation="pulse"
+            [theme]="{
+              margin: '0',
+              width: '100%',
+              paddingBottom: '100%',
+              aspectRatio: '1 / 1',
+              borderRadius: '0',
+              background: 'lightGrey'
+            }">
+          </ngx-skeleton-loader>
+        </td>
+
         <td>{{ category._id }}</td>
 
         <td>{{ category.name }}</td>

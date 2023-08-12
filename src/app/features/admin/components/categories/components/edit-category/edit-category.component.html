@@ -4,11 +4,45 @@
 <mat-dialog-content>
   <form [formGroup]="editCategoryForm" class="mt-2">
     <div class="form-group">
-      <label for="name" class="block font-medium text-900 mb-1">
+      <label for="name" class="block font-medium text-blue-500 mb-1">
         Kategória neve
       </label>
 
       <input id="name" formControlName="name" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-blue-500 mb-1">Kategória képe</label>
+
+      <p-button
+        *ngIf="!imagePreview"
+        icon="pi pi-image"
+        styleClass="p-button p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <input
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <img
+        *ngIf="imagePreview"
+        class="mb-2 image-preview"
+        [src]="imagePreview"
+        alt="Inspiration" />
+
+      <button
+        *ngIf="imagePreview"
+        pButton
+        pRipple
+        pTooltip="Kép törlése"
+        tooltipPosition="bottom"
+        (click)="onImageClear(imagePicker)"
+        type="button"
+        icon="pi pi-times"
+        class="p-button p-button-danger p-button"></button>
     </div>
   </form>
 </mat-dialog-content>
@@ -16,7 +50,7 @@
 <mat-dialog-actions class="flex justify-content-end">
   <p-button
     label="Mégsem"
-    styleClass="p-button p-button-danger mr-4"
+    styleClass="p-button-outlined p-button-danger mr-4"
     mat-dialog-close>
   </p-button>
 
