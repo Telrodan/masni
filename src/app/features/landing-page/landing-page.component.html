@@ -1,0 +1,19 @@
+<mhd-scrollable-image-with-title
+  [title]="'Nyuszkó Kuckó'"
+  [imageUrl]="'../../../assets/images/landing-page/test.jpg'"
+  [elementToScrollTo]="main">
+</mhd-scrollable-image-with-title>
+
+<main #main>
+  <mhd-products-carousel></mhd-products-carousel>
+
+  <mhd-about-me></mhd-about-me>
+
+  <mhd-carousel-with-heading-and-button
+    [carouselData]="inspirationCarouselData$ | async">
+  </mhd-carousel-with-heading-and-button>
+
+  <mhd-carousel-with-heading-and-button
+    [carouselData]="materialCarouselData$ | async">
+  </mhd-carousel-with-heading-and-button>
+</main>

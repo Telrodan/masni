@@ -1,4 +1,5 @@
 @import 'mixins';
+@import 'colors';
 
 :host {
   width: 100%;
@@ -21,10 +22,10 @@
   display: flex;
   align-items: center;
   padding: 4px;
-  background-color: var(--color-primary);
+  background-color: $color-primary;
   aspect-ratio: 1 / 1;
   border-radius: 500px;
-  border: 2px solid var(--color-background);
+  border: 2px solid $color-background;
 
   @include respond(sm) {
     top: 4px;
@@ -49,6 +50,7 @@ img {
   display: flex;
   flex-direction: column;
   height: 180px;
+  text-align: left;
 
   @include respond(sm) {
     height: auto;

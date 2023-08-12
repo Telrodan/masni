@@ -1,4 +1,4 @@
-<div class="product-card" (click)="onProductDetails()">
+<div class="product-card" (click)="onProductDetails()" *ngIf="product">
   <div *ngIf="product.discountedPrice > 0" class="discount-wrapper shadow-5">
     <p>-{{ product.discountPercentage }}%</p>
   </div>

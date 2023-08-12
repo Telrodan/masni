@@ -6,7 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { Table } from 'primeng/table';
 
-import { materialsSelector } from '@core/store';
+import { selectAllMaterial } from '@core/store';
 import { Material } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -39,7 +39,7 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.materials$ = this.store.select(materialsSelector).pipe(
+    this.materials$ = this.store.select(selectAllMaterial).pipe(
       map((materials) => {
         this.reloadMaterialsImages(materials);
 

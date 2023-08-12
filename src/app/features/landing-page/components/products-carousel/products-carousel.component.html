@@ -1,0 +1,26 @@
+<ng-container *ngIf="products$ | async as products">
+  <section>
+    <p-carousel
+      [value]="products"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="10000"
+      [showNavigators]="true"
+      [showIndicators]="false"
+      [responsiveOptions]="responsiveOptions">
+      <ng-template pTemplate="header">
+        <h1 class="heading-primary">Termékek készleten</h1>
+      </ng-template>
+      <ng-template let-product pTemplate="item">
+        <div class="item-content">
+          <mhd-product-card [product]="product"></mhd-product-card>
+        </div>
+      </ng-template>
+    </p-carousel>
+
+    <button routerLink="/shop" class="secondary-button shadow-2">
+      Mindet Megnézem
+    </button>
+  </section>
+</ng-container>

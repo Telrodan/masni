@@ -1,0 +1,9 @@
+<ng-container *ngIf="imageUrl">
+  <div [style.background-image]="backgroundImage" class="content">
+    <h1>{{ title }}</h1>
+
+    <button (click)="scrollToElement()">
+      <i class="pi pi-angle-down"></i>
+    </button>
+  </div>
+</ng-container>

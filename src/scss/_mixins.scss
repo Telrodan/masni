@@ -25,3 +25,15 @@
     }
   }
 }
+
+@mixin section {
+  width: 80%;
+  margin: 120px auto;
+  text-align: center;
+
+  @include respond(sm) {
+    margin: 80px auto;
+    width: 100%;
+    padding: 0 10px;
+  }
+}

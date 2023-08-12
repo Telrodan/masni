@@ -47,8 +47,6 @@ import {
   ShoppingCartEffects,
   UserEffects
 } from '@core/store/effects';
-import { LandingComponent } from '@features/landing/landing.component';
-import { AboutMeComponent } from '@features/landing/components/about-me/about-me.component';
 import { NyuszkoShopModule } from '@features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from '@features/masni-shop/masni-shop.module';
 import { ContactComponent } from '@features/contact/contact.component';
@@ -60,12 +58,10 @@ import { UserProfileComponent } from '@features/user-profile/user-profile.compon
 import { ProductDetailsComponent } from '@features/shop/components/product-details/product-details.component';
 import { SamplesComponent } from '@features/samples/samples.component';
 import { ShoppingCartComponent } from '@features/shopping-cart/shopping-cart.component';
-import { ProductsCarouselComponent } from '@features/landing/components/products-carousel/products-carousel.component';
 import { InspirationPageComponent } from '@features/inspiration-page/inspiration-page.component';
 import { environment } from 'src/environments/environment';
 import { reducers } from './core/store/app-state';
 import { SharedModule } from './shared/shared.module';
-import { BrandsMenuComponent } from '@features/landing/components/brands-menu/brands-menu.component';
 import { LayoutComponent } from './features/layout/layout.component';
 import { NavbarComponent } from '@features/layout/components/navbar/navbar.component';
 import { FooterComponent } from '@features/layout/components/footer/footer.component';
@@ -102,9 +98,6 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
     AppComponent,
     NavbarComponent,
     FooterComponent,
-    LandingComponent,
-    BrandsMenuComponent,
-    AboutMeComponent,
     ContactComponent,
     ShopComponent,
     ProductDetailsComponent,
@@ -113,7 +106,6 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
     UserProfileComponent,
     SamplesComponent,
     ShoppingCartComponent,
-    ProductsCarouselComponent,
     InspirationPageComponent,
     LayoutComponent
   ],

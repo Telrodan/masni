@@ -1,4 +1,5 @@
-@import './mixins';
+@import 'mixins';
+@import 'colors';
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
 // font-family: 'Nunito', sans-serif;
@@ -10,8 +11,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
 // font-family: 'Amatic SC', cursive;
 
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+// font-family: 'Arimo', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400&display=swap');
+// font-family: 'Oswald', sans-serif;
+
 body {
-  color: var(--color-text);
+  color: $color-black;
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
 
@@ -28,7 +35,7 @@ body {
 }
 
 .heading-primary {
-  color: var(--color-text);
+  color: $color-black;
   font-size: 60px;
   line-height: 60px;
 
@@ -48,7 +55,7 @@ body {
 .heading-tertiary {
   display: inline-block;
   padding: 10px 20px;
-  color: var(--color-text);
+  color: $color-black;
   background-color: rgba(255, 255, 255, 0.843);
   box-shadow: 0 3px 5px rgba(139, 139, 139, 0.8);
   font-size: 60px;
