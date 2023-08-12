@@ -43,6 +43,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailsComponent } from './components/users/components/user-details/user-details.component';
 import { LogsComponent } from './components/reports/components/logs/logs.component';
+import { QuestionsComponent } from './components/questions/questions.component';
 
 const PRIME_NG = [
   CardModule,
@@ -86,7 +87,8 @@ const PRIME_NG = [
     OrdersComponent,
     UsersComponent,
     UserDetailsComponent,
-    LogsComponent
+    LogsComponent,
+    QuestionsComponent
   ],
   imports: [
     CommonModule,

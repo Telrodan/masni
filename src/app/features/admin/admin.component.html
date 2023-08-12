@@ -3,167 +3,97 @@
     id="app-sidebar-1"
     class="h-screen hidden lg:block flex-shrink-0 fixed lg:sticky left-0 top-0 z-1 border-right-1 border-400 select-none"
     style="width: 280px">
-    <div class="flex flex-column h-full">
-      <div class="overflow-y-auto">
-        <ul class="list-none p-3 m-0">
-          <li>
-            <ul class="list-none p-0 m-0 overflow-hidden">
-              <li>
-                <a
-                  routerLink="reports"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-chart-line mr-2"></i>
-                  <span class="font-medium">Jelentések</span>
-                </a>
-              </li>
+    <ul class="list-none p-3 m-0">
+      <li>
+        <a
+          routerLink="reports"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-chart-line mr-2"></i>
+          <span class="font-medium">Jelentések</span>
+        </a>
+      </li>
 
-              <li>
-                <a
-                  routerLink="categories"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-bookmark mr-2"></i>
-                  <span class="font-medium">Kategóriák</span>
-                </a>
-              </li>
+      <li>
+        <a
+          routerLink="categories"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-bookmark mr-2"></i>
+          <span class="font-medium">Kategóriák</span>
+        </a>
+      </li>
 
-              <li>
-                <a
-                  routerLink="materials"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-palette mr-2"></i>
-                  <span class="font-medium">Minták</span>
-                </a>
-              </li>
+      <li>
+        <a
+          routerLink="materials"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-palette mr-2"></i>
+          <span class="font-medium">Minták</span>
+        </a>
+      </li>
 
-              <li>
-                <a
-                  routerLink="inspirations"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-sun mr-2"></i>
-                  <span class="font-medium">Inspirációk</span>
-                </a>
-              </li>
+      <li>
+        <a
+          routerLink="inspirations"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-sun mr-2"></i>
+          <span class="font-medium">Inspirációk</span>
+        </a>
+      </li>
 
-              <li>
-                <a
-                  routerLink="products"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-box mr-2"></i>
-                  <span class="font-medium">Termékek</span>
-                </a>
-              </li>
+      <li>
+        <a
+          routerLink="questions"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-question mr-2"></i>
+          <span class="font-medium">Kérdések</span>
+        </a>
+      </li>
 
-              <li>
-                <a
-                  routerLink="orders"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-file mr-2"></i>
-                  <span class="font-medium">Rendelések</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  routerLink="users"
-                  routerLinkActive="surface-50 border-solid border-grey-100 border-1"
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-users mr-2"></i>
-                  <span class="font-medium">Felhasználok</span>
-                </a>
-              </li>
-              <!-- <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-comments mr-2"></i>
-                  <span class="font-medium">Messages</span>
-                  <span
-                    class="inline-flex align-items-center justify-content-center ml-auto bg-blue-500 text-0 border-circle"
-                    style="min-width: 1.5rem; height: 1.5rem"
-                    >3</span
-                  >
-                </a>
-              </li>
-              <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-calendar mr-2"></i>
-                  <span class="font-medium">Calendar</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-cog mr-2"></i>
-                  <span class="font-medium">Settings</span>
-                </a>
-              </li> -->
-            </ul>
-          </li>
-        </ul>
-        <!-- <ul class="list-none p-3 m-0">
-          <li>
-            <div
-              pRipple
-              class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer"
-              pStyleClass="@next"
-              enterClass="hidden"
-              enterActiveClass="slidedown"
-              leaveToClass="hidden"
-              leaveActiveClass="slideup">
-              <span class="font-medium">APPLICATION</span>
-              <i class="pi pi-chevron-down"></i>
-            </div>
-            <ul class="list-none p-0 m-0 overflow-hidden">
-              <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-folder mr-2"></i>
-                  <span class="font-medium">Projects</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-chart-bar mr-2"></i>
-                  <span class="font-medium">Performance</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  pRipple
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
-                  <i class="pi pi-cog mr-2"></i>
-                  <span class="font-medium">Settings</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul> -->
-      </div>
-    </div>
+      <li>
+        <a
+          routerLink="products"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-box mr-2"></i>
+          <span class="font-medium">Termékek</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="orders"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-file mr-2"></i>
+          <span class="font-medium">Rendelések</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="users"
+          routerLinkActive="surface-50 border-solid border-grey-100 border-1"
+          pRipple
+          class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-50 transition-duration-150 transition-colors">
+          <i class="pi pi-users mr-2"></i>
+          <span class="font-medium">Felhasználok</span>
+        </a>
+      </li>
+    </ul>
   </div>
-  <div class="min-h-screen flex flex-column relative flex-auto">
-    <div class="p-5 flex flex-column flex-auto">
-      <div class="flex-auto">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+  <div class="p-5 flex flex-column flex-auto">
+    <router-outlet></router-outlet>
   </div>
 </div>
