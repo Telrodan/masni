@@ -23,6 +23,9 @@ import { AddCategoryComponent } from './components/add-category/add-category.com
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
 
+  images: string[];
+  imageLoadedStatus: boolean[] = [];
+
   constructor(
     private store: Store,
     private categoryService: CategoryService,
@@ -33,7 +36,11 @@ export class CategoriesComponent implements OnInit {
   ngOnInit(): void {
     this.categories$ = this.store.select(selectAllCategories).pipe(
       filter((categories) => !!categories),
-      map((categories) => [...categories]),
+      map((categories) => {
+        this.reloadCategoriesImages(categories);
+
+        return [...categories];
+      }),
       untilDestroyed(this)
     );
   }
@@ -70,6 +77,19 @@ export class CategoriesComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  imageLoaded(index: number) {
+    this.imageLoadedStatus[index] = true;
+  }
+
+  reloadCategoriesImages(categories: Category[]) {
+    this.images = categories.map((inspiration) => {
+      const timestamp = new Date().getTime();
+
+      return inspiration.image + `?timestamp=${timestamp}`;
+    });
+    this.imageLoadedStatus = this.images.map(() => false);
   }
 
   applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
