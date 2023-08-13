@@ -1,1 +1,21 @@
-<p>questions works!</p>
+<p-card header="Kérdések">
+  <p-table
+    #table
+    styleClass="p-datatable-gridlines"
+    [value]="[1, 2, 3]"
+    [globalFilterFields]="['id', 'name', 'category']"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-button
+          icon="pi pi-plus"
+          label="Kérdés hozzáadása"
+          styleClass="p-button p-button-success"
+          (click)="onAddQuestion()">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-table>
+</p-card>

@@ -1,0 +1,37 @@
+<i class="pi pi-times close" mat-dialog-close></i>
+
+<h2 mat-dialog-title>Kérdés hozzáadása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="selectQuestionTypeForm">
+    <p-selectButton
+      formControlName="questionType"
+      [options]="questionOptions"
+      optionLabel="label"
+      optionValue="value">
+    </p-selectButton>
+  </form>
+
+  <ng-container
+    *ngIf="
+      selectQuestionTypeForm.get('questionType').value ===
+      QuestionType.QUESTION_WITH_STRING_ANSWER
+    ">
+    <mhd-add-question-with-string-answer></mhd-add-question-with-string-answer>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-content-end">
+  <p-button
+    label="Mégsem"
+    styleClass="p-button-outlined p-button-danger mr-4"
+    mat-dialog-close>
+  </p-button>
+
+  <p-button
+    type="submit"
+    label="Hozzáadás"
+    styleClass="p-button"
+    (click)="onSubmit()">
+  </p-button>
+</mat-dialog-actions>
