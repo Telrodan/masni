@@ -6,6 +6,7 @@ import {
   QuestionWithStringAnswer,
   QuestionWithStringAnswerOption
 } from '@core/models/question-with-string-answer.model';
+import { Option, Question } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -27,7 +28,7 @@ export class AddQuestionWithStringAnswerComponent implements OnInit {
     extraPrice: [0],
     options: this.fb.array([], Validators.required)
   });
-  options: QuestionWithStringAnswerOption[] = [];
+  options: Option[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +45,7 @@ export class AddQuestionWithStringAnswerComponent implements OnInit {
       )
       .subscribe();
   }
-  // this.questionWithStringAnswerForm.value.questionName
+
   addOption(): void {
     const options = this.questionWithStringAnswerForm.get(
       'options'
@@ -93,8 +94,7 @@ export class AddQuestionWithStringAnswerComponent implements OnInit {
         this.questionWithStringAnswerForm.value.questionName.trim();
       const question = this.questionWithStringAnswerForm.value.question.trim();
 
-      const questionWithStringAnswer: QuestionWithStringAnswer = {
-        questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
+      const questionWithStringAnswer: Question = {
         questionName: questionName,
         question: question,
         options: this.questionWithStringAnswerForm.value
@@ -102,7 +102,7 @@ export class AddQuestionWithStringAnswerComponent implements OnInit {
       };
 
       this.questionService
-        .addQuestionWithStringAnswer(questionWithStringAnswer)
+        .addQuestion$(questionWithStringAnswer)
         .pipe(
           tap(() => {
             this.toastr.success('Kérdés sikeresen hozzáadva');

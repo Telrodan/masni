@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { QuestionWithStringAnswer } from '@core/models/question-with-string-answer.model';
 import { Observable, Subject, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
+import { Question } from '@core/models/question.model';
+import { Store } from '@ngrx/store';
+import { addQuestion } from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +14,26 @@ export class QuestionService {
 
   submitButtonClick$ = this.buttonClickSubject.asObservable();
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private store$: Store) {}
 
   emitButtonClick(): void {
     this.buttonClickSubject.next();
   }
 
-  addQuestionWithStringAnswer(
-    question: QuestionWithStringAnswer
-  ): Observable<QuestionWithStringAnswer> {
+  addQuestion$(question: Question): Observable<Question> {
     return this.apiService
-      .post<ApiResponse<QuestionWithStringAnswer>>(
-        'question/addQuestionWithStringAnswer',
-        question
-      )
+      .post<ApiResponse<Question>>('question/addQuestion', question)
       .pipe(
         map((questionDTO) => questionDTO.data),
         tap((question) => {
-          // TODO: dispatch action
+          this.store$.dispatch(addQuestion({ question }));
         })
       );
+  }
+
+  getQuestions$(): Observable<Question[]> {
+    return this.apiService
+      .get<ApiResponse<Question[]>>('question/getQuestions')
+      .pipe(map((questionsDTO) => questionsDTO.data));
   }
 }
