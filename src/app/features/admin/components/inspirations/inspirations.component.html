@@ -1,76 +1,78 @@
-<p-card header="Inspirációk" *ngIf="inspirations$ | async as inspirations">
-  <p-table
-    styleClass="p-datatable-gridlines"
-    [value]="inspirations"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
-    <ng-template pTemplate="caption">
-      <div class="flex">
-        <p-button
-          icon="pi pi-plus"
-          label="Hozzáadás"
-          styleClass="p-button p-button-success"
-          (click)="onAddInspiration()">
-        </p-button>
-      </div>
-    </ng-template>
+<ng-container *ngIf="inspirations$ | async as inspirations">
+  <p-card header="Inspirációk">
+    <p-table
+      styleClass="p-datatable-gridlines"
+      [value]="inspirations"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <p-button
+            icon="pi pi-plus"
+            label="Hozzáadás"
+            styleClass="p-button p-button-success"
+            (click)="onAddInspiration()">
+          </p-button>
+        </div>
+      </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="w-9rem">Kép</th>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="w-9rem">Kép</th>
 
-        <th>Azonosító</th>
+          <th>Azonosító</th>
 
-        <th>Opciók</th>
-      </tr>
-    </ng-template>
+          <th>Opciók</th>
+        </tr>
+      </ng-template>
 
-    <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
-      <tr>
-        <td>
-          <img
-            class="hidden"
-            [src]="images[i]"
-            [alt]="'Inspiráció ' + i"
-            (load)="imageLoaded(i)" />
+      <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
+        <tr>
+          <td>
+            <img
+              class="hidden"
+              [src]="images[i]"
+              [alt]="'Inspiráció ' + i"
+              (load)="imageLoaded(i)" />
 
-          <p-image
-            *ngIf="imageLoadedStatus[i]"
-            [src]="inspiration.image"
-            [alt]="'Inspiráció ' + i"
-            [preview]="true">
-          </p-image>
+            <p-image
+              *ngIf="imageLoadedStatus[i]"
+              [src]="inspiration.image"
+              [alt]="'Inspiráció ' + i"
+              [preview]="true">
+            </p-image>
 
-          <ngx-skeleton-loader
-            *ngIf="!imageLoadedStatus[i]"
-            appearance="circle"
-            animation="pulse"
-            [theme]="{
-              margin: '0',
-              width: '100%',
-              paddingBottom: '100%',
-              aspectRatio: '1 / 1',
-              borderRadius: '0',
-              background: 'lightGrey'
-            }">
-          </ngx-skeleton-loader>
-        </td>
+            <ngx-skeleton-loader
+              *ngIf="!imageLoadedStatus[i]"
+              appearance="circle"
+              animation="pulse"
+              [theme]="{
+                margin: '0',
+                width: '100%',
+                paddingBottom: '100%',
+                aspectRatio: '1 / 1',
+                borderRadius: '0',
+                background: 'lightGrey'
+              }">
+            </ngx-skeleton-loader>
+          </td>
 
-        <td>{{ inspiration.id }}</td>
+          <td>{{ inspiration.id }}</td>
 
-        <td>
-          <button
-            (click)="onDeleteInspiration(inspiration)"
-            pButton
-            pRipple
-            pTooltip="Inspiráció törlése"
-            tooltipPosition="bottom"
-            type="button"
-            icon="pi pi-times"
-            class="p-button p-button-danger p-button"></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</p-card>
+          <td>
+            <button
+              (click)="onDeleteInspiration(inspiration)"
+              pButton
+              pRipple
+              pTooltip="Inspiráció törlése"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-times"
+              class="p-button p-button-danger p-button"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</ng-container>

@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormArray } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { QuestionType } from '@core/enums/question-type.enum';
-import {
-  QuestionWithStringAnswer,
-  QuestionWithStringAnswerOption
-} from '@core/models/question-with-string-answer.model';
+import { QuestionWithStringAnswerOption } from '@core/models/question-with-string-answer.model';
 import { Option, Question } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -95,6 +92,7 @@ export class AddQuestionWithStringAnswerComponent implements OnInit {
       const question = this.questionWithStringAnswerForm.value.question.trim();
 
       const questionWithStringAnswer: Question = {
+        questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
         questionName: questionName,
         question: question,
         options: this.questionWithStringAnswerForm.value
