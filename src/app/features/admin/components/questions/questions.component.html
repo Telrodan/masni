@@ -1,0 +1,78 @@
+<ng-container *ngIf="questions$ | async as questions">
+  <p-card header="Kérdések">
+    <p-table
+      #table
+      styleClass="p-datatable-gridlines"
+      [value]="questions"
+      [globalFilterFields]="['id', 'questionName']"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <p-button
+            icon="pi pi-plus"
+            label="Kérdés hozzáadása"
+            styleClass="p-button p-button-success"
+            (click)="onAddQuestion()">
+          </p-button>
+
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              pTooltip="Kereshető mezők: Azonosító, Kérdés neve"
+              tooltipPosition="bottom"
+              type="text"
+              (input)="applyTableGlobalFilter($event, 'contains', table)"
+              placeholder="Keresés" />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Azonosító</th>
+
+          <th>Kérdés neve</th>
+
+          <th>Kérdés</th>
+
+          <th>Opciók</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-question>
+        <tr>
+          <td>{{ question.id }}</td>
+
+          <td>{{ question.questionName }}</td>
+
+          <td class="font-bold">{{ question.question }}</td>
+
+          <td>
+            <button
+              (click)="onEditQuestion(question)"
+              pButton
+              pRipple
+              pTooltip="Kérdés módosítás"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-cog"
+              class="p-button p-button p-button-warning p-button mr-1"></button>
+
+            <button
+              (click)="onDeleteQuestion(question)"
+              pButton
+              pRipple
+              pTooltip="Kérdés törlés"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-times"
+              class="p-button p-button p-button-danger p-button"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</ng-container>

@@ -5,24 +5,27 @@ import { MaterialState } from '@core/store/models/material-state.model';
 import { ProductState } from '@core/store/models/product-state.model';
 import { ShoppingCartState } from '@core/store/models/shopping-cart-state.model';
 import { UserState } from '@core/store/models/user-state.model';
+import { OrderState } from '@core/store/models/order-state.model';
+import { InspirationState } from '@core/store/models/inspiration-state.model';
+import { QuestionState } from './models/question-state.model';
 import {
   categoryReducers,
   materialReducers,
   userReducers,
   shoppingCartReducers,
   productReducers,
-  inspirationReducers
+  inspirationReducers,
+  questionReducers,
+  orderReducers
 } from '@core/store';
 
 import { environment } from '../../../environments/environment';
-import { OrderState } from '@core/store/models/order-state.model';
-import { orderReducers } from '@core/store/reducers/order.reducers';
-import { InspirationState } from '@core/store/models/inspiration-state.model';
 
 export interface AppState {
   material: MaterialState;
   inspiration: InspirationState;
   shoppingCart: ShoppingCartState;
+  questions: QuestionState;
   products: ProductState;
   categories: CategoryState;
   user: UserState;
@@ -33,6 +36,7 @@ export const reducers: ActionReducerMap<AppState> = {
   material: materialReducers,
   inspiration: inspirationReducers,
   shoppingCart: shoppingCartReducers,
+  questions: questionReducers,
   products: productReducers,
   categories: categoryReducers,
   user: userReducers,

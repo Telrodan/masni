@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PanelModule } from 'primeng/panel';
 import { DividerModule } from 'primeng/divider';
@@ -21,6 +22,9 @@ import { ImageModule } from 'primeng/image';
 import { BadgeModule } from 'primeng/badge';
 import { RippleModule } from 'primeng/ripple';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -30,7 +34,6 @@ import { OrderDetailsComponent } from './components/orders/components/order-deta
 import { UserListComponent } from './components/user-list/user-list.component';
 import { AddMaterialComponent } from './components/materials/components/add-material/add-material.component';
 import { AddInspirationComponent } from './components/inspirations/components/add-inspiration/add-inspiration.component';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { InspirationsComponent } from './components/inspirations/inspirations.component';
 import { MaterialsComponent } from './components/materials/materials.component';
 import { AddCategoryComponent } from './components/categories/components/add-category/add-category.component';
@@ -43,6 +46,9 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailsComponent } from './components/users/components/user-details/user-details.component';
 import { LogsComponent } from './components/reports/components/logs/logs.component';
+import { QuestionsComponent } from './components/questions/questions.component';
+import { AddQuestionComponent } from './components/questions/components/add-question/add-question.component';
+import { AddQuestionWithStringAnswerComponent } from './components/questions/components/add-question/components/add-question-with-string-answer/add-question-with-string-answer.component';
 
 const PRIME_NG = [
   CardModule,
@@ -62,7 +68,10 @@ const PRIME_NG = [
   TooltipModule,
   ImageModule,
   BadgeModule,
-  MultiSelectModule
+  MultiSelectModule,
+  SelectButtonModule,
+  CheckboxModule,
+  InputNumberModule
 ];
 
 @NgModule({
@@ -86,7 +95,10 @@ const PRIME_NG = [
     OrdersComponent,
     UsersComponent,
     UserDetailsComponent,
-    LogsComponent
+    LogsComponent,
+    QuestionsComponent,
+    AddQuestionComponent,
+    AddQuestionWithStringAnswerComponent
   ],
   imports: [
     CommonModule,

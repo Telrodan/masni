@@ -1,0 +1,31 @@
+@import 'colors';
+
+.content {
+  display: flex;
+
+  form,
+  .preview {
+    width: 50%;
+    margin-top: 20px;
+  }
+
+  form {
+    margin-right: 20px;
+  }
+
+  .preview {
+    padding: 12px 20px;
+    border: 1px solid rgba($color-black, 0.2);
+    border-radius: 5px;
+
+    h3 {
+      border-bottom: 1px solid rgba($color-black, 0.2);
+    }
+
+    .option-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

@@ -45,7 +45,9 @@ import {
   CategoryEffects,
   MaterialEffects,
   ShoppingCartEffects,
-  UserEffects
+  UserEffects,
+  QuestionEffects,
+  InspirationEffects
 } from '@core/store/effects';
 import { NyuszkoShopModule } from '@features/nyuszko-shop/nyuszko-shop.module';
 import { MasniShopModule } from '@features/masni-shop/masni-shop.module';
@@ -66,7 +68,6 @@ import { LayoutComponent } from './features/layout/layout.component';
 import { NavbarComponent } from '@features/layout/components/navbar/navbar.component';
 import { FooterComponent } from '@features/layout/components/footer/footer.component';
 import { StyleClassModule } from 'primeng/styleclass';
-import { InspirationEffects } from '@core/store/effects/inspiration.effects';
 
 const PRIME_NG = [
   AccordionModule,
@@ -138,7 +139,8 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
       CategoryEffects,
       UserEffects,
       OrderEffects,
-      InspirationEffects
+      InspirationEffects,
+      QuestionEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
