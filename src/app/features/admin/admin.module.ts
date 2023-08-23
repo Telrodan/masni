@@ -48,7 +48,7 @@ import { UserDetailsComponent } from './components/users/components/user-details
 import { LogsComponent } from './components/reports/components/logs/logs.component';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { AddQuestionComponent } from './components/questions/components/add-question/add-question.component';
-import { AddQuestionWithStringAnswerComponent } from './components/questions/components/add-question/components/add-question-with-string-answer/add-question-with-string-answer.component';
+import { EditQuestionComponent } from './components/questions/components/edit-question/edit-question.component';
 
 const PRIME_NG = [
   CardModule,
@@ -98,7 +98,7 @@ const PRIME_NG = [
     LogsComponent,
     QuestionsComponent,
     AddQuestionComponent,
-    AddQuestionWithStringAnswerComponent
+    EditQuestionComponent
   ],
   imports: [
     CommonModule,
