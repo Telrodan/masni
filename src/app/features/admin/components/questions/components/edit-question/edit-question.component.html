@@ -1,20 +1,10 @@
 <i class="pi pi-times close" mat-dialog-close></i>
 
-<h2 mat-dialog-title>Kérdés hozzáadása</h2>
+<h2 mat-dialog-title>Kérdés szerkesztese</h2>
 
 <mat-dialog-content>
-  <!-- Question type selector form -->
-  <form [formGroup]="questionTypeForm">
-    <p-selectButton
-      formControlName="questionType"
-      [options]="questionTypeFormData"
-      optionLabel="label"
-      optionValue="value">
-    </p-selectButton>
-  </form>
-
   <div class="content">
-    <form [formGroup]="addQuestionForm">
+    <form [formGroup]="editQuestionForm">
       <div class="form-group">
         <label for="questionName" class="block font-medium text-blue-500 mb-1">
           Kérdés neve
@@ -58,7 +48,7 @@
           inputId="isExtraPrice"></p-checkbox>
       </div>
 
-      <div class="form-group" *ngIf="addQuestionForm.value.isExtraPrice">
+      <div class="form-group" *ngIf="editQuestionForm.value.isExtraPrice">
         <label for="extraPrice" class="block font-medium text-blue-500 mb-1">
           Lehetőség extra ára
         </label>
@@ -78,17 +68,17 @@
       <h3 class="font-medium text-blue-500 mb-1">Előnézet</h3>
 
       <h4 class="font-medium text-500 mb-1">
-        {{ addQuestionForm.value.questionName }}
+        {{ editQuestionForm.value.questionName }}
       </h4>
 
-      <ng-container *ngIf="addQuestionForm.value.options.length">
+      <ng-container *ngIf="editQuestionForm.value.options.length">
         <div class="form-group">
           <label for="option" class="block font-medium text-blue-500 mb-1">
-            {{ addQuestionForm.value.question }}
+            {{ editQuestionForm.value.question }}
           </label>
 
           <p-dropdown
-            [options]="addQuestionForm.value.options"
+            [options]="editQuestionForm.value.options"
             optionLabel="slug"
             styleClass="w-full">
           </p-dropdown>
@@ -98,9 +88,9 @@
 
         <div
           class="option-wrapper mb-2"
-          *ngFor="let option of addQuestionForm.value.options; let i = index">
+          *ngFor="let option of editQuestionForm.value.options; let i = index">
           <p class="block font-medium text-800 mb-1">
-            {{ i + 1 }}. {{ option.slug }}
+            {{ i + 1 }}. {{ option?.slug }}
           </p>
 
           <p-button
@@ -123,7 +113,7 @@
 
   <p-button
     type="submit"
-    label="Hozzáadás"
+    label="Módosítás"
     styleClass="p-button"
     (click)="onSubmit()">
   </p-button>

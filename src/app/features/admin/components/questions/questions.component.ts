@@ -9,6 +9,7 @@ import { Table } from 'primeng/table';
 import { ConfirmDialogComponent } from '@shared/UI/confirm-dialog/confirm-dialog.component';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
+import { EditQuestionComponent } from './components/edit-question/edit-question.component';
 
 @Component({
   selector: 'mhd-questions',
@@ -37,7 +38,12 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
-  onEditQuestion(question: Question): void {}
+  onEditQuestion(question: Question): void {
+    this.dialog.open(EditQuestionComponent, {
+      minWidth: '40vw',
+      data: question
+    });
+  }
 
   onDeleteQuestion(question: Question): void {
     this.dialog

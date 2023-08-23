@@ -5,7 +5,8 @@ import {
   deleteQuestion,
   getQuestions,
   getQuestionsError,
-  getQuestionsSuccess
+  getQuestionsSuccess,
+  updateQuestion
 } from '../actions';
 
 export const questionInitialState = {
@@ -37,6 +38,18 @@ export const questionReducers = createReducer(
     ...state,
     questions: [...state.questions, action.question]
   })),
+
+  on(updateQuestion, (state, action) => {
+    const index = state.questions.findIndex(
+      (item) => item.id === action.question.id
+    );
+    const questions = [...state.questions];
+    questions[index] = action.question;
+    return {
+      ...state,
+      questions
+    };
+  }),
 
   on(deleteQuestion, (state, action) => {
     const index = state.questions.findIndex((item) => item.id === action.id);
