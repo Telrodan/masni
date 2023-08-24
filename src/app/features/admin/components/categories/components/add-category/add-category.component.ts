@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -6,11 +6,11 @@ import { tap } from 'rxjs';
 
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
+import { CategoryType } from '@core/enums/category-type.enum';
 
 @Component({
   selector: 'mhd-add-category',
@@ -18,7 +18,10 @@ import {
   styleUrls: ['./add-category.component.scss']
 })
 export class AddCategoryComponent {
+  readonly CategoryType = CategoryType;
+
   addCategoryForm = this.fb.group({
+    type: [CategoryType.PRODUCT_CATEGORY, Validators.required],
     name: ['', Validators.required],
     image: ['', Validators.required]
   });
@@ -48,18 +51,21 @@ export class AddCategoryComponent {
 
   onAddCategory(): void {
     if (this.addCategoryForm.valid) {
-      const name = this.addCategoryForm.value.name.trim();
-      if (name) {
-        const categoryData = new FormData();
+      const categoryType = this.addCategoryForm.value.type;
+      const categoryName = this.addCategoryForm.value.name.trim();
+      const categoryImage = this.addCategoryForm.value.image;
 
-        categoryData.append('name', name);
-        categoryData.append('image', this.addCategoryForm.value.image);
+      if (categoryName) {
+        const categoryData = new FormData();
+        categoryData.append('type', categoryType);
+        categoryData.append('name', categoryName);
+        categoryData.append('image', categoryImage);
 
         this.categoryService
           .addCategory$(categoryData)
           .pipe(
             tap(() => {
-              this.toastr.success(`${capitalize(name)} kategória hozzáadva`);
+              this.toastr.success(`${categoryName} kategória hozzáadva`);
               this.dialogRef.close();
             })
           )

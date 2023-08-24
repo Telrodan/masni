@@ -25,6 +25,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -71,7 +73,9 @@ const PRIME_NG = [
   MultiSelectModule,
   SelectButtonModule,
   CheckboxModule,
-  InputNumberModule
+  InputNumberModule,
+  RadioButtonModule,
+  SkeletonModule
 ];
 
 @NgModule({

@@ -106,16 +106,6 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit {
     }
   }
 
-  private findProduct(categories: Category[]) {
-    const category = categories.find(
-      (category) => category.name === 'egyedi termékek'
-    );
-    const product = category.products.find(
-      (product) => product === 'nyuszkó-szundikendő'
-    );
-    return product;
-  }
-
   private initForm(): void {
     this.builderForm = new FormGroup({
       baseColor: new FormControl(null, Validators.required),

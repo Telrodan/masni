@@ -73,14 +73,14 @@ export const categoryReducers = createReducer(
       (category) => category.id === action.product.categoryId
     );
 
-    const updatedProducts = [...categories[index].products];
+    const updatedProducts = [...categories[index].items];
 
     updatedProducts.push(action.product.id);
 
     const updatedCategories = [...categories];
     updatedCategories[index] = {
       ...categories[index],
-      products: updatedProducts
+      items: updatedProducts
     };
 
     return {
@@ -96,13 +96,13 @@ export const categoryReducers = createReducer(
       (category) => category.id === action.product.categoryId
     );
 
-    const updatedProducts = [...categories[index].products];
+    const updatedProducts = [...categories[index].items];
     updatedProducts.splice(index, 1);
 
     const updatedCategories = [...categories];
     updatedCategories[index] = {
       ...categories[index],
-      products: updatedProducts
+      items: updatedProducts
     };
 
     return {
@@ -122,7 +122,7 @@ export const categoryReducers = createReducer(
 
     // Find the original category that contains the product
     const originalCategory = categories.find((category) =>
-      category.products.includes(action.product.id)
+      category.items.includes(action.product.id)
     );
 
     // Check if the product needs to be moved to a different category
@@ -134,7 +134,7 @@ export const categoryReducers = createReducer(
       );
 
       // Create a new array of products for the original category, excluding the moved product
-      const updatedOriginalCategoryProducts = [...originalCategory.products];
+      const updatedOriginalCategoryProducts = [...originalCategory.items];
       updatedOriginalCategoryProducts.splice(
         updatedOriginalCategoryProducts.indexOf(action.product.id),
         1
@@ -143,7 +143,7 @@ export const categoryReducers = createReducer(
       // Update the original category with the updated products array
       categories[originalCategoryIndex] = {
         ...categories[originalCategoryIndex],
-        products: updatedOriginalCategoryProducts
+        items: updatedOriginalCategoryProducts
       };
 
       // Find the index of the target category in the categories array
@@ -153,14 +153,14 @@ export const categoryReducers = createReducer(
 
       // Create a new array of products for the target category, including the moved product
       const updatedCategoryProducts = [
-        ...categories[updatedCategoryIndex].products
+        ...categories[updatedCategoryIndex].items
       ];
       updatedCategoryProducts.push(action.product.id);
 
       // Update the target category with the updated products array
       categories[updatedCategoryIndex] = {
         ...categories[updatedCategoryIndex],
-        products: updatedCategoryProducts
+        items: updatedCategoryProducts
       };
 
       // Return the updated state object with the modified categories array

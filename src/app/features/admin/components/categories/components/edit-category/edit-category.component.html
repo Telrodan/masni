@@ -3,6 +3,26 @@
 
 <mat-dialog-content>
   <form [formGroup]="editCategoryForm" class="mt-2">
+    <div class="mb-4">
+      <ng-container *ngIf="data.type === CategoryType.PRODUCT_CATEGORY">
+        <p-badge
+          value="Termék kategória"
+          severity="success"
+          size="large"></p-badge>
+      </ng-container>
+
+      <ng-container *ngIf="data.type === CategoryType.MATERIAL_CATEGORY">
+        <p-badge
+          value="Minta kategória"
+          severity="warning"
+          size="large"></p-badge>
+      </ng-container>
+
+      <ng-container *ngIf="data.type === CategoryType.INSPIRATION_CATEGORY">
+        <p-badge value="Inspiració kategória" size="large"></p-badge>
+      </ng-container>
+    </div>
+
     <div class="form-group">
       <label for="name" class="block font-medium text-blue-500 mb-1">
         Kategória neve

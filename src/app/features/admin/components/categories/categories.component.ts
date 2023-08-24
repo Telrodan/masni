@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
+import { Table } from 'primeng/table';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, map, Observable, switchMap, tap } from 'rxjs';
-import { Table } from 'primeng/table';
 
 import { selectAllCategories } from '@core/store';
 import { Category } from '@core/models/category.model';
+import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
@@ -18,12 +19,15 @@ import { AddCategoryComponent } from './components/add-category/add-category.com
 @Component({
   selector: 'mhd-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss']
+  styleUrls: ['./categories.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoriesComponent implements OnInit {
+  readonly CategoryType = CategoryType;
+
   categories$: Observable<Category[]>;
 
-  images: string[];
+  images: string[] = [];
   imageLoadedStatus: boolean[] = [];
 
   constructor(
@@ -36,11 +40,7 @@ export class CategoriesComponent implements OnInit {
   ngOnInit(): void {
     this.categories$ = this.store.select(selectAllCategories).pipe(
       filter((categories) => !!categories),
-      map((categories) => {
-        this.reloadCategoriesImages(categories);
-
-        return [...categories];
-      }),
+      map((categories) => [...categories]),
       untilDestroyed(this)
     );
   }
@@ -81,15 +81,6 @@ export class CategoriesComponent implements OnInit {
 
   imageLoaded(index: number) {
     this.imageLoadedStatus[index] = true;
-  }
-
-  reloadCategoriesImages(categories: Category[]) {
-    this.images = categories.map((inspiration) => {
-      const timestamp = new Date().getTime();
-
-      return inspiration.image + `?timestamp=${timestamp}`;
-    });
-    this.imageLoadedStatus = this.images.map(() => false);
   }
 
   applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {

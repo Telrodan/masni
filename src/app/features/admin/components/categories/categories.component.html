@@ -5,8 +5,8 @@
     [value]="categories"
     [globalFilterFields]="['id', 'name']"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -37,9 +37,11 @@
 
         <th>Név</th>
 
-        <th pSortableColumn="products">
-          Termékek
-          <p-sortIcon field="products"></p-sortIcon>
+        <th>Típus</th>
+
+        <th pSortableColumn="items.length">
+          Tételek
+          <p-sortIcon field="items"></p-sortIcon>
         </th>
 
         <th>Opciók</th>
@@ -51,37 +53,43 @@
         <td>
           <img
             class="hidden"
-            [src]="images[i]"
-            [alt]="'Inspiráció ' + i"
+            [src]="category.image"
+            [alt]="'Inspiráció ' + i + ' képe'"
             (load)="imageLoaded(i)" />
 
           <p-image
             *ngIf="imageLoadedStatus[i]"
             [src]="category.image"
-            [alt]="'Inspiráció ' + i"
+            [alt]="'Inspiráció ' + i + ' képe'"
             [preview]="true">
           </p-image>
 
-          <ngx-skeleton-loader
+          <p-skeleton
             *ngIf="!imageLoadedStatus[i]"
-            appearance="circle"
-            animation="pulse"
-            [theme]="{
-              margin: '0',
-              width: '100%',
-              paddingBottom: '100%',
-              aspectRatio: '1 / 1',
-              borderRadius: '0',
-              background: 'lightGrey'
-            }">
-          </ngx-skeleton-loader>
+            styleClass="skeleton"></p-skeleton>
         </td>
 
         <td>{{ category._id }}</td>
 
-        <td>{{ category.name }}</td>
+        <td class="font-bold">{{ category.name }}</td>
 
-        <td class="font-bold">{{ category.products.length }}</td>
+        <td>
+          <ng-container *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
+            <p-badge value="Termék kategória" severity="success"></p-badge>
+          </ng-container>
+
+          <ng-container
+            *ngIf="category.type === CategoryType.MATERIAL_CATEGORY">
+            <p-badge value="Minta kategória" severity="warning"></p-badge>
+          </ng-container>
+
+          <ng-container
+            *ngIf="category.type === CategoryType.INSPIRATION_CATEGORY">
+            <p-badge value="Inspiració kategória"></p-badge>
+          </ng-container>
+        </td>
+
+        <td class="font-bold">{{ category.items.length }}</td>
 
         <td>
           <button

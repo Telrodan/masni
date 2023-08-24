@@ -7,11 +7,11 @@ import { tap } from 'rxjs';
 import { Category } from '@core/models/category.model';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
+import { CategoryType } from '@core/enums/category-type.enum';
 
 @Component({
   selector: 'mhd-edit-category',
@@ -19,6 +19,8 @@ import {
   styleUrls: ['./edit-category.component.scss']
 })
 export class EditCategoryComponent {
+  readonly CategoryType = CategoryType;
+
   editCategoryForm = this.fb.group({
     name: [this.data.name, Validators.required],
     image: [this.data.image, Validators.required]
@@ -50,18 +52,19 @@ export class EditCategoryComponent {
 
   onEditCategory(): void {
     if (this.editCategoryForm.valid) {
-      const name = this.editCategoryForm.value.name.trim();
-      if (name) {
-        const categoryData = new FormData();
+      const categoryName = this.editCategoryForm.value.name.trim();
+      const categoryImage = this.editCategoryForm.value.image;
 
-        categoryData.append('name', name);
-        categoryData.append('image', this.editCategoryForm.value.image);
+      if (categoryName) {
+        const categoryData = new FormData();
+        categoryData.append('name', categoryName);
+        categoryData.append('image', categoryImage);
 
         this.categoryService
           .updateCategory$(categoryData, this.data.id)
           .pipe(
             tap(() => {
-              this.toastr.success(`${capitalize(name)} kategória módosítva`);
+              this.toastr.success(`${categoryName} kategória módosítva`);
               this.dialogRef.close();
             })
           )
