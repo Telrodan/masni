@@ -41,9 +41,9 @@ export const updateCategory = createAction(
   props<{ category: Category }>()
 );
 
-export const addProductToCategory = createAction(
+export const addItemToCategory = createAction(
   CategoryActionsTypes.ADD_PRODUCT_TO_CATEGORY,
-  props<{ product: Product }>()
+  props<{ itemId: string; categoryId: string }>()
 );
 
 export const deleteProductFromCategory = createAction(
@@ -51,7 +51,7 @@ export const deleteProductFromCategory = createAction(
   props<{ product: Product }>()
 );
 
-export const moveProductToCategory = createAction(
+export const moveItemBetweenCategories = createAction(
   CategoryActionsTypes.MOVE_PRODUCT_TO_CATEGORY,
-  props<{ product: Product }>()
+  props<{ itemId: string; categoryId: string }>()
 );

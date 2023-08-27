@@ -1,4 +1,5 @@
 export interface Inspiration {
-  id?: string;
+  id: string;
+  categoryId?: string;
   image: string;
 }

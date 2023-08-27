@@ -11,18 +11,19 @@
       <input id="name" type="text" formControlName="name" pInputText />
     </div>
 
-    <div class="form-group">
+    <div class="form-group" *ngIf="categories$ | async as categories">
       <label for="category" class="block font-medium text-900 mb-2">
         Minta kategória
       </label>
 
       <p-dropdown
         id="category"
-        formControlName="category"
+        formControlName="categoryId"
         [options]="categories"
-        optionValue="value"
+        optionValue="id"
         optionLabel="name"
-        [showClear]="true"></p-dropdown>
+        [showClear]="true">
+      </p-dropdown>
     </div>
 
     <div class="form-group">
@@ -55,7 +56,7 @@
         pRipple
         pTooltip="Kép törlése"
         tooltipPosition="bottom"
-        (click)="onImageClear()"
+        (click)="onImageClear(imagePicker)"
         type="button"
         icon="pi pi-times"
         class="p-button p-button-danger p-button"></button>

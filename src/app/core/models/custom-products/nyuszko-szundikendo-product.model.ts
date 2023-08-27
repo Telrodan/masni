@@ -1,5 +1,4 @@
 import { Material } from '../material.model';
-import { SortedMaterials } from '../sorted-materials.model';
 
 export class NyuszkoSzundikendoProduct {
   public baseColor: Material[];
@@ -14,15 +13,5 @@ export class NyuszkoSzundikendoProduct {
     this.baseColor = baseColor;
     this.szundikendoColor = szundikendoColor;
     this.minkyColorBack = minkyColorBack;
-  }
-
-  public static setUpMaterials(
-    sortedMaterials: SortedMaterials
-  ): NyuszkoSzundikendoProduct {
-    return new NyuszkoSzundikendoProduct(
-      sortedMaterials.plainCotton,
-      [...sortedMaterials.plainCotton, ...sortedMaterials.patternedCotton],
-      sortedMaterials.minkyPlus
-    );
   }
 }

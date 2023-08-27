@@ -1,9 +1,10 @@
 export interface Material {
-  id?: string;
+  id: string;
   name: string;
   nameWithExtra: string;
-  category: string;
-  image?: string;
+  categoryId: string;
+  categoryName: string;
+  image: string;
   extra: number;
   isAvailable: boolean;
 }

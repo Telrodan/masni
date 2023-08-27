@@ -9,10 +9,10 @@ import { MaterialService } from './material.service';
 import { Product } from '@core/models/product.model';
 import {
   addProduct,
-  addProductToCategory,
+  addItemToCategory,
   deleteProduct,
   deleteProductFromCategory,
-  moveProductToCategory,
+  moveItemBetweenCategories,
   updateProduct
 } from '@core/store';
 
@@ -33,7 +33,12 @@ export class ProductService {
         map((productDTO) => productDTO.data),
         tap((product) => {
           this.store.dispatch(addProduct({ product }));
-          this.store.dispatch(addProductToCategory({ product }));
+          this.store.dispatch(
+            addItemToCategory({
+              itemId: product.id,
+              categoryId: product.categoryId
+            })
+          );
         })
       );
   }
@@ -45,7 +50,12 @@ export class ProductService {
         map((productDTO) => productDTO.data),
         tap((product) => {
           this.store.dispatch(updateProduct({ product }));
-          this.store.dispatch(moveProductToCategory({ product }));
+          this.store.dispatch(
+            moveItemBetweenCategories({
+              itemId: product.id,
+              categoryId: product.categoryId
+            })
+          );
         })
       );
   }

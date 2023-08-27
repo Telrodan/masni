@@ -5,13 +5,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tap } from 'rxjs';
 
 import { Category } from '@core/models/category.model';
+import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { CategoryType } from '@core/enums/category-type.enum';
 
 @Component({
   selector: 'mhd-edit-category',

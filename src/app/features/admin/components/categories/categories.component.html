@@ -44,7 +44,7 @@
           <p-sortIcon field="items"></p-sortIcon>
         </th>
 
-        <th>Opciók</th>
+        <th class="w-3rem">Opciók</th>
       </tr>
     </ng-template>
 
@@ -100,13 +100,18 @@
             tooltipPosition="bottom"
             type="button"
             icon="pi pi-cog"
-            class="p-button p-button p-button-warning p-button mr-1"></button>
+            class="p-button p-button p-button-warning p-button mb-1"></button>
 
           <button
             (click)="onDeleteCategory(category)"
             pButton
             pRipple
-            pTooltip="Kategória törlés"
+            [disabled]="category.items.length > 0"
+            [pTooltip]="
+              category.items.length > 0
+                ? 'Addig nem törölhető a kategória amíg vannak hozzárendelt tételek'
+                : 'Kategória törlése'
+            "
             tooltipPosition="bottom"
             type="button"
             icon="pi pi-times"

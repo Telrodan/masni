@@ -5,9 +5,15 @@ import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { Material } from '@core/models/material.model';
-import { materialExtraByNameSelector } from '@core/store/selectors/material.selectors';
+import { selectMaterialExtraById } from '@core/store/selectors/material.selectors';
 import { ApiResponse } from '@core/models/api-response.model';
-import { addMaterial, deleteMaterial, updateMaterial } from '@core/store';
+import {
+  addItemToCategory,
+  addMaterial,
+  deleteMaterial,
+  moveItemBetweenCategories,
+  updateMaterial
+} from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +28,12 @@ export class MaterialService {
         map((material) => material.data),
         tap((material) => {
           this.store.dispatch(addMaterial({ material }));
+          this.store.dispatch(
+            addItemToCategory({
+              itemId: material.id,
+              categoryId: material.categoryId
+            })
+          );
         })
       );
   }
@@ -36,6 +48,12 @@ export class MaterialService {
         map((materialDTO) => materialDTO.data),
         tap((material) => {
           this.store.dispatch(updateMaterial({ material }));
+          this.store.dispatch(
+            moveItemBetweenCategories({
+              itemId: material.id,
+              categoryId: material.categoryId
+            })
+          );
         })
       );
   }
@@ -57,7 +75,7 @@ export class MaterialService {
   public getExtraPriceByName(name: string): number {
     let result = 0;
     this.store
-      .select(materialExtraByNameSelector(name))
+      .select(selectMaterialExtraById(name))
       .pipe(
         tap((extraPrice) => {
           result = extraPrice;

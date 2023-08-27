@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { SortedMaterials } from '@core/models/sorted-materials.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import {
   addMaterial,
@@ -10,13 +9,11 @@ import {
   getMaterialsSuccess,
   updateMaterial
 } from '@core/store/actions/';
-import { Material } from '@core/models/material.model';
 import { StatusTypes } from '../status-types';
 
 export const materialInitialState: MaterialState = {
   materials: [],
   availableMaterials: [],
-  sortedMaterials: null,
   status: StatusTypes.INIT
 };
 
@@ -32,14 +29,10 @@ export const materialReducers = createReducer(
       (material) => material.isAvailable
     );
 
-    const sortedMaterials: SortedMaterials =
-      SortedMaterials.sortMaterials(availableMaterials);
-
     return {
       ...state,
       materials: [...action.materials],
       availableMaterials,
-      sortedMaterials,
       status: StatusTypes.LOADED
     };
   }),
@@ -49,69 +42,58 @@ export const materialReducers = createReducer(
     status: StatusTypes.ERROR
   })),
 
-  on(addMaterial, (state, action) => {
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
+  on(addMaterial, (state, action) => ({
+    ...state,
+    materials: [...state.materials, action.material],
+    availableMaterials: action.material.isAvailable
+      ? [...state.availableMaterials, action.material]
+      : [...state.availableMaterials]
+  })),
 
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        sortedMaterials[key] = [...sortedMaterials[key], action.material];
-      }
-    }
-
-    return {
-      ...state,
-      sortedMaterials,
-      materials: [...state.materials, action.material]
-    };
-  }),
   on(updateMaterial, (state, action) => {
-    const materialIndex = state.materials.findIndex(
+    const index = state.materials.findIndex(
       (material) => material.id === action.material.id
     );
 
     const materials = [...state.materials];
-    materials.splice(materialIndex, 1, action.material);
+    const availableMaterials = [...state.availableMaterials];
 
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
+    materials.splice(index, 1, action.material);
 
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material.id === action.material.id
-        );
-        sortedMaterials[key].splice(sortedMaterialIndex, 1, action.material);
-      }
+    if (action.material.isAvailable) {
+      const index = availableMaterials.findIndex(
+        (material) => material.id === action.material.id
+      );
+      availableMaterials.splice(index, 1, action.material);
     }
 
     return {
       ...state,
       materials,
-      sortedMaterials
+      availableMaterials
     };
   }),
+
   on(deleteMaterial, (state, action) => {
-    const materialIndex = state.materials.findIndex(
+    const index = state.materials.findIndex(
       (material) => material.id === action.material.id
     );
 
     const materials = [...state.materials];
-    materials.splice(materialIndex, 1);
+    const availableMaterials = [...state.availableMaterials];
 
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
+    materials.splice(index, 1);
 
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material.id === action.material.id
-        );
-        sortedMaterials[key].splice(sortedMaterialIndex, 1);
-      }
+    if (action.material.isAvailable) {
+      const index = availableMaterials.findIndex(
+        (material) => material.id === action.material.id
+      );
+      availableMaterials.splice(index, 1);
     }
 
     return {
       ...state,
-      materials,
-      sortedMaterials
+      materials
     };
   })
 );

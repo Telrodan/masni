@@ -2,13 +2,13 @@ import { createReducer, on } from '@ngrx/store';
 
 import {
   addCategory,
-  addProductToCategory,
+  addItemToCategory,
   deleteCategory,
   deleteProductFromCategory,
   getCategories,
   getCategoriesError,
   getCategoriesSuccess,
-  moveProductToCategory,
+  moveItemBetweenCategories,
   updateCategory
 } from '../actions';
 import { CategoryState } from '../models/category-state.model';
@@ -66,26 +66,25 @@ export const categoryReducers = createReducer(
     };
   }),
 
-  on(addProductToCategory, (state, action) => {
+  on(addItemToCategory, (state, action) => {
     const categories = [...state.categories];
-
     const index = categories.findIndex(
-      (category) => category.id === action.product.categoryId
+      (category) => category.id === action.categoryId
     );
 
-    const updatedProducts = [...categories[index].items];
+    if (index !== -1) {
+      // Check if the category was found
+      const updatedCategory = {
+        ...categories[index], // Copy the category object
+        items: [...categories[index].items, action.itemId] // Create a new items array
+      };
 
-    updatedProducts.push(action.product.id);
-
-    const updatedCategories = [...categories];
-    updatedCategories[index] = {
-      ...categories[index],
-      items: updatedProducts
-    };
+      categories[index] = updatedCategory; // Update the category in the copy
+    }
 
     return {
       ...state,
-      categories: updatedCategories
+      categories
     };
   }),
 
@@ -111,68 +110,50 @@ export const categoryReducers = createReducer(
     };
   }),
 
-  /**
-   * Reducer function that handles the action of moving a product to a different category.
-   *
-   * @param {Object} state - The current state object.
-   * @param {Object} action - The action object containing information about the product and the target category.
-   */
-  on(moveProductToCategory, (state, action) => {
+  on(moveItemBetweenCategories, (state, action) => {
     const categories = [...state.categories];
 
-    // Find the original category that contains the product
-    const originalCategory = categories.find((category) =>
-      category.items.includes(action.product.id)
+    const categoryIndex = categories.findIndex((category) =>
+      category.items.includes(action.itemId)
     );
 
-    // Check if the product needs to be moved to a different category
-
-    if (originalCategory.id !== action.product.categoryId) {
-      // Find the index of the original category in the categories array
-      const originalCategoryIndex = categories.findIndex(
-        (category) => category.id === originalCategory.id
+    if (categoryIndex !== -1) {
+      // Check if categoryIndex is valid
+      const itemIndex = categories[categoryIndex].items.findIndex(
+        (item) => item === action.itemId
       );
 
-      // Create a new array of products for the original category, excluding the moved product
-      const updatedOriginalCategoryProducts = [...originalCategory.items];
-      updatedOriginalCategoryProducts.splice(
-        updatedOriginalCategoryProducts.indexOf(action.product.id),
-        1
-      );
+      if (itemIndex !== -1) {
+        // Check if itemIndex is valid
+        const items = [...categories[categoryIndex].items];
+        items.splice(itemIndex, 1);
 
-      // Update the original category with the updated products array
-      categories[originalCategoryIndex] = {
-        ...categories[originalCategoryIndex],
-        items: updatedOriginalCategoryProducts
-      };
+        const updatedCategory = {
+          ...categories[categoryIndex],
+          items: items
+        };
 
-      // Find the index of the target category in the categories array
-      const updatedCategoryIndex = categories.findIndex(
-        (category) => category.id === action.product.categoryId
-      );
-
-      // Create a new array of products for the target category, including the moved product
-      const updatedCategoryProducts = [
-        ...categories[updatedCategoryIndex].items
-      ];
-      updatedCategoryProducts.push(action.product.id);
-
-      // Update the target category with the updated products array
-      categories[updatedCategoryIndex] = {
-        ...categories[updatedCategoryIndex],
-        items: updatedCategoryProducts
-      };
-
-      // Return the updated state object with the modified categories array
-      return {
-        ...state,
-        categories
-      };
-    } else {
-      // If the product is already in the target category, return the original state object
-      return {
-        ...state
-      };
+        categories[categoryIndex] = updatedCategory;
+      }
     }
+
+    const targetCategoryIndex = categories.findIndex(
+      (category) => category.id === action.categoryId
+    );
+
+    if (targetCategoryIndex !== -1) {
+      // Check if targetCategoryIndex is valid
+      const updatedCategory = {
+        ...categories[targetCategoryIndex],
+        items: [...categories[targetCategoryIndex].items, action.itemId]
+      };
+
+      categories[targetCategoryIndex] = updatedCategory;
+    }
+
+    return {
+      ...state,
+      categories
+    };
   })
 );

@@ -5,8 +5,8 @@
     [value]="materials"
     [globalFilterFields]="['id', 'name', 'category']"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -58,37 +58,27 @@
         <td>
           <img
             class="hidden"
-            [src]="images[i]"
+            [src]="material.image"
             [alt]="material.name"
             (load)="imageLoaded(i)" />
 
           <p-image
             *ngIf="imageLoadedStatus[i]"
-            [src]="images[i]"
+            [src]="material.image"
             [alt]="material.name"
             [preview]="true">
           </p-image>
 
-          <ngx-skeleton-loader
+          <p-skeleton
             *ngIf="!imageLoadedStatus[i]"
-            appearance="circle"
-            animation="pulse"
-            [theme]="{
-              margin: '0',
-              width: '100%',
-              paddingBottom: '100%',
-              aspectRatio: '1 / 1',
-              borderRadius: '0',
-              background: 'lightGrey'
-            }">
-          </ngx-skeleton-loader>
+            styleClass="skeleton"></p-skeleton>
         </td>
 
         <td>{{ material.id }}</td>
 
         <td>{{ material.name }}</td>
 
-        <td>{{ material.category }}</td>
+        <td>{{ material.categoryName }}</td>
 
         <td class="font-bold">{{ material.extra }} Ft</td>
 

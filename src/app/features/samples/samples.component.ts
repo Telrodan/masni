@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Material } from '@core/models/material.model';
-import { sortedMaterialsSelector } from '@core/store';
 import { Store } from '@ngrx/store';
 
 import { filter, map, Observable } from 'rxjs';
@@ -40,25 +39,23 @@ export class SamplesComponent implements OnInit {
   constructor(private store$: Store) {}
 
   public ngOnInit(): void {
-    this.sortedMaterials$ = this.store$.select(sortedMaterialsSelector).pipe(
-      filter((sortedMaterials) => !!sortedMaterials),
-      map((sortedMaterials) => {
-        const filteredItemsByKeys: FilteredAvailableMaterials = Object.keys(
-          sortedMaterials
-        ).reduce((acc, key) => {
-          const filteredItems = sortedMaterials[key].filter(
-            (material: Material) => material.isAvailable
-          );
-
-          if (filteredItems.length > 0) {
-            acc[key] = filteredItems;
-          }
-
-          return acc;
-        }, {});
-        return filteredItemsByKeys;
-      })
-    );
+    // this.sortedMaterials$ = this.store$.select(sortedMaterialsSelector).pipe(
+    //   filter((sortedMaterials) => !!sortedMaterials),
+    //   map((sortedMaterials) => {
+    //     const filteredItemsByKeys: FilteredAvailableMaterials = Object.keys(
+    //       sortedMaterials
+    //     ).reduce((acc, key) => {
+    //       const filteredItems = sortedMaterials[key].filter(
+    //         (material: Material) => material.isAvailable
+    //       );
+    //       if (filteredItems.length > 0) {
+    //         acc[key] = filteredItems;
+    //       }
+    //       return acc;
+    //     }, {});
+    //     return filteredItemsByKeys;
+    //   })
+    // );
   }
 
   imageClickGaleryOne(index: number): void {

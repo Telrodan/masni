@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { selectAllMaterial } from '@core/store';
+import { selectAllMaterials } from '@core/store';
 import { selectAllInspiration } from '@core/store/selectors/inspiration.selectors';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
@@ -83,7 +83,7 @@ export class LandingPageComponent implements OnInit {
         untilDestroyed(this)
       );
 
-    this.materialCarouselData$ = this.store$.select(selectAllMaterial).pipe(
+    this.materialCarouselData$ = this.store$.select(selectAllMaterials).pipe(
       map((materials) => ({
         ...materialCarouselData,
         images: materials.map((material) => material.image)

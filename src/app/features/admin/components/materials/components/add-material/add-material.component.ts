@@ -1,85 +1,97 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { categories } from 'src/app/shared/util/material-categories';
+import { Category } from '@core/models/category.model';
+import { Store } from '@ngrx/store';
+import { selectMaterialCategories } from '@core/store';
+import {
+  addImageToFormAndSetPreview,
+  removeImageFromFormAndInputAndClearPreview
+} from '@shared/util/image-upload-helpers';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'mhd-add-material',
   templateUrl: './add-material.component.html',
   styleUrls: ['./add-material.component.scss']
 })
 export class AddMaterialComponent implements OnInit {
-  addMaterialForm: FormGroup;
+  categories$: Observable<Category[]>;
+
+  addMaterialForm = this.fb.group({
+    name: ['', Validators.required],
+    categoryId: ['', Validators.required],
+    image: ['', Validators.required],
+    extra: [0, Validators.required],
+    isAvailable: [true, Validators.required]
+  });
+
   imagePreview: string;
-  categories = categories;
 
   constructor(
+    private store$: Store,
     private materialService: MaterialService,
     private toastr: ToastrService,
-    private dialogRef: MatDialogRef<AddMaterialComponent>
+    private dialogRef: MatDialogRef<AddMaterialComponent>,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.initAddMaterialForm();
+    this.categories$ = this.store$
+      .select(selectMaterialCategories)
+      .pipe(untilDestroyed(this));
   }
 
-  onImagePicked(event: Event): void {
-    const file = (event.target as HTMLInputElement).files[0];
-
-    this.addMaterialForm.patchValue({ image: file });
-    this.addMaterialForm.get('image').updateValueAndValidity();
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+  async onImagePicked(event: Event): Promise<void> {
+    this.imagePreview = await addImageToFormAndSetPreview(
+      event,
+      this.addMaterialForm
+    );
   }
 
-  onImageClear(): void {
-    this.imagePreview = '';
-    this.addMaterialForm.value.image = '';
-    this.addMaterialForm.patchValue({ image: '' });
-    this.addMaterialForm.get('image').updateValueAndValidity();
+  onImageClear(imageInput: HTMLInputElement): void {
+    this.imagePreview = removeImageFromFormAndInputAndClearPreview(
+      this.addMaterialForm,
+      imageInput
+    );
   }
 
   onAddMaterial(): void {
     if (this.addMaterialForm.valid) {
       const material = new FormData();
-      material.append('name', this.addMaterialForm.value.name);
-      material.append('category', this.addMaterialForm.value.category);
-      material.append('image', this.addMaterialForm.value.image);
-      material.append('extra', this.addMaterialForm.value.extra);
-      material.append('isAvailable', this.addMaterialForm.value.isAvailable);
+      const materialName = this.addMaterialForm.value.name.trim();
+      const materialCategoryId = this.addMaterialForm.value.categoryId;
+      const materialImage = this.addMaterialForm.value.image;
+      const materialExtra = this.addMaterialForm.value.extra.toString();
+      const materialIsAvailable =
+        this.addMaterialForm.value.isAvailable.toString();
 
-      this.materialService
-        .addMaterial$(material)
-        .pipe(
-          tap(() => {
-            this.toastr.success(`${this.addMaterialForm.value.name} hozzáadva`);
-            this.dialogRef.close();
-          })
-        )
-        .subscribe();
+      if (materialName) {
+        material.append('name', materialName);
+        material.append('categoryId', materialCategoryId);
+        material.append('image', materialImage);
+        material.append('extra', materialExtra);
+        material.append('isAvailable', materialIsAvailable);
+        this.materialService
+          .addMaterial$(material)
+          .pipe(
+            tap(() => {
+              this.toastr.success(
+                `${this.addMaterialForm.value.name} hozzáadva`
+              );
+              this.dialogRef.close();
+            })
+          )
+          .subscribe();
+      } else {
+        this.toastr.error('Kérlek adj meg egy minta nevet');
+      }
     }
-  }
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
-
-  initAddMaterialForm(): void {
-    this.addMaterialForm = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      category: new FormControl(null, Validators.required),
-      image: new FormControl(null, Validators.required),
-      extra: new FormControl(null, Validators.required),
-      isAvailable: new FormControl(true, Validators.required)
-    });
   }
 }

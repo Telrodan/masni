@@ -15,7 +15,6 @@ import {
 import { AuthService } from '@core/services/auth.service';
 import { ProductService } from '@core/services/product.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
-import { sortedMaterialsSelector } from '@core/store/selectors/material.selectors';
 import { NyuszkoSzundikendoProduct } from '@core/models/custom-products/nyuszko-szundikendo-product.model';
 import { Product } from '@core/models/product.model';
 import { selectCustomProductByName } from '@core/store';
@@ -53,28 +52,28 @@ export class NyuszkoSzundikendoBuilderComponent implements OnInit {
   public ngOnInit(): void {
     this.isAuthenticated$ = this.authService.getAuthStatus$();
     this.initForm();
-    this.productData$ = combineLatest([
-      this.store$
-        .select(selectCustomProductByName('nyuszkó-szundikendő'))
-        .pipe(filter((product) => !!product)),
-      this.store$.select(sortedMaterialsSelector).pipe(
-        filter((sortedMaterials) => !!sortedMaterials),
-        map((sortedMaterials) =>
-          NyuszkoSzundikendoProduct.setUpMaterials(sortedMaterials)
-        )
-      ),
-      this.builderForm.valueChanges.pipe(
-        startWith(0),
-        debounceTime(300),
-        map((value) => this.productService.getProductExtraPrice(value))
-      )
-    ]).pipe(
-      map(([baseProduct, customProduct, price]) => ({
-        baseProduct,
-        customProduct,
-        price: baseProduct.price + price
-      }))
-    );
+    // this.productData$ = combineLatest([
+    //   this.store$
+    //     .select(selectCustomProductByName('nyuszkó-szundikendő'))
+    //     .pipe(filter((product) => !!product)),
+    //   this.store$.select(sortedMaterialsSelector).pipe(
+    //     filter((sortedMaterials) => !!sortedMaterials),
+    //     map((sortedMaterials) =>
+    //       NyuszkoSzundikendoProduct.setUpMaterials(sortedMaterials)
+    //     )
+    //   ),
+    //   this.builderForm.valueChanges.pipe(
+    //     startWith(0),
+    //     debounceTime(300),
+    //     map((value) => this.productService.getProductExtraPrice(value))
+    //   )
+    // ]).pipe(
+    //   map(([baseProduct, customProduct, price]) => ({
+    //     baseProduct,
+    //     customProduct,
+    //     price: baseProduct.price + price
+    //   }))
+    // );
   }
 
   onSubmit(product: Product, price: number): void {

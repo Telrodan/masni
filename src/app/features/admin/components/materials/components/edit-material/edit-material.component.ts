@@ -1,65 +1,87 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { Observable, tap, filter } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+
+import { Category } from '@core/models/category.model';
 import { Material } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { tap } from 'rxjs';
-import { categories } from 'src/app/shared/util/material-categories';
+import { selectMaterialCategories } from '@core/store';
+import {
+  addImageToFormAndSetPreview,
+  removeImageFromFormAndInputAndClearPreview
+} from '@shared/util/image-upload-helpers';
 
+@UntilDestroy()
 @Component({
   selector: 'mhd-edit-material',
   templateUrl: './edit-material.component.html',
   styleUrls: ['./edit-material.component.scss']
 })
 export class EditMaterialComponent implements OnInit {
-  editMaterialForm: FormGroup;
+  categories$: Observable<Category[]>;
+
+  editMaterialForm = this.fb.group({
+    name: [this.data.name, Validators.required],
+    categoryId: [this.data?.categoryId, Validators.required],
+    image: [this.data.image, Validators.required],
+    extra: [this.data.extra, Validators.required],
+    isAvailable: [this.data.isAvailable, Validators.required]
+  });
+
   imagePreview: string;
-  categories = categories;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Material,
     private dialogRef: MatDialogRef<EditMaterialComponent>,
     private materialService: MaterialService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private store$: Store
   ) {}
 
   ngOnInit(): void {
-    this.initEditMaterialForm(this.data);
+    this.categories$ = this.store$.select(selectMaterialCategories).pipe(
+      filter((categories) => !!categories),
+      untilDestroyed(this)
+    );
+
     this.imagePreview = this.data.image;
   }
 
-  onImagePicked(event: Event): void {
-    const file = (event.target as HTMLInputElement).files[0];
-
-    this.editMaterialForm.patchValue({ image: file });
-    this.editMaterialForm.get('image').updateValueAndValidity();
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+  async onImagePicked(event: Event): Promise<void> {
+    this.imagePreview = await addImageToFormAndSetPreview(
+      event,
+      this.editMaterialForm
+    );
   }
 
-  onImageClear(): void {
-    this.imagePreview = '';
-    this.editMaterialForm.value.image = '';
-    this.editMaterialForm.patchValue({ image: '' });
-    this.editMaterialForm.get('image').updateValueAndValidity();
+  onImageClear(imageInput: HTMLInputElement): void {
+    this.imagePreview = removeImageFromFormAndInputAndClearPreview(
+      this.editMaterialForm,
+      imageInput
+    );
   }
 
   onUpdateMaterial(): void {
     if (this.editMaterialForm.valid) {
       const editedMaterial = new FormData();
-      editedMaterial.append('name', this.editMaterialForm.value.name);
-      editedMaterial.append('category', this.editMaterialForm.value.category);
-      editedMaterial.append('image', this.editMaterialForm.value.image);
-      editedMaterial.append('extra', this.editMaterialForm.value.extra);
-      editedMaterial.append(
-        'isAvailable',
-        this.editMaterialForm.value.isAvailable
-      );
+      const materialName = this.editMaterialForm.value.name.trim();
+      const materialCategoryId = this.editMaterialForm.value.categoryId;
+      const materialImage = this.editMaterialForm.value.image;
+      const materialExtra = this.editMaterialForm.value.extra.toString();
+      const materialIsAvailable =
+        this.editMaterialForm.value.isAvailable.toString();
+
+      editedMaterial.append('name', materialName);
+      editedMaterial.append('categoryId', materialCategoryId);
+      editedMaterial.append('image', materialImage);
+      editedMaterial.append('extra', materialExtra);
+      editedMaterial.append('isAvailable', materialIsAvailable);
 
       this.materialService
         .updateMaterial$(editedMaterial, this.data.id)
@@ -71,15 +93,5 @@ export class EditMaterialComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  initEditMaterialForm(material: Material): void {
-    this.editMaterialForm = new FormGroup({
-      name: new FormControl(material.name, Validators.required),
-      category: new FormControl(material.category, Validators.required),
-      image: new FormControl(material.image, Validators.required),
-      extra: new FormControl(material.extra, Validators.required),
-      isAvailable: new FormControl(material.isAvailable, Validators.required)
-    });
   }
 }
