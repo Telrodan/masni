@@ -3,7 +3,13 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, map, tap } from 'rxjs';
 
-import { addInspiration, deleteInspiration } from '@core/store';
+import {
+  addInspiration,
+  addItemToCategory,
+  deleteInspiration,
+  moveItemBetweenCategories,
+  updateInspiration
+} from '@core/store';
 import { Inspiration } from '@core/models/inspiration.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { ApiService } from './api.service';
@@ -21,6 +27,32 @@ export class InspirationService {
         map((inspirationDTO) => inspirationDTO.data),
         tap((inspiration) => {
           this.store.dispatch(addInspiration({ inspiration }));
+          this.store.dispatch(
+            addItemToCategory({
+              itemId: inspiration.id,
+              categoryId: inspiration.categoryId
+            })
+          );
+        })
+      );
+  }
+
+  updateInspiration$(inspiration: FormData): Observable<Inspiration> {
+    return this.apiService
+      .patch<ApiResponse<Inspiration>>(
+        `inspiration/updateOne/${inspiration.get('id')}`,
+        inspiration
+      )
+      .pipe(
+        map((inspirationDTO) => inspirationDTO.data),
+        tap((inspiration) => {
+          this.store.dispatch(updateInspiration({ inspiration }));
+          this.store.dispatch(
+            moveItemBetweenCategories({
+              itemId: inspiration.id,
+              categoryId: inspiration.categoryId
+            })
+          );
         })
       );
   }

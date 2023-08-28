@@ -5,7 +5,9 @@ import { Inspiration } from '@core/models/inspiration.model';
 export enum InspirationActionsTypes {
   GET_INSPIRATIONS = '[Inspiration] Get Inspirations',
   GET_INSPIRATIONS_SUCCESS = '[Inspiration] Get Inspirations Success',
+  GET_INSPIRATIONS_ERROR = '[Inspiration] Get Inspirations Error',
   ADD_INSPIRATION = '[Inspiration] Add Inspiration',
+  UPDATE_INSPIRATION = '[Inspiration] Update Inspiration',
   DELETE_INSPIRATION = '[Inspiration] Delete Inspiration'
 }
 
@@ -18,8 +20,17 @@ export const getInspirationsSuccess = createAction(
   props<{ inspirations: Inspiration[] }>()
 );
 
+export const getInspirationsError = createAction(
+  InspirationActionsTypes.GET_INSPIRATIONS_ERROR
+);
+
 export const addInspiration = createAction(
   InspirationActionsTypes.ADD_INSPIRATION,
+  props<{ inspiration: Inspiration }>()
+);
+
+export const updateInspiration = createAction(
+  InspirationActionsTypes.UPDATE_INSPIRATION,
   props<{ inspiration: Inspiration }>()
 );
 

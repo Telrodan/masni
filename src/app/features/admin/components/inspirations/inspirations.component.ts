@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
 import { AddInspirationComponent } from './components/add-inspiration/add-inspiration.component';
+import { EditInspirationComponent } from './components/edit-inspiration/edit-inspiration.component';
 
 @Component({
   selector: 'mhd-inspirations',
@@ -17,7 +18,6 @@ import { AddInspirationComponent } from './components/add-inspiration/add-inspir
 export class InspirationsComponent implements OnInit {
   inspirations$: Observable<Inspiration[]>;
 
-  images: string[];
   imageLoadedStatus: boolean[] = [];
 
   constructor(
@@ -30,17 +30,20 @@ export class InspirationsComponent implements OnInit {
   ngOnInit(): void {
     this.inspirations$ = this.store$.select(selectAllInspiration).pipe(
       filter((inspirations) => !!inspirations),
-      map((inspirations) => {
-        this.reloadInspirationsImages(inspirations);
-
-        return [...inspirations];
-      })
+      map((inspirations) => [...inspirations])
     );
   }
 
   onAddInspiration(): void {
     this.dialog.open(AddInspirationComponent, {
       minWidth: '40vw'
+    });
+  }
+
+  onEditInspiration(inspiration: Inspiration): void {
+    this.dialog.open(EditInspirationComponent, {
+      minWidth: '40vw',
+      data: inspiration
     });
   }
 
@@ -70,14 +73,5 @@ export class InspirationsComponent implements OnInit {
 
   imageLoaded(index: number) {
     this.imageLoadedStatus[index] = true;
-  }
-
-  reloadInspirationsImages(inspiration: Inspiration[]) {
-    this.images = inspiration.map((inspiration) => {
-      const timestamp = new Date().getTime();
-
-      return inspiration.image + `?timestamp=${timestamp}`;
-    });
-    this.imageLoadedStatus = this.images.map(() => false);
   }
 }

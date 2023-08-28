@@ -4,8 +4,8 @@
       styleClass="p-datatable-gridlines"
       [value]="inspirations"
       [paginator]="true"
-      [rows]="5"
-      [rowsPerPageOptions]="[5, 10, 20]">
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]">
       <ng-template pTemplate="caption">
         <div class="flex">
           <p-button
@@ -23,7 +23,11 @@
 
           <th>Azonosító</th>
 
-          <th>Opciók</th>
+          <th>Név</th>
+
+          <th>Kategória</th>
+
+          <th class="w-3rem">Opciók</th>
         </tr>
       </ng-template>
 
@@ -32,35 +36,39 @@
           <td>
             <img
               class="hidden"
-              [src]="images[i]"
-              [alt]="'Inspiráció ' + i"
+              [src]="inspiration.image"
+              [alt]="inspiration.name"
               (load)="imageLoaded(i)" />
 
             <p-image
               *ngIf="imageLoadedStatus[i]"
               [src]="inspiration.image"
-              [alt]="'Inspiráció ' + i"
+              [alt]="inspiration.name"
               [preview]="true">
             </p-image>
 
-            <ngx-skeleton-loader
+            <p-skeleton
               *ngIf="!imageLoadedStatus[i]"
-              appearance="circle"
-              animation="pulse"
-              [theme]="{
-                margin: '0',
-                width: '100%',
-                paddingBottom: '100%',
-                aspectRatio: '1 / 1',
-                borderRadius: '0',
-                background: 'lightGrey'
-              }">
-            </ngx-skeleton-loader>
+              styleClass="skeleton"></p-skeleton>
           </td>
 
           <td>{{ inspiration.id }}</td>
 
+          <td>{{ inspiration.name }}</td>
+
+          <td>{{ inspiration.categoryName }}</td>
+
           <td>
+            <button
+              (click)="onEditInspiration(inspiration)"
+              pButton
+              pRipple
+              pTooltip="Inspiráció módosítása"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-cog"
+              class="p-button p-button-warning p-button mb-1"></button>
+
             <button
               (click)="onDeleteInspiration(inspiration)"
               pButton

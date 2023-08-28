@@ -1,11 +1,11 @@
 <i class="pi pi-times close" mat-dialog-close></i>
-<h2 mat-dialog-title>Minta szerkesztése</h2>
+<h2 mat-dialog-title>Inspiráció módosítása</h2>
 
 <mat-dialog-content>
-  <form class="flex-auto p-fluid" [formGroup]="editMaterialForm">
+  <form class="flex-auto p-fluid" [formGroup]="editInspirationForm">
     <div class="form-group">
       <label for="name" class="block font-medium text-900 mb-2">
-        Minta neve
+        Inspiráció neve
       </label>
 
       <input id="name" type="text" formControlName="name" pInputText />
@@ -13,12 +13,13 @@
 
     <div class="form-group" *ngIf="categories$ | async as categories">
       <label for="category" class="block font-medium text-900 mb-2">
-        Minta kategória
+        Inspiráció kategóriája
       </label>
 
       <p-dropdown
         id="category"
         formControlName="categoryId"
+        placeholder="Válassz egy kategóriát"
         [options]="categories"
         optionValue="id"
         optionLabel="name">
@@ -26,9 +27,7 @@
     </div>
 
     <div class="form-group">
-      <label for="image" class="block font-medium text-900 mb-2">
-        Minta képe
-      </label>
+      <label class="block font-medium text-900 mb-2"> Inspiráció képe </label>
 
       <p-button
         icon="pi pi-image"
@@ -37,7 +36,6 @@
       </p-button>
 
       <input
-        id="image"
         type="file"
         class="hidden"
         #imagePicker
@@ -47,7 +45,7 @@
         *ngIf="imagePreview"
         class="my-3 image-preview"
         [src]="imagePreview"
-        [alt]="editMaterialForm.value.name" />
+        alt="Inspiration" />
 
       <button
         *ngIf="imagePreview"
@@ -59,23 +57,6 @@
         type="button"
         icon="pi pi-times"
         class="p-button p-button-danger p-button"></button>
-    </div>
-
-    <div class="mb-4">
-      <label for="extra" class="block font-medium text-900 mb-2">
-        Minta extra ára
-      </label>
-      <input id="extra" formControlName="extra" type="text" pInputText />
-    </div>
-    <div class="mb-4">
-      <label for="stock" class="block font-medium text-900 mb-2"
-        >Rendelhető?</label
-      >
-      <p-toggleButton
-        styleClass="w-auto"
-        formControlName="isAvailable"
-        onLabel="Igen"
-        offLabel="Nem"></p-toggleButton>
     </div>
   </form>
 </mat-dialog-content>
@@ -89,8 +70,8 @@
 
   <p-button
     label="Módosítás"
-    styleClass="p-button"
-    [disabled]="!editMaterialForm.valid || !editMaterialForm.dirty"
-    (click)="onUpdateMaterial()">
+    styleClass="p-button w-auto"
+    [disabled]="!editInspirationForm.valid"
+    (click)="onEditInspiration()">
   </p-button>
 </mat-dialog-actions>

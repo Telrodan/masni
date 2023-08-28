@@ -51,6 +51,7 @@ import { LogsComponent } from './components/reports/components/logs/logs.compone
 import { QuestionsComponent } from './components/questions/questions.component';
 import { AddQuestionComponent } from './components/questions/components/add-question/add-question.component';
 import { EditQuestionComponent } from './components/questions/components/edit-question/edit-question.component';
+import { EditInspirationComponent } from './components/inspirations/components/edit-inspiration/edit-inspiration.component';
 
 const PRIME_NG = [
   CardModule,
@@ -102,7 +103,8 @@ const PRIME_NG = [
     LogsComponent,
     QuestionsComponent,
     AddQuestionComponent,
-    EditQuestionComponent
+    EditQuestionComponent,
+    EditInspirationComponent
   ],
   imports: [
     CommonModule,

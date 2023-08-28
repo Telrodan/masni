@@ -31,7 +31,6 @@ export class MaterialsComponent implements OnInit {
 
   materials$: Observable<Material[]>;
 
-  images: string[];
   imageLoadedStatus: boolean[] = [];
 
   constructor(

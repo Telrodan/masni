@@ -1,5 +1,7 @@
 export interface Inspiration {
   id: string;
-  categoryId?: string;
+  name: string;
+  categoryId: string;
+  categoryName?: string;
   image: string;
 }

@@ -5,7 +5,8 @@ import {
   addInspiration,
   deleteInspiration,
   getInspirations,
-  getInspirationsSuccess
+  getInspirationsSuccess,
+  updateInspiration
 } from '../actions';
 
 export const inspirationInitialState: InspirationState = {
@@ -30,6 +31,18 @@ export const inspirationReducers = createReducer(
     ...state,
     inspirations: [...state.inspirations, action.inspiration]
   })),
+
+  on(updateInspiration, (state, action) => {
+    const index = state.inspirations.findIndex(
+      (inspiration) => inspiration.id === action.inspiration.id
+    );
+    const inspirations = [...state.inspirations];
+    inspirations.splice(index, 1, action.inspiration);
+    return {
+      ...state,
+      inspirations
+    };
+  }),
 
   on(deleteInspiration, (state, action) => {
     const index = state.inspirations.findIndex((item) => item.id === action.id);
