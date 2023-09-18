@@ -66,7 +66,6 @@ export class EditInspirationComponent implements OnInit {
 
   onEditInspiration(): void {
     if (this.editInspirationForm.valid) {
-      console.log('lel');
       const editedInspiration: Inspiration = {
         id: this.data.id,
         name: this.editInspirationForm.value.name.trim(),

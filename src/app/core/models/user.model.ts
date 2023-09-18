@@ -24,6 +24,8 @@ interface Address {
   county: string;
 }
 
+interface ShoppingCart {}
+
 export class User {
   id?: string;
   name: string;
