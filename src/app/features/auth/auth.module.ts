@@ -10,8 +10,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ButtonModule } from 'primeng/button';
 
-const PRIME_NG = [InputTextModule, CheckboxModule, InputSwitchModule];
+const PRIME_NG = [
+  InputTextModule,
+  CheckboxModule,
+  InputSwitchModule,
+  ButtonModule
+];
 
 @NgModule({
   declarations: [

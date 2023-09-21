@@ -1,64 +1,19 @@
-import { ShoppingCartItem } from './shopping-cart-item.model';
+import { Address } from './address.model';
+import { ShoppingCart } from './shopping-cart.model';
 
-interface UserSignupForm {
-  name: string;
-  email: string;
-  phone: string;
-  password?: string;
-  passwordConfirm?: string;
-  shippingStreet: string;
-  shippingCity: string;
-  shippingPostcode: number;
-  shippingCounty: string;
-  billingStreet: string;
-  billingCity: string;
-  billingPostcode: number;
-  billingCounty: string;
-  subscribed: boolean;
-}
-
-interface Address {
-  street: string;
-  city: string;
-  postcode: number;
-  county: string;
-}
-
-interface ShoppingCart {}
-
-export class User {
+export interface User {
   id?: string;
   name: string;
   email: string;
   phone: string;
   password?: string;
   passwordConfirm?: string;
-  shoppingCart: {
-    id: string;
-    items: ShoppingCartItem[];
-  };
+  shoppingCart?: ShoppingCart;
   shippingAddress: Address;
   billingAddress: Address;
   subscribed: boolean;
-
-  constructor(data: UserSignupForm) {
-    this.name = data.name;
-    this.email = data.email;
-    this.phone = data.phone;
-    this.password = data.password;
-    this.passwordConfirm = data.passwordConfirm;
-    this.shippingAddress = {
-      street: data.shippingStreet,
-      city: data.shippingCity,
-      postcode: data.shippingPostcode,
-      county: data.shippingCounty
-    };
-    this.billingAddress = {
-      street: data.billingStreet,
-      city: data.billingCity,
-      postcode: data.billingPostcode,
-      county: data.billingCounty
-    };
-    this.subscribed = data.subscribed;
-  }
+  active?: boolean;
+  passwordChangedAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
