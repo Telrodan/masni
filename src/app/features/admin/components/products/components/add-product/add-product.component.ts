@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
@@ -14,10 +9,10 @@ import { Observable, filter, tap } from 'rxjs';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { Category } from '@core/models/category.model';
-import { selectProductCategories } from '@core/store';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
-import { Product } from '@core/models/product.model';
+import { selectAllQuestion, selectProductCategories } from '@core/store';
 import { addImagesToFormAndSetPreview } from '@shared/util/image-upload-helpers';
+import { Question } from '@core/models/question.model';
+import { Product } from '@core/models/product.model';
 
 @UntilDestroy()
 @Component({
@@ -27,21 +22,18 @@ import { addImagesToFormAndSetPreview } from '@shared/util/image-upload-helpers'
 })
 export class AddProductComponent implements OnInit {
   categories$: Observable<Category[]>;
-
-  // name: new FormControl(null, Validators.required),
-  // category: new FormControl(null, Validators.required),
-  // shortDescription: new FormControl(null, Validators.required),
-  // description: new FormControl(null, Validators.required),
-  // images: new FormControl(null, Validators.required),
-  // price: new FormControl(null, Validators.required),
-  // discountedPrice: new FormControl(0, Validators.required),
-  // stock: new FormControl(null, Validators.required)
+  questions: Question[];
+  selectedQuestions: Question[] = [];
 
   addProductForm = this.fb.group({
     name: ['', Validators.required],
     categoryId: ['', Validators.required],
     shortDescription: ['', Validators.required],
     description: ['', Validators.required],
+    isCustom: [false, Validators.required],
+    isNameEmbroideryAvailable: [false, Validators.required],
+    selectedQuestion: [null],
+    questions: this.fb.array<string[]>([]),
     images: [[], Validators.required],
     price: [0, Validators.required],
     discountedPrice: [0, Validators.required],
@@ -59,10 +51,45 @@ export class AddProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.store$.select(selectProductCategories).pipe(
-      filter((categories) => !!categories),
-      untilDestroyed(this)
-    );
+    this.categories$ = this.store$
+      .select(selectProductCategories)
+      .pipe(untilDestroyed(this));
+
+    this.store$
+      .select(selectAllQuestion)
+      .pipe(
+        tap((questions) => {
+          this.questions = questions;
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  addQuestion(): void {
+    const id = this.addProductForm.value.selectedQuestion;
+    if (id) {
+      this.addProductForm.value.questions.push(id);
+      const selectedQuestion = this.questions.find(
+        (question) => question.id === id
+      );
+      this.selectedQuestions.push(selectedQuestion);
+      this.toastr.success('Kérdés hozzáadva');
+      this.addProductForm.get('selectedQuestion').patchValue('');
+    } else {
+      this.toastr.info('Válassz egy kérdést');
+    }
+  }
+
+  deleteQuestion(id: string, index: number): void {
+    this.selectedQuestions.splice(index, 1);
+    this.addProductForm.value.questions =
+      this.addProductForm.value.questions.filter(
+        (questionId) => questionId !== id
+      );
+
+    this.toastr.success('Kérdés törölve');
+    console.log(' this.selectedQuestions', this.selectedQuestions);
   }
 
   onImagePicked(event: Event): void {
@@ -80,46 +107,37 @@ export class AddProductComponent implements OnInit {
   }
 
   onAddProduct(): void {
-    //   if (this.addProductForm.valid) {
-    //     const product: Product = {
-    //       name: this.addProductForm.value.name,
-    //       categoryId: this.addProductForm.value.categoryId,
-    //       shortDescription: this.addProductForm.value.shortDescription,
-    //       description: this.addProductForm.value.description,
-    //       images: this.addProductForm.value.images,
-    //       price: this.addProductForm.value.price,
-    //       discountedPrice: this.addProductForm.value.discountedPrice,
-    //       stock: this.addProductForm.value.stock
-    //     };
-    //     }
-    //     const product = new FormData();
-    //     product.append('name', this.addProductForm.value.name);
-    //     product.append('categoryId', this.addProductForm.value.category);
-    //     product.append(
-    //       'shortDescription',
-    //       this.addProductForm.value.shortDescription
-    //     );
-    //     product.append('description', this.addProductForm.value.description);
-    //     this.addProductForm.value.images.map((image: string) => {
-    //       product.append('images', image);
-    //     });
-    //     product.append('price', this.addProductForm.value.price);
-    //     product.append(
-    //       'discountedPrice',
-    //       this.addProductForm.value.discountedPrice
-    //     );
-    //     product.append('stock', this.addProductForm.value.stock);
-    //     this.productService
-    //       .addProduct$(product)
-    //       .pipe(
-    //         tap(() => {
-    //           this.toastr.success(
-    //             `${capitalize(this.addProductForm.value.name)} hozzáadva`
-    //           );
-    //           this.dialogRef.close();
-    //         })
-    //       )
-    //       .subscribe();
-    // }
+    if (this.addProductForm.valid) {
+      const product: Product = {
+        categoryId: this.addProductForm.value.categoryId,
+        name: this.addProductForm.value.name,
+        shortDescription: this.addProductForm.value.shortDescription,
+        description: this.addProductForm.value.description,
+        questions: this.addProductForm.value.questions,
+        isCustom: this.addProductForm.value.isCustom,
+        isNameEmbroideryAvailable:
+          this.addProductForm.value.isNameEmbroideryAvailable,
+        images: this.addProductForm.value.images,
+        price: this.addProductForm.value.price,
+        discountedPrice: this.addProductForm.value.discountedPrice,
+        stock: this.addProductForm.value.stock
+      };
+
+      const productFormData = new FormData();
+      productFormData.append('product', JSON.stringify(product));
+      product.images.forEach((image: string) => {
+        productFormData.append('images', image);
+      });
+
+      this.productService
+        .addProduct$(productFormData)
+        .pipe(
+          tap(() => {
+            this.toastr.success(`${product.name} hozzáadva`);
+            this.dialogRef.close();
+          })
+        )
+        .subscribe();
+    }
   }
 }
