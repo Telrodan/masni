@@ -28,6 +28,47 @@ export const addImageToFormAndSetPreview = async (
   return imagePreview;
 };
 
+export const addImagesToFormAndSetPreview = (
+  event: Event,
+  form: FormGroup
+): string[] => {
+  const files = Array.from((event.target as HTMLInputElement).files);
+  const imagesPreview = [];
+
+  form.patchValue({ images: files });
+  form.get('images').updateValueAndValidity();
+
+  if (files && files[0]) {
+    const numberOfFiles = files.length;
+    for (let i = 0; i < numberOfFiles; i++) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        imagesPreview.push(e.target.result);
+      };
+
+      reader.readAsDataURL(files[i]);
+    }
+  }
+
+  // const imagePreviewPromise = new Promise<string>((resolve, reject) => {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     const result = reader.result as string;
+  //     resolve(result);
+  //   };
+  //   reader.onerror = (error) => {
+  //     reject(error);
+  //   };
+  //   reader.readAsDataURL(file);
+  // });
+
+  // imagePreview = await imagePreviewPromise;
+  form.markAsDirty();
+
+  return imagesPreview;
+};
+
 export const removeImageFromFormAndInputAndClearPreview = (
   form: FormGroup,
   input: HTMLInputElement

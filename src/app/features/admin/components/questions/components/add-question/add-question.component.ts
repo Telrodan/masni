@@ -1,113 +1,233 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { QuestionType } from '@core/enums/question-type.enum';
-import { Option, Question } from '@core/models/question.model';
 
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { QuestionType } from '@core/enums/question-type.enum';
+import { Category } from '@core/models/category.model';
+import { Option, Question } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { tap } from 'rxjs';
+import {
+  selectMaterialCategories,
+  selectMaterialsByCategoryId
+} from '@core/store';
 
+const QUESTION_TYPE_FORM_OPTIONS = [
+  {
+    label: 'Kérdés hozzáadható válaszokkal',
+    value: QuestionType.QUESTION_WITH_STRING_ANSWER
+  },
+  {
+    label: 'Kérdés hozzáadható anyag kategóriákkal',
+    value: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+  }
+];
+
+@UntilDestroy()
 @Component({
   selector: 'mhd-add-question',
   templateUrl: './add-question.component.html',
   styleUrls: ['./add-question.component.scss']
 })
 export class AddQuestionComponent implements OnInit {
-  selectedQuestionType: QuestionType = QuestionType.QUESTION_WITH_STRING_ANSWER;
+  readonly questionType = QuestionType;
+  readonly questionTypeFormOptions = QUESTION_TYPE_FORM_OPTIONS;
 
-  QuestionType = QuestionType;
-  questionTypeFormData = [
-    {
-      label: 'Kérdés hozzáadható válaszokkal',
-      value: QuestionType.QUESTION_WITH_STRING_ANSWER
-    },
-    {
-      label: 'Kérdés hozzáadható anyag kategóriákkal',
-      value: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
-    }
-  ];
-  questionTypeForm = this.fb.group({
-    questionType: [this.questionTypeFormData[0].value, Validators.required]
-  });
-
-  addQuestionForm = this.fb.group({
+  addStringQuestionForm = this.fb.group({
     questionName: ['', Validators.required],
     question: ['', Validators.required],
-    option: [''],
+    optionName: [''],
+    options: this.fb.array<Option[]>([]),
     isExtraPrice: [false],
-    extraPrice: [0],
-    options: this.fb.array<Option[]>([], Validators.required)
+    extraPrice: [0]
   });
+  addMaterialQuestionForm = this.fb.group({
+    questionName: ['', Validators.required],
+    question: ['', Validators.required],
+    categoryId: [''],
+    materialCategoryIds: this.fb.array<string[]>([]),
+    categories: this.fb.array<Category[]>([])
+  });
+
+  categories$: Observable<Category[]>;
+  categories: Category[] = [];
+
+  questionTypeHelper = QuestionType.QUESTION_WITH_STRING_ANSWER;
+  questionTypeForm = this.fb.group({
+    questionType: [this.questionTypeHelper, Validators.required]
+  });
+
+  materialOptions = [];
 
   constructor(
     private fb: FormBuilder,
     private questionService: QuestionService,
     private toastr: ToastrService,
-    private dialogRef: MatDialogRef<AddQuestionComponent>
+    private dialogRef: MatDialogRef<AddQuestionComponent>,
+    private store$: Store
   ) {}
 
   ngOnInit(): void {
+    this.categories$ = this.store$.select(selectMaterialCategories).pipe(
+      tap((categories) => {
+        this.categories = categories;
+      }),
+      untilDestroyed(this)
+    );
+
     this.questionTypeForm.valueChanges
       .pipe(
         tap((value) => {
-          this.selectedQuestionType = value.questionType;
-        })
+          this.questionTypeHelper = value.questionType;
+        }),
+        untilDestroyed(this)
       )
       .subscribe();
   }
 
-  addOption(): void {
-    const option = this.addQuestionForm.value.option.trim();
-    const extraPrice = this.addQuestionForm.value.extraPrice;
+  addStringOption(): void {
+    const optionName = this.addStringQuestionForm.value.optionName.trim();
+    const extraPrice = this.addStringQuestionForm.value.extraPrice;
+    const option: Option = {
+      optionName,
+      extraPrice,
+      slug: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
+    };
 
-    if (option) {
-      (this.addQuestionForm.get('options') as FormArray).push(
-        this.fb.group({
-          option,
-          extraPrice,
-          slug: [extraPrice ? option + ' +' + extraPrice + ' Ft' : option]
-        })
-      );
-      this.addQuestionForm.get('option').reset();
-      this.addQuestionForm.get('isExtraPrice').reset();
-      this.addQuestionForm.get('extraPrice').patchValue(0);
+    if (option.optionName) {
+      this.addStringQuestionForm.value.options.push(option);
+      this.addStringQuestionForm.get('optionName').patchValue('');
+      this.addStringQuestionForm.get('isExtraPrice').patchValue(false);
+      this.addStringQuestionForm.get('extraPrice').patchValue(0);
       this.toastr.success('Választási lehetőség hozzáadva');
     } else {
       this.toastr.info('Kérlek adj meg egy választási lehetőséget');
     }
   }
 
-  deleteOption(index: number): void {
-    const options = this.addQuestionForm.get('options') as FormArray;
-
+  deleteStringOption(index: number): void {
+    const options = this.addStringQuestionForm.get('options') as FormArray;
     options.removeAt(index);
   }
 
+  addMaterialOption(): void {
+    const categoryId = this.addMaterialQuestionForm.value.categoryId;
+    const index = this.categories.findIndex(
+      (category) => category.id === categoryId
+    );
+    const category = this.categories[index];
+    this.addMaterialQuestionForm.value.materialCategoryIds.push(category.id);
+    this.addMaterialQuestionForm.value.categories.push(category);
+
+    this.store$
+      .select(selectMaterialsByCategoryId(category.id))
+      .pipe(
+        tap((items) => {
+          this.materialOptions = [
+            ...this.materialOptions,
+            ...items.filter((item) => item.isAvailable).map((item) => item.name)
+          ];
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  deleteMaterialCategoryOption(categoryId: string, index: number): void {
+    this.store$
+      .select(selectMaterialsByCategoryId(categoryId))
+      .pipe(
+        tap((items) => {
+          const deletedMaterialNames = items.map((item) => item.name);
+          this.materialOptions = this.materialOptions.filter(
+            (materialOption) => !deletedMaterialNames.includes(materialOption)
+          );
+          this.addMaterialQuestionForm.value.materialCategoryIds.splice(
+            index,
+            1
+          );
+          this.addMaterialQuestionForm.value.categories.splice(index, 1);
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe();
+  }
+
+  addQuestionWithStringAnswer(): void {
+    const questionName = this.addStringQuestionForm.value.questionName.trim();
+    const question = this.addStringQuestionForm.value.question.trim();
+    const options = this.addStringQuestionForm.value.options;
+
+    const questionObj: Question = {
+      questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
+      questionName,
+      question,
+      options
+    };
+
+    this.questionService
+      .addQuestion$(questionObj)
+      .pipe(
+        tap(() => {
+          this.toastr.success('Kérdés sikeresen hozzáadva');
+          this.addStringQuestionForm.reset();
+          this.dialogRef.close();
+        })
+      )
+      .subscribe();
+  }
+
+  addQuestionWithMaterialCategoryAnswer(): void {
+    const questionName = this.addMaterialQuestionForm.value.questionName.trim();
+    const question = this.addMaterialQuestionForm.value.question.trim();
+    const materialCategoryIds =
+      this.addMaterialQuestionForm.value.materialCategoryIds;
+
+    const questionObj: Question = {
+      questionType: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
+      questionName,
+      question,
+      materialCategoryIds
+    };
+
+    this.questionService
+      .addQuestion$(questionObj)
+      .pipe(
+        tap(() => {
+          this.toastr.success('Kérdés sikeresen hozzáadva');
+          this.dialogRef.close();
+          this.addMaterialQuestionForm.reset();
+        })
+      )
+      .subscribe();
+  }
+
   onSubmit(): void {
-    if (this.addQuestionForm.valid) {
-      const questionName = this.addQuestionForm.value.questionName.trim();
-      const question = this.addQuestionForm.value.question.trim();
-
-      const questionData: Question = {
-        questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
-        questionName,
-        question,
-        options: this.addQuestionForm.value.options as Option[]
-      };
-
-      this.questionService
-        .addQuestion$(questionData)
-        .pipe(
-          tap(() => {
-            this.toastr.success('Kérdés sikeresen hozzáadva');
-            this.addQuestionForm.reset();
-            this.dialogRef.close();
-          })
-        )
-        .subscribe();
-    } else {
-      this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
+    if (this.questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER) {
+      if (
+        this.addStringQuestionForm.valid &&
+        this.addStringQuestionForm.value.options.length
+      ) {
+        this.addQuestionWithStringAnswer();
+      } else {
+        this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
+      }
+    } else if (
+      this.questionTypeHelper ===
+      QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+    ) {
+      if (
+        this.addMaterialQuestionForm.valid &&
+        this.addMaterialQuestionForm.value.materialCategoryIds.length
+      ) {
+        this.addQuestionWithMaterialCategoryAnswer();
+      } else {
+        this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
+      }
     }
   }
 }

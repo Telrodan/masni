@@ -27,6 +27,7 @@ import { User } from '@core/models/user.model';
 import { userSelector } from '@core/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { loadStripe } from '@stripe/stripe-js';
+import { FoxpostService } from '@core/services/foxpost.service';
 
 interface ShoppingCartData {
   items: ShoppingCartItem[];
@@ -71,7 +72,8 @@ export class ShoppingCartComponent implements OnInit {
     private toastr: ToastrService,
     private store$: Store,
     private dialog: MatDialog,
-    private http: HttpClient
+    private http: HttpClient,
+    private foxpostService: FoxpostService
   ) {}
 
   public ngOnInit(): void {
@@ -94,11 +96,11 @@ export class ShoppingCartComponent implements OnInit {
       foxpost: new FormControl('')
     });
 
-    this.http
-      .get('https://cdn.foxpost.hu/apms.json')
+    this.foxpostService
+      .getFoxpostMachines()
       .pipe(
-        tap((response) => {
-          this.foxpostPoints = response;
+        tap((machines) => {
+          this.foxpostPoints = machines.data;
         })
       )
       .subscribe();

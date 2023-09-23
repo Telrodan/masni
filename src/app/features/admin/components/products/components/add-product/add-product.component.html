@@ -18,7 +18,7 @@
 
       <p-dropdown
         id="category"
-        formControlName="category"
+        formControlName="categoryId"
         [options]="categories$ | async"
         placeholder="Válassz egy kategóriát"
         optionValue="id"
@@ -52,6 +52,109 @@
         [autoResize]="true">
       </textarea>
     </div>
+
+    <div class="form-group">
+      <label for="isCustom" class="block font-medium text-900 mb-2">
+        Egyedi termék?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isCustom"
+            name="isCustom"
+            [value]="false"
+            inputId="isCustom">
+          </p-radioButton>
+          <label for="ingredient1" class="ml-2">Nem</label>
+        </div>
+
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isCustom"
+            name="isCustom"
+            [value]="true"
+            inputId="isCustom">
+          </p-radioButton>
+          <label for="ingredient2" class="ml-2">Igen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label
+        for="isNameEmbroideryAvailable"
+        class="block font-medium text-900 mb-2">
+        Név hímzés elérhető?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isNameEmbroideryAvailable"
+            name="isNameEmbroideryAvailable"
+            [value]="false"
+            inputId="isNameEmbroideryAvailable">
+          </p-radioButton>
+          <label for="isNameEmbroideryAvailable" class="ml-2">Nem</label>
+        </div>
+
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isNameEmbroideryAvailable"
+            name="isNameEmbroideryAvailable"
+            [value]="true"
+            inputId="isNameEmbroideryAvailable">
+          </p-radioButton>
+          <label for="isNameEmbroideryAvailable" class="ml-2">Igen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="selectedQuestion" class="block font-medium text-900 mb-2">
+        Kérdések
+      </label>
+
+      <div class="questions-wrapper">
+        <p-dropdown
+          id="selectedQuestion"
+          formControlName="selectedQuestion"
+          [options]="questions"
+          placeholder="Válassz egy kérdést"
+          optionValue="id"
+          optionLabel="questionName"
+          styleClass="mr-2">
+        </p-dropdown>
+
+        <p-button
+          icon="pi pi-plus"
+          styleClass="p-button-success"
+          pTooltip="Kérdés hozzáadása"
+          tooltipPosition="bottom"
+          (click)="addQuestion()"></p-button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="selectedQuestions.length">
+      <div class="form-group w-6">
+        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
+
+        <div
+          class="option-wrapper mb-2"
+          *ngFor="let question of selectedQuestions; let i = index">
+          <p class="block font-medium text-800 mb-1">
+            {{ i + 1 }}. {{ question.questionName }}
+          </p>
+
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-danger"
+            (click)="deleteQuestion(question.id, i)">
+          </p-button>
+        </div>
+      </div>
+    </ng-container>
 
     <div class="form-group">
       <label for="images" class="block font-medium text-900 mb-2">

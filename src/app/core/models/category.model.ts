@@ -6,4 +6,6 @@ export interface Category {
   name: string;
   image: string;
   items: string[];
+  updatedAt: Date;
+  createdAt: Date;
 }

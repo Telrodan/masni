@@ -1,86 +1,86 @@
 <ng-container *ngIf="inspirations$ | async as inspirations">
-  <p-card header="Inspirációk">
-    <p-table
-      styleClass="p-datatable-gridlines"
-      [value]="inspirations"
-      [paginator]="true"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 25, 50]">
-      <ng-template pTemplate="caption">
-        <div class="flex">
-          <p-button
-            icon="pi pi-plus"
-            label="Hozzáadás"
-            styleClass="p-button p-button-success"
-            (click)="onAddInspiration()">
-          </p-button>
-        </div>
-      </ng-template>
+    <p-card header="Inspirációk">
+        <p-table
+            styleClass="p-datatable-gridlines"
+            [value]="inspirations"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 25, 50]">
+            <ng-template pTemplate="caption">
+                <div class="flex">
+                    <p-button
+                        icon="pi pi-plus"
+                        label="Hozzáadás"
+                        styleClass="p-button p-button-success"
+                        (click)="onAddInspiration()">
+                    </p-button>
+                </div>
+            </ng-template>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th class="w-9rem">Kép</th>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="w-9rem">Kép</th>
 
-          <th>Azonosító</th>
+                    <th>Azonosító</th>
 
-          <th>Név</th>
+                    <th>Név</th>
 
-          <th>Kategória</th>
+                    <th>Kategória</th>
 
-          <th class="w-3rem">Opciók</th>
-        </tr>
-      </ng-template>
+                    <th class="w-3rem">Opciók</th>
+                </tr>
+            </ng-template>
 
-      <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
-        <tr>
-          <td>
-            <img
-              class="hidden"
-              [src]="inspiration.image"
-              [alt]="inspiration.name"
-              (load)="imageLoaded(i)" />
+            <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
+                <tr>
+                    <td>
+                        <img
+                            class="hidden"
+                            [src]="inspiration.image"
+                            [alt]="inspiration.name"
+                            (load)="imageLoaded(i)" />
 
-            <p-image
-              *ngIf="imageLoadedStatus[i]"
-              [src]="inspiration.image"
-              [alt]="inspiration.name"
-              [preview]="true">
-            </p-image>
+                        <p-image
+                            *ngIf="imageLoadedStatus[i]"
+                            [src]="inspiration.image"
+                            [alt]="inspiration.name"
+                            [preview]="true">
+                        </p-image>
 
-            <p-skeleton
-              *ngIf="!imageLoadedStatus[i]"
-              styleClass="skeleton"></p-skeleton>
-          </td>
+                        <p-skeleton
+                            *ngIf="!imageLoadedStatus[i]"
+                            styleClass="skeleton"></p-skeleton>
+                    </td>
 
-          <td>{{ inspiration.id }}</td>
+                    <td>{{ inspiration.id }}</td>
 
-          <td>{{ inspiration.name }}</td>
+                    <td>{{ inspiration.name }}</td>
 
-          <td>{{ inspiration.categoryName }}</td>
+                    <td>{{ inspiration.categoryName }}</td>
 
-          <td>
-            <button
-              (click)="onEditInspiration(inspiration)"
-              pButton
-              pRipple
-              pTooltip="Inspiráció módosítása"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-cog"
-              class="p-button p-button-warning p-button mb-1"></button>
+                    <td>
+                        <button
+                            (click)="onEditInspiration(inspiration)"
+                            pButton
+                            pRipple
+                            pTooltip="Inspiráció módosítása"
+                            tooltipPosition="bottom"
+                            type="button"
+                            icon="pi pi-cog"
+                            class="p-button p-button-warning p-button mb-1"></button>
 
-            <button
-              (click)="onDeleteInspiration(inspiration)"
-              pButton
-              pRipple
-              pTooltip="Inspiráció törlése"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-times"
-              class="p-button p-button-danger p-button"></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+                        <button
+                            (click)="onDeleteInspiration(inspiration)"
+                            pButton
+                            pRipple
+                            pTooltip="Inspiráció törlése"
+                            tooltipPosition="bottom"
+                            type="button"
+                            icon="pi pi-times"
+                            class="p-button p-button-danger p-button"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
 </ng-container>
