@@ -21,7 +21,7 @@
           class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
           (click)="activeMenu = 'address'">
           <i class="pi pi-truck md:mr-2"></i>
-          <span class="font-medium hidden md:block">Cím</span>
+          <span class="font-medium hidden md:block">Címek</span>
         </a>
       </li>
       <li>
@@ -58,15 +58,25 @@
                 pInputText />
             </div>
             <div class="mb-4">
-              <label for="subscribed" class="block text-900 mb-2"
-                >Hírlevél feliratkozás</label
-              >
-              <p-toggleButton
-                id="subscribed"
-                styleClass="p-button-raised w-auto"
-                formControlName="subscribed"
-                onLabel="Igen"
-                offLabel="Nem"></p-toggleButton>
+              <label for="subscribed" class="block text-900 mb-2">
+                Hírlevél feliratkozás
+              </label>
+
+              <div class="flex flex-wrap gap-3">
+                <p-radioButton
+                  id="subscribed"
+                  formControlName="subscribed"
+                  [value]="true"
+                  label="Igen">
+                </p-radioButton>
+
+                <p-radioButton
+                  id="subscribed"
+                  formControlName="subscribed"
+                  [value]="false"
+                  label="Nem">
+                </p-radioButton>
+              </div>
             </div>
             <div>
               <button
@@ -84,11 +94,9 @@
         class="surface-card p-5 shadow-2 border-round flex-auto"
         @fadeIn
         *ngIf="activeMenu === 'address'">
-        <div class="heading-primary mt-3 mt-3">Cím</div>
-        <p-divider></p-divider>
         <div class="flex gap-5 flex-column-reverse md:flex-row">
           <div class="flex-auto p-fluid">
-            <p class="font-medium text-primary">Szállítási cím</p>
+            <p class="heading-primary mt-3 mt-3">Szállítási cím</p>
             <p-divider></p-divider>
             <div formGroupName="shippingAddress">
               <div class="mb-4">
@@ -128,8 +136,7 @@
                   pInputText />
               </div>
             </div>
-            <p-divider></p-divider>
-            <p class="font-medium text-primary">Számlázási cím</p>
+            <p class="heading-primary mt-3 mt-3">Számlázási cím</p>
             <p-divider></p-divider>
             <div formGroupName="billingAddress">
               <div class="mb-4">
@@ -225,7 +232,7 @@
             <div class="mb-4">
               <p
                 class="text-red-300 underline cursor-pointer"
-                (click)="onDeleteCurrentUser()">
+                (click)="onDeleteCurrentUser(user)">
                 Fiók törléséhez kattints ide.
               </p>
             </div>
