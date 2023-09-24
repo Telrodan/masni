@@ -1,5 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '@core/store/app-state';
+import { selectAllQuestion } from './question.selectors';
+import * as _ from 'lodash';
 
 export const selectProductState = (state: AppState) => state.products;
 
@@ -11,6 +13,24 @@ export const selectAllProducts = createSelector(
 export const selectAvailableProducts = createSelector(
   selectProductState,
   (state) => state.availableProducts
+);
+
+export const selectProductsWithQuestions = createSelector(
+  selectAllProducts,
+  selectAllQuestion,
+  (products, questions) => {
+    console.log('products', products);
+
+    const clonedProducts = _.cloneDeep(products);
+    clonedProducts.forEach((product) => {
+      questions.forEach((question) => {
+        if (product.questionIds.includes(question.id)) {
+          product.questions.push(question);
+        }
+      });
+    });
+    return clonedProducts;
+  }
 );
 
 export const selectCustomProductByName = (name: string) =>

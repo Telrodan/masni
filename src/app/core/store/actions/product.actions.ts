@@ -7,7 +7,8 @@ export enum ProductActionTypes {
   GET_PRODUCTS_ERROR = '[Products] Get Products Error',
   ADD_PRODUCT = '[Products] Add Product',
   DELETE_PRODUCT = '[Products] Delete Product',
-  UPDATE_PRODUCT = '[Products] Update Product'
+  UPDATE_PRODUCT = '[Products] Update Product',
+  REMOVE_QUESTION_FROM_PRODUCT = '[Products] Remove Question From Product'
 }
 
 export const getProducts = createAction(ProductActionTypes.GET_PRODUCTS);
@@ -34,4 +35,9 @@ export const deleteProduct = createAction(
 export const updateProduct = createAction(
   ProductActionTypes.UPDATE_PRODUCT,
   props<{ product: Product }>()
+);
+
+export const removeQuestionFromProduct = createAction(
+  ProductActionTypes.REMOVE_QUESTION_FROM_PRODUCT,
+  props<{ id: string }>()
 );

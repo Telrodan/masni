@@ -4,7 +4,12 @@ import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
 import { Question } from '@core/models/question.model';
 import { Store } from '@ngrx/store';
-import { addQuestion, deleteQuestion, updateQuestion } from '@core/store';
+import {
+  addQuestion,
+  deleteQuestion,
+  removeQuestionFromProduct,
+  updateQuestion
+} from '@core/store';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +52,7 @@ export class QuestionService {
     return this.apiService.delete<null>('question/deleteOne', id).pipe(
       tap(() => {
         this.store$.dispatch(deleteQuestion({ id }));
+        this.store$.dispatch(removeQuestionFromProduct({ id }));
       })
     );
   }

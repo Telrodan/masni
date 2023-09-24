@@ -50,20 +50,6 @@ export const addImagesToFormAndSetPreview = (
       reader.readAsDataURL(files[i]);
     }
   }
-
-  // const imagePreviewPromise = new Promise<string>((resolve, reject) => {
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     const result = reader.result as string;
-  //     resolve(result);
-  //   };
-  //   reader.onerror = (error) => {
-  //     reject(error);
-  //   };
-  //   reader.readAsDataURL(file);
-  // });
-
-  // imagePreview = await imagePreviewPromise;
   form.markAsDirty();
 
   return imagesPreview;

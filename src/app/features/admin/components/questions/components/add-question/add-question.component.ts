@@ -8,13 +8,14 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { QuestionType } from '@core/enums/question-type.enum';
 import { Category } from '@core/models/category.model';
-import { Option, Question } from '@core/models/question.model';
+import { Question } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
   selectMaterialCategories,
   selectMaterialsByCategoryId
 } from '@core/store';
+import { QuestionOption } from '@core/models/question-option.model';
 
 const QUESTION_TYPE_FORM_OPTIONS = [
   {
@@ -41,7 +42,7 @@ export class AddQuestionComponent implements OnInit {
     questionName: ['', Validators.required],
     question: ['', Validators.required],
     optionName: [''],
-    options: this.fb.array<Option[]>([]),
+    options: this.fb.array<QuestionOption[]>([]),
     isExtraPrice: [false],
     extraPrice: [0]
   });
@@ -92,7 +93,7 @@ export class AddQuestionComponent implements OnInit {
   addStringOption(): void {
     const optionName = this.addStringQuestionForm.value.optionName.trim();
     const extraPrice = this.addStringQuestionForm.value.extraPrice;
-    const option: Option = {
+    const option: QuestionOption = {
       optionName,
       extraPrice,
       slug: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
