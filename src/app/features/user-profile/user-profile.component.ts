@@ -6,12 +6,15 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { User } from '@core/models/user.model';
+import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
 import { userSelector } from '@core/store';
 import { Store } from '@ngrx/store';
-import { filter, Observable, tap } from 'rxjs';
+import { filter, Observable, tap, switchMap } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'mhd-user-profile',
@@ -34,7 +37,9 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private store: Store,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -76,10 +81,28 @@ export class UserProfileComponent implements OnInit {
       .subscribe();
   }
 
-  onDeleteCurrentUser(): void {
-    this.userService.deleteCurrentUser$().subscribe();
+  onDeleteCurrentUser(user: User): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Megerősítés',
+          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`,
+          confirmButtonText: 'Igen',
+          cancelButtonText: 'Nem'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => !!confirmed),
+        switchMap(() => this.userService.deleteCurrentUser$()),
+        tap(() => {
+          this.toastr.success(`${user.name} törölve`);
+          this.authService.logout();
+        })
+      )
+      .subscribe();
   }
-
+  
   private initForm(user: User): void {
     this.form = new FormGroup({
       name: new FormControl(user.name, Validators.required),
