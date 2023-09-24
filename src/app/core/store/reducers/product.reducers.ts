@@ -6,11 +6,13 @@ import {
   getProducts,
   getProductsError,
   getProductsSuccess,
+  removeQuestionFromProduct,
   updateProduct
 } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
 import { StatusTypes } from '../status-types';
+import * as _ from 'lodash';
 
 export const productInitialState: ProductState = {
   allProducts: [],
@@ -26,12 +28,18 @@ export const productReducers = createReducer(
     status: StatusTypes.LOADING
   })),
 
-  on(getProductsSuccess, (state, action) => ({
-    ...state,
-    allProducts: action.products,
-    availableProducts: action.products.filter((product) => product.stock > 0),
-    status: StatusTypes.LOADED
-  })),
+  on(getProductsSuccess, (state, action) => {
+    const products = action.products.map((product) => {
+      return { ...product, questions: [] };
+    });
+
+    return {
+      ...state,
+      allProducts: products,
+      availableProducts: products.filter((product) => product.stock > 0),
+      status: StatusTypes.LOADED
+    };
+  }),
 
   on(getProductsError, (state) => ({
     ...state,
@@ -64,15 +72,16 @@ export const productReducers = createReducer(
   }),
 
   on(updateProduct, (state, action) => {
-    const availableProducts = [...state.availableProducts];
+    const availableProducts = _.cloneDeep(state.availableProducts);
+
     if (action.product.stock > 0) {
-      if (!availableProducts.includes(action.product)) {
-        availableProducts.push(action.product);
-      } else {
+      if (availableProducts.includes(action.product)) {
         const index = availableProducts.findIndex(
           (product) => product.id === action.product.id
         );
         availableProducts.splice(index, 1, action.product);
+      } else {
+        availableProducts.push(action.product);
       }
     } else {
       const index = availableProducts.findIndex(
@@ -86,6 +95,37 @@ export const productReducers = createReducer(
     );
     const allProducts = [...state.allProducts];
     allProducts.splice(index, 1, action.product);
+
+    return {
+      ...state,
+      allProducts,
+      availableProducts
+    };
+  }),
+
+  on(removeQuestionFromProduct, (state, action) => {
+    const allProducts = _.cloneDeep(state.allProducts);
+    const availableProducts = _.cloneDeep(state.availableProducts);
+
+    allProducts.forEach((product) => {
+      if (product.questionIds.includes(action.id)) {
+        const index = product.questionIds.findIndex(
+          (questionId) => questionId === action.id
+        );
+        product.questionIds.splice(index, 1);
+      }
+    });
+
+    console.log('allProducts', allProducts);
+
+    availableProducts.forEach((product) => {
+      if (product.questionIds.includes(action.id)) {
+        const index = product.questionIds.findIndex(
+          (questionId) => questionId === action.id
+        );
+        product.questionIds.splice(index, 1);
+      }
+    });
 
     return {
       ...state,

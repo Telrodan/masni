@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, filter, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -22,6 +22,7 @@ import { Product } from '@core/models/product.model';
 })
 export class AddProductComponent implements OnInit {
   categories$: Observable<Category[]>;
+
   questions: Question[];
   selectedQuestions: Question[] = [];
 
@@ -33,7 +34,7 @@ export class AddProductComponent implements OnInit {
     isCustom: [false, Validators.required],
     isNameEmbroideryAvailable: [false, Validators.required],
     selectedQuestion: [null],
-    questions: this.fb.array<string[]>([]),
+    questionIds: this.fb.array<string[]>([]),
     images: [[], Validators.required],
     price: [0, Validators.required],
     discountedPrice: [0, Validators.required],
@@ -69,7 +70,7 @@ export class AddProductComponent implements OnInit {
   addQuestion(): void {
     const id = this.addProductForm.value.selectedQuestion;
     if (id) {
-      this.addProductForm.value.questions.push(id);
+      this.addProductForm.value.questionIds.push(id);
       const selectedQuestion = this.questions.find(
         (question) => question.id === id
       );
@@ -83,13 +84,12 @@ export class AddProductComponent implements OnInit {
 
   deleteQuestion(id: string, index: number): void {
     this.selectedQuestions.splice(index, 1);
-    this.addProductForm.value.questions =
-      this.addProductForm.value.questions.filter(
+    this.addProductForm.value.questionIds =
+      this.addProductForm.value.questionIds.filter(
         (questionId) => questionId !== id
       );
 
     this.toastr.success('Kérdés törölve');
-    console.log(' this.selectedQuestions', this.selectedQuestions);
   }
 
   onImagePicked(event: Event): void {
@@ -113,7 +113,7 @@ export class AddProductComponent implements OnInit {
         name: this.addProductForm.value.name,
         shortDescription: this.addProductForm.value.shortDescription,
         description: this.addProductForm.value.description,
-        questions: this.addProductForm.value.questions,
+        questionIds: this.addProductForm.value.questionIds,
         isCustom: this.addProductForm.value.isCustom,
         isNameEmbroideryAvailable:
           this.addProductForm.value.isNameEmbroideryAvailable,

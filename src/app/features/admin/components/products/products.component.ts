@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
-import { selectAllProducts } from '@core/store';
+import { selectProductsWithQuestions } from '@core/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { Table } from 'primeng/table';
@@ -10,7 +10,6 @@ import { filter, map, Observable, switchMap, tap } from 'rxjs';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { EditProductComponent } from './components/edit-product/edit-product.component';
 import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
 import { ToastrService } from '@core/services/toastr.service';
 
 @UntilDestroy()
@@ -35,7 +34,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.products$ = this.store$.select(selectAllProducts).pipe(
+    this.products$ = this.store$.select(selectProductsWithQuestions).pipe(
       filter((products) => !!products),
       map((products) => {
         this.reloadProductsImages(products);
@@ -82,9 +81,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         minWidth: '40vw',
         data: {
           title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd 
-          "${capitalize(product.name)}"
-           terméket?`,
+          message: `Biztos törölni szeretnéd "${product.name}" terméket?`,
           confirmButtonText: 'Igen',
           cancelButtonText: 'Nem'
         }
@@ -94,7 +91,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.productService.deleteProduct$(product)),
         tap(() => {
-          this.toastr.success(`${capitalize(product.name)} termék törölve`);
+          this.toastr.success(`${product.name} termék törölve`);
         })
       )
       .subscribe();

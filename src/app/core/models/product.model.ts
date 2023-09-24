@@ -6,7 +6,8 @@ export interface Product {
   name: string;
   shortDescription: string;
   description: string;
-  questions: string[] | Question[];
+  questionIds: string[];
+  questions?: Question[];
   isCustom: boolean;
   isNameEmbroideryAvailable: boolean;
   images: string[];

@@ -3,7 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { QuestionType } from '@core/enums/question-type.enum';
 import { Category } from '@core/models/category.model';
-import { Option, Question } from '@core/models/question.model';
+import { QuestionOption } from '@core/models/question-option.model';
+import { Question } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
@@ -44,7 +45,7 @@ export class EditQuestionComponent implements OnInit {
       questionName: [this.data.questionName, Validators.required],
       question: [this.data.question, Validators.required],
       optionName: [''],
-      options: this.fb.array<Option>(this.data.options),
+      options: this.fb.array<QuestionOption>(this.data.options),
       isExtraPrice: [false],
       extraPrice: [0]
     });
@@ -85,7 +86,7 @@ export class EditQuestionComponent implements OnInit {
   addStringOption(): void {
     const optionName = this.editStringQuestionForm.value.optionName.trim();
     const extraPrice = this.editStringQuestionForm.value.extraPrice;
-    const option: Option = {
+    const option: QuestionOption = {
       optionName,
       extraPrice,
       slug: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
