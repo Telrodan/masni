@@ -4,9 +4,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { tap } from 'rxjs';
 
-import { CategoryService } from '@core/services/category.service';
+import { RawCategory } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
+import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
+
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
@@ -51,28 +53,27 @@ export class AddCategoryComponent {
 
   onAddCategory(): void {
     if (this.addCategoryForm.valid) {
-      const categoryType = this.addCategoryForm.value.type;
-      const categoryName = this.addCategoryForm.value.name.trim();
-      const categoryImage = this.addCategoryForm.value.image;
+      const category: RawCategory = {
+        type: this.addCategoryForm.value.type,
+        name: this.addCategoryForm.value.name.trim(),
+        image: this.addCategoryForm.value.image
+      };
 
-      if (categoryName) {
-        const categoryData = new FormData();
-        categoryData.append('type', categoryType);
-        categoryData.append('name', categoryName);
-        categoryData.append('image', categoryImage);
-
+      if (category.name) {
         this.categoryService
-          .addCategory$(categoryData)
+          .addCategory$(category)
           .pipe(
             tap(() => {
-              this.toastr.success(`${categoryName} kategória hozzáadva`);
+              this.toastr.success(`${category.name} hozzáadva`);
               this.dialogRef.close();
             })
           )
           .subscribe();
       } else {
-        this.toastr.info(`Kérlek adj meg egy kategória nevet`);
+        this.toastr.info('Kérlek adj meg egy kategória nevet');
       }
+    } else {
+      this.toastr.info('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

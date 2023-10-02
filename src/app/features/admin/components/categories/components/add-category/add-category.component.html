@@ -4,8 +4,20 @@
 
 <mat-dialog-content>
   <form [formGroup]="addCategoryForm" class="mt-2">
-    <div class="form-group gap-2">
-      <div class="flex align-items-center">
+    <div class="form-group">
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
+        Kategória neve
+      </label>
+
+      <input id="name" formControlName="name" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-blue-500 mb-1 text-lg">
+        Kategória típusa
+      </label>
+
+      <div class="flex align-items-center mb-1">
         <p-radioButton
           [value]="CategoryType.PRODUCT_CATEGORY"
           formControlName="type"
@@ -14,13 +26,13 @@
         <label for="productCategory" class="ml-2">Termék kategória</label>
       </div>
 
-      <div class="flex align-items-center">
+      <div class="flex align-items-center mb-1">
         <p-radioButton
           [value]="CategoryType.MATERIAL_CATEGORY"
           formControlName="type"
           inputId="materialCategory">
         </p-radioButton>
-        <label for="materialCategory" class="ml-2">Minta kategória</label>
+        <label for="materialCategory" class="ml-2"> Minta kategória </label>
       </div>
 
       <div class="flex align-items-center">
@@ -36,15 +48,11 @@
     </div>
 
     <div class="form-group">
-      <label for="name" class="block font-medium text-blue-500 mb-1">
-        Kategória neve
+      <label
+        for="imagePicker"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Kategória képe
       </label>
-
-      <input id="name" formControlName="name" type="text" pInputText />
-    </div>
-
-    <div class="form-group">
-      <label class="block font-medium text-blue-500 mb-1">Kategória képe</label>
 
       <p-button
         *ngIf="!imagePreview"
@@ -54,6 +62,7 @@
       </p-button>
 
       <input
+        id="imagePicker"
         type="file"
         class="hidden"
         #imagePicker

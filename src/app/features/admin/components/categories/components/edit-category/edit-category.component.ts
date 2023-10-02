@@ -1,13 +1,14 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { tap } from 'rxjs';
 
-import { Category } from '@core/models/category.model';
+import { Category, RawCategory } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
+
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
@@ -21,12 +22,8 @@ import {
 export class EditCategoryComponent {
   readonly CategoryType = CategoryType;
 
-  editCategoryForm = this.fb.group({
-    name: [this.data.name, Validators.required],
-    image: [this.data.image, Validators.required]
-  });
-
-  imagePreview = this.data.image;
+  editCategoryForm: FormGroup;
+  imagePreview: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Category,
@@ -34,7 +31,14 @@ export class EditCategoryComponent {
     private categoryService: CategoryService,
     private toastr: ToastrService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.editCategoryForm = this.fb.group({
+      name: [this.data.name, Validators.required],
+      image: [this.data.image, Validators.required]
+    });
+
+    this.imagePreview = this.data.image;
+  }
 
   async onImagePicked(event: Event): Promise<void> {
     this.imagePreview = await addImageToFormAndSetPreview(
@@ -52,24 +56,27 @@ export class EditCategoryComponent {
 
   onEditCategory(): void {
     if (this.editCategoryForm.valid) {
-      const categoryName = this.editCategoryForm.value.name.trim();
-      const categoryImage = this.editCategoryForm.value.image;
+      const category: RawCategory = {
+        type: this.data.type,
+        name: this.editCategoryForm.value.name.trim(),
+        image: this.editCategoryForm.value.image
+      };
 
-      if (categoryName) {
-        const categoryData = new FormData();
-        categoryData.append('name', categoryName);
-        categoryData.append('image', categoryImage);
-
+      if (category.name) {
         this.categoryService
-          .updateCategory$(categoryData, this.data.id)
+          .updateCategory$(category, this.data.id)
           .pipe(
             tap(() => {
-              this.toastr.success(`${categoryName} kategória módosítva`);
+              this.toastr.success(`${category.name} módosítva`);
               this.dialogRef.close();
             })
           )
           .subscribe();
+      } else {
+        this.toastr.info('Kérlek adj meg egy kategória nevet');
       }
+    } else {
+      this.toastr.info('Kérlek töltsd az összes mezőt');
     }
   }
 }

@@ -11,7 +11,7 @@ import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 
@@ -63,9 +63,7 @@ export class CategoriesComponent implements OnInit {
       .open(ConfirmDialogComponent, {
         minWidth: '40vw',
         data: {
-          message: `Biztos törölni szeretnéd "${category.name}" kategóriát?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd "${category.name}" kategóriát?`
         }
       })
       .afterClosed()
