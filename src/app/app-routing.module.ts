@@ -1,18 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContactComponent } from './features/contact/contact.component';
-import { SamplesComponent } from './features/samples/samples.component';
 import { AuthGuard } from './core/guards/auth.guard';
-import { ShoppingCartComponent } from './features/shopping-cart/shopping-cart.component';
-import { ShopComponent } from './features/shop/shop.component';
-import { PrivacyPolicyComponent } from './features/privacy-policy/privacy-policy.component';
-import { TermsAndConditionsComponent } from './features/terms-and-conditions/terms-and-conditions.component';
-import { ProductDetailsComponent } from './features/shop/components/product-details/product-details.component';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
-import { UserProfileComponent } from './features/user-profile/user-profile.component';
-import { InspirationPageComponent } from './features/inspiration-page/inspiration-page.component';
-import { OrderSuccessComponent } from './shared/UI/order-success/order-success.component';
 
 const landingPageModule = () =>
   import('./features/landing-page/landing-page.module').then(
@@ -22,18 +12,44 @@ const landingPageModule = () =>
 const authModule = () =>
   import('./features/auth/auth.module').then((m) => m.AuthModule);
 
+const userProfileModule = () =>
+  import('./features/user-profile/user-profile.module').then(
+    (m) => m.UserProfileModule
+  );
+
+const shopModule = () =>
+  import('./features/shop/shop.module').then((m) => m.ShopModule);
+
+const shoppingCartModule = () =>
+  import('./features/shopping-cart/shopping-cart.module').then(
+    (m) => m.ShoppingCartModule
+  );
+
+const materialPageModule = () =>
+  import('./features/material-page/material-page.module').then(
+    (m) => m.MaterialPageModule
+  );
+
+const inspirationPageModule = () =>
+  import('./features/inspiration-page/inspiration-page.module').then(
+    (m) => m.InspirationPageModule
+  );
+
+const contactPageModule = () =>
+  import('./features/contact-page/contact-page.module').then(
+    (m) => m.ContactPageModule
+  );
+
+const legalModule = () =>
+  import('./features/legal/legal.module').then((m) => m.LegalModule);
+
+const orderSuccessPageModule = () =>
+  import('./features/order-success-page/order-success-page.module').then(
+    (m) => m.OrderSuccessPageModule
+  );
+
 const adminModule = () =>
   import('./features/admin/admin.module').then((m) => m.AdminModule);
-
-const nyuszkoShopModule = () =>
-  import('./features/nyuszko-shop/nyuszko-shop.module').then(
-    (m) => m.NyuszkoShopModule
-  );
-
-const masniShopModule = () =>
-  import('./features/masni-shop/masni-shop.module').then(
-    (m) => m.MasniShopModule
-  );
 
 const routes: Routes = [
   {
@@ -56,58 +72,37 @@ const routes: Routes = [
     data: { role: 'admin' }
   },
   {
-    path: 'user',
-    component: UserProfileComponent
-  },
-  {
-    path: 'nyuszko-shop',
-    loadChildren: nyuszkoShopModule
-  },
-  {
-    path: 'masni-shop',
-    loadChildren: masniShopModule
+    path: 'user-profile',
+    loadChildren: userProfileModule
   },
   {
     path: 'shop',
-    children: [
-      {
-        path: '',
-        component: ShopComponent
-      },
-      {
-        path: ':id',
-        component: ProductDetailsComponent
-      }
-    ]
+    loadChildren: shopModule
   },
   {
     path: 'shopping-cart',
-    component: ShoppingCartComponent,
+    loadChildren: shoppingCartModule,
     canActivate: [AuthGuard]
   },
   {
-    path: 'samples',
-    component: SamplesComponent
+    path: 'material',
+    loadChildren: materialPageModule
   },
   {
     path: 'inspiration',
-    component: InspirationPageComponent
+    loadChildren: inspirationPageModule
   },
   {
     path: 'contact',
-    component: ContactComponent
+    loadChildren: contactPageModule
   },
   {
-    path: 'privacy-policy',
-    component: PrivacyPolicyComponent
-  },
-  {
-    path: 'terms-and-conditions',
-    component: TermsAndConditionsComponent
+    path: 'legal',
+    loadChildren: legalModule
   },
   {
     path: 'order-success/:id',
-    component: OrderSuccessComponent
+    loadChildren: orderSuccessPageModule
   }
 ];
 
