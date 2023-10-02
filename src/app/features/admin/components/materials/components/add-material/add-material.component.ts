@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
+import { Store } from '@ngrx/store';
 import { Observable, tap } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { Category } from '@core/models/category.model';
-import { Store } from '@ngrx/store';
+import { RawMaterial } from '@core/models/material.model';
 import { selectMaterialCategories } from '@core/store';
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
@@ -26,9 +27,9 @@ export class AddMaterialComponent implements OnInit {
 
   addMaterialForm = this.fb.group({
     name: ['', Validators.required],
-    categoryId: ['', Validators.required],
+    category: ['', Validators.required],
     image: ['', Validators.required],
-    extra: [0, Validators.required],
+    extraPrice: [0, Validators.required],
     isAvailable: [true, Validators.required]
   });
 
@@ -64,27 +65,20 @@ export class AddMaterialComponent implements OnInit {
 
   onAddMaterial(): void {
     if (this.addMaterialForm.valid) {
-      const material = new FormData();
-      const materialName = this.addMaterialForm.value.name.trim();
-      const materialCategoryId = this.addMaterialForm.value.categoryId;
-      const materialImage = this.addMaterialForm.value.image;
-      const materialExtra = this.addMaterialForm.value.extra.toString();
-      const materialIsAvailable =
-        this.addMaterialForm.value.isAvailable.toString();
+      const material: RawMaterial = {
+        name: this.addMaterialForm.value.name.trim(),
+        categoryId: this.addMaterialForm.value.category,
+        image: this.addMaterialForm.value.image,
+        extraPrice: this.addMaterialForm.value.extraPrice,
+        isAvailable: this.addMaterialForm.value.isAvailable
+      };
 
-      if (materialName) {
-        material.append('name', materialName);
-        material.append('categoryId', materialCategoryId);
-        material.append('image', materialImage);
-        material.append('extra', materialExtra);
-        material.append('isAvailable', materialIsAvailable);
+      if (material.name) {
         this.materialService
           .addMaterial$(material)
           .pipe(
             tap(() => {
-              this.toastr.success(
-                `${this.addMaterialForm.value.name} hozzáadva`
-              );
+              this.toastr.success(`${material.name} hozzáadva`);
               this.dialogRef.close();
             })
           )
@@ -92,6 +86,8 @@ export class AddMaterialComponent implements OnInit {
       } else {
         this.toastr.error('Kérlek adj meg egy minta nevet');
       }
+    } else {
+      this.toastr.error('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

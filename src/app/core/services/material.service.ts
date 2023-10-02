@@ -4,12 +4,13 @@ import { Store } from '@ngrx/store';
 import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
-import { Material } from '@core/models/material.model';
+import { Material, RawMaterial } from '@core/models/material.model';
 import { selectMaterialExtraById } from '@core/store/selectors/material.selectors';
 import { ApiResponse } from '@core/models/api-response.model';
 import {
   addItemToCategory,
   addMaterial,
+  deleteItemFromCategory,
   deleteMaterial,
   moveItemBetweenCategories,
   updateMaterial
@@ -21,28 +22,38 @@ import {
 export class MaterialService {
   constructor(private apiService: ApiService, private store: Store) {}
 
-  addMaterial$(material: any): Observable<Material> {
+  addMaterial$(material: RawMaterial): Observable<Material> {
+    const materialFormData = new FormData();
+    materialFormData.append('material', JSON.stringify(material));
+    materialFormData.append('image', material.image);
+
     return this.apiService
-      .post<ApiResponse<Material>>('material/addOne', material)
+      .post<ApiResponse<Material>>('material/addOne', materialFormData)
       .pipe(
         map((material) => material.data),
         tap((material) => {
           this.store.dispatch(addMaterial({ material }));
           this.store.dispatch(
             addItemToCategory({
-              itemId: material.id,
-              categoryId: material.categoryId
+              item: material
             })
           );
         })
       );
   }
 
-  updateMaterial$(material: any, materialId: string): Observable<Material> {
+  updateMaterial$(
+    material: RawMaterial,
+    materialId: string
+  ): Observable<Material> {
+    const materialFormData = new FormData();
+    materialFormData.append('material', JSON.stringify(material));
+    materialFormData.append('image', material.image);
+
     return this.apiService
       .patch<ApiResponse<Material>>(
         `material/updateOne/${materialId}`,
-        material
+        materialFormData
       )
       .pipe(
         map((materialDTO) => materialDTO.data),
@@ -50,8 +61,7 @@ export class MaterialService {
           this.store.dispatch(updateMaterial({ material }));
           this.store.dispatch(
             moveItemBetweenCategories({
-              itemId: material.id,
-              categoryId: material.categoryId
+              item: material
             })
           );
         })
@@ -62,6 +72,7 @@ export class MaterialService {
     return this.apiService.delete<null>('material/deleteOne', material.id).pipe(
       tap(() => {
         this.store.dispatch(deleteMaterial({ material }));
+        this.store.dispatch(deleteItemFromCategory({ item: material }));
       })
     );
   }
