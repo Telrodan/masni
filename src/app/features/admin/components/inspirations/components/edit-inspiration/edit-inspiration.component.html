@@ -4,7 +4,7 @@
 <mat-dialog-content>
   <form class="flex-auto p-fluid" [formGroup]="editInspirationForm">
     <div class="form-group">
-      <label for="name" class="block font-medium text-900 mb-2">
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
         Inspiráció neve
       </label>
 
@@ -12,12 +12,14 @@
     </div>
 
     <div class="form-group" *ngIf="categories$ | async as categories">
-      <label for="category" class="block font-medium text-900 mb-2">
+      <label
+        for="categoryId"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Inspiráció kategóriája
       </label>
 
       <p-dropdown
-        id="category"
+        id="categoryId"
         formControlName="categoryId"
         placeholder="Válassz egy kategóriát"
         [options]="categories"
@@ -27,7 +29,9 @@
     </div>
 
     <div class="form-group">
-      <label class="block font-medium text-900 mb-2"> Inspiráció képe </label>
+      <label class="block font-medium text-blue-500 mb-1 text-lg">
+        Inspiráció képe
+      </label>
 
       <p-button
         icon="pi pi-image"
@@ -71,7 +75,7 @@
   <p-button
     label="Módosítás"
     styleClass="p-button w-auto"
-    [disabled]="!editInspirationForm.valid"
+    [disabled]="!editInspirationForm.valid || !editInspirationForm.dirty"
     (click)="onEditInspiration()">
   </p-button>
 </mat-dialog-actions>
