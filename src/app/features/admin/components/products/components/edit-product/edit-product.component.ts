@@ -1,24 +1,33 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
 import { Observable, filter, tap } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+import { Product, RawProduct } from '@core/models/product.model';
+import { Category } from '@core/models/category.model';
+import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { Category } from '@core/models/category.model';
-import { Product } from '@core/models/product.model';
-import { selectAllCategories, selectAllQuestion } from '@core/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Question } from '@core/models/question.model';
-import { addImagesToFormAndSetPreview } from '@shared/util/image-upload-helpers';
+import { selectAllQuestion, selectProductCategories } from '@core/store';
+import {
+  addImagesToFormAndSetPreview,
+  removeImagesFromFormAndInputAndClearPreview
+} from '@shared/util/image-upload-helpers';
 
 @UntilDestroy()
 @Component({
   selector: 'mhd-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.scss']
+  styleUrls: ['./edit-product.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditProductComponent implements OnInit {
   categories$: Observable<Category[]>;
@@ -39,16 +48,19 @@ export class EditProductComponent implements OnInit {
   ) {
     this.editProductForm = this.fb.group({
       name: [this.data.name, Validators.required],
-      categoryId: [this.data.categoryId, Validators.required],
+      categoryId: [this.data.category.id, Validators.required],
       shortDescription: [this.data.shortDescription, Validators.required],
       description: [this.data.description, Validators.required],
       isCustom: [this.data.isCustom, Validators.required],
+      isDollDress: [this.data.isDollDress, Validators.required],
+      isDressable: [this.data.isDressable, Validators.required],
+      isFeatured: [this.data.isFeatured, Validators.required],
       isNameEmbroideryAvailable: [
         this.data.isNameEmbroideryAvailable,
         Validators.required
       ],
       selectedQuestion: [null],
-      questionIds: this.fb.array<string>(this.data.questionIds),
+      questionIds: this.fb.array<string>(this.data.questions.map((q) => q.id)),
       images: [this.data.images, Validators.required],
       price: [this.data.price, Validators.required],
       discountedPrice: [this.data.discountedPrice, Validators.required],
@@ -59,7 +71,7 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categories$ = this.store$.select(selectAllCategories).pipe(
+    this.categories$ = this.store$.select(selectProductCategories).pipe(
       filter((categories) => !!categories),
       untilDestroyed(this)
     );
@@ -69,12 +81,12 @@ export class EditProductComponent implements OnInit {
       .pipe(
         tap((questions) => {
           this.questions = questions;
-          this.data.questionIds.forEach((id) => {
-            const selectedQuestion = this.questions.find(
-              (question) => question.id === id
-            );
-            this.selectedQuestions.push(selectedQuestion);
-          });
+          // this.data.questions.forEach((id: string) => {
+          //   const selectedQuestion = this.questions.find(
+          //     (question) => question.id === id
+          //   );
+          //   this.selectedQuestions.push(selectedQuestion);
+          // });
         }),
         untilDestroyed(this)
       )
@@ -113,23 +125,25 @@ export class EditProductComponent implements OnInit {
     );
   }
 
-  onImageClear(): void {
-    this.imagesPreview = [];
-    this.editProductForm.value.images = null;
-    this.editProductForm.patchValue({ images: null });
-    this.editProductForm.get('images').updateValueAndValidity();
+  onImageClear(imageInput: HTMLInputElement): void {
+    this.imagesPreview = removeImagesFromFormAndInputAndClearPreview(
+      this.editProductForm,
+      imageInput
+    );
   }
 
   onEditProduct(): void {
     if (this.editProductForm.valid) {
-      const product: Product = {
-        id: this.data.id,
+      const product: RawProduct = {
         categoryId: this.editProductForm.value.categoryId,
         name: this.editProductForm.value.name,
         shortDescription: this.editProductForm.value.shortDescription,
         description: this.editProductForm.value.description,
         questionIds: this.editProductForm.value.questionIds,
         isCustom: this.editProductForm.value.isCustom,
+        isDollDress: this.editProductForm.value.isDollDress,
+        isDressable: this.editProductForm.value.isDressable,
+        isFeatured: this.editProductForm.value.isFeatured,
         isNameEmbroideryAvailable:
           this.editProductForm.value.isNameEmbroideryAvailable,
         images: this.editProductForm.value.images,
@@ -137,21 +151,21 @@ export class EditProductComponent implements OnInit {
         discountedPrice: this.editProductForm.value.discountedPrice,
         stock: this.editProductForm.value.stock
       };
-      const productFormData = new FormData();
-      productFormData.append('product', JSON.stringify(product));
-      product.images.forEach((image: string) => {
-        productFormData.append('images', image);
-      });
-
-      this.productService
-        .updateProduct$(productFormData, product.id)
-        .pipe(
-          tap((product) => {
-            this.toastr.success(`${product.name} termék módosítva`);
-            this.dialogRef.close();
-          })
-        )
-        .subscribe();
+      if (product.name) {
+        this.productService
+          .updateProduct$(product, this.data.id)
+          .pipe(
+            tap((product) => {
+              this.toastr.success(`${product.name} termék módosítva`);
+              this.dialogRef.close();
+            })
+          )
+          .subscribe();
+      } else {
+        this.toastr.info('Kérlek adj meg egy termék nevet');
+      }
+    } else {
+      this.toastr.info('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

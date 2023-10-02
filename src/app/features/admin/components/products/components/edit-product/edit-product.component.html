@@ -4,29 +4,33 @@
 <mat-dialog-content>
   <form class="flex-auto p-fluid" [formGroup]="editProductForm">
     <div class="form-group">
-      <label for="name" class="block font-medium text-900 mb-2">
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
         Termék neve
       </label>
 
       <input id="name" type="text" formControlName="name" pInputText />
     </div>
 
-    <div class="form-group">
-      <label for="categoryId" class="block font-medium text-900 mb-2">
+    <div class="form-group" *ngIf="categories$ | async as categories">
+      <label
+        for="categoryId"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Termék kategória
       </label>
 
       <p-dropdown
         id="categoryId"
         formControlName="categoryId"
-        [options]="categories$ | async"
+        [options]="categories"
         placeholder="Válassz egy kategóriát"
         optionValue="id"
         optionLabel="name"></p-dropdown>
     </div>
 
     <div class="form-group">
-      <label for="shortDescription" class="block font-medium text-900 mb-2">
+      <label
+        for="shortDescription"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Termék rövid leírása
       </label>
 
@@ -38,7 +42,9 @@
     </div>
 
     <div class="form-group">
-      <label for="description" class="block font-medium text-900 mb-2">
+      <label
+        for="description"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Termék leírása
       </label>
 
@@ -52,7 +58,66 @@
     </div>
 
     <div class="form-group">
-      <label for="isCustom" class="block font-medium text-900 mb-2">
+      <label for="price" class="block font-medium text-blue-500 mb-1 text-lg">
+        Termék ára
+      </label>
+
+      <input id="price" formControlName="price" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label
+        for="discountedPrice"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Termék akciós ára
+      </label>
+
+      <input
+        id="discountedPrice"
+        formControlName="discountedPrice"
+        type="text"
+        pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="stock" class="block font-medium text-blue-500 mb-1 text-lg">
+        Készleten
+      </label>
+
+      <input id="stock" formControlName="stock" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label
+        for="selectedQuestion"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Kérdések
+      </label>
+
+      <div class="questions-wrapper">
+        <p-dropdown
+          id="selectedQuestion"
+          formControlName="selectedQuestion"
+          [options]="questions"
+          placeholder="Válassz egy kérdést"
+          optionValue="id"
+          optionLabel="questionName"
+          styleClass="mr-2">
+        </p-dropdown>
+
+        <p-button
+          icon="pi pi-plus"
+          styleClass="p-button-success"
+          pTooltip="Kérdés hozzáadása"
+          tooltipPosition="bottom"
+          (click)="addQuestion()"></p-button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label
+        for="isCustom"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Egyedi termék?
       </label>
 
@@ -62,9 +127,10 @@
             formControlName="isCustom"
             name="isCustom"
             [value]="false"
-            inputId="isCustom">
+            inputId="isCustomFalse">
           </p-radioButton>
-          <label for="ingredient1" class="ml-2">Nem</label>
+
+          <label for="isCustomFalse" class="ml-2">Nem</label>
         </div>
 
         <div class="flex align-items-center">
@@ -72,9 +138,104 @@
             formControlName="isCustom"
             name="isCustom"
             [value]="true"
-            inputId="isCustom">
+            inputId="isCustomTrue">
           </p-radioButton>
-          <label for="ingredient2" class="ml-2">Igen</label>
+
+          <label for="isCustomTrue" class="ml-2">Igen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label
+        for="isDollDress"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Babaruha?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isDollDress"
+            name="isDollDress"
+            [value]="false"
+            inputId="isDollDressFalse">
+          </p-radioButton>
+
+          <label for="isDollDressFalse" class="ml-2">Nem</label>
+        </div>
+
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isDollDress"
+            name="isDollDress"
+            [value]="true"
+            inputId="isDollDressTrue">
+          </p-radioButton>
+
+          <label for="isDollDressTrue" class="ml-2">Igen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-blue-500 mb-1 text-lg">
+        Öltöztethető?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isDressable"
+            name="isDressable"
+            [value]="false"
+            inputId="isDressableFalse">
+          </p-radioButton>
+
+          <label for="isDressableFalse" class="ml-2">Nem</label>
+        </div>
+
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isDressable"
+            name="isDressable"
+            [value]="true"
+            inputId="isDressableTrue">
+          </p-radioButton>
+
+          <label for="isDressableTrue" class="ml-2">Igen</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label
+        for="isDollDress"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Kiemelt termék?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isFeatured"
+            name="isFeatured"
+            [value]="false"
+            inputId="isFeaturedFalse">
+          </p-radioButton>
+
+          <label for="isFeaturedFalse" class="ml-2">Nem</label>
+        </div>
+
+        <div class="flex align-items-center">
+          <p-radioButton
+            formControlName="isFeatured"
+            name="isFeatured"
+            [value]="true"
+            inputId="isFeaturedTrue">
+          </p-radioButton>
+
+          <label for="isFeaturedTrue" class="ml-2">Igen</label>
         </div>
       </div>
     </div>
@@ -82,7 +243,7 @@
     <div class="form-group">
       <label
         for="isNameEmbroideryAvailable"
-        class="block font-medium text-900 mb-2">
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Név hímzés elérhető?
       </label>
 
@@ -109,31 +270,6 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="selectedQuestion" class="block font-medium text-900 mb-2">
-        Kérdések
-      </label>
-
-      <div class="questions-wrapper">
-        <p-dropdown
-          id="selectedQuestion"
-          formControlName="selectedQuestion"
-          [options]="questions"
-          placeholder="Válassz egy kérdést"
-          optionValue="id"
-          optionLabel="questionName"
-          styleClass="mr-2">
-        </p-dropdown>
-
-        <p-button
-          icon="pi pi-plus"
-          styleClass="p-button-success"
-          pTooltip="Kérdés hozzáadása"
-          tooltipPosition="bottom"
-          (click)="addQuestion()"></p-button>
-      </div>
-    </div>
-
     <ng-container *ngIf="selectedQuestions.length">
       <div class="form-group w-6">
         <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
@@ -155,7 +291,7 @@
     </ng-container>
 
     <div class="form-group">
-      <label for="images" class="block font-medium text-900 mb-2">
+      <label for="images" class="block font-medium text-blue-500 mb-1 text-lg">
         Termék képek (az első kép lesz mindig a nagy kép)
       </label>
 
@@ -185,36 +321,8 @@
         *ngIf="imagesPreview.length"
         icon="pi pi-times"
         styleClass="p-button-danger"
-        (click)="onImageClear()">
+        (click)="onImageClear(imagePicker)">
       </p-button>
-    </div>
-
-    <div class="form-group">
-      <label for="price" class="block font-medium text-900 mb-2">
-        Termék ára
-      </label>
-
-      <input id="price" formControlName="price" type="text" pInputText />
-    </div>
-
-    <div class="form-group">
-      <label for="discountedPrice" class="block font-medium text-900 mb-2">
-        Termék akciós ára
-      </label>
-
-      <input
-        id="discountedPrice"
-        formControlName="discountedPrice"
-        type="text"
-        pInputText />
-    </div>
-
-    <div class="form-group">
-      <label for="stock" class="block font-medium text-900 mb-2">
-        Készleten
-      </label>
-
-      <input id="stock" formControlName="stock" type="text" pInputText />
     </div>
   </form>
 </mat-dialog-content>

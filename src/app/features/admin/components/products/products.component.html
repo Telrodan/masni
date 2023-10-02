@@ -5,8 +5,8 @@
     [value]="products"
     [globalFilterFields]="['id', 'name', 'category']"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
+    [rows]="25"
+    [rowsPerPageOptions]="[25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -23,7 +23,7 @@
             pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
             tooltipPosition="bottom"
             type="text"
-            (input)="applyFilterGlobal($event, 'contains', table)"
+            (input)="applyTableGlobalFilter($event, 'contains', table)"
             placeholder="Keresés" />
         </span>
       </div>
@@ -39,13 +39,13 @@
 
         <th>Kategória</th>
 
-        <th pSortableColumn="stock" class="w-9rem">
-          Készlet <p-sortIcon field="stock"></p-sortIcon>
-        </th>
-
         <th pSortableColumn="price" class="w-8rem">
           Ár
           <p-sortIcon field="price"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="stock" class="w-9rem">
+          Készlet <p-sortIcon field="stock"></p-sortIcon>
         </th>
 
         <th class="w-3rem">Opciók</th>
@@ -57,37 +57,59 @@
         <td>
           <img
             class="hidden"
-            [src]="images[i]"
-            [alt]="product.name"
+            [src]="product.images[0]"
+            [alt]="'Termék ' + i + ' képe'"
             (load)="imageLoaded(i)" />
 
           <p-image
             *ngIf="imageLoadedStatus[i]"
-            [src]="images[i]"
-            [alt]="product.name"
+            [src]="product.images[0]"
+            [alt]="'Termék ' + i + ' képe'"
             [preview]="true">
           </p-image>
 
-          <ngx-skeleton-loader
+          <p-skeleton
             *ngIf="!imageLoadedStatus[i]"
-            appearance="circle"
-            animation="pulse"
-            [theme]="{
-              margin: '0',
-              width: '100%',
-              paddingBottom: '100%',
-              aspectRatio: '1 / 1',
-              borderRadius: '0',
-              background: 'lightGrey'
-            }">
-          </ngx-skeleton-loader>
+            styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td>{{ product.id }}</td>
+        <td class="font-italic font-semibold">{{ product.id }}</td>
 
-        <td>{{ product.name }}</td>
+        <td>
+          <div class="flex align-items-center">
+            <p class="font-semibold text-blue-500">
+              {{ product.name }}
+            </p>
 
-        <td>{{ product.category }}</td>
+            <i
+              *ngIf="product.isFeatured"
+              class="pi pi-star-fill text-yellow-400 ml-2"
+              pTooltip="Kiemelt termék"
+              tooltipPosition="bottom"></i>
+
+            <i
+              *ngIf="product.isCustom"
+              class="pi pi-palette text-green-400 ml-2"
+              pTooltip="Egyedi termék"
+              tooltipPosition="bottom"></i>
+          </div>
+        </td>
+
+        <td>
+          <p-badge
+            [value]="product?.category?.name"
+            severity="success"></p-badge>
+        </td>
+
+        <td class="font-semibold">
+          <span [ngClass]="{ 'line-through': product.discountedPrice > 0 }">
+            {{ product.price }} Ft
+          </span>
+          <br />
+          <span *ngIf="product.discountedPrice > 0" class="text-red-500">
+            {{ product.discountedPrice }} Ft
+          </span>
+        </td>
 
         <td>
           <div class="stock">
@@ -100,16 +122,6 @@
               [severity]="product.stock > 0 ? 'success' : 'danger'">
             </p-badge>
           </div>
-        </td>
-
-        <td class="font-bold">
-          <span [ngClass]="{ 'line-through': product.discountedPrice > 0 }">
-            {{ product.price }} Ft
-          </span>
-          <br />
-          <span *ngIf="product.discountedPrice > 0" class="text-red-500">
-            {{ product.discountedPrice }} Ft
-          </span>
         </td>
 
         <td>
@@ -132,6 +144,14 @@
             type="button"
             icon="pi pi-times"
             class="p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center text-800 text-4xl">
+          Nem található termék
         </td>
       </tr>
     </ng-template>

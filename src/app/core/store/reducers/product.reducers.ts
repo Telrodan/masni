@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import * as _ from 'lodash';
 
 import {
   addProduct,
@@ -7,16 +8,16 @@ import {
   getProductsError,
   getProductsSuccess,
   removeQuestionFromProduct,
-  updateProduct
+  updateProduct,
+  updateProductsCategory
 } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
 import { StatusTypes } from '../status-types';
-import * as _ from 'lodash';
+import { Category } from '@core/models/category.model';
 
 export const productInitialState: ProductState = {
-  allProducts: [],
-  availableProducts: [],
+  products: [],
   status: StatusTypes.INIT
 };
 
@@ -28,109 +29,68 @@ export const productReducers = createReducer(
     status: StatusTypes.LOADING
   })),
 
-  on(getProductsSuccess, (state, action) => {
-    const products = action.products.map((product) => {
-      return { ...product, questions: [] };
-    });
-
-    return {
-      ...state,
-      allProducts: products,
-      availableProducts: products.filter((product) => product.stock > 0),
-      status: StatusTypes.LOADED
-    };
-  }),
+  on(getProductsSuccess, (state, action) => ({
+    ...state,
+    products: [...action.products],
+    status: StatusTypes.LOADED
+  })),
 
   on(getProductsError, (state) => ({
     ...state,
     status: StatusTypes.ERROR
   })),
 
-  on(addProduct, (state, action) => {
-    const availableProducts = [...state.availableProducts];
-    if (action.product.stock > 0) {
-      availableProducts.push(action.product);
-    }
-    return {
-      ...state,
-      allProducts: [...state.allProducts, action.product],
-      availableProducts
-    };
-  }),
+  on(addProduct, (state, action) => ({
+    ...state,
+    products: [...state.products, action.product]
+  })),
 
-  on(deleteProduct, (state, action) => {
-    const index = state.allProducts.findIndex(
-      (item) => item.id === action.product.id
-    );
-    const products = [...state.allProducts];
-    products.splice(index, 1);
-
-    return {
-      ...state,
-      allProducts: products
-    };
-  }),
+  on(deleteProduct, (state, action) => ({
+    ...state,
+    products: state.products.filter(
+      (product) => product.id !== action.product.id
+    )
+  })),
 
   on(updateProduct, (state, action) => {
-    const availableProducts = _.cloneDeep(state.availableProducts);
-
-    if (action.product.stock > 0) {
-      if (availableProducts.includes(action.product)) {
-        const index = availableProducts.findIndex(
-          (product) => product.id === action.product.id
-        );
-        availableProducts.splice(index, 1, action.product);
-      } else {
-        availableProducts.push(action.product);
-      }
-    } else {
-      const index = availableProducts.findIndex(
-        (product) => product.id === action.product.id
-      );
-      availableProducts.splice(index, 1);
-    }
-
-    const index = state.allProducts.findIndex(
-      (product) => product.id === action.product.id
-    );
-    const allProducts = [...state.allProducts];
-    allProducts.splice(index, 1, action.product);
-
     return {
       ...state,
-      allProducts,
-      availableProducts
+      products: state.products.map((product) =>
+        product.id === action.product.id ? action.product : product
+      )
     };
   }),
 
-  on(removeQuestionFromProduct, (state, action) => {
-    const allProducts = _.cloneDeep(state.allProducts);
-    const availableProducts = _.cloneDeep(state.availableProducts);
+  // on(removeQuestionFromProduct, (state, action) => {
+  //   const products = _.cloneDeep(state.products);
 
-    allProducts.forEach((product) => {
-      if (product.questionIds.includes(action.id)) {
-        const index = product.questionIds.findIndex(
-          (questionId) => questionId === action.id
-        );
-        product.questionIds.splice(index, 1);
-      }
-    });
+  //   products.forEach((product) => {
+  //     if (product.questions.includes(action.id)) {
+  //       const index = product.questions.findIndex(
+  //         (questionId) => questionId === action.id
+  //       );
+  //       product.questions.splice(index, 1);
+  //     }
+  //   });
 
-    console.log('allProducts', allProducts);
+  //   return {
+  //     ...state,
+  //     products
+  //   };
+  // }),
 
-    availableProducts.forEach((product) => {
-      if (product.questionIds.includes(action.id)) {
-        const index = product.questionIds.findIndex(
-          (questionId) => questionId === action.id
-        );
-        product.questionIds.splice(index, 1);
+  on(updateProductsCategory, (state, action) => {
+    const products = _.cloneDeep(state.products);
+
+    products.forEach((product) => {
+      if ((product.category as Category).id === action.category.id) {
+        product.category = action.category;
       }
     });
 
     return {
       ...state,
-      allProducts,
-      availableProducts
+      products
     };
   })
 );
