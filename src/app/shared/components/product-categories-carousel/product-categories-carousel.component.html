@@ -1,0 +1,41 @@
+<ng-container *ngIf="categories">
+  <section>
+    <p-carousel
+      [value]="categories"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="10000"
+      [showNavigators]="true"
+      [showIndicators]="false"
+      [responsiveOptions]="responsiveOptions">
+      <ng-template pTemplate="header">
+        <h1 class="heading-primary">Termék kategóriák</h1>
+      </ng-template>
+
+      <ng-template let-category let-i="i" pTemplate="item">
+        <div class="item-content">
+          <a [routerLink]="'/shop/' + category.id">
+            <p class="category-name shadow-2">
+              {{ category.name }}
+            </p>
+
+            <img
+              [src]="category.image"
+              class="hidden"
+              (load)="imageLoaded(i)" />
+
+            <img
+              *ngIf="imageLoadedStatus[i]"
+              [src]="category.image"
+              class="mb-1 shadow-2" />
+
+            <p-skeleton
+              *ngIf="!imageLoadedStatus[i]"
+              styleClass="skeleton"></p-skeleton>
+          </a>
+        </div>
+      </ng-template>
+    </p-carousel>
+  </section>
+</ng-container>

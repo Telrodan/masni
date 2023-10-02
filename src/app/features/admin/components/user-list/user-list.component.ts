@@ -7,7 +7,7 @@ import { filter, Observable, Subject, switchMap, tap } from 'rxjs';
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { selectUsers } from '@core/store';
 
 @Component({
@@ -46,10 +46,7 @@ export class UserListComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`
         }
       })
       .afterClosed()

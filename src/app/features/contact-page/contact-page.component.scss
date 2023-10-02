@@ -1,0 +1,33 @@
+@import 'mixins';
+@import 'colors';
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  margin: 60px auto 120px;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba($color-tertiary, 0.8),
+      rgba($color-secondary, 0.8)
+    ),
+    url('../../../assets/images/contact-us-test-image.jpg');
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 1 / 1;
+
+  @include respond(sm) {
+    width: 100%;
+  }
+}
+
+.link {
+  color: $color-black;
+  font-size: 20px;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}

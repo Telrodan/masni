@@ -7,7 +7,7 @@ import { filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { UserService } from '@core/services/user.service';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { selectUsers } from '@core/store';
 import { Table } from 'primeng/table';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
@@ -60,10 +60,7 @@ export class UsersComponent implements OnInit {
       .open(ConfirmDialogComponent, {
         minWidth: '40vw',
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.id} azonosítóval?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.id} azonosítóval?`
         }
       })
       .afterClosed()

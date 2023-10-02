@@ -1,0 +1,21 @@
+<div class="confirm-dialog">
+  <i class="pi pi-times close" mat-dialog-close></i>
+
+  <h2 mat-dialog-title class="mb-2">Megerősítés</h2>
+
+  <mat-dialog-content>
+    <p>{{ data.message }}</p>
+
+    <div class="dialog-actions flex justify-content-end mt-5">
+      <p-button
+        label="Mégsem"
+        styleClass="p-button p-button-danger mr-4"
+        mat-dialog-close></p-button>
+
+      <p-button
+        label="Igen"
+        styleClass="p-button"
+        (click)="confirm()"></p-button>
+    </div>
+  </mat-dialog-content>
+</div>

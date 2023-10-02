@@ -19,7 +19,7 @@ import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.s
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { environment } from 'src/environments/environment';
-import { ConfirmDialogComponent } from '../../shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '@core/services/order.service';
@@ -77,6 +77,7 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    console.log('yoyo');
     this.store$
       .select(userSelector)
       .pipe(
@@ -138,10 +139,7 @@ export class ShoppingCartComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd ${productName} terméket, ${item.price} Ft értékben?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd ${productName} terméket, ${item.price} Ft értékben?`
         }
       })
       .afterClosed()

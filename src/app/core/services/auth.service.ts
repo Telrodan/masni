@@ -7,9 +7,10 @@ import jwt_decode from 'jwt-decode';
 
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
-import { AuthData, TokenPayload } from '@core/models/auth-data.model';
+import { AuthData } from '@core/models/auth-data.model';
 import { User } from '@core/models/user.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { TokenPayload } from '@core/models/token-payload.model';
 
 @Injectable({
   providedIn: 'root'
