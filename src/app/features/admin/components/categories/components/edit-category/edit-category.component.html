@@ -31,6 +31,23 @@
       <input id="name" formControlName="name" type="text" pInputText />
     </div>
 
+    <ng-container *ngIf="data.type === CategoryType.PRODUCT_CATEGORY">
+      <div class="form-group">
+        <label
+          for="description"
+          class="block font-medium text-blue-500 mb-1 text-lg">
+          Kategória leírása
+        </label>
+
+        <textarea
+          rows="5"
+          cols="30"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="description"></textarea>
+      </div>
+    </ng-container>
+
     <div class="form-group">
       <label class="block font-medium text-blue-500 mb-1">Kategória képe</label>
 

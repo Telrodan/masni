@@ -34,7 +34,8 @@ export class EditCategoryComponent {
   ) {
     this.editCategoryForm = this.fb.group({
       name: [this.data.name, Validators.required],
-      image: [this.data.image, Validators.required]
+      image: [this.data.image, Validators.required],
+      description: [this.data.description]
     });
 
     this.imagePreview = this.data.image;
@@ -59,7 +60,8 @@ export class EditCategoryComponent {
       const category: RawCategory = {
         type: this.data.type,
         name: this.editCategoryForm.value.name.trim(),
-        image: this.editCategoryForm.value.image
+        image: this.editCategoryForm.value.image,
+        description: this.editCategoryForm.value.description.trim()
       };
 
       if (category.name) {

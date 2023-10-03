@@ -25,7 +25,8 @@ export class AddCategoryComponent {
   addCategoryForm = this.fb.group({
     type: [CategoryType.PRODUCT_CATEGORY, Validators.required],
     name: ['', Validators.required],
-    image: ['', Validators.required]
+    image: ['', Validators.required],
+    description: ['']
   });
 
   imagePreview: string;
@@ -56,7 +57,8 @@ export class AddCategoryComponent {
       const category: RawCategory = {
         type: this.addCategoryForm.value.type,
         name: this.addCategoryForm.value.name.trim(),
-        image: this.addCategoryForm.value.image
+        image: this.addCategoryForm.value.image,
+        description: this.addCategoryForm.value.description.trim()
       };
 
       if (category.name) {

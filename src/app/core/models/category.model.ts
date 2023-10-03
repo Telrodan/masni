@@ -7,6 +7,7 @@ export interface RawCategory {
   type: CategoryType;
   name: string;
   image: string;
+  description?: string;
 }
 
 export interface Category {
@@ -14,6 +15,7 @@ export interface Category {
   type: CategoryType;
   name: string;
   image: string;
+  description?: string;
   items: (Product | Material | Inspiration)[];
   updatedAt: Date;
   createdAt: Date;
