@@ -1,26 +1,33 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
+
 import { QuestionType } from '@core/enums/question-type.enum';
 import { Category } from '@core/models/category.model';
 import { QuestionOption } from '@core/models/question-option.model';
-import { Question } from '@core/models/question.model';
+import { Question, RawQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
   selectMaterialCategories,
-  selectMaterialsByCategoryId,
-  selectMaterialsByCategoryIds
+  selectMaterialsByCategoryId
 } from '@core/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
-import { Observable, map, switchMap, tap } from 'rxjs';
 
 @UntilDestroy()
 @Component({
   selector: 'mhd-edit-question',
   templateUrl: './edit-question.component.html',
-  styleUrls: ['./edit-question.component.scss']
+  styleUrls: ['./edit-question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditQuestionComponent implements OnInit {
   readonly questionType = QuestionType;
@@ -30,8 +37,7 @@ export class EditQuestionComponent implements OnInit {
 
   categories$: Observable<Category[]>;
   categories: Category[] = [];
-
-  materialOptions = [];
+  selectedCategories: Category[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Question,
@@ -42,7 +48,7 @@ export class EditQuestionComponent implements OnInit {
     private store$: Store
   ) {
     this.editStringQuestionForm = this.fb.group({
-      questionName: [this.data.questionName, Validators.required],
+      name: [this.data.name, Validators.required],
       question: [this.data.question, Validators.required],
       optionName: [''],
       options: this.fb.array<QuestionOption>(this.data.options),
@@ -51,49 +57,52 @@ export class EditQuestionComponent implements OnInit {
     });
 
     this.editMaterialQuestionForm = this.fb.group({
-      questionName: [this.data.questionName, Validators.required],
+      name: [this.data.name, Validators.required],
       question: [this.data.question, Validators.required],
       categoryId: [''],
-      materialCategoryIds: this.fb.array<string>(this.data.materialCategoryIds),
-      categories: [[]]
+      materialCategories: this.fb.array<string>(
+        this.data.materialCategories.map((category) => category.id)
+      ),
+      options: this.fb.array<QuestionOption>(this.data.options)
     });
   }
 
   ngOnInit(): void {
     this.categories$ = this.store$.select(selectMaterialCategories).pipe(
-      switchMap((categories) =>
-        this.store$
-          .select(selectMaterialsByCategoryIds(this.data.materialCategoryIds))
-          .pipe(
-            tap((items) => {
-              this.categories = categories;
-              const selectedCategories = this.categories.filter((category) =>
-                this.data.materialCategoryIds.includes(category.id)
-              );
-              this.editMaterialQuestionForm
-                .get('categories')
-                .patchValue(selectedCategories);
-
-              this.materialOptions = items.map((item) => item.name);
-            }),
-            map(() => categories)
-          )
-      ),
+      tap((categories) => {
+        categories.forEach((category) => {
+          this.categories = categories;
+          if (
+            this.editMaterialQuestionForm.value.materialCategories.find(
+              (id: string) => id === category.id
+            )
+          ) {
+            this.selectedCategories.push(category);
+          }
+        });
+      }),
       untilDestroyed(this)
     );
   }
 
   addStringOption(): void {
-    const optionName = this.editStringQuestionForm.value.optionName.trim();
+    const name = this.editStringQuestionForm.value.optionName.trim();
     const extraPrice = this.editStringQuestionForm.value.extraPrice;
     const option: QuestionOption = {
-      optionName,
+      name,
       extraPrice,
-      slug: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
+      slug: extraPrice ? name + ' +' + extraPrice + ' Ft' : name
     };
 
-    if (option.optionName) {
-      this.editStringQuestionForm.value.options.push(option);
+    if (option.name) {
+      const options = this.editStringQuestionForm.get('options') as FormArray;
+      options.push(
+        this.fb.group({
+          name: option.name,
+          extraPrice: option.extraPrice,
+          slug: option.slug
+        })
+      );
       this.editStringQuestionForm.get('optionName').patchValue('');
       this.editStringQuestionForm.get('isExtraPrice').patchValue(false);
       this.editStringQuestionForm.get('extraPrice').patchValue(0);
@@ -110,25 +119,44 @@ export class EditQuestionComponent implements OnInit {
 
   addMaterialOption(): void {
     const categoryId = this.editMaterialQuestionForm.value.categoryId;
-    const index = this.categories.findIndex(
+    const category = this.categories.find(
       (category) => category.id === categoryId
     );
-    const category = this.categories[index];
-    this.editMaterialQuestionForm.value.materialCategoryIds.push(category.id);
-    this.editMaterialQuestionForm.value.categories.push(category);
 
-    this.store$
-      .select(selectMaterialsByCategoryId(category.id))
-      .pipe(
-        tap((items) => {
-          this.materialOptions = [
-            ...this.materialOptions,
-            ...items.filter((item) => item.isAvailable).map((item) => item.name)
-          ];
-        }),
-        untilDestroyed(this)
-      )
-      .subscribe();
+    console.log(this.categories);
+
+    if (category) {
+      this.editMaterialQuestionForm.value.materialCategories.push(category.id);
+      this.selectedCategories.push(category);
+
+      this.store$
+        .select(selectMaterialsByCategoryId(category.id))
+        .pipe(
+          tap((materials) => {
+            const options = this.editMaterialQuestionForm.get(
+              'options'
+            ) as FormArray;
+
+            materials.forEach((material) => {
+              if (material.isAvailable) {
+                const option = this.fb.group({
+                  materialId: material.id,
+                  name: material.name,
+                  extraPrice: material.extraPrice,
+                  slug: material.extraPrice
+                    ? material.name + ' +' + material.extraPrice + ' Ft'
+                    : material.name
+                });
+                options.push(option);
+              }
+            });
+          }),
+          untilDestroyed(this)
+        )
+        .subscribe();
+    } else {
+      this.toastr.info('Kérlek válassz egy anyag kategóriát');
+    }
   }
 
   deleteMaterialCategoryOption(categoryId: string, index: number): void {
@@ -136,15 +164,22 @@ export class EditQuestionComponent implements OnInit {
       .select(selectMaterialsByCategoryId(categoryId))
       .pipe(
         tap((items) => {
-          const deletedMaterialNames = items.map((item) => item.name);
-          this.materialOptions = this.materialOptions.filter(
-            (materialOption) => !deletedMaterialNames.includes(materialOption)
+          const options = this.editMaterialQuestionForm.get(
+            'options'
+          ) as FormArray;
+          const materialIds = items.map((item) => item.id);
+          const materialOptions = options.controls.filter((control) =>
+            materialIds.includes(control.value.materialId)
           );
-          this.editMaterialQuestionForm.value.materialCategoryIds.splice(
+          materialOptions.forEach((option) => {
+            options.removeAt(options.controls.indexOf(option));
+          });
+
+          this.editMaterialQuestionForm.value.materialCategories.splice(
             index,
             1
           );
-          this.editMaterialQuestionForm.value.categories.splice(index, 1);
+          this.selectedCategories.splice(index, 1);
         }),
         untilDestroyed(this)
       )
@@ -152,20 +187,19 @@ export class EditQuestionComponent implements OnInit {
   }
 
   editQuestionWithStringAnser(): void {
-    const questionName = this.editStringQuestionForm.value.questionName.trim();
+    const name = this.editStringQuestionForm.value.name.trim();
     const question = this.editStringQuestionForm.value.question.trim();
     const options = this.editStringQuestionForm.value.options;
 
-    const questionData: Question = {
-      id: this.data.id,
-      questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
-      questionName,
+    const questionData: RawQuestion = {
+      type: QuestionType.QUESTION_WITH_STRING_ANSWER,
+      name,
       question,
       options
     };
 
     this.questionService
-      .updateQuestion$(questionData)
+      .updateQuestion$(this.data.id, questionData)
       .pipe(
         tap(() => {
           this.toastr.success('Kérdés sikeresen hozzáadva');
@@ -177,22 +211,22 @@ export class EditQuestionComponent implements OnInit {
   }
 
   editQuestionWithMaterialCategoryAnswer(): void {
-    const questionName =
-      this.editMaterialQuestionForm.value.questionName.trim();
+    const name = this.editMaterialQuestionForm.value.name.trim();
     const question = this.editMaterialQuestionForm.value.question.trim();
-    const materialCategoryIds = this.editMaterialQuestionForm.value
-      .materialCategoryIds as string[];
+    const materialCategories = this.editMaterialQuestionForm.value
+      .materialCategories as string[];
+    const options = this.editMaterialQuestionForm.value.options;
 
-    const questionData: Question = {
-      id: this.data.id,
-      questionType: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
-      questionName,
+    const questionData: RawQuestion = {
+      type: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
+      name,
       question,
-      materialCategoryIds
+      materialCategories,
+      options
     };
 
     this.questionService
-      .updateQuestion$(questionData)
+      .updateQuestion$(this.data.id, questionData)
       .pipe(
         tap(() => {
           this.toastr.success('Kérdés sikeresen hozzáadva');
@@ -204,20 +238,14 @@ export class EditQuestionComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.data.questionType === QuestionType.QUESTION_WITH_STRING_ANSWER) {
-      if (
-        this.editStringQuestionForm.valid &&
-        this.editStringQuestionForm.value.options.length
-      ) {
+    if (this.data.type === QuestionType.QUESTION_WITH_STRING_ANSWER) {
+      if (this.editStringQuestionForm.valid) {
         this.editQuestionWithStringAnser();
       } else {
         this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
       }
     } else {
-      if (
-        this.editMaterialQuestionForm.valid &&
-        this.editMaterialQuestionForm.value.materialCategoryIds.length
-      ) {
+      if (this.editMaterialQuestionForm.valid) {
         this.editQuestionWithMaterialCategoryAnswer();
       } else {
         this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');

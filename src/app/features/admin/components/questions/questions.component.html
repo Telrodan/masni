@@ -38,17 +38,37 @@
 
           <th>Kérdés</th>
 
+          <th>Kérdés kategória</th>
+
           <th>Opciók</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-question>
         <tr>
-          <td>{{ question.id }}</td>
+          <td class="font-italic font-semibold">{{ question.id }}</td>
 
-          <td>{{ question.questionName }}</td>
+          <td class="font-semibold text-blue-500">{{ question.name }}</td>
 
-          <td class="font-bold">{{ question.question }}</td>
+          <td class="font-semibold">{{ question.question }}</td>
+
+          <td class="font-semibold text-blue-500">
+            <ng-container
+              *ngIf="
+                question.type ===
+                QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+              ">
+              <p-badge value="Kérdés anyag kategóriákkal" severity="success">
+              </p-badge>
+            </ng-container>
+
+            <ng-container
+              *ngIf="
+                question.type === QuestionType.QUESTION_WITH_STRING_ANSWER
+              ">
+              <p-badge value="Kérdés válaszokkal" severity="warning"> </p-badge>
+            </ng-container>
+          </td>
 
           <td>
             <button
@@ -70,6 +90,14 @@
               type="button"
               icon="pi pi-times"
               class="p-button p-button p-button-danger p-button"></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center text-800 text-4xl">
+            Nem található kérdés
           </td>
         </tr>
       </ng-template>

@@ -59,9 +59,9 @@ export class EditCategoryComponent {
     if (this.editCategoryForm.valid) {
       const category: RawCategory = {
         type: this.data.type,
-        name: this.editCategoryForm.value.name.trim(),
+        name: this.editCategoryForm.value.name,
         image: this.editCategoryForm.value.image,
-        description: this.editCategoryForm.value.description.trim()
+        description: this.editCategoryForm.value.description
       };
 
       if (category.name) {

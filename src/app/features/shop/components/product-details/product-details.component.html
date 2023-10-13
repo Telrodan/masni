@@ -1,74 +1,131 @@
-<div
-  class="px-4 py-8 md:px-6 lg:px-8"
-  *ngIf="productData$ | async as productData">
-  <div class="grid" *ngIf="productData.product as product">
-    <div class="w-full lg:w-5">
-      <mhd-image-composition [images]="product.images"></mhd-image-composition>
+<ng-container *ngIf="product$ | async as product">
+  <div class="product-details">
+    <div class="content-left">
+      <mhd-image-composition [images]="product.images"> </mhd-image-composition>
     </div>
 
-    <div class="col-12 lg:col-6 py-3 lg:pl-6">
-      <div class="flex align-items-center mb-4">
-        <div class="flex-column">
-          <h1 class="heading-primary mb-3">{{ product.name | titlecase }}</h1>
-          <p class="paragraph-primary">{{ product.shortDescription }}</p>
-        </div>
-        <!-- <i
-          class="pi ml-3 cursor-pointer"
-          [ngClass]="{
-            'pi-heart text-600': true,
-            'pi-heart-fill text-orange-500': false
-          }"
-          (click)="liked1 = !liked1"></i> -->
-      </div>
-      <span class="text-primary font-medium text-3xl block mb-5"
-        >{{ productData.price }} Ft</span
-      >
+    <div class="content-right">
+      <div class="product-details-container">
+        <p
+          *ngIf="product.category"
+          class="paragraph-primary sm:text-xl text-lg sm:mb-2 mb-1">
+          <i class="pi pi-folder"></i>
+          {{ product.category.name }}
+        </p>
 
-      <form (submit)="onAddToCart(product)" [formGroup]="builderForm">
-        <div class="field-checkbox">
-          <p-checkbox
-            [binary]="true"
-            formControlName="nameEmbroideryCheckbox"
-            inputId="nameEmbroideryCheckbox"></p-checkbox>
-          <label for="nameEmbroideryCheckbox"
-            >Szeretnék kézzel hímzett nevet a {{ product.name }}-ra/re! +500
-            Ft.</label
-          >
-        </div>
+        <h1 class="heading-primary sm:mb-2 mb-1">{{ product.name }}</h1>
 
-        <div
-          class="form-group"
-          *ngIf="builderForm.get('nameEmbroideryCheckbox').value">
-          <input
-            formControlName="nameEmbroideryInput"
-            id="nameEmbroideryInput"
-            type="text"
-            pInputText
-            placeholder="Add meg a nevet" />
+        <p class="primary-paragraph text-600 sm:mb-2 mb-1">
+          {{ product.shortDescription }}
+        </p>
+
+        <div class="flex sm:text-2xl text-xl sm:mb-2 mb-1">
+          <p
+            class="mr-3"
+            [ngClass]="
+              product.discountedPrice
+                ? 'text-red-500 line-through'
+                : 'text-primary'
+            ">
+            {{ product.price }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+          </p>
+
+          <p
+            *ngIf="product.discountedPrice"
+            class="discounted-price text-primary">
+            {{ product.discountedPrice }}
+            {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+          </p>
         </div>
 
         <p class="primary-paragraph mb-3">
           <i class="pi pi-box"></i> Készleten: {{ product.stock }}
         </p>
+      </div>
 
+      <form [formGroup]="productForm" class="mt-6">
+        <div formGroupName="questions">
+          <ng-container *ngFor="let question of product.questions">
+            <div class="form-group">
+              <label for="question.id" class="block font-medium mb-1 text-lg">
+                {{ question.question }}
+              </label>
+
+              <p-dropdown
+                id="question.id"
+                [formControlName]="question.id"
+                [options]="question.options"
+                placeholder="Kérlek válassz"
+                optionValue="_id"
+                optionLabel="slug"
+                styleClass="w-full">
+              </p-dropdown>
+            </div>
+          </ng-container>
+        </div>
+
+        <ng-container *ngIf="product.isNameEmbroideryAvailable">
+          <div class="form-group">
+            <label for="nameEmbroidery" class="block font-medium mb-1 text-lg">
+              Hímzett név +500 Ft
+            </label>
+
+            <input
+              formControlName="nameEmbroidery"
+              id="nameEmbroidery"
+              type="text"
+              pInputText
+              placeholder="Kérlek add meg a nevet" />
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="product.isCustom">
+          <div class="form-group">
+            <label for="comment" class="block font-medium mb-1 text-lg">
+              Megjegyzés
+            </label>
+
+            <textarea
+              rows="5"
+              cols="30"
+              pInputTextarea
+              [autoResize]="true"
+              formControlName="comment">
+            </textarea>
+          </div>
+        </ng-container>
+      </form>
+
+      <div class="flex sm:text-2xl text-xl sm:mb-2 mb-1">
+        <p>
+          Végösszeg: <span class="text-primary">{{ price }} Ft</span>
+        </p>
+      </div>
+
+      <div class="controlls-wrapper">
         <button
-          class="primary-button shadow-2 mb-3 w-full"
-          *ngIf="isAuthenticated$ | async">
+          class="primary-button mb-3 w-full"
+          *ngIf="isAuthenticated$ | async"
+          (click)="onAddToCart()">
           <i class="pi pi-shopping-cart"></i>
           Kosárba
         </button>
+
         <button
           routerLink="/login"
-          class="primary-button shadow-2 mb-3 w-full"
+          class="primary-button mb-3 w-full"
           *ngIf="(isAuthenticated$ | async) === false">
           Előbb lépj be a rendeléshez
         </button>
+
         <button
-          routerLink="/shop"
-          class="secondary-button shadow-2 mb-3 w-full">
+          (click)="onBack()"
+          type="button"
+          class="secondary-button mb-3 w-full">
           Vissza
         </button>
-      </form>
+      </div>
+
       <ol class="list-none p-0 m-0 text-center text-900">
         <li
           class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
@@ -80,4 +137,4 @@
       </ol>
     </div>
   </div>
-</div>
+</ng-container>

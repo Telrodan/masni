@@ -60,7 +60,7 @@ export class EditProductComponent implements OnInit {
         Validators.required
       ],
       selectedQuestion: [null],
-      questionIds: this.fb.array<string>(this.data.questions.map((q) => q.id)),
+      questions: this.fb.array<string>(this.data.questions.map((q) => q.id)),
       images: [this.data.images, Validators.required],
       price: [this.data.price, Validators.required],
       discountedPrice: [this.data.discountedPrice, Validators.required],
@@ -81,12 +81,16 @@ export class EditProductComponent implements OnInit {
       .pipe(
         tap((questions) => {
           this.questions = questions;
-          // this.data.questions.forEach((id: string) => {
-          //   const selectedQuestion = this.questions.find(
-          //     (question) => question.id === id
-          //   );
-          //   this.selectedQuestions.push(selectedQuestion);
-          // });
+          this.data.questions.forEach((question) => {
+            console.log(this.editProductForm.value.questions);
+            if (
+              this.editProductForm.value.questions.find(
+                (id: string) => id === question.id
+              )
+            ) {
+              this.selectedQuestions.push(question);
+            }
+          });
         }),
         untilDestroyed(this)
       )
@@ -96,7 +100,7 @@ export class EditProductComponent implements OnInit {
   addQuestion(): void {
     const id = this.editProductForm.value.selectedQuestion;
     if (id) {
-      this.editProductForm.value.questionIds.push(id);
+      this.editProductForm.value.questions.push(id);
       const selectedQuestion = this.questions.find(
         (question) => question.id === id
       );
@@ -109,11 +113,11 @@ export class EditProductComponent implements OnInit {
   }
 
   deleteQuestion(id: string, index: number): void {
-    const filteredQuestions = this.editProductForm.value.questionIds.filter(
-      (questionId: string) => questionId !== id
-    );
+    this.editProductForm.value.questions =
+      this.editProductForm.value.questions.filter(
+        (questionId: string) => questionId !== id
+      );
     this.selectedQuestions.splice(index, 1);
-    this.editProductForm.value.questionIds = filteredQuestions;
     this.editProductForm.markAsDirty();
     this.toastr.success('Kérdés törölve');
   }
@@ -139,7 +143,7 @@ export class EditProductComponent implements OnInit {
         name: this.editProductForm.value.name,
         shortDescription: this.editProductForm.value.shortDescription,
         description: this.editProductForm.value.description,
-        questionIds: this.editProductForm.value.questionIds,
+        questions: this.editProductForm.value.questions,
         isCustom: this.editProductForm.value.isCustom,
         isDollDress: this.editProductForm.value.isDollDress,
         isDressable: this.editProductForm.value.isDressable,

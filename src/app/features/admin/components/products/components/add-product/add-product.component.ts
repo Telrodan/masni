@@ -41,7 +41,7 @@ export class AddProductComponent implements OnInit {
     isFeatured: [false, Validators.required],
     isNameEmbroideryAvailable: [false, Validators.required],
     selectedQuestion: [null],
-    questionIds: this.fb.array<string[]>([]),
+    questions: this.fb.array<string>([]),
     images: [[], Validators.required],
     price: [0, Validators.required],
     discountedPrice: [0, Validators.required],
@@ -74,7 +74,7 @@ export class AddProductComponent implements OnInit {
   addQuestion(): void {
     const id = this.addProductForm.value.selectedQuestion;
     if (id) {
-      this.addProductForm.value.questionIds.push(id);
+      this.addProductForm.value.questions.push(id);
       const selectedQuestion = this.questions.find(
         (question) => question.id === id
       );
@@ -88,8 +88,8 @@ export class AddProductComponent implements OnInit {
 
   deleteQuestion(id: string, index: number): void {
     this.selectedQuestions.splice(index, 1);
-    this.addProductForm.value.questionIds =
-      this.addProductForm.value.questionIds.filter(
+    this.addProductForm.value.questions =
+      this.addProductForm.value.questions.filter(
         (questionId) => questionId !== id
       );
 
@@ -123,7 +123,7 @@ export class AddProductComponent implements OnInit {
         isNameEmbroideryAvailable:
           this.addProductForm.value.isNameEmbroideryAvailable,
         description: this.addProductForm.value.description,
-        questionIds: this.addProductForm.value.questionIds,
+        questions: this.addProductForm.value.questions,
         images: this.addProductForm.value.images,
         price: this.addProductForm.value.price,
         discountedPrice: this.addProductForm.value.discountedPrice,

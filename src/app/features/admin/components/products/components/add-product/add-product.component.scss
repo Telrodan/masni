@@ -5,6 +5,11 @@
 .questions-wrapper {
   display: flex;
   align-items: center;
+  width: 100%;
+
+  p-dropdown {
+    width: 100%;
+  }
 }
 
 .option-wrapper {

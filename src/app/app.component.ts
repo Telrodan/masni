@@ -35,11 +35,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     if (sessionStorage.getItem('visit') === null) {
-      const isNewVisitor = true;
-      this.trackService.trackVisitor({ isNewVisitor });
+      const isNewSession = true;
+      this.trackService.trackVisitor(isNewSession);
     } else {
-      const isNewVisitor = false;
-      this.trackService.trackVisitor({ isNewVisitor });
+      const isNewSession = false;
+      this.trackService.trackVisitor(isNewSession);
     }
 
     sessionStorage.setItem('visit', 'x');

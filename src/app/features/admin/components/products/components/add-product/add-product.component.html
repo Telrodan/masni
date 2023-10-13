@@ -103,7 +103,7 @@
           [options]="questions$ | async"
           placeholder="Válassz egy kérdést"
           optionValue="id"
-          optionLabel="questionName"
+          optionLabel="name"
           styleClass="mr-2">
         </p-dropdown>
 
@@ -115,6 +115,26 @@
           (click)="addQuestion()"></p-button>
       </div>
     </div>
+
+    <ng-container *ngIf="selectedQuestions.length">
+      <div class="form-group w-6">
+        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
+
+        <div
+          class="option-wrapper mb-2"
+          *ngFor="let question of selectedQuestions; let i = index">
+          <p class="block font-medium text-800 mb-1">
+            {{ i + 1 }}. {{ question.name }}
+          </p>
+
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-danger"
+            (click)="deleteQuestion(question.id, i)">
+          </p-button>
+        </div>
+      </div>
+    </ng-container>
 
     <div class="form-group">
       <label class="block font-medium text-blue-500 mb-1 text-lg">
@@ -271,26 +291,6 @@
         </div>
       </div>
     </div>
-
-    <ng-container *ngIf="selectedQuestions.length">
-      <div class="form-group w-6">
-        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
-
-        <div
-          class="option-wrapper mb-2"
-          *ngFor="let question of selectedQuestions; let i = index">
-          <p class="block font-medium text-800 mb-1">
-            {{ i + 1 }}. {{ question.questionName }}
-          </p>
-
-          <p-button
-            icon="pi pi-times"
-            styleClass="p-button-danger"
-            (click)="deleteQuestion(question.id, i)">
-          </p-button>
-        </div>
-      </div>
-    </ng-container>
 
     <div class="form-group">
       <label for="images" class="block font-medium text-blue-500 mb-1 text-lg">

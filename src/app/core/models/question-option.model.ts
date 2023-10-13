@@ -1,6 +1,7 @@
 export interface QuestionOption {
-  id?: string;
-  optionName: string;
+  _id?: string;
+  materialId?: string;
+  name: string;
   extraPrice: number;
   slug?: string;
 }

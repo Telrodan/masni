@@ -9,7 +9,7 @@ import { Order } from '@core/models/order.model';
   styleUrls: ['./order-details.component.scss']
 })
 export class OrderDetailsComponent {
-  order = this.data;
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Order) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public order: Order) {
+    console.log(this.order);
+  }
 }

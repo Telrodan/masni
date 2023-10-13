@@ -15,7 +15,7 @@
 
       <ng-template let-material let-i="i" pTemplate="item">
         <div class="item-content">
-          <p class="material-name shadow-2">
+          <p class="material-name">
             {{ material.name }}
           </p>
 
@@ -24,7 +24,7 @@
           <img
             *ngIf="imageLoadedStatus[i]"
             [src]="material.image"
-            class="mb-1 shadow-2" />
+            class="mb-1" />
 
           <p-skeleton
             *ngIf="!imageLoadedStatus[i]"
@@ -33,7 +33,7 @@
       </ng-template>
     </p-carousel>
 
-    <button routerLink="/material" class="secondary-button shadow-2">
+    <button routerLink="/material" class="secondary-button">
       Mindet Megnézem
     </button>
   </section>

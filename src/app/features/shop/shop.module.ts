@@ -10,8 +10,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule } from 'primeng/paginator';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
-const PRIME_NG = [ImageModule, CheckboxModule, DropdownModule, PaginatorModule];
+const PRIME_NG = [
+  ImageModule,
+  CheckboxModule,
+  DropdownModule,
+  PaginatorModule,
+  InputTextModule,
+  InputTextareaModule
+];
 
 @NgModule({
   declarations: [ShopComponent, ProductDetailsComponent],

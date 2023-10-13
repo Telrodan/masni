@@ -24,7 +24,8 @@
         [options]="categories"
         placeholder="Válassz egy kategóriát"
         optionValue="id"
-        optionLabel="name"></p-dropdown>
+        optionLabel="name">
+      </p-dropdown>
     </div>
 
     <div class="form-group">
@@ -101,7 +102,7 @@
           [options]="questions"
           placeholder="Válassz egy kérdést"
           optionValue="id"
-          optionLabel="questionName"
+          optionLabel="name"
           styleClass="mr-2">
         </p-dropdown>
 
@@ -113,6 +114,26 @@
           (click)="addQuestion()"></p-button>
       </div>
     </div>
+
+    <ng-container *ngIf="selectedQuestions.length">
+      <div class="form-group w-6">
+        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
+
+        <div
+          class="option-wrapper mb-2"
+          *ngFor="let question of selectedQuestions; let i = index">
+          <p class="block font-medium text-800 mb-1">
+            {{ i + 1 }}. {{ question.name }}
+          </p>
+
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-danger"
+            (click)="deleteQuestion(question.id, i)">
+          </p-button>
+        </div>
+      </div>
+    </ng-container>
 
     <div class="form-group">
       <label
@@ -253,9 +274,9 @@
             formControlName="isNameEmbroideryAvailable"
             name="isNameEmbroideryAvailable"
             [value]="false"
-            inputId="isNameEmbroideryAvailable">
+            inputId="isNameEmbroideryAvailableFalse">
           </p-radioButton>
-          <label for="isNameEmbroideryAvailable" class="ml-2">Nem</label>
+          <label for="isNameEmbroideryAvailableFalse" class="ml-2">Nem</label>
         </div>
 
         <div class="flex align-items-center">
@@ -263,32 +284,13 @@
             formControlName="isNameEmbroideryAvailable"
             name="isNameEmbroideryAvailable"
             [value]="true"
-            inputId="isNameEmbroideryAvailable">
+            inputId="isNameEmbroideryAvailableTrue">
           </p-radioButton>
-          <label for="isNameEmbroideryAvailable" class="ml-2">Igen</label>
+
+          <label for="isNameEmbroideryAvailableTrue" class="ml-2">Igen</label>
         </div>
       </div>
     </div>
-
-    <ng-container *ngIf="selectedQuestions.length">
-      <div class="form-group w-6">
-        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
-
-        <div
-          class="option-wrapper mb-2"
-          *ngFor="let question of selectedQuestions; let i = index">
-          <p class="block font-medium text-800 mb-1">
-            {{ i + 1 }}. {{ question.questionName }}
-          </p>
-
-          <p-button
-            icon="pi pi-times"
-            styleClass="p-button-danger"
-            (click)="deleteQuestion(question.id, i)">
-          </p-button>
-        </div>
-      </div>
-    </ng-container>
 
     <div class="form-group">
       <label for="images" class="block font-medium text-blue-500 mb-1 text-lg">

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
 import {
@@ -12,33 +14,21 @@ import {
   startWith,
   debounceTime
 } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { environment } from 'src/environments/environment';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { HttpClient } from '@angular/common/http';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ShoppingCartData } from '@core/models/shopping-cart-data.model';
 import { OrderService } from '@core/services/order.service';
 import { User } from '@core/models/user.model';
-import { userSelector } from '@core/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { loadStripe } from '@stripe/stripe-js';
 import { FoxpostService } from '@core/services/foxpost.service';
-
-interface ShoppingCartData {
-  items: ShoppingCartItem[];
-  price: number;
-}
-
-interface ShippingOption {
-  method: string;
-  value: string;
-  price: number;
-}
+import { userSelector } from '@core/store';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { environment } from 'src/environments/environment';
+import { loadStripe } from '@stripe/stripe-js';
+import { ShippingOption } from '@core/models/shipping-option.model';
 
 @UntilDestroy()
 @Component({
@@ -53,16 +43,21 @@ export class ShoppingCartComponent implements OnInit {
   shippingForm: FormGroup;
   foxpostPoints: any;
 
-  shippingMethods = [
+  shippingMethods: ShippingOption[] = [
     {
-      method: 'Házhozszállítás +2200 Ft',
-      value: 'delivery',
+      name: 'Házhozszállítás +2200 Ft',
+      method: 'delivery',
       price: 2200
     },
     {
-      method: 'Foxpost automata +1200 Ft',
-      value: 'foxpost-collection',
+      name: 'Foxpost automata +1200 Ft',
+      method: 'foxpost-collection',
       price: 1200
+    },
+    {
+      name: 'Szemelyés átvétel (Szentes) +0 Ft ',
+      method: 'personal-collection',
+      price: 0
     }
   ];
 
@@ -72,12 +67,10 @@ export class ShoppingCartComponent implements OnInit {
     private toastr: ToastrService,
     private store$: Store,
     private dialog: MatDialog,
-    private http: HttpClient,
     private foxpostService: FoxpostService
   ) {}
 
   public ngOnInit(): void {
-    console.log('yoyo');
     this.store$
       .select(userSelector)
       .pipe(
@@ -111,15 +104,13 @@ export class ShoppingCartComponent implements OnInit {
         .select(shoppingCartItemsSelector)
         .pipe(filter((items) => !!items)),
       this.shippingForm.valueChanges.pipe(
-        distinctUntilChanged(),
         map((changes) => changes.shippingMethod as ShippingOption),
-        startWith(this.shippingMethods[0]),
-        debounceTime(300)
+        startWith(this.shippingMethods[0])
       )
     ]).pipe(
       map(([items, shipping]) => {
         let price = 0;
-        items.map((item) => {
+        items.forEach((item) => {
           price += item.price;
         });
         price += shipping.price;
@@ -132,14 +123,10 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onDeleteOrder(item: ShoppingCartItem): void {
-    const productName =
-      item.product['name'].charAt(0).toUpperCase() +
-      item.product['name'].slice(1);
-
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          message: `Biztos törölni szeretnéd ${productName} terméket, ${item.price} Ft értékben?`
+          message: `Biztos törölni szeretnéd ${item.product.name} terméket, ${item.price} Ft értékben?`
         }
       })
       .afterClosed()
@@ -147,28 +134,29 @@ export class ShoppingCartComponent implements OnInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.shoppingCartService.deleteItemFromCart(item)),
         tap(() => {
-          this.toastr.success(`${productName} törölve`);
+          this.toastr.success(`${item.product.name} törölve`);
         })
       )
       .subscribe();
   }
 
   onSubmitOrder(): void {
-    let shipping;
-    const billing = `${this.user.billingAddress.postcode}, ${this.user.billingAddress.city} ${this.user.billingAddress.street} ${this.user.billingAddress.county}`;
-    if (this.shippingForm.get('shippingMethod').value.value === 'delivery') {
+    let shipping = {};
+    const billingAddress = this.user.billingAddress;
+    const billing = `${billingAddress.postcode}, ${billingAddress.city} ${billingAddress.street} ${billingAddress.county}`;
+    if (this.shippingForm.value.shippingMethod.method === 'delivery') {
       const userAddress = this.user.shippingAddress;
       shipping = {
-        method: this.shippingForm.get('shippingMethod').value.method,
-        price: this.shippingForm.get('shippingMethod').value.price,
+        name: this.shippingForm.value.shippingMethod.name,
+        price: this.shippingForm.value.shippingMethod.price,
         address: `${userAddress.postcode} ${userAddress.city}, ${userAddress.street}`,
         billing
       };
     } else {
       shipping = {
-        method: this.shippingForm.get('shippingMethod').value.method,
-        price: this.shippingForm.get('shippingMethod').value.price,
-        address: this.shippingForm.get('foxpost').value.address,
+        name: this.shippingForm.value.shippingMethod.name,
+        price: this.shippingForm.value.shippingMethod.price,
+        address: this.shippingForm.value.foxpost.address,
         billing
       };
     }

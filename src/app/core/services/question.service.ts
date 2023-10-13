@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
-import { Question } from '@core/models/question.model';
+import { Question, RawQuestion } from '@core/models/question.model';
 import { Store } from '@ngrx/store';
 import {
   addQuestion,
   deleteQuestion,
   removeQuestionFromProduct,
+  updateProductsQuestion,
   updateQuestion
 } from '@core/store';
 
@@ -17,7 +18,7 @@ import {
 export class QuestionService {
   constructor(private apiService: ApiService, private store$: Store) {}
 
-  addQuestion$(question: Question): Observable<Question> {
+  addQuestion$(question: RawQuestion): Observable<Question> {
     return this.apiService
       .post<ApiResponse<Question>>('question/addOne', question)
       .pipe(
@@ -28,16 +29,15 @@ export class QuestionService {
       );
   }
 
-  updateQuestion$(question: Question): Observable<Question> {
+  updateQuestion$(id: string, question: RawQuestion): Observable<Question> {
     return this.apiService
-      .patch<ApiResponse<Question>>(
-        `question/updateOne/${question.id}`,
-        question
-      )
+      .patch<ApiResponse<Question>>(`question/updateOne/${id}`, question)
       .pipe(
         map((questionDTO) => questionDTO.data),
         tap((question) => {
+          console.log(question);
           this.store$.dispatch(updateQuestion({ question }));
+          this.store$.dispatch(updateProductsQuestion({ question }));
         })
       );
   }

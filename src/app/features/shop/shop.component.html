@@ -5,9 +5,11 @@
     [elementToScrollTo]="form">
   </mhd-scrollable-image-with-title>
 
-  <form [formGroup]="filterForm" class="filter-form" #form>
-    <h1 class="heading-primary">Rendezés</h1>
+  <p class="primary-paragraph category-description">
+    {{ pageData?.description }}
+  </p>
 
+  <form [formGroup]="filterForm" class="filter-form" #form>
     <div class="form-content">
       <div class="flex-row align-items-center">
         <label for="price" class="mr-1">Ár:</label>

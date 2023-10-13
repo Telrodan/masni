@@ -14,7 +14,7 @@
 
   <ng-container
     *ngIf="
-      questionTypeHelper === questionType.QUESTION_WITH_STRING_ANSWER;
+      questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER;
       then stringQuestionFormTemplate;
       else categoryQuestionFormTemplate
     ">
@@ -25,20 +25,18 @@
       <form [formGroup]="addStringQuestionForm">
         <div class="form-group">
           <label
-            for="questionName"
-            class="block font-medium text-blue-500 mb-1">
+            for="name"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Kérdés neve
           </label>
 
-          <input
-            id="questionName"
-            formControlName="questionName"
-            type="text"
-            pInputText />
+          <input id="name" formControlName="name" type="text" pInputText />
         </div>
 
         <div class="form-group">
-          <label for="question" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="question"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Kérdés
           </label>
 
@@ -50,7 +48,9 @@
         </div>
 
         <div class="form-group">
-          <label for="optionName" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="optionName"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Választási lehetőség
           </label>
 
@@ -64,7 +64,7 @@
         <div class="form-group">
           <label
             for="isExtraPrice"
-            class="block font-medium text-blue-500 mb-1">
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Van a lehetőségnek extra ára?
           </label>
 
@@ -77,7 +77,9 @@
         <div
           class="form-group"
           *ngIf="addStringQuestionForm.value.isExtraPrice">
-          <label for="extraPrice" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="extraPrice"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Lehetőség extra ára
           </label>
 
@@ -96,11 +98,13 @@
         <h3 class="font-medium text-blue-500 mb-1">Előnézet</h3>
 
         <h4 class="font-medium text-500 mb-1">
-          {{ addStringQuestionForm.value.questionName }}
+          {{ addStringQuestionForm.value.name }}
         </h4>
 
         <div class="form-group">
-          <label for="option" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="option"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             {{ addStringQuestionForm.value.question }}
           </label>
 
@@ -139,20 +143,18 @@
       <form [formGroup]="addMaterialQuestionForm">
         <div class="form-group">
           <label
-            for="questionName"
-            class="block font-medium text-blue-500 mb-1">
+            for="name"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Kérdés neve
           </label>
 
-          <input
-            id="questionName"
-            formControlName="questionName"
-            type="text"
-            pInputText />
+          <input id="name" formControlName="name" type="text" pInputText />
         </div>
 
         <div class="form-group">
-          <label for="question" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="question"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             Kérdés
           </label>
 
@@ -165,7 +167,9 @@
 
         <ng-container *ngIf="categories$ | async as categories">
           <div class="form-group">
-            <label for="category" class="block font-medium text-blue-500 mb-1">
+            <label
+              for="category"
+              class="block font-medium text-blue-500 mb-1 text-lg">
               Valassz minta kategóriát
             </label>
 
@@ -191,29 +195,31 @@
         <h3 class="font-medium text-blue-500 mb-1">Előnézet</h3>
 
         <h4 class="font-medium text-500 mb-1">
-          {{ addMaterialQuestionForm.value.questionName }}
+          {{ addMaterialQuestionForm.value.name }}
         </h4>
 
         <div class="form-group">
-          <label for="option" class="block font-medium text-blue-500 mb-1">
+          <label
+            for="option"
+            class="block font-medium text-blue-500 mb-1 text-lg">
             {{ addMaterialQuestionForm.value.question }}
           </label>
 
-          <ng-container *ngIf="materialOptions.length">
-            <p-dropdown [options]="materialOptions" styleClass="w-full">
+          <ng-container *ngIf="addMaterialQuestionForm.value.options.length">
+            <p-dropdown
+              [options]="addMaterialQuestionForm.value.options"
+              optionLabel="slug"
+              styleClass="w-full">
             </p-dropdown>
           </ng-container>
         </div>
 
-        <ng-container *ngIf="materialOptions">
+        <ng-container *ngIf="addMaterialQuestionForm.value.options.length">
           <h3 class="font-medium text-blue-500 mb-1">Lehetőségek</h3>
 
           <div
             class="option-wrapper mb-2"
-            *ngFor="
-              let option of this.addMaterialQuestionForm.value.categories;
-              let i = index
-            ">
+            *ngFor="let option of selectedCategories; let i = index">
             <p class="block font-medium text-800 mb-1">
               {{ i + 1 }}. {{ option.name }}
             </p>

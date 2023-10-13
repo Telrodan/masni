@@ -123,6 +123,19 @@ img {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+
+  @include respond(sm) {
+    margin-bottom: 0;
+    font-size: 13px;
+  }
+
+  .original-price {
+    margin-right: 12px;
+
+    @include respond(sm) {
+      margin-right: 8px;
+    }
+  }
 }
 
 .stock {

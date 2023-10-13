@@ -1,6 +1,6 @@
 <mhd-scrollable-image-with-title
   [title]="'Nyuszkó Kuckó'"
-  [imageUrl]="'../../../assets/images/landing-page/test.jpg'"
+  [imageUrl]="'../../../assets/images/landing-page/carousel-placeholder.jpg'"
   [elementToScrollTo]="main">
 </mhd-scrollable-image-with-title>
 
@@ -28,6 +28,6 @@
   <mhd-product-categories-carousel [categories]="productCategories$ | async">
   </mhd-product-categories-carousel>
 
-  <mhd-material-carousel
-    [materials]="materials$ | async"></mhd-material-carousel>
+  <mhd-material-carousel [materials]="materials$ | async">
+  </mhd-material-carousel>
 </main>

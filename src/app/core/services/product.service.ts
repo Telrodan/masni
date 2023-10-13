@@ -57,7 +57,6 @@ export class ProductService {
       .pipe(
         map((productDTO) => productDTO.data),
         tap((product) => {
-          product.questions = [];
           this.store.dispatch(updateProduct({ product }));
           this.store.dispatch(
             moveItemBetweenCategories({

@@ -6,7 +6,7 @@ export interface RawProduct {
   name: string;
   shortDescription: string;
   description: string;
-  questionIds: string[];
+  questions: string[];
   isCustom: boolean;
   isDollDress: boolean;
   isDressable: boolean;

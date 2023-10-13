@@ -16,7 +16,7 @@
       <ng-template let-category let-i="i" pTemplate="item">
         <div class="item-content">
           <a [routerLink]="'/shop/' + category.id">
-            <p class="category-name shadow-2">
+            <p class="category-name">
               {{ category.name }}
             </p>
 
@@ -28,7 +28,7 @@
             <img
               *ngIf="imageLoadedStatus[i]"
               [src]="category.image"
-              class="mb-1 shadow-2" />
+              class="mb-1" />
 
             <p-skeleton
               *ngIf="!imageLoadedStatus[i]"

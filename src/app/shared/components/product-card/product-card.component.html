@@ -1,22 +1,19 @@
 <div class="product-card" (click)="onProductDetails()" *ngIf="product">
   <div class="image-wrapper">
-    <div *ngIf="product.discountedPrice > 0" class="discount-wrapper shadow-5">
-      <p>-{{ product.discountPercentage }}%</p>
+    <div *ngIf="product.discountedPrice > 0" class="discount-wrapper">
+      <p class="text-red-500 font-bold">-{{ product.discountPercentage }}%</p>
     </div>
 
-    <div *ngIf="product.isCustom" class="dream-it-wrapper shadow-5">
+    <div *ngIf="product.isCustom" class="dream-it-wrapper">
       <p>"Álmodd meg"</p>
     </div>
 
-    <div
-      *ngIf="isOneWeekPassed(product.createdAt)"
-      class="new-wrapper shadow-5">
+    <div *ngIf="isOneWeekPassed(product.createdAt)" class="new-wrapper">
       <p>Új</p>
     </div>
 
     <div class="image-wrapper">
       <img
-        class="shadow-3"
         [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
         [src]="product.images[0]"
         (load)="isImageLoading = false" />
@@ -42,7 +39,7 @@
     <div class="wrapper">
       <div class="price-wrapper">
         <p
-          class="mr-3"
+          class="original-price"
           [ngClass]="
             product.discountedPrice > 0
               ? 'text-red-500 line-through'
@@ -60,7 +57,7 @@
         <p class="stock">Készleten: {{ product.stock }}</p>
       </div>
 
-      <button class="primary-button shadow-2">
+      <button class="primary-button">
         <i class="pi pi-shopping-cart"></i>
       </button>
     </div>

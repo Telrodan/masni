@@ -5,13 +5,16 @@ import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { Material, RawMaterial } from '@core/models/material.model';
-import { selectMaterialExtraById } from '@core/store/selectors/material.selectors';
 import { ApiResponse } from '@core/models/api-response.model';
 import {
   addItemToCategory,
   addMaterial,
+  addMaterialQuestionOption,
+  addMaterialQuestionOptionToProduct,
   deleteItemFromCategory,
   deleteMaterial,
+  deleteMaterialQuestionOption,
+  deleteProductQuestionMaterialOption,
   moveItemBetweenCategories,
   updateMaterial
 } from '@core/store';
@@ -64,6 +67,17 @@ export class MaterialService {
               item: material
             })
           );
+          if (!material.isAvailable) {
+            this.store.dispatch(
+              deleteProductQuestionMaterialOption({ material })
+            );
+            this.store.dispatch(deleteMaterialQuestionOption({ material }));
+          } else {
+            this.store.dispatch(addMaterialQuestionOption({ material }));
+            this.store.dispatch(
+              addMaterialQuestionOptionToProduct({ material })
+            );
+          }
         })
       );
   }
@@ -73,27 +87,14 @@ export class MaterialService {
       tap(() => {
         this.store.dispatch(deleteMaterial({ material }));
         this.store.dispatch(deleteItemFromCategory({ item: material }));
+        this.store.dispatch(deleteProductQuestionMaterialOption({ material }));
       })
     );
   }
 
-  fetchMaterials$(): Observable<Material[]> {
+  getMaterials$(): Observable<Material[]> {
     return this.apiService
       .get<ApiResponse<Material[]>>('material/getAll')
       .pipe(map((materialsDTO) => materialsDTO.data));
-  }
-
-  public getExtraPriceByName(name: string): number {
-    let result = 0;
-    this.store
-      .select(selectMaterialExtraById(name))
-      .pipe(
-        tap((extraPrice) => {
-          result = extraPrice;
-        })
-      )
-      .subscribe();
-
-    return result;
   }
 }

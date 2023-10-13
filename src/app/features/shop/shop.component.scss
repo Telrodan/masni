@@ -8,15 +8,16 @@
   }
 }
 
+.category-description {
+  text-align: center;
+  margin-top: 12px;
+}
+
 .filter-form {
   padding: 20px 40px;
 
   @include respond(sm) {
     padding: 20px;
-  }
-
-  h1 {
-    margin-bottom: 16px;
   }
 }
 

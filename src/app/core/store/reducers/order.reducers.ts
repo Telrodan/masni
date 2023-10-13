@@ -23,13 +23,12 @@ export const orderReducers = createReducer(
   on(getOrdersSuccess, (state, action) => {
     const orders = action.orders.map((order) => ({
       ...order,
-      userEmail: order.user[0].email,
-      user: { ...order.user[0], phone: formatPhoneNumber(order.user[0].phone) }
+      user: { ...order.user, phone: formatPhoneNumber(order.user.phone) }
     }));
 
     return {
       ...state,
-      orders: orders,
+      orders,
       status: StatusTypes.LOADED
     };
   }),
