@@ -10,12 +10,16 @@ import { Product } from '@core/models/product.model';
 })
 export class ProductCardComponent {
   @Input() product: Product;
+  @Input() page: number;
 
   isImageLoading = true;
 
   constructor(private router: Router) {}
 
   onProductDetails(): void {
+    if (this.page >= 0) {
+      sessionStorage.setItem('page', this.page.toString());
+    }
     this.router.navigate(['/shop/product-details', this.product.id]);
   }
 

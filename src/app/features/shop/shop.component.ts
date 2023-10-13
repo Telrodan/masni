@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,6 +24,7 @@ import {
   selectAvailableProducts,
   selectCategoryById,
   selectCustomProducts,
+  selectDollDresses,
   selectFeaturedProducts
 } from '@core/store';
 import { Title, Meta } from '@angular/platform-browser';
@@ -37,7 +43,7 @@ interface PageEvent {
   styleUrls: ['./shop.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ShopComponent implements OnInit {
+export class ShopComponent implements OnInit, AfterViewChecked {
   pageData$: Observable<ShopPageData>;
 
   filterForm = new FormGroup({
@@ -46,7 +52,7 @@ export class ShopComponent implements OnInit {
   prices = [{ price: 'Csökkenő' }, { price: 'Növekvő' }];
 
   first = 0;
-  rows = 8;
+  rows = 25;
 
   constructor(
     private store$: Store,
@@ -93,6 +99,18 @@ export class ShopComponent implements OnInit {
               filter((products) => !!products),
               map((products) => ({
                 category: 'Kiemelt termékek',
+                image:
+                  '../../../assets/images/landing-page/carousel-placeholder.jpg',
+                products,
+                priceFilter: price
+              }))
+            );
+
+          case 'doll-dress':
+            return this.store$.select(selectDollDresses).pipe(
+              filter((products) => !!products),
+              map((products) => ({
+                category: 'Baba ruhák és kiegészítők',
                 image:
                   '../../../assets/images/landing-page/carousel-placeholder.jpg',
                 products,
@@ -152,9 +170,19 @@ export class ShopComponent implements OnInit {
           { name: 'author', content: 'Nyuszkó Kuckó' }
         ]);
 
+        const page = sessionStorage.getItem('page');
+
+        if (page) {
+          this.first = Number(page);
+        }
+
         return data;
       })
     );
+  }
+
+  ngAfterViewChecked(): void {
+    sessionStorage.removeItem('page');
   }
 
   onPageChange(event: PageEvent): void {

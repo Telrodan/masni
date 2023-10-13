@@ -15,6 +15,8 @@ import { Product } from '@core/models/product.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { PreviousRouteService } from '@core/services/previous-route.service';
 import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DollDressDialogComponent } from '../doll-dress-dialog/doll-dress-dialog.component';
 
 @Component({
   selector: 'mhd-product-details',
@@ -37,7 +39,8 @@ export class ProductDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private fb: FormBuilder,
     private previousRouteService: PreviousRouteService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -138,6 +141,10 @@ export class ProductDetailsComponent implements OnInit {
           this.toastr.success(`${cartItem.product.name} hozzáadva a kosárhoz`);
           this.productForm.reset();
           this.productForm.get('nameEmbroidery').patchValue('');
+
+          if (cartItem.product.isDressable) {
+            this.dialog.open(DollDressDialogComponent);
+          }
         })
       )
       .subscribe();
