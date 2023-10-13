@@ -40,7 +40,7 @@ export const shoppingCartReducers = createReducer(
   })),
 
   on(deleteShoppingCartItem, (state, action) => {
-    const index = state.items.findIndex((item) => item._id === action.item._id);
+    const index = state.items.findIndex((item) => item.id === action.item.id);
     const items = [...state.items];
     items.splice(index, 1);
     return {

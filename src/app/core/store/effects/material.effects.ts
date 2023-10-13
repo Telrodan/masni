@@ -21,7 +21,7 @@ export class MaterialEffects {
     this.actions$.pipe(
       ofType(getMaterials),
       exhaustMap(() =>
-        this.materialService.fetchMaterials$().pipe(
+        this.materialService.getMaterials$().pipe(
           map((materials) => getMaterialsSuccess({ materials })),
           catchError(() => of(getMaterialsError()))
         )

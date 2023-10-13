@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Store } from '@ngrx/store';
+import { Observable, filter, map, switchMap, tap } from 'rxjs';
+
 import { Inspiration } from '@core/models/inspiration.model';
 import { InspirationService } from '@core/services/inspiration.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { selectAllInspiration } from '@core/store/selectors/inspiration.selectors';
-import { Store } from '@ngrx/store';
-import { Observable, filter, map, switchMap, tap } from 'rxjs';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { AddInspirationComponent } from './components/add-inspiration/add-inspiration.component';
+import { EditInspirationComponent } from './components/edit-inspiration/edit-inspiration.component';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'mhd-inspirations',
@@ -17,7 +21,6 @@ import { AddInspirationComponent } from './components/add-inspiration/add-inspir
 export class InspirationsComponent implements OnInit {
   inspirations$: Observable<Inspiration[]>;
 
-  images: string[];
   imageLoadedStatus: boolean[] = [];
 
   constructor(
@@ -30,11 +33,7 @@ export class InspirationsComponent implements OnInit {
   ngOnInit(): void {
     this.inspirations$ = this.store$.select(selectAllInspiration).pipe(
       filter((inspirations) => !!inspirations),
-      map((inspirations) => {
-        this.reloadInspirationsImages(inspirations);
-
-        return [...inspirations];
-      })
+      map((inspirations) => [...inspirations])
     );
   }
 
@@ -44,15 +43,19 @@ export class InspirationsComponent implements OnInit {
     });
   }
 
+  onEditInspiration(inspiration: Inspiration): void {
+    this.dialog.open(EditInspirationComponent, {
+      minWidth: '40vw',
+      data: inspiration
+    });
+  }
+
   onDeleteInspiration(inspiration: Inspiration): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         minWidth: '40vw',
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd ${inspiration.id} azonosítójú inspirációt?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd "${inspiration.name}" inspirációt?`
         }
       })
       .afterClosed()
@@ -72,12 +75,8 @@ export class InspirationsComponent implements OnInit {
     this.imageLoadedStatus[index] = true;
   }
 
-  reloadInspirationsImages(inspiration: Inspiration[]) {
-    this.images = inspiration.map((inspiration) => {
-      const timestamp = new Date().getTime();
-
-      return inspiration.image + `?timestamp=${timestamp}`;
-    });
-    this.imageLoadedStatus = this.images.map(() => false);
+  applyFilterGlobal($event: any, stringVal: string, table: Table): void {
+    const filter = ($event.target as HTMLInputElement).value;
+    table.filterGlobal(filter, stringVal);
   }
 }

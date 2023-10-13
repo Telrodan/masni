@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { tap } from 'rxjs';
 
+import { RawCategory } from '@core/models/category.model';
+import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
+
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
@@ -18,9 +20,13 @@ import {
   styleUrls: ['./add-category.component.scss']
 })
 export class AddCategoryComponent {
+  readonly CategoryType = CategoryType;
+
   addCategoryForm = this.fb.group({
+    type: [CategoryType.PRODUCT_CATEGORY, Validators.required],
     name: ['', Validators.required],
-    image: ['', Validators.required]
+    image: ['', Validators.required],
+    description: ['']
   });
 
   imagePreview: string;
@@ -48,25 +54,28 @@ export class AddCategoryComponent {
 
   onAddCategory(): void {
     if (this.addCategoryForm.valid) {
-      const name = this.addCategoryForm.value.name.trim();
-      if (name) {
-        const categoryData = new FormData();
+      const category: RawCategory = {
+        type: this.addCategoryForm.value.type,
+        name: this.addCategoryForm.value.name.trim(),
+        image: this.addCategoryForm.value.image,
+        description: this.addCategoryForm.value.description.trim()
+      };
 
-        categoryData.append('name', name);
-        categoryData.append('image', this.addCategoryForm.value.image);
-
+      if (category.name) {
         this.categoryService
-          .addCategory$(categoryData)
+          .addCategory$(category)
           .pipe(
             tap(() => {
-              this.toastr.success(`${capitalize(name)} kategória hozzáadva`);
+              this.toastr.success(`${category.name} hozzáadva`);
               this.dialogRef.close();
             })
           )
           .subscribe();
       } else {
-        this.toastr.info(`Kérlek adj meg egy kategória nevet`);
+        this.toastr.info('Kérlek adj meg egy kategória nevet');
       }
+    } else {
+      this.toastr.info('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

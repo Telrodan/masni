@@ -25,9 +25,9 @@ export interface AppState {
   material: MaterialState;
   inspiration: InspirationState;
   shoppingCart: ShoppingCartState;
-  questions: QuestionState;
-  products: ProductState;
-  categories: CategoryState;
+  question: QuestionState;
+  product: ProductState;
+  category: CategoryState;
   user: UserState;
   order: OrderState;
 }
@@ -36,9 +36,9 @@ export const reducers: ActionReducerMap<AppState> = {
   material: materialReducers,
   inspiration: inspirationReducers,
   shoppingCart: shoppingCartReducers,
-  questions: questionReducers,
-  products: productReducers,
-  categories: categoryReducers,
+  question: questionReducers,
+  product: productReducers,
+  category: categoryReducers,
   user: userReducers,
   order: orderReducers
 };

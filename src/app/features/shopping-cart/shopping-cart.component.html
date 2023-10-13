@@ -5,20 +5,19 @@
     class="flex flex-column align-items-center"
     *ngIf="!cartData.items.length">
     <h1 class="heading-primary">A kosarad jelenleg üres</h1>
-    <button routerLink="/shop" class="primary-button shadow-2 mt-5">
-      <i class="pi pi-shopping-cart mr-2"></i>Vásárlás
+
+    <button routerLink="/shop/all" class="primary-button mt-5">
+      <i class="pi pi-shopping-cart mr-2"></i>
+      Vásárlás
     </button>
   </div>
 
   <div *ngIf="cartData.items.length">
     <div class="flex flex-column align-items-center mb-6">
       <div class="text-900 text-4xl mb-4 font-medium">
-        Kosár értéke: {{ cartData.price }} Ft
+        Kosár értéke:
+        <span class="text-primary">{{ cartData.price }} Ft</span>
       </div>
-
-      <button class="primary-button shadow-2">
-        <i class="pi pi-credit-card mr-1"></i>Fizetés
-      </button>
     </div>
 
     <ul class="list-none p-0 m-0">
@@ -26,20 +25,20 @@
         *ngFor="let item of cartData.items"
         class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
         <img
-          appLazyImage
-          [src]="item.product['images'][0]"
+          [src]="item.product.images[0]"
           class="w-12rem flex-shrink-0 mx-auto md:mx-0" />
 
         <div class="flex-auto py-3 md:pl-5">
           <div
             class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-3">
             <div class="w-full sm:w-6 flex flex-column">
-              <span class="text-900 text-xl font-medium mb-2 text-pink-500">{{
-                item.product['name'] | titlecase
-              }}</span>
-              <span class="text-600">{{
-                item.product['shortDescription']
-              }}</span>
+              <span class="text-900 text-xl font-medium mb-2 text-pink-500">
+                {{ item.product.name }}
+              </span>
+
+              <span class="text-600">
+                {{ item.product.shortDescription }}
+              </span>
             </div>
             <div
               class="w-full sm:w-6 flex align-items-start justify-content-between mt-3 sm:mt-0">
@@ -62,177 +61,92 @@
             <span class="inline-flex align-items-center mb-1">
               <span class="text-900 text-primary"> Termék adatok: </span>
             </span>
+
+            <ng-container *ngFor="let question of item.questions">
+              <span class="text-600">
+                {{ question.question }}
+                <span class="font-bold text-800">
+                  {{ question.option }}
+                </span>
+              </span>
+            </ng-container>
+
             <span
               class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.nameEmbroidery">
+              *ngIf="item.nameEmbroidery">
               <span class="text-600"
                 >Hímzett név:
                 <span class="font-bold text-800">{{
-                  item.productExtra.nameEmbroidery
+                  item.nameEmbroidery
                 }}</span>
               </span>
             </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.baseColor">
-              <span class="text-600"
-                >Alapszín:
-                <span class="font-bold text-800">{{
-                  item.productExtra.baseColor
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.earsColor">
-              <span class="text-600"
-                >Fülek színe/mintája:
-                <span class="font-bold text-800">{{
-                  item.productExtra.earsColor
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.ribbonColor">
-              <span class="text-600"
-                >Masni színe:
-                <span class="font-bold text-800">{{
-                  item.productExtra.ribbonColor
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.extraMinkyEars">
-              <span class="text-600"
-                >Extra minky plüss fülek:
-                <span class="font-bold text-800">{{
-                  item.productExtra.extraMinkyEars
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.szundikendoColor">
-              <span class="text-600"
-                >Szundikendő színe/mintája:
-                <span class="font-bold text-800">{{
-                  item.productExtra.szundikendoColor
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.minkyColorBack">
-              <span class="text-600"
-                >Minky plüss színe(szundikendő-hátulja):
-                <span class="font-bold text-800">{{
-                  item.productExtra.minkyColorBack
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.earsAndBodyColor">
-              <span class="text-600"
-                >Fülek és test színe/mintája:
-                <span class="font-bold text-800">{{
-                  item.productExtra.earsAndBodyColor
-                }}</span>
-              </span>
-            </span>
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.productExtra.noseColor">
-              <span class="text-600">
-                Orr színe:
-                <span class="font-bold text-800">
-                  {{ item.productExtra.noseColor }}
-                </span>
-              </span>
-            </span>
-            <!-- <span class="inline-flex align-items-center mb-3">
-            <span class="text-600 mr-2">Delivery by </span>
-          </span>  -->
-            <span class="flex flex-column" *ngIf="item.productExtra.comment">
+
+            <span class="flex flex-column" *ngIf="item.comment">
               <span class="text-900 text-primary">
                 Megjegyzés a termékkel kapcsolatban:
               </span>
-              <span class="text-600">
-                {{ item.productExtra.comment }}
+              <span class="font-bold text-800">
+                {{ item.comment }}
               </span>
             </span>
           </div>
         </div>
       </li>
     </ul>
-    <div class="flex">
-      <div class="w-12rem hidden md:block"></div>
-      <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
-        <li class="flex justify-content-between mb-4">
-          <span class="text-xl text-900">Részösszeg</span>
-          <span class="text-xl text-900"> {{ cartData.price }} Ft </span>
-        </li>
-        <li class="flex flex-column sm:flex-row justify-content-between mb-4">
-          <span class="text-xl text-900">Szállítás</span>
+    <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
+      <li class="flex flex-column sm:flex-row justify-content-between mb-4">
+        <span class="text-xl text-900">Szállítás</span>
 
-          <form
-            [formGroup]="shippingForm"
-            class="flex flex-column w-full md:w-6">
-            <div class="field max-w-full">
-              <p-dropdown
-                styleClass="w-full mb-3"
-                [options]="shippingMethods"
-                formControlName="shippingMethod"
-                optionLabel="method"></p-dropdown>
-            </div>
+        <form [formGroup]="shippingForm" class="flex flex-column w-full md:w-6">
+          <div class="field max-w-full">
+            <p-dropdown
+              styleClass="w-full mb-3"
+              [options]="shippingMethods"
+              formControlName="shippingMethod"
+              optionLabel="name">
+            </p-dropdown>
+          </div>
 
-            <div class="field">
-              <p-dropdown
-                styleClass="w-full"
-                *ngIf="
-                  shippingForm.get('shippingMethod').value.value ===
-                  'foxpost-collection'
-                "
-                formControlName="foxpost"
-                [options]="foxpostPoints"
-                optionLabel="address"
-                [filter]="true"
-                filterBy="address"
-                [showClear]="true"
-                placeholder="Válassz">
-              </p-dropdown>
-            </div>
-            <p
+          <div class="field">
+            <p-dropdown
+              styleClass="w-full"
               *ngIf="
-                shippingForm.get('shippingMethod').value.value === 'delivery'
-              ">
-              Házhozszállítás esetén a regisztráció során megadott címre
-              szállítunk, ha most másik szállítási címet szeretnél használni,
-              azt fizetés előtt a profilodban a cím megváltoztatásával tudod
-              jelezni.
-              <a routerLink="/user" class="underline text-primary"
-                >Vagy kattints ide.</a
-              >
-            </p>
-          </form>
-        </li>
+                shippingForm.value.shippingMethod.method ===
+                'foxpost-collection'
+              "
+              formControlName="foxpost"
+              [options]="foxpostPoints"
+              optionLabel="address"
+              [filter]="true"
+              filterBy="address"
+              placeholder="Kérlek válassz">
+            </p-dropdown>
+          </div>
+          <p *ngIf="shippingForm.value.shippingMethod.method === 'delivery'">
+            Házhozszállítás esetén a regisztráció során megadott címre
+            szállítunk, ha most másik szállítási címet szeretnél használni, azt
+            fizetés előtt a profilodban a cím megváltoztatásával tudod jelezni.
+            <a routerLink="/user-profile" class="underline text-primary">
+              Vagy kattints ide.
+            </a>
+          </p>
+        </form>
+      </li>
 
-        <li
-          class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
-          <span class="text-xl text-900 font-bold text-3xl"> Összesen </span>
-          <span class="text-xl text-900 font-bold text-3xl">
-            {{ cartData.price }} Ft
-          </span>
-        </li>
-        <li class="flex justify-content-end">
-          <button class="primary-button shadow-2" (click)="onSubmitOrder()">
-            <i class="pi pi-credit-card mr-1"></i>
-            Fizetés
-          </button>
-        </li>
-      </ul>
-    </div>
+      <li
+        class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
+        <span class="text-xl text-900 font-bold text-3xl"> Összesen </span>
+        <span class="text-xl text-900 font-bold text-3xl">
+          {{ cartData.price }} Ft
+        </span>
+      </li>
+      <li class="flex justify-content-end">
+        <button class="primary-button w-12rem" (click)="onSubmitOrder()">
+          <i class="pi pi-credit-card mr-1"></i>
+          Fizetés
+        </button>
+      </li>
+    </ul>
   </div>
 </div>

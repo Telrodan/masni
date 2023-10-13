@@ -5,8 +5,8 @@
     [value]="categories"
     [globalFilterFields]="['id', 'name']"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
+    [rows]="25"
+    [rowsPerPageOptions]="[25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -37,51 +37,55 @@
 
         <th>Név</th>
 
-        <th pSortableColumn="products">
-          Termékek
-          <p-sortIcon field="products"></p-sortIcon>
+        <th>Típus</th>
+
+        <th pSortableColumn="items.length">
+          Tételek
+          <p-sortIcon field="items"></p-sortIcon>
         </th>
 
-        <th>Opciók</th>
+        <th class="w-3rem">Opciók</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-category let-i="rowIndex">
       <tr>
         <td>
-          <img
-            class="hidden"
-            [src]="images[i]"
-            [alt]="'Inspiráció ' + i"
-            (load)="imageLoaded(i)" />
+          <img class="hidden" [src]="category.image" (load)="imageLoaded(i)" />
 
           <p-image
             *ngIf="imageLoadedStatus[i]"
             [src]="category.image"
-            [alt]="'Inspiráció ' + i"
+            [alt]="'Kategória ' + i + ' képe'"
             [preview]="true">
           </p-image>
 
-          <ngx-skeleton-loader
+          <p-skeleton
             *ngIf="!imageLoadedStatus[i]"
-            appearance="circle"
-            animation="pulse"
-            [theme]="{
-              margin: '0',
-              width: '100%',
-              paddingBottom: '100%',
-              aspectRatio: '1 / 1',
-              borderRadius: '0',
-              background: 'lightGrey'
-            }">
-          </ngx-skeleton-loader>
+            styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td>{{ category._id }}</td>
+        <td class="font-italic font-semibold">{{ category._id }}</td>
 
-        <td>{{ category.name }}</td>
+        <td class="font-semibold text-blue-500">{{ category.name }}</td>
 
-        <td class="font-bold">{{ category.products.length }}</td>
+        <td>
+          <ng-container *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
+            <p-badge value="Termék kategória" severity="success"></p-badge>
+          </ng-container>
+
+          <ng-container
+            *ngIf="category.type === CategoryType.MATERIAL_CATEGORY">
+            <p-badge value="Minta kategória" severity="warning"></p-badge>
+          </ng-container>
+
+          <ng-container
+            *ngIf="category.type === CategoryType.INSPIRATION_CATEGORY">
+            <p-badge value="Inspiració kategória"></p-badge>
+          </ng-container>
+        </td>
+
+        <td class="font-semibold">{{ category.items.length }}</td>
 
         <td>
           <button
@@ -92,17 +96,30 @@
             tooltipPosition="bottom"
             type="button"
             icon="pi pi-cog"
-            class="p-button p-button p-button-warning p-button mr-1"></button>
+            class="p-button p-button p-button-warning p-button mb-1"></button>
 
           <button
             (click)="onDeleteCategory(category)"
             pButton
             pRipple
-            pTooltip="Kategória törlés"
+            [disabled]="category.items.length > 0"
+            [pTooltip]="
+              category.items.length > 0
+                ? 'Addig nem törölhető a kategória amíg vannak hozzárendelt tételek'
+                : 'Kategória törlése'
+            "
             tooltipPosition="bottom"
             type="button"
             icon="pi pi-times"
             class="p-button p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center text-800 text-4xl">
+          Nem található kategória
         </td>
       </tr>
     </ng-template>

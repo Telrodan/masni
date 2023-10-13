@@ -4,7 +4,34 @@
 <mat-dialog-content>
   <form class="flex-auto p-fluid" [formGroup]="addInspirationForm">
     <div class="form-group">
-      <label class="block font-medium text-900 mb-2"> Inspiráció képe </label>
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
+        Inspiráció neve
+      </label>
+
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="form-group" *ngIf="categories$ | async as categories">
+      <label
+        for="categoryId"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Inspiráció kategóriája
+      </label>
+
+      <p-dropdown
+        id="categoryId"
+        formControlName="categoryId"
+        placeholder="Válassz egy kategóriát"
+        [options]="categories"
+        optionValue="id"
+        optionLabel="name">
+      </p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-blue-500 mb-1 text-lg">
+        Inspiráció képe
+      </label>
 
       <p-button
         icon="pi pi-image"
@@ -30,7 +57,7 @@
         pRipple
         pTooltip="Kép törlése"
         tooltipPosition="bottom"
-        (click)="onImageClear()"
+        (click)="onImageClear(imagePicker)"
         type="button"
         icon="pi pi-times"
         class="p-button p-button-danger p-button"></button>

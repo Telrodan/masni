@@ -1,19 +1,41 @@
-<mhd-scrollable-image-with-title
+<!-- <mhd-scrollable-image-with-title
   [title]="'Nyuszkó Kuckó'"
-  [imageUrl]="'../../../assets/images/landing-page/test.jpg'"
+  [imageUrl]="'../../../assets/images/landing-page/carousel-placeholder.jpg'"
   [elementToScrollTo]="main">
 </mhd-scrollable-image-with-title>
 
 <main #main>
-  <mhd-products-carousel></mhd-products-carousel>
+  <mhd-products-carousel
+    title="Kiemelt termékek"
+    [products]="featuredProducts$ | async"
+    link="/shop/featured">
+  </mhd-products-carousel>
+
+  <mhd-products-carousel
+    title='"Álmodd meg" termékek'
+    [products]="customProducts$ | async"
+    link="/shop/dream-it">
+  </mhd-products-carousel>
+
+  <mhd-products-carousel
+    title="Összes termék"
+    [products]="allProducts$ | async"
+    link="/shop/all">
+  </mhd-products-carousel>
 
   <mhd-about-me></mhd-about-me>
 
-  <mhd-carousel-with-heading-and-button
-    [carouselData]="inspirationCarouselData$ | async">
-  </mhd-carousel-with-heading-and-button>
+  <mhd-product-categories-carousel [categories]="productCategories$ | async">
+  </mhd-product-categories-carousel>
 
-  <mhd-carousel-with-heading-and-button
-    [carouselData]="materialCarouselData$ | async">
-  </mhd-carousel-with-heading-and-button>
-</main>
+  <mhd-material-carousel [materials]="materials$ | async">
+  </mhd-material-carousel>
+</main> -->
+
+<div class="um">
+  <img src="../../../assets/images/um.jpg" alt="" />
+
+  <h1 class="heading-primary">
+    Az oldal karbantartás alatt van, kérlek nézz vissza később.
+  </h1>
+</div>

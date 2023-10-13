@@ -8,6 +8,8 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '@core/services/auth.service';
 import { shoppingCartItemsSelector } from '@core/store/selectors/shopping-cart.selectors';
 import { CookieService } from '@core/services/cookie.service';
+import { Category } from '@core/models/category.model';
+import { selectProductCategories } from '@core/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,8 +18,10 @@ import { CookieService } from '@core/services/cookie.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  public isAuthenticated$: Observable<boolean>;
-  public itemCounter$: Observable<string>;
+  isAuthenticated$: Observable<boolean>;
+  categories$: Observable<Category[]>;
+  itemCounter$: Observable<string>;
+
   isAdmin = false;
 
   constructor(
@@ -27,7 +31,11 @@ export class NavbarComponent implements OnInit {
     private cookieService: CookieService
   ) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
+    this.categories$ = this.store$
+      .select(selectProductCategories)
+      .pipe(filter((categories) => !!categories));
+
     this.isAuthenticated$ = this.authService.getAuthStatus$().pipe(
       tap(() => {
         const role = this.cookieService.getCookie('role');
@@ -41,8 +49,14 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  public closeNavbar(): void {
-    document.getElementsByClassName('sidebar')[0].classList.add('hidden');
+  closeNavbar(): void {
+    document
+      .getElementsByClassName('closeable-sidebar')[0]
+      .classList.add('hidden');
+
+    document
+      .getElementsByClassName('closeable-sidebar')[1]
+      .classList.add('hidden');
   }
 
   public onLogout(): void {

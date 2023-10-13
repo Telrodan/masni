@@ -5,7 +5,7 @@
 <mat-dialog-content>
   <form [formGroup]="addCategoryForm" class="mt-2">
     <div class="form-group">
-      <label for="name" class="block font-medium text-blue-500 mb-1">
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
         Kategória neve
       </label>
 
@@ -13,7 +13,68 @@
     </div>
 
     <div class="form-group">
-      <label class="block font-medium text-blue-500 mb-1">Kategória képe</label>
+      <label class="block font-medium text-blue-500 mb-1 text-lg">
+        Kategória típusa
+      </label>
+
+      <div class="flex align-items-center mb-1">
+        <p-radioButton
+          [value]="CategoryType.PRODUCT_CATEGORY"
+          formControlName="type"
+          inputId="productCategory">
+        </p-radioButton>
+
+        <label for="productCategory" class="ml-2">Termék kategória</label>
+      </div>
+
+      <div class="flex align-items-center mb-1">
+        <p-radioButton
+          [value]="CategoryType.MATERIAL_CATEGORY"
+          formControlName="type"
+          inputId="materialCategory">
+        </p-radioButton>
+
+        <label for="materialCategory" class="ml-2"> Minta kategória </label>
+      </div>
+
+      <div class="flex align-items-center">
+        <p-radioButton
+          [value]="CategoryType.INSPIRATION_CATEGORY"
+          formControlName="type"
+          inputId="inspirationCategory">
+        </p-radioButton>
+
+        <label for="inspirationCategory" class="ml-2">
+          Inspiráció kategória
+        </label>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="addCategoryForm.value.type === CategoryType.PRODUCT_CATEGORY">
+      <div class="form-group">
+        <label
+          for="description"
+          class="block font-medium text-blue-500 mb-1 text-lg">
+          Kategória leírása
+        </label>
+
+        <textarea
+          rows="5"
+          cols="30"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="description">
+        </textarea>
+      </div>
+    </ng-container>
+
+    <div class="form-group">
+      <label
+        for="imagePicker"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Kategória képe
+      </label>
 
       <p-button
         *ngIf="!imagePreview"
@@ -23,6 +84,7 @@
       </p-button>
 
       <input
+        id="imagePicker"
         type="file"
         class="hidden"
         #imagePicker

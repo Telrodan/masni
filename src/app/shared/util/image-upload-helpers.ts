@@ -28,14 +28,51 @@ export const addImageToFormAndSetPreview = async (
   return imagePreview;
 };
 
+export const addImagesToFormAndSetPreview = (
+  event: Event,
+  form: FormGroup
+): string[] => {
+  const files = Array.from((event.target as HTMLInputElement).files);
+  const imagesPreview = [];
+
+  form.patchValue({ images: files });
+  form.get('images').updateValueAndValidity();
+
+  if (files && files[0]) {
+    const numberOfFiles = files.length;
+    for (let i = 0; i < numberOfFiles; i++) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        imagesPreview.push(e.target.result);
+      };
+
+      reader.readAsDataURL(files[i]);
+    }
+  }
+  form.markAsDirty();
+
+  return imagesPreview;
+};
+
 export const removeImageFromFormAndInputAndClearPreview = (
   form: FormGroup,
   input: HTMLInputElement
 ): string => {
-  const imagePreview = '';
   form.patchValue({ image: '' });
   form.get('image').updateValueAndValidity();
   input.value = '';
 
-  return imagePreview;
+  return '';
+};
+
+export const removeImagesFromFormAndInputAndClearPreview = (
+  form: FormGroup,
+  input: HTMLInputElement
+): string[] => {
+  form.patchValue({ images: '' });
+  form.get('images').updateValueAndValidity();
+  input.value = '';
+
+  return [''];
 };

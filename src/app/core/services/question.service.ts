@@ -1,28 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, map, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
-import { Question } from '@core/models/question.model';
+import { Question, RawQuestion } from '@core/models/question.model';
 import { Store } from '@ngrx/store';
-import { addQuestion, deleteQuestion } from '@core/store';
+import {
+  addQuestion,
+  deleteQuestion,
+  removeQuestionFromProduct,
+  updateProductsQuestion,
+  updateQuestion
+} from '@core/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionService {
-  private buttonClickSubject = new Subject<void>();
-
-  submitButtonClick$ = this.buttonClickSubject.asObservable();
-
   constructor(private apiService: ApiService, private store$: Store) {}
 
-  emitButtonClick(): void {
-    this.buttonClickSubject.next();
-  }
-
-  addQuestion$(question: Question): Observable<Question> {
+  addQuestion$(question: RawQuestion): Observable<Question> {
     return this.apiService
-      .post<ApiResponse<Question>>('question/addQuestion', question)
+      .post<ApiResponse<Question>>('question/addOne', question)
       .pipe(
         map((questionDTO) => questionDTO.data),
         tap((question) => {
@@ -31,9 +29,21 @@ export class QuestionService {
       );
   }
 
+  updateQuestion$(id: string, question: RawQuestion): Observable<Question> {
+    return this.apiService
+      .patch<ApiResponse<Question>>(`question/updateOne/${id}`, question)
+      .pipe(
+        map((questionDTO) => questionDTO.data),
+        tap((question) => {
+          this.store$.dispatch(updateQuestion({ question }));
+          this.store$.dispatch(updateProductsQuestion({ question }));
+        })
+      );
+  }
+
   getQuestions$(): Observable<Question[]> {
     return this.apiService
-      .get<ApiResponse<Question[]>>('question/getQuestions')
+      .get<ApiResponse<Question[]>>('question/getAll')
       .pipe(map((questionsDTO) => questionsDTO.data));
   }
 
@@ -41,6 +51,7 @@ export class QuestionService {
     return this.apiService.delete<null>('question/deleteOne', id).pipe(
       tap(() => {
         this.store$.dispatch(deleteQuestion({ id }));
+        this.store$.dispatch(removeQuestionFromProduct({ id }));
       })
     );
   }

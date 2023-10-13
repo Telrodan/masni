@@ -9,6 +9,11 @@ export const userSelector = createSelector(
   (state) => state.user
 );
 
+export const selectUserShoppingCart = createSelector(
+  selectUserState,
+  (state) => state.user.shoppingCart
+);
+
 export const selectUsers = createSelector(
   selectUserState,
   (state) => state.users

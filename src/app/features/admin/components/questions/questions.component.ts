@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddQuestionComponent } from './components/add-question/add-question.component';
-import { Observable, filter, switchMap, tap } from 'rxjs';
-import { Question } from '@core/models/question.model';
+
 import { Store } from '@ngrx/store';
-import { selectAllQuestion } from '@core/store';
+import { Observable, filter, switchMap, tap } from 'rxjs';
 import { Table } from 'primeng/table';
-import { ConfirmDialogComponent } from '@shared/UI/confirm-dialog/confirm-dialog.component';
+
+import { Question } from '@core/models/question.model';
+import { QuestionType } from '@core/enums/question-type.enum';
+import { selectAllQuestion } from '@core/store';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { AddQuestionComponent } from './components/add-question/add-question.component';
+import { EditQuestionComponent } from './components/edit-question/edit-question.component';
 
 @Component({
   selector: 'mhd-questions',
@@ -16,6 +20,7 @@ import { ToastrService } from '@core/services/toastr.service';
   styleUrls: ['./questions.component.scss']
 })
 export class QuestionsComponent implements OnInit {
+  readonly QuestionType = QuestionType;
   questions$: Observable<Question[]>;
 
   constructor(
@@ -37,16 +42,19 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
-  onEditQuestion(question: Question): void {}
+  onEditQuestion(question: Question): void {
+    this.dialog.open(EditQuestionComponent, {
+      minWidth: '40vw',
+      data: question
+    });
+  }
 
   onDeleteQuestion(question: Question): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         minWidth: '40vw',
         data: {
-          message: `Biztos törölni szeretnéd "${question.questionName}" kérdést?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd "${question.name}" kérdést?`
         }
       })
       .afterClosed()
@@ -54,9 +62,7 @@ export class QuestionsComponent implements OnInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.questionService.deleteQuestion$(question.id)),
         tap(() => {
-          this.toastr.success(
-            `${question.questionName} kérdés sikeresen törölve`
-          );
+          this.toastr.success(`${question.name} kérdés sikeresen törölve`);
         })
       )
       .subscribe();

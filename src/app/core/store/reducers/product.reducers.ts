@@ -1,20 +1,25 @@
 import { createReducer, on } from '@ngrx/store';
+import * as _ from 'lodash';
 
 import {
+  addMaterialQuestionOptionToProduct,
   addProduct,
   deleteProduct,
+  deleteProductQuestionMaterialOption,
   getProducts,
   getProductsError,
   getProductsSuccess,
-  updateProduct
+  removeQuestionFromProduct,
+  updateProduct,
+  updateProductsCategory,
+  updateProductsQuestion
 } from '../actions';
 
 import { ProductState } from '../models/product-state.model';
 import { StatusTypes } from '../status-types';
 
 export const productInitialState: ProductState = {
-  allProducts: [],
-  availableProducts: [],
+  products: [],
   status: StatusTypes.INIT
 };
 
@@ -28,8 +33,7 @@ export const productReducers = createReducer(
 
   on(getProductsSuccess, (state, action) => ({
     ...state,
-    allProducts: action.products,
-    availableProducts: action.products.filter((product) => product.stock > 0),
+    products: [...action.products],
     status: StatusTypes.LOADED
   })),
 
@@ -38,59 +42,129 @@ export const productReducers = createReducer(
     status: StatusTypes.ERROR
   })),
 
-  on(addProduct, (state, action) => {
-    const availableProducts = [...state.availableProducts];
-    if (action.product.stock > 0) {
-      availableProducts.push(action.product);
-    }
-    return {
-      ...state,
-      allProducts: [...state.allProducts, action.product],
-      availableProducts
-    };
-  }),
+  on(addProduct, (state, action) => ({
+    ...state,
+    products: [...state.products, action.product]
+  })),
 
-  on(deleteProduct, (state, action) => {
-    const index = state.allProducts.findIndex(
-      (item) => item.id === action.product.id
-    );
-    const products = [...state.allProducts];
-    products.splice(index, 1);
-
-    return {
-      ...state,
-      allProducts: products
-    };
-  }),
+  on(deleteProduct, (state, action) => ({
+    ...state,
+    products: state.products.filter(
+      (product) => product.id !== action.product.id
+    )
+  })),
 
   on(updateProduct, (state, action) => {
-    const availableProducts = [...state.availableProducts];
-    if (action.product.stock > 0) {
-      if (!availableProducts.includes(action.product)) {
-        availableProducts.push(action.product);
-      } else {
-        const index = availableProducts.findIndex(
-          (product) => product.id === action.product.id
-        );
-        availableProducts.splice(index, 1, action.product);
-      }
-    } else {
-      const index = availableProducts.findIndex(
-        (product) => product.id === action.product.id
-      );
-      availableProducts.splice(index, 1);
-    }
+    return {
+      ...state,
+      products: state.products.map((product) =>
+        product.id === action.product.id ? action.product : product
+      )
+    };
+  }),
 
-    const index = state.allProducts.findIndex(
-      (product) => product.id === action.product.id
-    );
-    const allProducts = [...state.allProducts];
-    allProducts.splice(index, 1, action.product);
+  on(removeQuestionFromProduct, (state, action) => {
+    const products = _.cloneDeep(state.products);
+
+    products.forEach((product) => {
+      product.questions = product.questions.filter(
+        (question) => question.id !== action.id
+      );
+    });
 
     return {
       ...state,
-      allProducts,
-      availableProducts
+      products
+    };
+  }),
+
+  on(updateProductsQuestion, (state, action) => {
+    const products = _.cloneDeep(state.products);
+
+    products.forEach((product) => {
+      product.questions.forEach((question) => {
+        if (question.id === action.question.id) {
+          const index = product.questions.findIndex(
+            (item) => item.id === action.question.id
+          );
+          product.questions[index] = action.question;
+        }
+      });
+    });
+
+    return {
+      ...state,
+      products
+    };
+  }),
+
+  on(updateProductsCategory, (state, action) => {
+    const products = _.cloneDeep(state.products);
+
+    products.forEach((product) => {
+      if (product.category.id === action.category.id) {
+        product.category = action.category;
+      }
+    });
+
+    return {
+      ...state,
+      products
+    };
+  }),
+
+  on(deleteProductQuestionMaterialOption, (state, action) => {
+    const products = _.cloneDeep(state.products);
+
+    products.forEach((product) => {
+      product.questions.forEach((question) => {
+        question.options.forEach((option) => {
+          if (option.materialId === action.material.id) {
+            const index = question.options.findIndex(
+              (item) => item.materialId === action.material.id
+            );
+            question.options.splice(index, 1);
+          }
+        });
+      });
+    });
+
+    return {
+      ...state,
+      products
+    };
+  }),
+
+  on(addMaterialQuestionOptionToProduct, (state, action) => {
+    const products = _.cloneDeep(state.products);
+    products.forEach((product) => {
+      product.questions.forEach((question) => {
+        const optionMaterialIds = question.options.map(
+          (option) => option.materialId
+        );
+        const optionMaterialCategoryIds = question.materialCategories.map(
+          (category) => category.id
+        );
+
+        if (
+          !optionMaterialIds.includes(action.material.id) &&
+          optionMaterialCategoryIds.includes(action.material.category.id)
+        ) {
+          question.options.push({
+            materialId: action.material.id,
+            name: action.material.name,
+            extraPrice: action.material.extraPrice,
+            slug: action.material.extraPrice
+              ? action.material.name + ' +' + action.material.extraPrice + ' Ft'
+              : action.material.name
+          });
+        }
+      });
+    });
+
+    return {
+      ...state,
+      products
     };
   })
 );

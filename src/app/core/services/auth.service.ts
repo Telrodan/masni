@@ -7,9 +7,10 @@ import jwt_decode from 'jwt-decode';
 
 import { ApiService } from './api.service';
 import { CookieService } from './cookie.service';
-import { AuthData, TokenPayload } from '@core/models/auth-data.model';
+import { AuthData } from '@core/models/auth-data.model';
 import { User } from '@core/models/user.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { TokenPayload } from '@core/models/token-payload.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +30,7 @@ export class AuthService {
   ) {}
 
   signup$(user: User): Observable<ApiResponse<string>> {
-    return this.apiService.post<ApiResponse<string>>('auth/signup', user).pipe(
-      tap(() => {
-        this.router.navigate(['/']);
-      })
-    );
+    return this.apiService.post<ApiResponse<string>>('auth/signup', user);
   }
 
   login$(authData: AuthData): Observable<ApiResponse<string>> {
@@ -46,7 +43,6 @@ export class AuthService {
             this.tokenPayload = jwt_decode(response.data);
             this.setAuthData();
             this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-            this.router.navigate(['/']);
           }
         })
       );
@@ -75,10 +71,9 @@ export class AuthService {
   }
 
   public forgotPassword$(email: string): Observable<ApiResponse<null>> {
-    return this.apiService.post<ApiResponse<null>>(
-      'auth/forgotPassword',
+    return this.apiService.post<ApiResponse<null>>('auth/forgotPassword', {
       email
-    );
+    });
   }
 
   public resetPassword$(
@@ -98,7 +93,6 @@ export class AuthService {
             this.tokenPayload = jwt_decode(response.data);
             this.setAuthData();
             this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-            this.router.navigate(['/']);
           }
         })
       );

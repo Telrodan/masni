@@ -4,20 +4,29 @@ import { createSelector } from '@ngrx/store';
 
 export const selectMaterialState = (state: AppState) => state.material;
 
-export const selectAllMaterial = createSelector(
+export const selectAllMaterials = createSelector(
   selectMaterialState,
   (state) => state.materials
 );
 
-export const sortedMaterialsSelector = createSelector(
+export const selectAvailableMaterials = createSelector(
   selectMaterialState,
-  (state) => state.sortedMaterials
+  (state) => state.materials.filter((material) => material.isAvailable)
 );
 
-export const materialExtraByNameSelector = (materialName: string) =>
-  createSelector(selectAllMaterial, (materials) => {
-    const material = materials.find(
-      (material) => material.name === materialName
-    );
-    return material ? material.extra : 0;
+export const selectMaterialsByCategoryId = (id: string) =>
+  createSelector(selectAllMaterials, (materials) =>
+    materials.filter((material) => material.category.id === id)
+  );
+
+export const selectMaterialsByCategoryIds = (ids: string[]) =>
+  createSelector(selectAllMaterials, (materials) =>
+    materials.filter((material) => ids.includes(material.category.id))
+  );
+
+// TODO: check this later
+export const selectMaterialExtraById = (id: string) =>
+  createSelector(selectAllMaterials, (materials) => {
+    const material = materials.find((material) => material.id === id);
+    return material.extraPrice;
   });

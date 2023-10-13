@@ -1,6 +1,22 @@
-export interface Category {
-  id?: string;
+import { CategoryType } from '@core/enums/category-type.enum';
+import { Product } from './product.model';
+import { Material } from './material.model';
+import { Inspiration } from './inspiration.model';
+
+export interface RawCategory {
+  type: CategoryType;
   name: string;
   image: string;
-  products: string[];
+  description?: string;
+}
+
+export interface Category {
+  id: string;
+  type: CategoryType;
+  name: string;
+  image: string;
+  description?: string;
+  items: (Product | Material | Inspiration)[];
+  updatedAt: Date;
+  createdAt: Date;
 }

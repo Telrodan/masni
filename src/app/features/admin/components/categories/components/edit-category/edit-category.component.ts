@@ -1,13 +1,14 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { tap } from 'rxjs';
 
-import { Category } from '@core/models/category.model';
+import { Category, RawCategory } from '@core/models/category.model';
+import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { capitalize } from 'src/app/shared/util/first-letter-capital';
+
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
@@ -19,12 +20,10 @@ import {
   styleUrls: ['./edit-category.component.scss']
 })
 export class EditCategoryComponent {
-  editCategoryForm = this.fb.group({
-    name: [this.data.name, Validators.required],
-    image: [this.data.image, Validators.required]
-  });
+  readonly CategoryType = CategoryType;
 
-  imagePreview = this.data.image;
+  editCategoryForm: FormGroup;
+  imagePreview: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Category,
@@ -32,7 +31,15 @@ export class EditCategoryComponent {
     private categoryService: CategoryService,
     private toastr: ToastrService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.editCategoryForm = this.fb.group({
+      name: [this.data.name, Validators.required],
+      image: [this.data.image, Validators.required],
+      description: [this.data.description]
+    });
+
+    this.imagePreview = this.data.image;
+  }
 
   async onImagePicked(event: Event): Promise<void> {
     this.imagePreview = await addImageToFormAndSetPreview(
@@ -50,23 +57,28 @@ export class EditCategoryComponent {
 
   onEditCategory(): void {
     if (this.editCategoryForm.valid) {
-      const name = this.editCategoryForm.value.name.trim();
-      if (name) {
-        const categoryData = new FormData();
+      const category: RawCategory = {
+        type: this.data.type,
+        name: this.editCategoryForm.value.name,
+        image: this.editCategoryForm.value.image,
+        description: this.editCategoryForm.value.description
+      };
 
-        categoryData.append('name', name);
-        categoryData.append('image', this.editCategoryForm.value.image);
-
+      if (category.name) {
         this.categoryService
-          .updateCategory$(categoryData, this.data.id)
+          .updateCategory$(category, this.data.id)
           .pipe(
             tap(() => {
-              this.toastr.success(`${capitalize(name)} kategória módosítva`);
+              this.toastr.success(`${category.name} módosítva`);
               this.dialogRef.close();
             })
           )
           .subscribe();
+      } else {
+        this.toastr.info('Kérlek adj meg egy kategória nevet');
       }
+    } else {
+      this.toastr.info('Kérlek töltsd az összes mezőt');
     }
   }
 }

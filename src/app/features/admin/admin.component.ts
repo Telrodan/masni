@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
-import { getQuestions, getUsers } from '@core/store';
+import { getUsers } from '@core/store';
 import { getOrders } from '@core/store/actions/order.actions';
 
 @Component({
@@ -16,6 +16,5 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(getOrders());
     this.store.dispatch(getUsers());
-    this.store.dispatch(getQuestions());
   }
 }

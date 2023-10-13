@@ -39,7 +39,7 @@ export class UserService {
   deleteCurrentUser$(): Observable<null> {
     return this.apiService
       .post<ApiResponse<null>>('users/deleteMe', '')
-      .pipe(map((responseDTO) => responseDTO.data));
+      .pipe(map((responseDTO) => null));
   }
 
   deleteUser$(user: User): Observable<null> {

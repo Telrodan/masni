@@ -1,12 +1,18 @@
 import { createReducer, on } from '@ngrx/store';
-import { InspirationState } from '../models/inspiration-state.model';
-import { StatusTypes } from '../status-types';
+import * as _ from 'lodash';
+
+import { Category } from '@core/models/category.model';
+import { InspirationState } from '@core/store/models/inspiration-state.model';
 import {
   addInspiration,
   deleteInspiration,
   getInspirations,
-  getInspirationsSuccess
-} from '../actions';
+  getInspirationsError,
+  getInspirationsSuccess,
+  updateInspiration,
+  updateInspirationsCategory
+} from '@core/store/actions';
+import { StatusTypes } from '../status-types';
 
 export const inspirationInitialState: InspirationState = {
   inspirations: [],
@@ -15,6 +21,7 @@ export const inspirationInitialState: InspirationState = {
 
 export const inspirationReducers = createReducer(
   inspirationInitialState,
+
   on(getInspirations, (state) => ({
     ...state,
     status: StatusTypes.LOADING
@@ -26,15 +33,43 @@ export const inspirationReducers = createReducer(
     status: StatusTypes.LOADED
   })),
 
+  on(getInspirationsError, (state) => ({
+    ...state,
+    status: StatusTypes.ERROR
+  })),
+
   on(addInspiration, (state, action) => ({
     ...state,
     inspirations: [...state.inspirations, action.inspiration]
   })),
 
+  on(updateInspiration, (state, action) => ({
+    ...state,
+    inspirations: state.inspirations.map((inspiration) =>
+      inspiration.id === action.inspiration.id
+        ? action.inspiration
+        : inspiration
+    )
+  })),
+
   on(deleteInspiration, (state, action) => {
-    const index = state.inspirations.findIndex((item) => item.id === action.id);
-    const inspirations = [...state.inspirations];
-    inspirations.splice(index, 1);
+    return {
+      ...state,
+      inspirations: state.inspirations.filter(
+        (inspiration) => inspiration.id !== action.id
+      )
+    };
+  }),
+
+  on(updateInspirationsCategory, (state, action) => {
+    const inspirations = _.cloneDeep(state.inspirations);
+
+    inspirations.forEach((inspiration) => {
+      if ((inspiration.category as Category).id === action.category.id) {
+        inspiration.category = action.category;
+      }
+    });
+
     return {
       ...state,
       inspirations

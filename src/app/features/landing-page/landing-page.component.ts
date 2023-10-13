@@ -1,31 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { selectAllMaterial } from '@core/store';
-import { selectAllInspiration } from '@core/store/selectors/inspiration.selectors';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { Store } from '@ngrx/store';
-import { Observable, map } from 'rxjs';
-import { CarouselData } from 'src/app/shared/components/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
+import { Observable, filter } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
-const inspirationCarouselData: CarouselData = {
-  heading: 'Inspirációk',
-  displayHeading: true,
-  images: [],
-  isRoundImage: false,
-  linkText: 'Mindet megnézem',
-  linkRoute: '/inspiration',
-  displayLink: true
-};
-
-const materialCarouselData: CarouselData = {
-  heading: 'Minták',
-  displayHeading: true,
-  images: [],
-  isRoundImage: false,
-  linkText: 'Mindet Megnézem',
-  linkRoute: '/samples',
-  displayLink: true
-};
+import { Product } from '@core/models/product.model';
+import {
+  selectAvailableMaterials,
+  selectAvailableProducts,
+  selectCustomProducts,
+  selectFeaturedProducts,
+  selectProductCategories
+} from '@core/store';
+import { Category } from '@core/models/category.model';
+import { Material } from '@core/models/material.model';
 
 @UntilDestroy()
 @Component({
@@ -34,8 +23,13 @@ const materialCarouselData: CarouselData = {
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit {
-  inspirationCarouselData$: Observable<CarouselData>;
-  materialCarouselData$: Observable<CarouselData>;
+  featuredProducts$: Observable<Product[]>;
+  allProducts$: Observable<Product[]>;
+  customProducts$: Observable<Product[]>;
+
+  productCategories$: Observable<Category[]>;
+
+  materials$: Observable<Material[]>;
 
   constructor(
     private store$: Store,
@@ -73,21 +67,24 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.inspirationCarouselData$ = this.store$
-      .select(selectAllInspiration)
-      .pipe(
-        map((inspirations) => ({
-          ...inspirationCarouselData,
-          images: inspirations.map((inspiration) => inspiration.image)
-        })),
-        untilDestroyed(this)
-      );
+    this.featuredProducts$ = this.store$
+      .select(selectFeaturedProducts)
+      .pipe(filter((products) => products.length > 0));
 
-    this.materialCarouselData$ = this.store$.select(selectAllMaterial).pipe(
-      map((materials) => ({
-        ...materialCarouselData,
-        images: materials.map((material) => material.image)
-      }))
-    );
+    this.allProducts$ = this.store$
+      .select(selectAvailableProducts)
+      .pipe(filter((products) => products.length > 0));
+
+    this.customProducts$ = this.store$
+      .select(selectCustomProducts)
+      .pipe(filter((products) => products.length > 0));
+
+    this.productCategories$ = this.store$
+      .select(selectProductCategories)
+      .pipe(filter((categories) => categories.length > 0));
+
+    this.materials$ = this.store$
+      .select(selectAvailableMaterials)
+      .pipe(filter((materials) => materials.length > 0));
   }
 }

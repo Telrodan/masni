@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
+import * as _ from 'lodash';
 
-import { SortedMaterials } from '@core/models/sorted-materials.model';
+import { Category } from '@core/models/category.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import {
   addMaterial,
@@ -8,110 +9,66 @@ import {
   getMaterials,
   getMaterialsError,
   getMaterialsSuccess,
-  updateMaterial
+  updateMaterial,
+  updateMaterialsCategory
 } from '@core/store/actions/';
-import { Material } from '@core/models/material.model';
 import { StatusTypes } from '../status-types';
 
 export const materialInitialState: MaterialState = {
   materials: [],
-  availableMaterials: [],
-  sortedMaterials: null,
   status: StatusTypes.INIT
 };
 
 export const materialReducers = createReducer(
   materialInitialState,
+
   on(getMaterials, (state) => ({
     ...state,
     status: StatusTypes.LOADING
   })),
 
-  on(getMaterialsSuccess, (state, action) => {
-    const availableMaterials = action.materials.filter(
-      (material) => material.isAvailable
-    );
-
-    const sortedMaterials: SortedMaterials =
-      SortedMaterials.sortMaterials(availableMaterials);
-
-    return {
-      ...state,
-      materials: [...action.materials],
-      availableMaterials,
-      sortedMaterials,
-      status: StatusTypes.LOADED
-    };
-  }),
+  on(getMaterialsSuccess, (state, action) => ({
+    ...state,
+    materials: [...action.materials],
+    status: StatusTypes.LOADED
+  })),
 
   on(getMaterialsError, (state) => ({
     ...state,
     status: StatusTypes.ERROR
   })),
 
-  on(addMaterial, (state, action) => {
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
+  on(addMaterial, (state, action) => ({
+    ...state,
+    materials: [...state.materials, action.material]
+  })),
 
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        sortedMaterials[key] = [...sortedMaterials[key], action.material];
+  on(updateMaterial, (state, action) => ({
+    ...state,
+    materials: state.materials.map((material) =>
+      material.id === action.material.id ? action.material : material
+    )
+  })),
+
+  on(deleteMaterial, (state, action) => ({
+    ...state,
+    materials: state.materials.filter(
+      (material) => material.id !== action.material.id
+    )
+  })),
+
+  on(updateMaterialsCategory, (state, action) => {
+    const materials = _.cloneDeep(state.materials);
+
+    materials.forEach((material) => {
+      if (material.category.id === action.category.id) {
+        material.category = action.category;
       }
-    }
+    });
 
     return {
       ...state,
-      sortedMaterials,
-      materials: [...state.materials, action.material]
-    };
-  }),
-  on(updateMaterial, (state, action) => {
-    const materialIndex = state.materials.findIndex(
-      (material) => material.id === action.material.id
-    );
-
-    const materials = [...state.materials];
-    materials.splice(materialIndex, 1, action.material);
-
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
-
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material.id === action.material.id
-        );
-        sortedMaterials[key].splice(sortedMaterialIndex, 1, action.material);
-      }
-    }
-
-    return {
-      ...state,
-      materials,
-      sortedMaterials
-    };
-  }),
-  on(deleteMaterial, (state, action) => {
-    const materialIndex = state.materials.findIndex(
-      (material) => material.id === action.material.id
-    );
-
-    const materials = [...state.materials];
-    materials.splice(materialIndex, 1);
-
-    const sortedMaterials = JSON.parse(JSON.stringify(state.sortedMaterials));
-
-    for (const key in sortedMaterials) {
-      if (key === action.material.category) {
-        const sortedMaterialIndex = sortedMaterials[key].findIndex(
-          (material: Material) => material.id === action.material.id
-        );
-        sortedMaterials[key].splice(sortedMaterialIndex, 1);
-      }
-    }
-
-    return {
-      ...state,
-      materials,
-      sortedMaterials
+      materials
     };
   })
 );

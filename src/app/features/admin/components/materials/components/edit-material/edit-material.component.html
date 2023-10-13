@@ -4,29 +4,69 @@
 <mat-dialog-content>
   <form class="flex-auto p-fluid" [formGroup]="editMaterialForm">
     <div class="form-group">
-      <label for="name" class="block font-medium text-900 mb-2">
+      <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">
         Minta neve
       </label>
 
       <input id="name" type="text" formControlName="name" pInputText />
     </div>
 
-    <div class="form-group">
-      <label for="category" class="block font-medium text-900 mb-2">
+    <div class="form-group" *ngIf="categories$ | async as categories">
+      <label
+        for="categoryId"
+        class="block font-medium text-blue-500 mb-1 text-lg">
         Minta kategória
       </label>
 
       <p-dropdown
-        id="category"
-        formControlName="category"
+        id="categoryId"
+        formControlName="categoryId"
+        placeholder="Válassz egy kategóriát"
         [options]="categories"
-        optionValue="value"
-        optionLabel="name"
-        [showClear]="true"></p-dropdown>
+        optionValue="id"
+        optionLabel="name">
+      </p-dropdown>
     </div>
 
     <div class="form-group">
-      <label for="image" class="block font-medium text-900 mb-2">
+      <label
+        for="extraPrice"
+        type="number"
+        class="block font-medium text-blue-500 mb-1 text-lg">
+        Minta extra ára
+      </label>
+
+      <input
+        id="extraPrice"
+        formControlName="extraPrice"
+        type="number"
+        pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="stock" class="block font-medium text-blue-500 mb-1 text-lg">
+        Rendelhető?
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <p-radioButton
+          id="isAvailable"
+          formControlName="isAvailable"
+          [value]="true"
+          label="Igen">
+        </p-radioButton>
+
+        <p-radioButton
+          id="isAvailable"
+          formControlName="isAvailable"
+          [value]="false"
+          label="Nem">
+        </p-radioButton>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="image" class="block font-medium text-blue-500 mb-1 text-lg">
         Minta képe
       </label>
 
@@ -55,27 +95,10 @@
         pRipple
         pTooltip="Kép törlése"
         tooltipPosition="bottom"
-        (click)="onImageClear()"
+        (click)="onImageClear(imagePicker)"
         type="button"
         icon="pi pi-times"
         class="p-button p-button-danger p-button"></button>
-    </div>
-
-    <div class="mb-4">
-      <label for="extra" class="block font-medium text-900 mb-2">
-        Minta extra ára
-      </label>
-      <input id="extra" formControlName="extra" type="text" pInputText />
-    </div>
-    <div class="mb-4">
-      <label for="stock" class="block font-medium text-900 mb-2"
-        >Rendelhető?</label
-      >
-      <p-toggleButton
-        styleClass="w-auto"
-        formControlName="isAvailable"
-        onLabel="Igen"
-        offLabel="Nem"></p-toggleButton>
     </div>
   </form>
 </mat-dialog-content>
@@ -91,6 +114,6 @@
     label="Módosítás"
     styleClass="p-button"
     [disabled]="!editMaterialForm.valid || !editMaterialForm.dirty"
-    (click)="onUpdateMaterial()">
+    (click)="onEditMaterial()">
   </p-button>
 </mat-dialog-actions>

@@ -5,8 +5,8 @@
     [value]="users"
     [globalFilterFields]="['id', 'name', 'email', 'phone']"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]">
+    [rows]="25"
+    [rowsPerPageOptions]="[25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <span class="p-input-icon-left ml-auto">
@@ -24,26 +24,34 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="w-14rem">Azonosító</th>
+        <th>Azonosító</th>
 
-        <th class="w-10rem">Név</th>
+        <th>Név</th>
 
         <th>Email</th>
+
         <th>Telefon</th>
+
         <th pSortableColumn="shoppingCart">
-          Kosár <p-sortIcon field="shoppingCart"> </p-sortIcon>
+          Kosár <p-sortIcon field="shoppingCart"></p-sortIcon>
         </th>
+
         <th>Opciók</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-user>
       <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.phone }}</td>
-        <td class="font-bold">{{ user.shoppingCart.length }} db</td>
+        <td class="font-italic font-semibold">{{ user.id }}</td>
+
+        <td class="font-semibold text-blue-500">{{ user.name }}</td>
+
+        <td class="font-semibold">{{ user.email }}</td>
+
+        <td class="font-semibold text-blue-500">{{ user.phone }}</td>
+
+        <td class="font-semibold">{{ user.shoppingCart.length }} db</td>
+
         <td>
           <button
             (click)="onUserDetails(user)"

@@ -2,6 +2,8 @@ import { createAction, props } from '@ngrx/store';
 
 import { Category } from '@core/models/category.model';
 import { Product } from '@core/models/product.model';
+import { Material } from '@core/models/material.model';
+import { Inspiration } from '@core/models/inspiration.model';
 
 export enum CategoryActionsTypes {
   GET_CATEGORIES = '[Category] Get Categories',
@@ -10,9 +12,9 @@ export enum CategoryActionsTypes {
   ADD_CATEGORY = '[Category] Add Category',
   UPDATE_CATEGORY = '[Category] Update Category',
   DELETE_CATEGORY = '[Category] Delete Category',
-  ADD_PRODUCT_TO_CATEGORY = '[Category] Add Product To Category',
-  DELETE_PRODUCT_FROM_CATEGORY = '[Category] Delete Product From Category',
-  MOVE_PRODUCT_TO_CATEGORY = '[Category] Move Product To Category'
+  ADD_ITEM_TO_CATEGORY = '[Category] Add Item To Category',
+  DELETE_ITEM_FROM_CATEGORY = '[Category] Delete Item From Category',
+  MOVE_ITEM_BETWEEN_CATEGORIES = '[Category] Move Item Between Categories'
 }
 
 export const getCategories = createAction(CategoryActionsTypes.GET_CATEGORIES);
@@ -25,9 +27,13 @@ export const getCategoriesSuccess = createAction(
 export const getCategoriesError = createAction(
   CategoryActionsTypes.GET_CATEGORIES_ERROR
 );
-
 export const addCategory = createAction(
   CategoryActionsTypes.ADD_CATEGORY,
+  props<{ category: Category }>()
+);
+
+export const updateCategory = createAction(
+  CategoryActionsTypes.UPDATE_CATEGORY,
   props<{ category: Category }>()
 );
 
@@ -36,22 +42,19 @@ export const deleteCategory = createAction(
   props<{ id: string }>()
 );
 
-export const updateCategory = createAction(
-  CategoryActionsTypes.UPDATE_CATEGORY,
-  props<{ category: Category }>()
+export const addItemToCategory = createAction(
+  CategoryActionsTypes.ADD_ITEM_TO_CATEGORY,
+  props<{ item: Product | Material | Inspiration }>()
 );
 
-export const addProductToCategory = createAction(
-  CategoryActionsTypes.ADD_PRODUCT_TO_CATEGORY,
-  props<{ product: Product }>()
+export const deleteItemFromCategory = createAction(
+  CategoryActionsTypes.DELETE_ITEM_FROM_CATEGORY,
+  props<{ item: Product | Material | Inspiration }>()
 );
 
-export const deleteProductFromCategory = createAction(
-  CategoryActionsTypes.DELETE_PRODUCT_FROM_CATEGORY,
-  props<{ product: Product }>()
-);
-
-export const moveProductToCategory = createAction(
-  CategoryActionsTypes.MOVE_PRODUCT_TO_CATEGORY,
-  props<{ product: Product }>()
+export const moveItemBetweenCategories = createAction(
+  CategoryActionsTypes.MOVE_ITEM_BETWEEN_CATEGORIES,
+  props<{
+    item: Product | Material | Inspiration;
+  }>()
 );

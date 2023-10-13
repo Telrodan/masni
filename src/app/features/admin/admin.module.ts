@@ -25,6 +25,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -48,7 +50,8 @@ import { UserDetailsComponent } from './components/users/components/user-details
 import { LogsComponent } from './components/reports/components/logs/logs.component';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { AddQuestionComponent } from './components/questions/components/add-question/add-question.component';
-import { AddQuestionWithStringAnswerComponent } from './components/questions/components/add-question/components/add-question-with-string-answer/add-question-with-string-answer.component';
+import { EditQuestionComponent } from './components/questions/components/edit-question/edit-question.component';
+import { EditInspirationComponent } from './components/inspirations/components/edit-inspiration/edit-inspiration.component';
 
 const PRIME_NG = [
   CardModule,
@@ -71,7 +74,9 @@ const PRIME_NG = [
   MultiSelectModule,
   SelectButtonModule,
   CheckboxModule,
-  InputNumberModule
+  InputNumberModule,
+  RadioButtonModule,
+  SkeletonModule
 ];
 
 @NgModule({
@@ -98,7 +103,8 @@ const PRIME_NG = [
     LogsComponent,
     QuestionsComponent,
     AddQuestionComponent,
-    AddQuestionWithStringAnswerComponent
+    EditQuestionComponent,
+    EditInspirationComponent
   ],
   imports: [
     CommonModule,

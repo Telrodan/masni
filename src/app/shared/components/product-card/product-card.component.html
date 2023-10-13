@@ -1,0 +1,65 @@
+<div class="product-card" (click)="onProductDetails()" *ngIf="product">
+  <div class="image-wrapper">
+    <div *ngIf="product.discountedPrice > 0" class="discount-wrapper">
+      <p class="text-red-500 font-bold">-{{ product.discountPercentage }}%</p>
+    </div>
+
+    <div *ngIf="product.isCustom" class="dream-it-wrapper">
+      <p>"Álmodd meg"</p>
+    </div>
+
+    <div *ngIf="isOneWeekPassed(product.createdAt)" class="new-wrapper">
+      <p>Új</p>
+    </div>
+
+    <div class="image-wrapper">
+      <img
+        [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
+        [src]="product.images[0]"
+        (load)="isImageLoading = false" />
+
+      <p-skeleton
+        *ngIf="isImageLoading"
+        styleClass="skeleton"
+        width="w-full"
+        height="h-full">
+      </p-skeleton>
+    </div>
+  </div>
+
+  <div class="details">
+    <p class="title">
+      {{ product.name | titlecase }}
+    </p>
+
+    <p class="description">
+      {{ product.shortDescription }}
+    </p>
+
+    <div class="wrapper">
+      <div class="price-wrapper">
+        <p
+          class="original-price"
+          [ngClass]="
+            product.discountedPrice > 0
+              ? 'text-red-500 line-through'
+              : 'text-primary'
+          ">
+          {{ product.price }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+        </p>
+
+        <p
+          *ngIf="product.discountedPrice > 0"
+          class="discounted-price text-primary">
+          {{ product.discountedPrice }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+        </p>
+
+        <p class="stock">Készleten: {{ product.stock }}</p>
+      </div>
+
+      <button class="primary-button">
+        <i class="pi pi-shopping-cart"></i>
+      </button>
+    </div>
+  </div>
+</div>

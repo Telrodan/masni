@@ -1,16 +1,23 @@
 import { QuestionType } from '@core/enums/question-type.enum';
 
-export interface Option {
-  id?: string;
-  option: string;
-  extraPrice: number;
-  slug?: string;
+import { QuestionOption } from './question-option.model';
+import { Category } from './category.model';
+
+export interface RawQuestion {
+  type: QuestionType;
+  name: string;
+  question: string;
+  materialCategories?: string[];
+  options?: QuestionOption[];
 }
 
 export interface Question {
   id?: string;
-  questionType: QuestionType;
-  questionName: string;
+  type: QuestionType;
+  name: string;
   question: string;
-  options: Option[];
+  materialCategories?: Category[];
+  options: QuestionOption[];
+  updatedAt: Date;
+  createdAt: Date;
 }

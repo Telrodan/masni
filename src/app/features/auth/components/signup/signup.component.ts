@@ -1,112 +1,124 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { catchError, tap, throwError } from 'rxjs';
+import { tap } from 'rxjs';
 
-import { AuthService } from 'src/app/core/services/auth.service';
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { environment } from 'src/environments/environment';
-
-interface PostCodeApiData {
-  places: {
-    'place name': string;
-    state: string;
-  }[];
-}
+import { AuthService } from '@core/services/auth.service';
+import { PostcodeApiService } from '@core/services/postcode-api.service';
+import { emailRegex } from '@shared/util/email-regex';
+import { phoneRegex } from '@shared/util/phone-regex';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'mhd-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
-  signupForm: FormGroup;
-  isSuccess = false;
+export class SignupComponent {
+  signupForm = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.pattern(emailRegex)]],
+    phone: ['', [Validators.required, Validators.pattern(phoneRegex)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    passwordConfirm: ['', Validators.required],
+    shippingStreet: ['', Validators.required],
+    shippingCity: ['', Validators.required],
+    shippingPostcode: [null, Validators.required],
+    shippingCounty: ['', Validators.required],
+    billingStreet: ['', Validators.required],
+    billingCity: ['', Validators.required],
+    billingPostcode: [null, Validators.required],
+    billingCounty: ['', Validators.required],
+    privacy: [false, Validators.requiredTrue],
+    subscribed: [false, Validators.required]
+  });
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
-    private http: HttpClient
-  ) {}
-
-  ngOnInit(): void {
-    this.createForm();
+    private postcodeApiService: PostcodeApiService,
+    private fb: FormBuilder,
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Nyuszkó Kuckó | Regisztráció');
+    this.metaService.addTags([
+      {
+        name: 'description',
+        content: 'Regisztrálás az oldalra.'
+      },
+      {
+        name: 'keywords',
+        content:
+          'regisztráció, babák, nyuszi, nyuszik, nyuszkó, nyuszkók, maci, macik, mackók, szundikendő, szundikendők, kézzel készített, webshop'
+      },
+      {
+        property: 'og:title',
+        content: 'Nyuszkó Kuckó | Regisztráció'
+      },
+      {
+        property: 'og:description',
+        content: 'Regisztrálás az oldalra.'
+      },
+      {
+        property: 'og:image',
+        content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+      },
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: 'Nyuszkó Kuckó' }
+    ]);
   }
 
   onSignup(): void {
     if (this.signupForm.valid) {
-      const user = new User(this.signupForm.value);
+      const user: User = {
+        name: this.signupForm.value.name,
+        email: this.signupForm.value.email,
+        phone: this.signupForm.value.phone,
+        password: this.signupForm.value.password,
+        passwordConfirm: this.signupForm.value.passwordConfirm,
+        shippingAddress: {
+          street: this.signupForm.value.shippingStreet,
+          city: this.signupForm.value.shippingCity,
+          county: this.signupForm.value.shippingCounty,
+          postcode: this.signupForm.value.shippingPostcode
+        },
+        billingAddress: {
+          street: this.signupForm.value.billingStreet,
+          city: this.signupForm.value.billingCity,
+          county: this.signupForm.value.billingCounty,
+          postcode: this.signupForm.value.billingPostcode
+        },
+        subscribed: this.signupForm.value.subscribed
+      };
+
       this.authService
         .signup$(user)
         .pipe(
           tap(() => {
             this.toastr.success('Sikeres regisztráció, átirányítva a főoldra');
             this.signupForm.reset();
+            this.router.navigate(['/']);
           })
         )
         .subscribe();
     }
   }
 
-  createForm(): void {
-    // eslint-disable-next-line no-useless-escape
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const phoneRegex = /^06[0-9]{9}$/;
-
-    this.signupForm = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      email: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(emailRegex)
-      ]),
-      phone: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(phoneRegex)
-      ]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(8)
-      ]),
-      passwordConfirm: new FormControl(null, Validators.required),
-      shippingStreet: new FormControl(null, Validators.required),
-      shippingCity: new FormControl(null, Validators.required),
-      shippingPostcode: new FormControl(null, Validators.required),
-      shippingCounty: new FormControl(null, Validators.required),
-      billingStreet: new FormControl(null, Validators.required),
-      billingCity: new FormControl(null, Validators.required),
-      billingPostcode: new FormControl(null, Validators.required),
-      billingCounty: new FormControl(null, Validators.required),
-      privacy: new FormControl(false, Validators.requiredTrue),
-      subscribed: new FormControl(false, Validators.required)
-    });
-  }
-
   onShippingPostcodeBlur(event: Event): void {
     if (this.signupForm.get('shippingPostcode').valid) {
-      const postcode = (event.target as HTMLInputElement).value;
-      const headers = new HttpHeaders({
-        'X-RapidAPI-Key': environment.zippopotamusApiKey,
-        'X-RapidAPI-Host': 'community-zippopotamus.p.rapidapi.com'
-      });
-      this.http
-        .get(`https://community-zippopotamus.p.rapidapi.com/hu/${postcode}`, {
-          headers
-        })
+      const postcode = Number((event.target as HTMLInputElement).value);
+
+      this.postcodeApiService
+        .getPostcodeInformation$(postcode)
         .pipe(
-          catchError(() => {
-            return throwError(
-              () => new Error('Nem található ilyen irányítószám!')
-            );
-          }),
-          tap((response: PostCodeApiData) => {
-            this.signupForm
-              .get('shippingCity')
-              .setValue(response.places[0]['place name']);
-            this.signupForm
-              .get('shippingCounty')
-              .setValue(response.places[0].state);
+          tap((place) => {
+            this.signupForm.get('shippingCity').setValue(place['place name']);
+            this.signupForm.get('shippingCounty').setValue(place.state);
           })
         )
         .subscribe();
@@ -115,28 +127,14 @@ export class SignupComponent implements OnInit {
 
   onBillingPostcodeBlur(event: Event): void {
     if (this.signupForm.get('billingPostcode').valid) {
-      const postcode = (event.target as HTMLInputElement).value;
-      const headers = new HttpHeaders({
-        'X-RapidAPI-Key': environment.zippopotamusApiKey,
-        'X-RapidAPI-Host': 'community-zippopotamus.p.rapidapi.com'
-      });
-      this.http
-        .get(`https://community-zippopotamus.p.rapidapi.com/hu/${postcode}`, {
-          headers
-        })
+      const postcode = Number((event.target as HTMLInputElement).value);
+
+      this.postcodeApiService
+        .getPostcodeInformation$(postcode)
         .pipe(
-          catchError(() => {
-            return throwError(
-              () => new Error('Nem található ilyen irányítószám!')
-            );
-          }),
-          tap((response: PostCodeApiData) => {
-            this.signupForm
-              .get('billingCity')
-              .setValue(response.places[0]['place name']);
-            this.signupForm
-              .get('billingCounty')
-              .setValue(response.places[0].state);
+          tap((place) => {
+            this.signupForm.get('billingCity').setValue(place['place name']);
+            this.signupForm.get('billingCounty').setValue(place.state);
           })
         )
         .subscribe();

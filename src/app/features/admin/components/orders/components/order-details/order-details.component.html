@@ -3,7 +3,7 @@
 
 <mat-dialog-content>
   <ul>
-    <li class="py-2 px-3 border-top-1 surface-border">
+    <li class="py-2 px-3">
       <div class="text-400 font-medium">Azonosító</div>
 
       <div class="text-900 font-bold">
@@ -51,7 +51,7 @@
       </div>
 
       <div class="text-900 font-normal">
-        {{ order.addedAt | date : 'medium' }}
+        {{ order.createdAt | date : 'medium' }}
       </div>
     </li>
 
@@ -107,43 +107,42 @@
 
     <li
       class="py-2 px-3 border-top-1 surface-border"
-      *ngIf="order.products as products">
+      *ngIf="order.items as items">
       <div class="text-400 font-medium">Termékek</div>
 
       <div class="w-full">
         <p-panel
           styleClass="mb-2"
           header="
-          Név: {{ product.product['name'] }} - 
-          Azonosító: {{ product.product['id'] }}
+          Név: {{ item.product.name }} - 
+          Azonosító: {{ item.product.id }}
           "
           [toggleable]="true"
           [collapsed]="true"
           toggler="header"
-          *ngFor="let product of products">
+          *ngFor="let item of items">
           <li class="py-2 px-3">
             <div class="text-400 font-medium">Kép</div>
+
             <img
               class="w-5"
-              [src]="product.product['images'][0]"
-              [alt]="product.product['name']" />
+              [src]="item.product.images[0]"
+              [alt]="item.product.name" />
           </li>
 
           <li class="py-2 px-3">
             <div class="text-400 font-medium">Termék</div>
 
             <div class="text-900 font-normal">
-              {{ product.product['name'] }}
+              {{ item.product.name }}
             </div>
           </li>
 
-          <li
-            class="py-2 px-3 border-top-1 surface-border"
-            *ngIf="product.product['category']">
+          <li class="py-2 px-3 border-top-1 surface-border">
             <div class="text-400 font-medium">Kategória</div>
 
             <div class="text-900 font-normal">
-              {{ product.product['category'] }}
+              {{ item.product.category.name }}
             </div>
           </li>
 
@@ -151,109 +150,37 @@
             <div class="text-400 font-medium">Rövid leírás</div>
 
             <div class="text-900 font-normal">
-              {{ product.product['shortDescription'] }}
+              {{ item.product.shortDescription }}
             </div>
           </li>
 
           <li
-            *ngIf="product.productExtra.nameEmbroidery"
+            *ngIf="item.nameEmbroidery"
             class="py-2 px-3 border-top-1 surface-border">
             <div class="text-400 font-medium">Hímzett név</div>
 
             <div class="text-900 font-normal">
-              {{ product.productExtra.nameEmbroidery }}
+              {{ item.nameEmbroidery }}
             </div>
           </li>
 
-          <li
-            *ngIf="product.productExtra.baseColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Alapszín</div>
+          <ng-container *ngFor="let question of item.questions">
+            <li class="py-2 px-3 border-top-1 surface-border">
+              <div class="text-400 font-medium">{{ question.question }}</div>
 
-            <div class="text-900 font-normal">
-              {{ product.productExtra.baseColor }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.earsColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Fülek színe</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.earsColor }}
-            </div>
-          </li>
+              <div class="text-900 font-normal">
+                {{ question.option }}
+              </div>
+            </li>
+          </ng-container>
 
           <li
-            *ngIf="product.productExtra.ribbonColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Masni színe</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.ribbonColor }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.szundikendoColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Szundikendő színe/mintája</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.szundikendoColor }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.minkyColorBack"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">
-              Minky plüss színe(szundikendő-hátulja)
-            </div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.minkyColorBack }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.noseColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Orr színe</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.noseColor }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.earsAndBodyColor"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Fülek és test színe/mintája:</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.earsAndBodyColor }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.extraMinkyEars"
-            class="py-2 px-3 border-top-1 surface-border">
-            <div class="text-400 font-medium">Minky fül</div>
-
-            <div class="text-900 font-normal">
-              {{ product.productExtra.extraMinkyEars }}
-            </div>
-          </li>
-
-          <li
-            *ngIf="product.productExtra.comment"
+            *ngIf="item.comment"
             class="py-2 px-3 border-top-1 surface-border">
             <div class="text-400 font-medium">Megjegyzés</div>
 
             <div class="text-900 font-normal">
-              {{ product.productExtra.comment }}
+              {{ item.comment }}
             </div>
           </li>
         </p-panel>
