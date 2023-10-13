@@ -48,6 +48,7 @@ export class AddQuestionComponent implements OnInit {
   });
 
   addMaterialQuestionForm = this.fb.group({
+    isOptional: [false],
     name: ['', Validators.required],
     question: ['', Validators.required],
     categoryId: [''],
@@ -226,6 +227,15 @@ export class AddQuestionComponent implements OnInit {
       materialCategories,
       options
     };
+
+    if (this.addMaterialQuestionForm.value.isOptional) {
+      questionObj.options.unshift({
+        name: 'Nem kérek!',
+        extraPrice: 0,
+        slug: 'Nem kérek!'
+      });
+    }
+
     this.questionService
       .addQuestion$(questionObj)
       .pipe(

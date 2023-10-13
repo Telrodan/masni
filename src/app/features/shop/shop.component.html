@@ -25,18 +25,23 @@
     </div>
   </form>
 
-  <div *ngIf="pageData.products as products" class="products-container">
-    <mhd-product-card *ngFor="let product of products" [product]="product">
-    </mhd-product-card>
-  </div>
+  <ng-container *ngIf="pageData.products as products">
+    <div class="products-container">
+      <mhd-product-card
+        *ngFor="let product of products.slice(first, first + rows)"
+        [product]="product"
+        [page]="first">
+      </mhd-product-card>
+    </div>
 
-  <div class="card flex justify-content-center">
-    <p-paginator
-      (onPageChange)="onPageChange($event)"
-      [first]="first"
-      [rows]="rows"
-      [totalRecords]="pageData.products.length"
-      [rowsPerPageOptions]="[25, 50, 100]">
-    </p-paginator>
-  </div>
+    <div class="card flex justify-content-center">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="products.length"
+        [rowsPerPageOptions]="[25, 50, 100]">
+      </p-paginator>
+    </div>
+  </ng-container>
 </div>

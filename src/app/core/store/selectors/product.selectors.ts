@@ -29,3 +29,7 @@ export const selectProductById = (id: string) =>
     const index = products.findIndex((product) => product.id === id);
     return products[index];
   });
+
+export const selectDollDresses = createSelector(selectProductState, (state) =>
+  state.products.filter((product) => product.isDollDress)
+);

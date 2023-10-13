@@ -12,6 +12,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DollDressDialogComponent } from './components/doll-dress-dialog/doll-dress-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonModule } from 'primeng/button';
+
+const MATERIAL = [MatDialogModule];
 
 const PRIME_NG = [
   ImageModule,
@@ -19,17 +24,23 @@ const PRIME_NG = [
   DropdownModule,
   PaginatorModule,
   InputTextModule,
-  InputTextareaModule
+  InputTextareaModule,
+  ButtonModule
 ];
 
 @NgModule({
-  declarations: [ShopComponent, ProductDetailsComponent],
+  declarations: [
+    ShopComponent,
+    ProductDetailsComponent,
+    DollDressDialogComponent
+  ],
   imports: [
     CommonModule,
     ShopRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    ...PRIME_NG
+    ...PRIME_NG,
+    ...MATERIAL
   ]
 })
 export class ShopModule {}
