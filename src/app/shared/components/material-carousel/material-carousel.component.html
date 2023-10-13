@@ -1,0 +1,40 @@
+<ng-container *ngIf="materials">
+  <section>
+    <p-carousel
+      [value]="materials"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="10000"
+      [showNavigators]="true"
+      [showIndicators]="false"
+      [responsiveOptions]="responsiveOptions">
+      <ng-template pTemplate="header">
+        <h1 class="heading-primary">Minták</h1>
+      </ng-template>
+
+      <ng-template let-material let-i="i" pTemplate="item">
+        <div class="item-content">
+          <p class="material-name">
+            {{ material.name }}
+          </p>
+
+          <img [src]="material.image" class="hidden" (load)="imageLoaded(i)" />
+
+          <img
+            *ngIf="imageLoadedStatus[i]"
+            [src]="material.image"
+            class="mb-1" />
+
+          <p-skeleton
+            *ngIf="!imageLoadedStatus[i]"
+            styleClass="skeleton"></p-skeleton>
+        </div>
+      </ng-template>
+    </p-carousel>
+
+    <button routerLink="/material" class="secondary-button">
+      Mindet Megnézem
+    </button>
+  </section>
+</ng-container>

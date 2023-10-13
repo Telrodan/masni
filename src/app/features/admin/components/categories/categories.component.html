@@ -5,8 +5,8 @@
     [value]="categories"
     [globalFilterFields]="['id', 'name']"
     [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[10, 25, 50]">
+    [rows]="25"
+    [rowsPerPageOptions]="[25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -51,16 +51,12 @@
     <ng-template pTemplate="body" let-category let-i="rowIndex">
       <tr>
         <td>
-          <img
-            class="hidden"
-            [src]="category.image"
-            [alt]="'Inspiráció ' + i + ' képe'"
-            (load)="imageLoaded(i)" />
+          <img class="hidden" [src]="category.image" (load)="imageLoaded(i)" />
 
           <p-image
             *ngIf="imageLoadedStatus[i]"
             [src]="category.image"
-            [alt]="'Inspiráció ' + i + ' képe'"
+            [alt]="'Kategória ' + i + ' képe'"
             [preview]="true">
           </p-image>
 
@@ -69,9 +65,9 @@
             styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td>{{ category._id }}</td>
+        <td class="font-italic font-semibold">{{ category._id }}</td>
 
-        <td class="font-bold">{{ category.name }}</td>
+        <td class="font-semibold text-blue-500">{{ category.name }}</td>
 
         <td>
           <ng-container *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
@@ -89,7 +85,7 @@
           </ng-container>
         </td>
 
-        <td class="font-bold">{{ category.items.length }}</td>
+        <td class="font-semibold">{{ category.items.length }}</td>
 
         <td>
           <button
@@ -116,6 +112,14 @@
             type="button"
             icon="pi pi-times"
             class="p-button p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center text-800 text-4xl">
+          Nem található kategória
         </td>
       </tr>
     </ng-template>

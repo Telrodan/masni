@@ -15,7 +15,7 @@ import { selectAllMaterials } from '@core/store';
 import { Material } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { EditMaterialComponent } from './components/edit-material/edit-material.component';
 import { AddMaterialComponent } from './components/add-material/add-material.component';
 
@@ -43,7 +43,6 @@ export class MaterialsComponent implements OnInit {
   ngOnInit(): void {
     this.materials$ = this.store$.select(selectAllMaterials).pipe(
       map((materials) => [...materials]),
-
       untilDestroyed(this)
     );
   }
@@ -66,10 +65,7 @@ export class MaterialsComponent implements OnInit {
       .open(ConfirmDialogComponent, {
         minWidth: '40vw',
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd "${material.name}" mintát?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd "${material.name}" mintát?`
         }
       })
       .afterClosed()

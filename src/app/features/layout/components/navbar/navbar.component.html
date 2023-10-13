@@ -1,5 +1,5 @@
 <nav
-  class="navbar py-3 px-6 shadow-2 flex align-items-center justify-content-between relative lg:static"
+  class="navbar py-3 px-6 flex align-items-center justify-content-between relative lg:static"
   style="min-height: 80px">
   <img
     routerLink="/"
@@ -17,9 +17,9 @@
     <i class="pi pi-bars text-4xl"></i>
   </a>
   <div
-    class="sidebar align-items-center flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 top-100 z-4 shadow-2 lg:shadow-none">
+    class="align-items-center closeable-sidebar flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 top-100 z-4 shadow-2 lg:shadow-none">
     <ul
-      class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row">
+      class="sidebar list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row">
       <li>
         <a
           pRipple
@@ -45,42 +45,45 @@
           <i class="pi pi-angle-down ml-auto lg:ml-3"></i>
         </a>
         <ul
-          class="sidebar list-none py-3 px-6 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute hidden origin-top w-full lg:w-15rem cursor-pointer">
-          <li>
+          class="sidebar closeable-sidebar list-none py-3 px-6 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute hidden origin-top w-full lg:w-15rem cursor-pointer">
+          <li class="ml-3 mt-3 mb-3">
             <a
               pRipple
-              class="flex p-3 align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
-              routerLink="/nyuszko-shop"
+              class="flex align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
+              routerLink="/shop/all"
               (click)="closeNavbar()">
-              <span>Nyuszkó Kuckó</span>
+              <span>Összes</span>
             </a>
           </li>
-          <li>
+
+          <li class="ml-3 mb-3">
             <a
               pRipple
-              class="flex p-3 align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
-              href="https://www.facebook.com/profile.php?id=100087389177967"
-              target="_blank"
+              class="flex align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
+              routerLink="shop/dream-it"
               (click)="closeNavbar()">
-              <span>Masni Handmade Dolls</span>
+              <span>"Álmodd meg"</span>
             </a>
           </li>
-          <li>
-            <a
-              pRipple
-              class="flex p-3 align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
-              routerLink="/shop"
-              (click)="closeNavbar()">
-              <span>Termékek készleten</span>
-            </a>
-          </li>
+
+          <ng-container *ngIf="categories$ | async as categories">
+            <li class="ml-3 mb-3" *ngFor="let category of categories">
+              <a
+                pRipple
+                class="flex align-items-center text-600 hover:text-900 transition-colors transition-duration-150"
+                [routerLink]="'/shop/' + category.id"
+                (click)="closeNavbar()">
+                <span>{{ category.name }}</span>
+              </a>
+            </li>
+          </ng-container>
         </ul>
       </li>
       <li>
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
-          routerLink="/samples"
+          routerLink="/material"
           (click)="closeNavbar()">
           <i class="pi pi-palette mr-2"></i>
           <span>Minták</span>
@@ -108,7 +111,7 @@
       </li>
     </ul>
     <ul
-      class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row border-top-1 border-400 lg:border-top-none">
+      class="sidebar list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row border-top-1 border-400 lg:border-top-none">
       <li *ngIf="(isAuthenticated$ | async) !== true">
         <a
           pRipple
@@ -155,7 +158,7 @@
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center border-round cursor-pointer text-600 hover:text-900 transition-colors transition-duration-150"
-          routerLink="user">
+          routerLink="user-profile">
           <i class="pi pi-user mr-2"></i>
           <span>Profil</span>
         </a>

@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
+import { selectInspirationCategories } from '@core/store';
 import { Observable, tap, filter } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { InspirationService } from '@core/services/inspiration.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { Category } from '@core/models/category.model';
 import { Store } from '@ngrx/store';
-import { selectInspirationCategories } from '@core/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
+import { RawInspiration } from '@core/models/inspiration.model';
 
 @UntilDestroy()
 @Component({
@@ -63,18 +64,15 @@ export class AddInspirationComponent implements OnInit {
 
   onAddInspiration(): void {
     if (this.addInspirationForm.valid) {
-      const inspirationData = new FormData();
-      const inspirationName = this.addInspirationForm.value.name.trim();
-      const inspirationCategoryId = this.addInspirationForm.value.categoryId;
-      const inspirationImage = this.addInspirationForm.value.image;
+      const inspiration: RawInspiration = {
+        name: this.addInspirationForm.value.name.trim(),
+        categoryId: this.addInspirationForm.value.categoryId,
+        image: this.addInspirationForm.value.image
+      };
 
-      inspirationData.append('name', inspirationName);
-      inspirationData.append('categoryId', inspirationCategoryId);
-      inspirationData.append('image', inspirationImage);
-
-      if (inspirationName) {
+      if (inspiration.name) {
         this.inspirationService
-          .addInspiration$(inspirationData)
+          .addInspiration$(inspiration)
           .pipe(
             tap(() => {
               this.toastr.success('Inspiráció hozzáadva');
@@ -85,6 +83,8 @@ export class AddInspirationComponent implements OnInit {
       } else {
         this.toastr.error('Kérlek adj meg egy inspiráció nevet');
       }
+    } else {
+      this.toastr.error('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

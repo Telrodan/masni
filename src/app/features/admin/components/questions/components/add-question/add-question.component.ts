@@ -8,7 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { QuestionType } from '@core/enums/question-type.enum';
 import { Category } from '@core/models/category.model';
-import { Question } from '@core/models/question.model';
+import { RawQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
@@ -35,34 +35,34 @@ const QUESTION_TYPE_FORM_OPTIONS = [
   styleUrls: ['./add-question.component.scss']
 })
 export class AddQuestionComponent implements OnInit {
-  readonly questionType = QuestionType;
+  readonly QuestionType = QuestionType;
   readonly questionTypeFormOptions = QUESTION_TYPE_FORM_OPTIONS;
 
   addStringQuestionForm = this.fb.group({
-    questionName: ['', Validators.required],
+    name: ['', Validators.required],
     question: ['', Validators.required],
     optionName: [''],
-    options: this.fb.array<QuestionOption[]>([]),
+    options: this.fb.array<QuestionOption>([], Validators.required),
     isExtraPrice: [false],
     extraPrice: [0]
   });
+
   addMaterialQuestionForm = this.fb.group({
-    questionName: ['', Validators.required],
+    name: ['', Validators.required],
     question: ['', Validators.required],
     categoryId: [''],
-    materialCategoryIds: this.fb.array<string[]>([]),
-    categories: this.fb.array<Category[]>([])
+    materialCategories: this.fb.array<string>([]),
+    options: this.fb.array<QuestionOption>([], Validators.required)
   });
 
   categories$: Observable<Category[]>;
   categories: Category[] = [];
+  selectedCategories: Category[] = [];
 
   questionTypeHelper = QuestionType.QUESTION_WITH_STRING_ANSWER;
   questionTypeForm = this.fb.group({
     questionType: [this.questionTypeHelper, Validators.required]
   });
-
-  materialOptions = [];
 
   constructor(
     private fb: FormBuilder,
@@ -91,16 +91,23 @@ export class AddQuestionComponent implements OnInit {
   }
 
   addStringOption(): void {
-    const optionName = this.addStringQuestionForm.value.optionName.trim();
+    const name = this.addStringQuestionForm.value.optionName.trim();
     const extraPrice = this.addStringQuestionForm.value.extraPrice;
     const option: QuestionOption = {
-      optionName,
+      name,
       extraPrice,
-      slug: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
+      slug: extraPrice ? name + ' +' + extraPrice + ' Ft' : name
     };
 
-    if (option.optionName) {
-      this.addStringQuestionForm.value.options.push(option);
+    if (option.name) {
+      const options = this.addStringQuestionForm.get('options') as FormArray;
+      options.push(
+        this.fb.group({
+          name: option.name,
+          extraPrice: option.extraPrice,
+          slug: option.slug
+        })
+      );
       this.addStringQuestionForm.get('optionName').patchValue('');
       this.addStringQuestionForm.get('isExtraPrice').patchValue(false);
       this.addStringQuestionForm.get('extraPrice').patchValue(0);
@@ -117,25 +124,42 @@ export class AddQuestionComponent implements OnInit {
 
   addMaterialOption(): void {
     const categoryId = this.addMaterialQuestionForm.value.categoryId;
-    const index = this.categories.findIndex(
+    const category = this.categories.find(
       (category) => category.id === categoryId
     );
-    const category = this.categories[index];
-    this.addMaterialQuestionForm.value.materialCategoryIds.push(category.id);
-    this.addMaterialQuestionForm.value.categories.push(category);
 
-    this.store$
-      .select(selectMaterialsByCategoryId(category.id))
-      .pipe(
-        tap((items) => {
-          this.materialOptions = [
-            ...this.materialOptions,
-            ...items.filter((item) => item.isAvailable).map((item) => item.name)
-          ];
-        }),
-        untilDestroyed(this)
-      )
-      .subscribe();
+    if (category) {
+      this.addMaterialQuestionForm.value.materialCategories.push(category.id);
+      this.selectedCategories.push(category);
+
+      this.store$
+        .select(selectMaterialsByCategoryId(category.id))
+        .pipe(
+          tap((materials) => {
+            const options = this.addMaterialQuestionForm.get(
+              'options'
+            ) as FormArray;
+
+            materials.forEach((material) => {
+              if (material.isAvailable) {
+                const option = this.fb.group({
+                  materialId: material.id,
+                  name: material.name,
+                  extraPrice: material.extraPrice,
+                  slug: material.extraPrice
+                    ? material.name + ' +' + material.extraPrice + ' Ft'
+                    : material.name
+                });
+                options.push(option);
+              }
+            });
+          }),
+          untilDestroyed(this)
+        )
+        .subscribe();
+    } else {
+      this.toastr.info('Kérlek válassz egy anyag kategóriát');
+    }
   }
 
   deleteMaterialCategoryOption(categoryId: string, index: number): void {
@@ -143,15 +167,22 @@ export class AddQuestionComponent implements OnInit {
       .select(selectMaterialsByCategoryId(categoryId))
       .pipe(
         tap((items) => {
-          const deletedMaterialNames = items.map((item) => item.name);
-          this.materialOptions = this.materialOptions.filter(
-            (materialOption) => !deletedMaterialNames.includes(materialOption)
+          const options = this.addMaterialQuestionForm.get(
+            'options'
+          ) as FormArray;
+          const materialIds = items.map((item) => item.id);
+          const materialOptions = options.controls.filter((control) =>
+            materialIds.includes(control.value.materialId)
           );
-          this.addMaterialQuestionForm.value.materialCategoryIds.splice(
+          materialOptions.forEach((option) => {
+            options.removeAt(options.controls.indexOf(option));
+          });
+
+          this.addMaterialQuestionForm.value.materialCategories.splice(
             index,
             1
           );
-          this.addMaterialQuestionForm.value.categories.splice(index, 1);
+          this.selectedCategories.splice(index, 1);
         }),
         untilDestroyed(this)
       )
@@ -159,13 +190,13 @@ export class AddQuestionComponent implements OnInit {
   }
 
   addQuestionWithStringAnswer(): void {
-    const questionName = this.addStringQuestionForm.value.questionName.trim();
+    const name = this.addStringQuestionForm.value.name.trim();
     const question = this.addStringQuestionForm.value.question.trim();
     const options = this.addStringQuestionForm.value.options;
 
-    const questionObj: Question = {
-      questionType: QuestionType.QUESTION_WITH_STRING_ANSWER,
-      questionName,
+    const questionObj: RawQuestion = {
+      type: QuestionType.QUESTION_WITH_STRING_ANSWER,
+      name,
       question,
       options
     };
@@ -183,18 +214,18 @@ export class AddQuestionComponent implements OnInit {
   }
 
   addQuestionWithMaterialCategoryAnswer(): void {
-    const questionName = this.addMaterialQuestionForm.value.questionName.trim();
+    const name = this.addMaterialQuestionForm.value.name.trim();
     const question = this.addMaterialQuestionForm.value.question.trim();
-    const materialCategoryIds =
-      this.addMaterialQuestionForm.value.materialCategoryIds;
-
-    const questionObj: Question = {
-      questionType: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
-      questionName,
+    const materialCategories =
+      this.addMaterialQuestionForm.value.materialCategories;
+    const options = this.addMaterialQuestionForm.value.options;
+    const questionObj: RawQuestion = {
+      type: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
+      name,
       question,
-      materialCategoryIds
+      materialCategories,
+      options
     };
-
     this.questionService
       .addQuestion$(questionObj)
       .pipe(
@@ -208,27 +239,19 @@ export class AddQuestionComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER) {
-      if (
-        this.addStringQuestionForm.valid &&
-        this.addStringQuestionForm.value.options.length
-      ) {
-        this.addQuestionWithStringAnswer();
-      } else {
-        this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
-      }
+    if (
+      this.questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER &&
+      this.addStringQuestionForm.valid
+    ) {
+      this.addQuestionWithStringAnswer();
     } else if (
       this.questionTypeHelper ===
-      QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+        QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER &&
+      this.addMaterialQuestionForm.valid
     ) {
-      if (
-        this.addMaterialQuestionForm.valid &&
-        this.addMaterialQuestionForm.value.materialCategoryIds.length
-      ) {
-        this.addQuestionWithMaterialCategoryAnswer();
-      } else {
-        this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
-      }
+      this.addQuestionWithMaterialCategoryAnswer();
+    } else {
+      this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
     }
   }
 }

@@ -1,8 +1,31 @@
 @import 'mixins';
 
 .shop {
+  padding-bottom: 120px;
+
   @include respond(sm) {
-    padding: 0 10px;
+    padding-bottom: 0;
+  }
+}
+
+.category-description {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.filter-form {
+  padding: 20px 40px;
+
+  @include respond(sm) {
+    padding: 20px;
+  }
+}
+
+.form-content {
+  display: flex;
+
+  @include respond(sm) {
+    flex-direction: column;
   }
 }
 
@@ -11,18 +34,12 @@
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 28px;
   grid-row-gap: 28px;
+  padding: 12px 40px 40px;
 
   @include respond(sm) {
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 14px;
     grid-row-gap: 0;
-  }
-}
-
-.categories-form {
-  display: flex;
-
-  @include respond(sm) {
-    flex-direction: column;
+    padding: 12px 20px 40px;
   }
 }

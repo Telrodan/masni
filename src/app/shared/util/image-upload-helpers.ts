@@ -59,10 +59,20 @@ export const removeImageFromFormAndInputAndClearPreview = (
   form: FormGroup,
   input: HTMLInputElement
 ): string => {
-  const imagePreview = '';
   form.patchValue({ image: '' });
   form.get('image').updateValueAndValidity();
   input.value = '';
 
-  return imagePreview;
+  return '';
+};
+
+export const removeImagesFromFormAndInputAndClearPreview = (
+  form: FormGroup,
+  input: HTMLInputElement
+): string[] => {
+  form.patchValue({ images: '' });
+  form.get('images').updateValueAndValidity();
+  input.value = '';
+
+  return [''];
 };

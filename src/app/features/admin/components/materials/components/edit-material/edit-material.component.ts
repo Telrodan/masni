@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Observable, tap, filter } from 'rxjs';
@@ -7,7 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 
 import { Category } from '@core/models/category.model';
-import { Material } from '@core/models/material.model';
+import { Material, RawMaterial } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { selectMaterialCategories } from '@core/store';
@@ -24,14 +24,7 @@ import {
 })
 export class EditMaterialComponent implements OnInit {
   categories$: Observable<Category[]>;
-
-  editMaterialForm = this.fb.group({
-    name: [this.data.name, Validators.required],
-    categoryId: [this.data?.categoryId, Validators.required],
-    image: [this.data.image, Validators.required],
-    extra: [this.data.extra, Validators.required],
-    isAvailable: [this.data.isAvailable, Validators.required]
-  });
+  editMaterialForm: FormGroup;
 
   imagePreview: string;
 
@@ -42,15 +35,23 @@ export class EditMaterialComponent implements OnInit {
     private toastr: ToastrService,
     private fb: FormBuilder,
     private store$: Store
-  ) {}
+  ) {
+    this.editMaterialForm = this.fb.group({
+      name: [this.data.name, Validators.required],
+      categoryId: [this.data.category.id, Validators.required],
+      image: [this.data.image, Validators.required],
+      extraPrice: [this.data.extraPrice, Validators.required],
+      isAvailable: [this.data.isAvailable, Validators.required]
+    });
+
+    this.imagePreview = this.data.image;
+  }
 
   ngOnInit(): void {
     this.categories$ = this.store$.select(selectMaterialCategories).pipe(
       filter((categories) => !!categories),
       untilDestroyed(this)
     );
-
-    this.imagePreview = this.data.image;
   }
 
   async onImagePicked(event: Event): Promise<void> {
@@ -67,31 +68,31 @@ export class EditMaterialComponent implements OnInit {
     );
   }
 
-  onUpdateMaterial(): void {
+  onEditMaterial(): void {
     if (this.editMaterialForm.valid) {
-      const editedMaterial = new FormData();
-      const materialName = this.editMaterialForm.value.name.trim();
-      const materialCategoryId = this.editMaterialForm.value.categoryId;
-      const materialImage = this.editMaterialForm.value.image;
-      const materialExtra = this.editMaterialForm.value.extra.toString();
-      const materialIsAvailable =
-        this.editMaterialForm.value.isAvailable.toString();
+      const material: RawMaterial = {
+        name: this.editMaterialForm.value.name.trim(),
+        categoryId: this.editMaterialForm.value.categoryId,
+        image: this.editMaterialForm.value.image,
+        extraPrice: this.editMaterialForm.value.extraPrice,
+        isAvailable: this.editMaterialForm.value.isAvailable
+      };
 
-      editedMaterial.append('name', materialName);
-      editedMaterial.append('categoryId', materialCategoryId);
-      editedMaterial.append('image', materialImage);
-      editedMaterial.append('extra', materialExtra);
-      editedMaterial.append('isAvailable', materialIsAvailable);
-
-      this.materialService
-        .updateMaterial$(editedMaterial, this.data.id)
-        .pipe(
-          tap((material) => {
-            this.toastr.success(`${material.name} minta módosítva`);
-            this.dialogRef.close();
-          })
-        )
-        .subscribe();
+      if (material.name) {
+        this.materialService
+          .updateMaterial$(material, this.data.id)
+          .pipe(
+            tap((material) => {
+              this.toastr.success(`${material.name} minta módosítva`);
+              this.dialogRef.close();
+            })
+          )
+          .subscribe();
+      } else {
+        this.toastr.info('Kérlek adj meg egy minta nevet');
+      }
+    } else {
+      this.toastr.info('Kérlek töltsd ki az összes mezőt');
     }
   }
 }

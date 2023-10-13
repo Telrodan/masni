@@ -2,59 +2,52 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CarouselModule } from 'primeng/carousel';
 import { RippleModule } from 'primeng/ripple';
 import { SkeletonModule } from 'primeng/skeleton';
-
-import { ProductCardComponent } from './UI/product-card/product-card.component';
-import { CarouselComponent } from './UI/carousel/carousel.component';
-import { MenuItemComponent } from './UI/menu-item/menu-item.component';
-import { ImageCompositionComponent } from './UI/image-composition/image-composition.component';
-import { SpinnerComponent } from './UI/spinner/spinner.component';
-import { CarouselWithHeadingAndButtonComponent } from './components/carousel-with-heading-and-button/carousel-with-heading-and-button.component';
-import { ConfirmDialogComponent } from './UI/confirm-dialog/confirm-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
-import { OrderSuccessComponent } from './UI/order-success/order-success.component';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { CarouselItemComponent } from './components/carousel-with-heading-and-button/components/carousel-item/carousel-item.component';
+
+import { ProductCardComponent } from './components/product-card/product-card.component';
+import { ImageCompositionComponent } from './components/image-composition/image-composition.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ScrollableImageWithTitleComponent } from './components/scrollable-image-with-title/scrollable-image-with-title.component';
+import { ProductsCarouselComponent } from './components/products-carousel/products-carousel.component';
+import { ProductCategoriesCarouselComponent } from './components/product-categories-carousel/product-categories-carousel.component';
+import { MaterialCarouselComponent } from './components/material-carousel/material-carousel.component';
 
 const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
 
 @NgModule({
   declarations: [
+    ConfirmDialogComponent,
     ProductCardComponent,
-    CarouselComponent,
-    MenuItemComponent,
     ImageCompositionComponent,
     SpinnerComponent,
-    CarouselWithHeadingAndButtonComponent,
-    ConfirmDialogComponent,
-    OrderSuccessComponent,
-    CarouselItemComponent,
-    ScrollableImageWithTitleComponent
+    ScrollableImageWithTitleComponent,
+    ProductsCarouselComponent,
+    ProductCategoriesCarouselComponent,
+    MaterialCarouselComponent
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    NgxSkeletonLoaderModule,
     ...PRIME_NG
   ],
   exports: [
+    ConfirmDialogComponent,
     ProductCardComponent,
-    CarouselComponent,
-    MenuItemComponent,
     ImageCompositionComponent,
     SpinnerComponent,
-    CarouselWithHeadingAndButtonComponent,
-    ScrollableImageWithTitleComponent
+    ScrollableImageWithTitleComponent,
+    ProductsCarouselComponent,
+    ProductCategoriesCarouselComponent,
+    MaterialCarouselComponent
   ]
 })
 export class SharedModule {}

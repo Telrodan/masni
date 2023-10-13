@@ -1,86 +1,107 @@
 <ng-container *ngIf="inspirations$ | async as inspirations">
-    <p-card header="Inspirációk">
-        <p-table
-            styleClass="p-datatable-gridlines"
-            [value]="inspirations"
-            [paginator]="true"
-            [rows]="10"
-            [rowsPerPageOptions]="[10, 25, 50]">
-            <ng-template pTemplate="caption">
-                <div class="flex">
-                    <p-button
-                        icon="pi pi-plus"
-                        label="Hozzáadás"
-                        styleClass="p-button p-button-success"
-                        (click)="onAddInspiration()">
-                    </p-button>
-                </div>
-            </ng-template>
+  <p-card header="Inspirációk">
+    <p-table
+      #table
+      styleClass="p-datatable-gridlines"
+      [value]="inspirations"
+      [globalFilterFields]="['id', 'name', 'category.name']"
+      [paginator]="true"
+      [rows]="25"
+      [rowsPerPageOptions]="[25, 50, 100]">
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <p-button
+            icon="pi pi-plus"
+            label="Hozzáadás"
+            styleClass="p-button p-button-success"
+            (click)="onAddInspiration()">
+          </p-button>
 
-            <ng-template pTemplate="header">
-                <tr>
-                    <th class="w-9rem">Kép</th>
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
+              tooltipPosition="bottom"
+              type="text"
+              (input)="applyFilterGlobal($event, 'contains', table)"
+              placeholder="Keresés" />
+          </span>
+        </div>
+      </ng-template>
 
-                    <th>Azonosító</th>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="w-9rem">Kép</th>
 
-                    <th>Név</th>
+          <th>Azonosító</th>
 
-                    <th>Kategória</th>
+          <th>Név</th>
 
-                    <th class="w-3rem">Opciók</th>
-                </tr>
-            </ng-template>
+          <th>Kategória</th>
 
-            <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
-                <tr>
-                    <td>
-                        <img
-                            class="hidden"
-                            [src]="inspiration.image"
-                            [alt]="inspiration.name"
-                            (load)="imageLoaded(i)" />
+          <th class="w-3rem">Opciók</th>
+        </tr>
+      </ng-template>
 
-                        <p-image
-                            *ngIf="imageLoadedStatus[i]"
-                            [src]="inspiration.image"
-                            [alt]="inspiration.name"
-                            [preview]="true">
-                        </p-image>
+      <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
+        <tr>
+          <td>
+            <img
+              class="hidden"
+              [src]="inspiration.image"
+              [alt]="inspiration.name"
+              (load)="imageLoaded(i)" />
 
-                        <p-skeleton
-                            *ngIf="!imageLoadedStatus[i]"
-                            styleClass="skeleton"></p-skeleton>
-                    </td>
+            <p-image
+              *ngIf="imageLoadedStatus[i]"
+              [src]="inspiration.image"
+              [alt]="inspiration.name"
+              [preview]="true">
+            </p-image>
 
-                    <td>{{ inspiration.id }}</td>
+            <p-skeleton
+              *ngIf="!imageLoadedStatus[i]"
+              styleClass="skeleton"></p-skeleton>
+          </td>
 
-                    <td>{{ inspiration.name }}</td>
+          <td class="font-italic font-semibold">{{ inspiration.id }}</td>
 
-                    <td>{{ inspiration.categoryName }}</td>
+          <td class="font-semibold text-blue-500">{{ inspiration.name }}</td>
 
-                    <td>
-                        <button
-                            (click)="onEditInspiration(inspiration)"
-                            pButton
-                            pRipple
-                            pTooltip="Inspiráció módosítása"
-                            tooltipPosition="bottom"
-                            type="button"
-                            icon="pi pi-cog"
-                            class="p-button p-button-warning p-button mb-1"></button>
+          <td><p-badge [value]="inspiration.category.name"></p-badge></td>
 
-                        <button
-                            (click)="onDeleteInspiration(inspiration)"
-                            pButton
-                            pRipple
-                            pTooltip="Inspiráció törlése"
-                            tooltipPosition="bottom"
-                            type="button"
-                            icon="pi pi-times"
-                            class="p-button p-button-danger p-button"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-card>
+          <td>
+            <button
+              (click)="onEditInspiration(inspiration)"
+              pButton
+              pRipple
+              pTooltip="Inspiráció módosítása"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-cog"
+              class="p-button p-button-warning p-button mb-1"></button>
+
+            <button
+              (click)="onDeleteInspiration(inspiration)"
+              pButton
+              pRipple
+              pTooltip="Inspiráció törlése"
+              tooltipPosition="bottom"
+              type="button"
+              icon="pi pi-times"
+              class="p-button p-button-danger p-button"></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center text-800 text-4xl">
+            Nem található inspiráció
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </ng-container>

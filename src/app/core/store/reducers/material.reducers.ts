@@ -1,5 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
+import * as _ from 'lodash';
 
+import { Category } from '@core/models/category.model';
 import { MaterialState } from '@core/store/models/material-state.model';
 import {
   addMaterial,
@@ -7,35 +9,29 @@ import {
   getMaterials,
   getMaterialsError,
   getMaterialsSuccess,
-  updateMaterial
+  updateMaterial,
+  updateMaterialsCategory
 } from '@core/store/actions/';
 import { StatusTypes } from '../status-types';
 
 export const materialInitialState: MaterialState = {
   materials: [],
-  availableMaterials: [],
   status: StatusTypes.INIT
 };
 
 export const materialReducers = createReducer(
   materialInitialState,
+
   on(getMaterials, (state) => ({
     ...state,
     status: StatusTypes.LOADING
   })),
 
-  on(getMaterialsSuccess, (state, action) => {
-    const availableMaterials = action.materials.filter(
-      (material) => material.isAvailable
-    );
-
-    return {
-      ...state,
-      materials: [...action.materials],
-      availableMaterials,
-      status: StatusTypes.LOADED
-    };
-  }),
+  on(getMaterialsSuccess, (state, action) => ({
+    ...state,
+    materials: [...action.materials],
+    status: StatusTypes.LOADED
+  })),
 
   on(getMaterialsError, (state) => ({
     ...state,
@@ -44,52 +40,31 @@ export const materialReducers = createReducer(
 
   on(addMaterial, (state, action) => ({
     ...state,
-    materials: [...state.materials, action.material],
-    availableMaterials: action.material.isAvailable
-      ? [...state.availableMaterials, action.material]
-      : [...state.availableMaterials]
+    materials: [...state.materials, action.material]
   })),
 
-  on(updateMaterial, (state, action) => {
-    const index = state.materials.findIndex(
-      (material) => material.id === action.material.id
-    );
+  on(updateMaterial, (state, action) => ({
+    ...state,
+    materials: state.materials.map((material) =>
+      material.id === action.material.id ? action.material : material
+    )
+  })),
 
-    const materials = [...state.materials];
-    const availableMaterials = [...state.availableMaterials];
+  on(deleteMaterial, (state, action) => ({
+    ...state,
+    materials: state.materials.filter(
+      (material) => material.id !== action.material.id
+    )
+  })),
 
-    materials.splice(index, 1, action.material);
+  on(updateMaterialsCategory, (state, action) => {
+    const materials = _.cloneDeep(state.materials);
 
-    if (action.material.isAvailable) {
-      const index = availableMaterials.findIndex(
-        (material) => material.id === action.material.id
-      );
-      availableMaterials.splice(index, 1, action.material);
-    }
-
-    return {
-      ...state,
-      materials,
-      availableMaterials
-    };
-  }),
-
-  on(deleteMaterial, (state, action) => {
-    const index = state.materials.findIndex(
-      (material) => material.id === action.material.id
-    );
-
-    const materials = [...state.materials];
-    const availableMaterials = [...state.availableMaterials];
-
-    materials.splice(index, 1);
-
-    if (action.material.isAvailable) {
-      const index = availableMaterials.findIndex(
-        (material) => material.id === action.material.id
-      );
-      availableMaterials.splice(index, 1);
-    }
+    materials.forEach((material) => {
+      if (material.category.id === action.category.id) {
+        material.category = action.category;
+      }
+    });
 
     return {
       ...state,

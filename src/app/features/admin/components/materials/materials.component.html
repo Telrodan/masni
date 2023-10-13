@@ -3,10 +3,10 @@
     #table
     styleClass="p-datatable-gridlines"
     [value]="materials"
-    [globalFilterFields]="['id', 'name', 'category']"
+    [globalFilterFields]="['id', 'name', 'category.name']"
     [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[10, 25, 50]">
+    [rows]="25"
+    [rowsPerPageOptions]="[25, 50, 100]">
     <ng-template pTemplate="caption">
       <div class="flex">
         <p-button
@@ -20,7 +20,7 @@
           <i class="pi pi-search"></i>
           <input
             pInputText
-            pTooltip="Kereshető mezők: Azonosító, Név, Kategória(angol)"
+            pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
             tooltipPosition="bottom"
             type="text"
             (input)="applyFilterGlobal($event, 'contains', table)"
@@ -74,13 +74,17 @@
             styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td>{{ material.id }}</td>
+        <td class="font-italic font-semibold">{{ material.id }}</td>
 
-        <td>{{ material.name }}</td>
+        <td class="font-semibold text-blue-500">{{ material.name }}</td>
 
-        <td>{{ material.categoryName }}</td>
+        <td>
+          <p-badge
+            [value]="material.category.name"
+            severity="warning"></p-badge>
+        </td>
 
-        <td class="font-bold">{{ material.extra }} Ft</td>
+        <td class="font-semibold">{{ material?.extraPrice }} Ft</td>
 
         <td>
           <div class="is-available">
@@ -111,6 +115,14 @@
             type="button"
             icon="pi pi-times"
             class="p-button p-button-danger p-button"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center text-800 text-4xl">
+          Nem található minta
         </td>
       </tr>
     </ng-template>

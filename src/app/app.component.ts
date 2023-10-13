@@ -1,19 +1,20 @@
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+import { filter, of, switchMap } from 'rxjs';
+import { Carousel } from 'primeng/carousel';
+
+import { AuthService } from './core/services/auth.service';
+import { TrackService } from '@core/services/track.service';
 import {
   getCategories,
   getInspirations,
   getMaterials,
   getProducts,
-  getUser
+  getQuestions,
+  getUser,
+  getShoppingCartItems
 } from '@core/store';
-import { getShoppingCartItems } from '@core/store/actions/shopping-cart.actions';
-
-import { Store } from '@ngrx/store';
-import { Carousel } from 'primeng/carousel';
-import { filter, of, switchMap } from 'rxjs';
-
-import { AuthService } from './core/services/auth.service';
-import { TrackService } from '@core/services/track.service';
 
 @Component({
   selector: 'mhd-root',
@@ -34,11 +35,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     if (sessionStorage.getItem('visit') === null) {
-      const isNewVisitor = true;
-      this.trackService.trackVisitor({ isNewVisitor });
+      const isNewSession = true;
+      this.trackService.trackVisitor(isNewSession);
     } else {
-      const isNewVisitor = false;
-      this.trackService.trackVisitor({ isNewVisitor });
+      const isNewSession = false;
+      this.trackService.trackVisitor(isNewSession);
     }
 
     sessionStorage.setItem('visit', 'x');
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
     of(this.store$.dispatch(getCategories()))
       .pipe(
         switchMap(() => of(this.store$.dispatch(getMaterials()))),
+        switchMap(() => of(this.store$.dispatch(getQuestions()))),
         switchMap(() => of(this.store$.dispatch(getInspirations()))),
         switchMap(() => of(this.store$.dispatch(getProducts()))),
         switchMap(() => this.authService.getAuthStatus$()),

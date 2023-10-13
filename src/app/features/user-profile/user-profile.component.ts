@@ -14,7 +14,7 @@ import { UserService } from '@core/services/user.service';
 import { userSelector } from '@core/store';
 import { Store } from '@ngrx/store';
 import { filter, Observable, tap, switchMap } from 'rxjs';
-import { ConfirmDialogComponent } from 'src/app/shared/UI/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'mhd-user-profile',
@@ -85,10 +85,7 @@ export class UserProfileComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Megerősítés',
-          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`,
-          confirmButtonText: 'Igen',
-          cancelButtonText: 'Nem'
+          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`
         }
       })
       .afterClosed()
@@ -102,7 +99,7 @@ export class UserProfileComponent implements OnInit {
       )
       .subscribe();
   }
-  
+
   private initForm(user: User): void {
     this.form = new FormGroup({
       name: new FormControl(user.name, Validators.required),

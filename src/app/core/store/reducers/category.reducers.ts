@@ -1,18 +1,23 @@
 import { createReducer, on } from '@ngrx/store';
+import * as _ from 'lodash';
 
+import { Category } from '@core/models/category.model';
+import { Material } from '@core/models/material.model';
+import { Inspiration } from '@core/models/inspiration.model';
+import { Product } from '@core/models/product.model';
+import { CategoryState } from '../models/category-state.model';
+import { StatusTypes } from '../status-types';
 import {
   addCategory,
   addItemToCategory,
   deleteCategory,
-  deleteProductFromCategory,
+  deleteItemFromCategory,
   getCategories,
   getCategoriesError,
   getCategoriesSuccess,
   moveItemBetweenCategories,
   updateCategory
 } from '../actions';
-import { CategoryState } from '../models/category-state.model';
-import { StatusTypes } from '../status-types';
 
 export const categoryInitialState: CategoryState = {
   categories: [],
@@ -21,6 +26,7 @@ export const categoryInitialState: CategoryState = {
 
 export const categoryReducers = createReducer(
   categoryInitialState,
+
   on(getCategories, (state) => ({
     ...state,
     status: StatusTypes.LOADING
@@ -44,43 +50,27 @@ export const categoryReducers = createReducer(
     categories: [...state.categories, action.category]
   })),
 
-  on(updateCategory, (state, action) => {
-    const index = state.categories.findIndex(
-      (category) => category.id === action.category.id
-    );
-    const categories = [...state.categories];
-    categories.splice(index, 1, action.category);
-    return {
-      ...state,
-      categories
-    };
-  }),
+  on(updateCategory, (state, action) => ({
+    ...state,
+    categories: state.categories.map((category) =>
+      category.id === action.category.id ? action.category : category
+    )
+  })),
 
-  on(deleteCategory, (state, action) => {
-    const index = state.categories.findIndex((item) => item.id === action.id);
-    const categories = [...state.categories];
-    categories.splice(index, 1);
-    return {
-      ...state,
-      categories
-    };
-  }),
+  on(deleteCategory, (state, action) => ({
+    ...state,
+    categories: state.categories.filter((category) => category.id !== action.id)
+  })),
 
   on(addItemToCategory, (state, action) => {
-    const categories = [...state.categories];
+    // TODO: refactor this when category can be only Category
+    const categories = _.cloneDeep(state.categories);
+
     const index = categories.findIndex(
-      (category) => category.id === action.categoryId
+      (category) => category.id === (action.item.category as Category).id
     );
 
-    if (index !== -1) {
-      // Check if the category was found
-      const updatedCategory = {
-        ...categories[index], // Copy the category object
-        items: [...categories[index].items, action.itemId] // Create a new items array
-      };
-
-      categories[index] = updatedCategory; // Update the category in the copy
-    }
+    categories[index].items.push(action.item);
 
     return {
       ...state,
@@ -88,72 +78,42 @@ export const categoryReducers = createReducer(
     };
   }),
 
-  on(deleteProductFromCategory, (state, action) => {
-    const categories = [...state.categories];
+  on(deleteItemFromCategory, (state, action) => {
+    // TODO: refactor this when category can be only Category
+    const categories = _.cloneDeep(state.categories);
 
     const index = categories.findIndex(
-      (category) => category.id === action.product.categoryId
+      (category) => category.id === (action.item.category as Category).id
     );
 
-    const updatedProducts = [...categories[index].items];
-    updatedProducts.splice(index, 1);
-
-    const updatedCategories = [...categories];
-    updatedCategories[index] = {
-      ...categories[index],
-      items: updatedProducts
-    };
+    categories[index].items = categories[index].items.filter(
+      (item) => (item as Product | Material | Inspiration).id !== action.item.id
+    );
 
     return {
       ...state,
-      categories: updatedCategories
+      categories
     };
   }),
 
   on(moveItemBetweenCategories, (state, action) => {
-    const categories = [...state.categories];
+    // TODO: refactor this when category can be only Category
+    const categories = _.cloneDeep(state.categories);
 
-    const categoryIndex = categories.findIndex((category) =>
-      category.items.includes(action.itemId)
-    );
-
-    if (categoryIndex !== -1) {
-      // Check if categoryIndex is valid
-      const itemIndex = categories[categoryIndex].items.findIndex(
-        (item) => item === action.itemId
+    categories.forEach((category) => {
+      const index = category.items.findIndex(
+        (item) => item.id === action.item.id
       );
 
-      if (itemIndex !== -1) {
-        // Check if itemIndex is valid
-        const items = [...categories[categoryIndex].items];
-        items.splice(itemIndex, 1);
-
-        const updatedCategory = {
-          ...categories[categoryIndex],
-          items: items
-        };
-
-        categories[categoryIndex] = updatedCategory;
+      if (index > -1) {
+        category.items.splice(index, 1);
       }
-    }
 
-    const targetCategoryIndex = categories.findIndex(
-      (category) => category.id === action.categoryId
-    );
+      if (category.id === (action.item.category as Category).id) {
+        category.items.push(action.item);
+      }
+    });
 
-    if (targetCategoryIndex !== -1) {
-      // Check if targetCategoryIndex is valid
-      const updatedCategory = {
-        ...categories[targetCategoryIndex],
-        items: [...categories[targetCategoryIndex].items, action.itemId]
-      };
-
-      categories[targetCategoryIndex] = updatedCategory;
-    }
-
-    return {
-      ...state,
-      categories
-    };
+    return { ...state, categories };
   })
 );

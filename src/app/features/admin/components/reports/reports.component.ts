@@ -96,23 +96,6 @@ export class ReportsComponent implements OnInit {
           sameVisitors
         };
       })
-      // map((trackingData) => {
-      //   console.log(trackingData);
-      //   const thisMonthVisitors: TrackData[] = [];
-      //   const currentDate = new Date();
-      //   const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
-      //   trackingData.forEach((data) => {
-      //     const itemCreated = new Date(data.createdAt);
-      //     const timeDifference = currentDate.getTime() - itemCreated.getTime();
-      //     if (timeDifference < oneMonthInMilliseconds) {
-      //       thisMonthVisitors.push(data);
-      //     }
-      //   });
-      //   return {
-      //     thisMonthVisitors: thisMonthVisitors.length,
-      //     allVisitors: trackingData.length
-      //   };
-      // })
     );
   }
 }

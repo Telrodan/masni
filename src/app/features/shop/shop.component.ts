@@ -1,12 +1,27 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { filter, map, combineLatest, startWith } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import {
+  map,
+  combineLatest,
+  startWith,
+  switchMap,
+  Observable,
+  filter
+} from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 import { Product } from '@core/models/product.model';
-import { selectAvailableProducts } from '@core/store';
+import { ShopPageData } from '@core/models/shop-page-data.model';
+import {
+  selectAvailableProducts,
+  selectCategoryById,
+  selectCustomProducts,
+  selectFeaturedProducts
+} from '@core/store';
+import { Title, Meta } from '@angular/platform-browser';
 
 interface PageEvent {
   first: number;
@@ -23,12 +38,9 @@ interface PageEvent {
   encapsulation: ViewEncapsulation.None
 })
 export class ShopComponent implements OnInit {
-  products: Product[];
-  categories: {
-    category: string;
-  }[];
-  categoriesForm = new FormGroup({
-    category: new FormControl('Összes', Validators.required),
+  pageData$: Observable<ShopPageData>;
+
+  filterForm = new FormGroup({
     price: new FormControl('Növekvő', Validators.required)
   });
   prices = [{ price: 'Csökkenő' }, { price: 'Növekvő' }];
@@ -36,56 +48,113 @@ export class ShopComponent implements OnInit {
   first = 0;
   rows = 8;
 
-  constructor(private store$: Store) {}
+  constructor(
+    private store$: Store,
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private metaService: Meta
+  ) {}
 
   ngOnInit(): void {
-    combineLatest([
-      this.store$.select(selectAvailableProducts).pipe(
-        filter((products) => !!products),
-        map((products) =>
-          products.filter((product) => product.category !== 'egyedi termékek')
-        )
-      ),
-      this.categoriesForm
-        .get('category')
-        .valueChanges.pipe(
-          startWith(this.categoriesForm.get('category').value)
-        ),
-      this.categoriesForm
+    this.pageData$ = combineLatest([
+      this.route.params.pipe(map((params) => params['id'])),
+      this.filterForm
         .get('price')
-        .valueChanges.pipe(startWith(this.categoriesForm.get('price').value))
-    ])
-      .pipe(
-        map(([products, category, price]) => {
-          const categoriesArr = [
-            ...new Set(products.map((product) => product.category))
-          ];
-          this.first = 0;
+        .valueChanges.pipe(startWith(this.filterForm.get('price').value))
+    ]).pipe(
+      switchMap(([id, price]) => {
+        this.first = 0;
 
-          this.categories = categoriesArr.map((category) => ({
-            category
-          }));
-
-          this.categories.unshift({ category: 'Összes' });
-          this.products = products;
-
-          if (category === 'Összes') {
-            this.products = products;
-          } else {
-            this.products = products.filter(
-              (product) => product.category === category
+        switch (id) {
+          case 'all':
+            return this.store$.select(selectAvailableProducts).pipe(
+              filter((products) => !!products),
+              map((products) => ({
+                category: 'Összes termék',
+                image:
+                  '../../../assets/images/landing-page/carousel-placeholder.jpg',
+                products,
+                priceFilter: price
+              }))
             );
-          }
+          case 'dream-it':
+            return this.store$.select(selectCustomProducts).pipe(
+              filter((products) => !!products),
+              map((products) => ({
+                category: '"Álmodd meg"',
+                image:
+                  '../../../assets/images/landing-page/carousel-placeholder.jpg',
+                products,
+                priceFilter: price
+              }))
+            );
+          case 'featured':
+            return this.store$.select(selectFeaturedProducts).pipe(
+              filter((products) => !!products),
+              map((products) => ({
+                category: 'Kiemelt termékek',
+                image:
+                  '../../../assets/images/landing-page/carousel-placeholder.jpg',
+                products,
+                priceFilter: price
+              }))
+            );
 
-          if (price === 'Csökkenő') {
-            this.products = this.products.sort((a, b) => b.price - a.price);
-          } else if (price === 'Növekvő') {
-            this.products = this.products.sort((a, b) => a.price - b.price);
-          }
-        }),
-        untilDestroyed(this)
-      )
-      .subscribe();
+          default:
+            return this.store$.select(selectCategoryById(id)).pipe(
+              filter((category) => !!category),
+              map((category) => ({
+                category: category.name,
+                image: category.image,
+                description: category.description,
+                products: category.items as Product[],
+                priceFilter: price
+              }))
+            );
+        }
+      }),
+      map((pageData) => {
+        const data: ShopPageData = { ...pageData };
+        if (data.priceFilter === 'Csökkenő') {
+          data.products = [...data.products].sort((a, b) => b.price - a.price);
+        } else if (data.priceFilter === 'Növekvő') {
+          data.products = [...data.products].sort((a, b) => a.price - b.price);
+        }
+
+        this.titleService.setTitle(`Nyuszkó Kuckó | ${data.category}`);
+        this.metaService.addTags([
+          {
+            name: 'description',
+            content: data.description
+              ? data.description
+              : 'Böngessz termékeim között, és rendelj egyedi, kézzel készített nyuszkókat, mackókat, nyuszkó szundikendőket, mackó szundikendőket, babákat és kiegészítőket'
+          },
+          {
+            name: 'keywords',
+            content:
+              'kapcsolat, babák, nyuszi, nyuszik, nyuszkó, nyuszkók, maci, macik, mackók, szundikendő, szundikendők, kézzel készített, webshop'
+          },
+          {
+            property: 'og:title',
+            content: `Nyuszkó Kuckó | ${data.category}}`
+          },
+          {
+            property: 'og:description',
+            content: data.description
+              ? data.description
+              : 'Böngessz termékeim között, és rendelj egyedi, kézzel készített nyuszkókat, mackókat, nyuszkó szundikendőket, mackó szundikendőket, babákat és kiegészítőket'
+          },
+          {
+            property: 'og:image',
+            content: `${data.image}`
+          },
+          { name: 'robots', content: 'index, follow' },
+          { name: 'author', content: 'Nyuszkó Kuckó' }
+        ]);
+
+        return data;
+      })
+    );
   }
 
   onPageChange(event: PageEvent): void {

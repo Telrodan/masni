@@ -1,30 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import {
-  combineLatest,
-  debounceTime,
-  filter,
-  map,
-  Observable,
-  startWith,
-  switchMap,
-  tap
-} from 'rxjs';
+import { filter, map, Observable, startWith, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
-import { productByIdSelector } from '@core/store';
+import {
+  selectProductById,
+  selectQuestionOptionExtraPriceByOptionId
+} from '@core/store';
 import { Product } from '@core/models/product.model';
-import { ProductExtra } from '@core/models/product-extra.model';
 import { ToastrService } from '@core/services/toastr.service';
-
-interface ProductData {
-  product: Product;
-  price: number;
-}
+import { PreviousRouteService } from '@core/services/previous-route.service';
+import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 
 @Component({
   selector: 'mhd-product-details',
@@ -32,80 +22,124 @@ interface ProductData {
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  isAuthenticated$: Observable<boolean>;
-  productData$: Observable<ProductData>;
-  builderForm: FormGroup;
+  product$: Observable<Product>;
+  isAuthenticated$ = this.authService.getAuthStatus$();
+
+  productForm: FormGroup;
+  product: Product;
+  price = 0;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private store: Store,
+    private store$: Store,
     private shoppingCartService: ShoppingCartService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private previousRouteService: PreviousRouteService,
+    private router: Router
   ) {}
 
-  public ngOnInit(): void {
-    this.isAuthenticated$ = this.authService.getAuthStatus$();
-    this.initForm();
-    this.productData$ = this.route.params.pipe(
+  ngOnInit(): void {
+    this.product$ = this.route.params.pipe(
       map((params) => params['id']),
-      switchMap((productId) =>
-        combineLatest([
-          this.store
-            .select(productByIdSelector(productId))
-            .pipe(filter((product) => !!product)),
-          this.builderForm.valueChanges.pipe(
-            startWith(0),
-            debounceTime(300),
-            map((value) => (value.nameEmbroideryCheckbox ? 500 : 0))
-          )
-        ])
+      switchMap((id) =>
+        this.store$.select(selectProductById(id)).pipe(
+          filter((product) => !!product),
+          tap((product) => {
+            this.product = product;
+            const formControls = {};
+            product.questions.forEach((question) => {
+              formControls[question.id] = ['', Validators.required];
+            });
+
+            this.productForm = this.fb.group({
+              comment: [''],
+              nameEmbroidery: [''],
+              questions: this.fb.group({
+                ...formControls
+              })
+            });
+          })
+        )
       ),
-      map(([product, price]) => ({
-        product,
-        price:
-          product.discountedPrice > 0
-            ? product.discountedPrice + price
-            : product.price + price
-      }))
+      switchMap((product) =>
+        this.productForm.valueChanges.pipe(
+          startWith(this.productForm.value),
+          map((changes) => {
+            this.price = product.discountedPrice
+              ? product.discountedPrice
+              : product.price;
+
+            if (changes.nameEmbroidery) {
+              this.price += 500;
+            }
+
+            for (const key of Object.keys(changes.questions)) {
+              const value = changes.questions[key];
+              if (value) {
+                this.store$
+                  .select(selectQuestionOptionExtraPriceByOptionId(value))
+                  .pipe(
+                    tap((extraPrice) => {
+                      this.price += extraPrice;
+                    })
+                  )
+                  .subscribe();
+              }
+            }
+
+            return product;
+          })
+        )
+      )
     );
   }
 
-  onAddToCart(product: Product): void {
-    const modifiedProduct = {
-      ...product,
-      price:
-        product.discountedPrice > 0 ? product.discountedPrice : product.price
-    };
-    let nameEmbroidery = '';
-    if (this.builderForm.value.nameEmbroideryCheckbox) {
-      nameEmbroidery = this.builderForm.value.nameEmbroideryInput.trim();
+  onBack(): void {
+    if (this.previousRouteService.getPreviousUrl() === this.router.url) {
+      this.router.navigate(['/shop/all']);
+    } else {
+      this.router.navigate([this.previousRouteService.getPreviousUrl()]);
+    }
+  }
+
+  onAddToCart(): void {
+    const questions = [];
+
+    for (const key of Object.keys(this.productForm.value.questions)) {
+      const value = this.productForm.value.questions[key];
+      const question = this.product.questions.find(
+        (question) => question.id === key
+      );
+      const option = question.options.find((option) => option._id === value);
+
+      if (value) {
+        questions.push({
+          question: question.question,
+          optionId: value,
+          option: option.slug
+        });
+      }
     }
 
-    const productExtra: ProductExtra = {
-      ...this.builderForm.value,
-      nameEmbroidery
+    const cartItem: ShoppingCartItem = {
+      product: this.product,
+      price: this.price,
+      questions,
+      nameEmbroidery: this.productForm.value.nameEmbroidery.trim(),
+      comment: this.productForm.value.comment
     };
-
-    if (productExtra.nameEmbroidery) {
-      modifiedProduct.price += 500;
-    }
 
     this.shoppingCartService
-      .addItemToCart(modifiedProduct, productExtra)
+      .addItemToCart(cartItem)
       .pipe(
         tap(() => {
-          this.toastr.success(`${product.name} hozzáadva a kosárhoz`);
-          this.builderForm.reset();
+          this.toastr.success(`${cartItem.product.name} hozzáadva a kosárhoz`);
+          this.productForm.reset();
+          this.productForm.get('nameEmbroidery').patchValue('');
         })
       )
       .subscribe();
-  }
-
-  private initForm(): void {
-    this.builderForm = new FormGroup({
-      nameEmbroideryCheckbox: new FormControl(false),
-      nameEmbroideryInput: new FormControl('')
-    });
   }
 }

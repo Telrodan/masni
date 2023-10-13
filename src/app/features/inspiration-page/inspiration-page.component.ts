@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 
 import { Inspiration } from '@core/models/inspiration.model';
-import { selectAllInspiration } from '@core/store/selectors/inspiration.selectors';
+import { InspirationPageData } from '@core/models/inspiration-page-data.model';
+import { selectInspirationCategories } from '@core/store';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'mhd-inspiration-page',
@@ -12,20 +14,73 @@ import { selectAllInspiration } from '@core/store/selectors/inspiration.selector
   styleUrls: ['./inspiration-page.component.scss']
 })
 export class InspirationPageComponent implements OnInit {
-  inspirations$: Observable<Inspiration[]>;
-  activeIndexGalery = 0;
-  displayCustomGalery: boolean;
+  inspirationPageData$: Observable<InspirationPageData[]>;
 
-  constructor(private store$: Store) {}
+  activeIndexArr: number[] = [];
+  displayCustomGaleryArr: boolean[] = [];
 
-  ngOnInit(): void {
-    this.inspirations$ = this.store$
-      .select(selectAllInspiration)
-      .pipe(filter((inspirations) => !!inspirations));
+  imageLoadedStatus: boolean[] = [];
+
+  constructor(
+    private store$: Store,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Nyuszkó Kuckó | Inspirációk');
+    this.metaService.addTags([
+      {
+        name: 'description',
+        content:
+          'Inspirálódj a Nyuszkó Kuckó kézzel készített nyuszkóiból, mackóiból, szundikendőiből, babáiból és kiegészítőiből. Fedezze fel a legbájosabb és legkülönlegesebb kézzel készített nyuszkókat, mackókat, nyuszkó szundikendőket, mackó szundikendőket, babákat és kiegészítőket'
+      },
+      {
+        name: 'keywords',
+        content:
+          'inspiráció ,babák, nyuszi, nyuszik, nyuszkó, nyuszkók, maci, macik, mackók, szundikendő, szundikendők, kézzel készített, webshop'
+      },
+      {
+        property: 'og:title',
+        content: 'Nyuszkó Kuckó | Inspirációk'
+      },
+      {
+        property: 'og:description',
+        content:
+          'Inspirálódj a Nyuszkó Kuckó kézzel készített nyuszkóiból, mackóiból, szundikendőiből, babáiból és kiegészítőiből. Fedezze fel a legbájosabb és legkülönlegesebb kézzel készített nyuszkókat, mackókat, nyuszkó szundikendőket, mackó szundikendőket, babákat és kiegészítőket'
+      },
+      {
+        property: 'og:image',
+        content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+      },
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: 'Nyuszkó Kuckó' }
+    ]);
   }
 
-  imageClickGalery(index: number): void {
-    this.activeIndexGalery = index;
-    this.displayCustomGalery = true;
+  ngOnInit(): void {
+    this.inspirationPageData$ = this.store$
+      .select(selectInspirationCategories)
+      .pipe(
+        filter((categories) => categories.length > 0),
+        map((categories) => {
+          const pageData = [];
+          categories.forEach((category) => {
+            const data: InspirationPageData = {
+              title: category.name,
+              items: category.items as Inspiration[]
+            };
+            pageData.push(data);
+          });
+          return pageData;
+        })
+      );
+  }
+
+  imageClickGalery(index: number, galeryIndex: number): void {
+    this.activeIndexArr[galeryIndex] = index;
+    this.displayCustomGaleryArr[galeryIndex] = true;
+  }
+
+  imageLoaded(index: number) {
+    this.imageLoadedStatus[index] = true;
   }
 }

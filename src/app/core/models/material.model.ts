@@ -1,10 +1,20 @@
+import { Category } from './category.model';
+
+export interface RawMaterial {
+  name: string;
+  categoryId: string;
+  image: string;
+  extraPrice: number;
+  isAvailable: boolean;
+}
 export interface Material {
   id: string;
   name: string;
-  nameWithExtra: string;
-  categoryId: string;
-  categoryName: string;
+  category: Category;
   image: string;
-  extra: number;
+  extraPrice: number;
+  nameWithExtra: string;
   isAvailable: boolean;
+  updatedAt: Date;
+  createdAt: Date;
 }

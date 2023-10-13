@@ -7,10 +7,11 @@ import {
   addInspiration,
   addItemToCategory,
   deleteInspiration,
+  deleteItemFromCategory,
   moveItemBetweenCategories,
   updateInspiration
 } from '@core/store';
-import { Inspiration } from '@core/models/inspiration.model';
+import { Inspiration, RawInspiration } from '@core/models/inspiration.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { ApiService } from './api.service';
 
@@ -20,28 +21,38 @@ import { ApiService } from './api.service';
 export class InspirationService {
   constructor(private apiService: ApiService, private store: Store) {}
 
-  addInspiration$(inspiration: FormData): Observable<Inspiration> {
+  addInspiration$(inspiration: RawInspiration): Observable<Inspiration> {
+    const inspirationFormData = new FormData();
+    inspirationFormData.append('inspiration', JSON.stringify(inspiration));
+    inspirationFormData.append('image', inspiration.image);
+
     return this.apiService
-      .post<ApiResponse<Inspiration>>('inspiration/addOne', inspiration)
+      .post<ApiResponse<Inspiration>>('inspiration/addOne', inspirationFormData)
       .pipe(
         map((inspirationDTO) => inspirationDTO.data),
         tap((inspiration) => {
           this.store.dispatch(addInspiration({ inspiration }));
           this.store.dispatch(
             addItemToCategory({
-              itemId: inspiration.id,
-              categoryId: inspiration.categoryId
+              item: inspiration
             })
           );
         })
       );
   }
 
-  updateInspiration$(inspiration: FormData): Observable<Inspiration> {
+  updateInspiration$(
+    inspiration: RawInspiration,
+    inspirationId: string
+  ): Observable<Inspiration> {
+    const inspirationFormData = new FormData();
+    inspirationFormData.append('inspiration', JSON.stringify(inspiration));
+    inspirationFormData.append('image', inspiration.image);
+
     return this.apiService
       .patch<ApiResponse<Inspiration>>(
-        `inspiration/updateOne/${inspiration.get('id')}`,
-        inspiration
+        `inspiration/updateOne/${inspirationId}`,
+        inspirationFormData
       )
       .pipe(
         map((inspirationDTO) => inspirationDTO.data),
@@ -49,8 +60,7 @@ export class InspirationService {
           this.store.dispatch(updateInspiration({ inspiration }));
           this.store.dispatch(
             moveItemBetweenCategories({
-              itemId: inspiration.id,
-              categoryId: inspiration.categoryId
+              item: inspiration
             })
           );
         })
@@ -63,6 +73,7 @@ export class InspirationService {
       .pipe(
         tap(() => {
           this.store.dispatch(deleteInspiration({ id: inspiration.id }));
+          this.store.dispatch(deleteItemFromCategory({ item: inspiration }));
         })
       );
   }
