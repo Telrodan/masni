@@ -35,7 +35,6 @@ export class QuestionService {
       .pipe(
         map((questionDTO) => questionDTO.data),
         tap((question) => {
-          console.log(question);
           this.store$.dispatch(updateQuestion({ question }));
           this.store$.dispatch(updateProductsQuestion({ question }));
         })

@@ -23,8 +23,6 @@ export class ScrollableImageWithTitleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.backgroundImage =
       this.linearGradient + ', url("' + this.imageUrl + '")';
-
-    console.log('this.backgroundImage', this.backgroundImage);
   }
 
   ngOnChanges(): void {

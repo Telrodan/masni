@@ -123,8 +123,6 @@ export class EditQuestionComponent implements OnInit {
       (category) => category.id === categoryId
     );
 
-    console.log(this.categories);
-
     if (category) {
       this.editMaterialQuestionForm.value.materialCategories.push(category.id);
       this.selectedCategories.push(category);

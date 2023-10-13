@@ -123,7 +123,6 @@ export const productReducers = createReducer(
             const index = question.options.findIndex(
               (item) => item.materialId === action.material.id
             );
-            console.log('torolve');
             question.options.splice(index, 1);
           }
         });
@@ -145,17 +144,6 @@ export const productReducers = createReducer(
         );
         const optionMaterialCategoryIds = question.materialCategories.map(
           (category) => category.id
-        );
-
-        console.log('optionMaterialCategoryIds', optionMaterialCategoryIds);
-
-        console.log(
-          '!optionMaterialIds.includes(action.material.id)',
-          !optionMaterialIds.includes(action.material.id)
-        );
-        console.log(
-          'optionMaterialCategoryIds.includes(action.material.category.id)',
-          optionMaterialCategoryIds.includes(action.material.category.id)
         );
 
         if (

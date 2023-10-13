@@ -82,7 +82,6 @@ export class EditProductComponent implements OnInit {
         tap((questions) => {
           this.questions = questions;
           this.data.questions.forEach((question) => {
-            console.log(this.editProductForm.value.questions);
             if (
               this.editProductForm.value.questions.find(
                 (id: string) => id === question.id
