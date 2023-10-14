@@ -24,9 +24,8 @@ import { User } from '@core/models/user.model';
 import { FoxpostService } from '@core/services/foxpost.service';
 import { userSelector } from '@core/store';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { environment } from 'src/environments/environment';
-import { loadStripe } from '@stripe/stripe-js';
 import { ShippingOption } from '@core/models/shipping-option.model';
+import { StripeService } from '@core/services/stripe.service';
 
 @UntilDestroy()
 @Component({
@@ -65,7 +64,8 @@ export class ShoppingCartComponent implements OnInit {
     private toastr: ToastrService,
     private store$: Store,
     private dialog: MatDialog,
-    private foxpostService: FoxpostService
+    private foxpostService: FoxpostService,
+    private stripeService: StripeService
   ) {}
 
   public ngOnInit(): void {
@@ -171,10 +171,13 @@ export class ShoppingCartComponent implements OnInit {
     this.orderService
       .getCheckoutSession(shipping)
       .subscribe(async (res: any) => {
-        const stripe = await loadStripe(environment.stripeKey);
-        stripe?.redirectToCheckout({
-          sessionId: res.data.id
-        });
+        const stripe = await this.stripeService.getStripe();
+
+        if (stripe) {
+          stripe?.redirectToCheckout({
+            sessionId: res.data.id
+          });
+        }
       });
   }
 }
