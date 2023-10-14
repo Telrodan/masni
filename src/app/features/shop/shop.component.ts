@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 
 import { Store } from '@ngrx/store';
 import {
@@ -27,7 +28,6 @@ import {
   selectDollDresses,
   selectFeaturedProducts
 } from '@core/store';
-import { Title, Meta } from '@angular/platform-browser';
 
 interface PageEvent {
   first: number;

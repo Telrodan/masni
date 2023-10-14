@@ -41,6 +41,8 @@ export class MaterialService {
               item: material
             })
           );
+          this.store.dispatch(addMaterialQuestionOption({ material }));
+          this.store.dispatch(addMaterialQuestionOptionToProduct({ material }));
         })
       );
   }
