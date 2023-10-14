@@ -19,7 +19,7 @@ export class MaterialPageComponent implements OnInit {
   activeIndexArr: number[] = [];
   displayCustomGaleryArr: boolean[] = [];
 
-  imageLoadedStatus: boolean[] = [];
+  imageLoadedStatus: any = {};
 
   constructor(
     private store$: Store,
@@ -78,7 +78,11 @@ export class MaterialPageComponent implements OnInit {
     this.displayCustomGaleryArr[galeryIndex] = true;
   }
 
-  imageLoaded(index: number) {
-    this.imageLoadedStatus[index] = true;
+  imageLoaded(categoryTitle: string, index: number) {
+    if (!this.imageLoadedStatus[categoryTitle]) {
+      this.imageLoadedStatus[categoryTitle] = [];
+    }
+
+    this.imageLoadedStatus[categoryTitle][index] = true;
   }
 }

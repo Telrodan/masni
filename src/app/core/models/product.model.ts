@@ -3,6 +3,7 @@ import { Question } from './question.model';
 
 export interface RawProduct {
   categoryId: string;
+  inspirationCategoryId?: string;
   name: string;
   shortDescription: string;
   description: string;
@@ -21,6 +22,7 @@ export interface RawProduct {
 export interface Product {
   id: string;
   category: Category;
+  inspirationCategory?: Category;
   name: string;
   shortDescription: string;
   description: string;

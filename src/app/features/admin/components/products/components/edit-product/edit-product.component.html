@@ -167,6 +167,27 @@
       </div>
     </div>
 
+    <ng-container *ngIf="editProductForm.value.isCustom">
+      <div
+        class="form-group"
+        *ngIf="inspirationCategories$ | async as inspirationCategories">
+        <label
+          for="inspirationCategoryId"
+          class="block font-medium text-blue-500 mb-1 text-lg">
+          Inspiráció kategória
+        </label>
+
+        <p-dropdown
+          id="inspirationCategoryId"
+          formControlName="inspirationCategoryId"
+          [options]="inspirationCategories"
+          placeholder="Válassz egy kategóriát"
+          optionValue="id"
+          optionLabel="name">
+        </p-dropdown>
+      </div>
+    </ng-container>
+
     <div class="form-group">
       <label
         for="isDollDress"

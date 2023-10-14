@@ -10,9 +10,7 @@ import {
   tap,
   switchMap,
   combineLatest,
-  distinctUntilChanged,
-  startWith,
-  debounceTime
+  startWith
 } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -152,11 +150,20 @@ export class ShoppingCartComponent implements OnInit {
         address: `${userAddress.postcode} ${userAddress.city}, ${userAddress.street}`,
         billing
       };
-    } else {
+    } else if (
+      this.shippingForm.value.shippingMethod.method === 'foxpost-collection'
+    ) {
       shipping = {
         name: this.shippingForm.value.shippingMethod.name,
         price: this.shippingForm.value.shippingMethod.price,
         address: this.shippingForm.value.foxpost.address,
+        billing
+      };
+    } else {
+      shipping = {
+        name: this.shippingForm.value.shippingMethod.name,
+        price: this.shippingForm.value.shippingMethod.price,
+        address: 'Szentes',
         billing
       };
     }

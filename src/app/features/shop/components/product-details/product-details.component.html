@@ -7,10 +7,9 @@
     <div class="content-right">
       <div class="product-details-container">
         <p
-          *ngIf="product.category"
-          class="paragraph-primary sm:text-xl text-lg sm:mb-2 mb-1">
+          class="paragraph-primary sm:text-xl text-lg sm:mb-2 mb-1 text-purple-400">
           <i class="pi pi-folder"></i>
-          {{ product.category.name }}
+          {{ product.category.name }} kategória
         </p>
 
         <h1 class="heading-primary sm:mb-2 mb-1">{{ product.name }}</h1>
@@ -47,7 +46,9 @@
         <div formGroupName="questions">
           <ng-container *ngFor="let question of product.questions">
             <div class="form-group">
-              <label for="question.id" class="block font-medium mb-1 text-lg">
+              <label
+                for="question.id"
+                class="block font-medium mb-1 text-lg text-pink-400">
                 {{ question.question }}
               </label>
 
@@ -66,7 +67,9 @@
 
         <ng-container *ngIf="product.isNameEmbroideryAvailable">
           <div class="form-group">
-            <label for="nameEmbroidery" class="block font-medium mb-1 text-lg">
+            <label
+              for="nameEmbroidery"
+              class="block font-medium mb-1 text-lg question-label text-pink-400">
               Hímzett név +500 Ft
             </label>
 
@@ -81,7 +84,9 @@
 
         <ng-container *ngIf="product.isCustom">
           <div class="form-group">
-            <label for="comment" class="block font-medium mb-1 text-lg">
+            <label
+              for="comment"
+              class="block font-medium mb-1 text-lg question-label text-pink-400">
               Megjegyzés
             </label>
 
@@ -89,6 +94,7 @@
               rows="5"
               cols="30"
               pInputTextarea
+              placeholder="Ha szeretnél valamit megjegyezni a rendeléseddel kapcsolatban, itt megteheted"
               [autoResize]="true"
               formControlName="comment">
             </textarea>
@@ -96,7 +102,7 @@
         </ng-container>
       </form>
 
-      <div class="flex sm:text-2xl text-xl sm:mb-2 mb-1">
+      <div class="form-group flex sm:text-2xl text-xl">
         <p>
           Végösszeg: <span class="text-primary">{{ price }} Ft</span>
         </p>
@@ -127,14 +133,59 @@
       </div>
 
       <ol class="list-none p-0 m-0 text-center text-900">
-        <li
-          class="line-height-3 p-3 font-bold border-bottom-1 border-300 text-primary">
-          Termékleírás:
+        <li class="p-3 heading-secondary border-bottom-1 border-300">
+          Termékleírás
         </li>
         <li class="line-height-3 pt-3 border-300">
           {{ product.description }}
         </li>
       </ol>
+    </div>
+  </div>
+  <div *ngIf="inspirations" class="inspiration">
+    <h1 class="heading-primary">Inspirációk</h1>
+
+    <p-galleria
+      [value]="inspirations"
+      [(visible)]="displayCustomGalery"
+      [(activeIndex)]="activeIndex"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [baseZIndex]="50">
+      <ng-template pTemplate="item" let-inspiration>
+        <img
+          [src]="inspiration.image"
+          [alt]="inspiration.name"
+          class="border-round-sm"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let inspiration of inspirations; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="inspiration.image"
+          class="hidden"
+          (load)="imageLoaded(index)" />
+
+        <img
+          *ngIf="imageLoadedStatus[index]"
+          [src]="inspiration.image"
+          class="mb-1 border-round-sm"
+          style="cursor: pointer"
+          (click)="imageClickGalery(index)" />
+
+        <p-skeleton *ngIf="!imageLoadedStatus[index]" styleClass="skeleton">
+        </p-skeleton>
+
+        <p class="name text-center">{{ inspiration.name }}</p>
+      </div>
     </div>
   </div>
 </ng-container>

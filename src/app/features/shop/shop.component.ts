@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 
 import { Store } from '@ngrx/store';
 import {
@@ -27,7 +28,6 @@ import {
   selectDollDresses,
   selectFeaturedProducts
 } from '@core/store';
-import { Title, Meta } from '@angular/platform-browser';
 
 interface PageEvent {
   first: number;
@@ -91,7 +91,9 @@ export class ShopComponent implements OnInit, AfterViewChecked {
                 image:
                   '../../../assets/images/landing-page/carousel-placeholder.jpg',
                 products,
-                priceFilter: price
+                priceFilter: price,
+                description:
+                  'Ez a legizgalmasabb rész! Az "Álmodd meg" kategória különlegessége, hogy a gondosan összeválogatott kérdések és válaszok alapján teljes egészében saját magadnak tudod összeállítani a termékeket. Ha konkrét elképzeléssel érkeztél, vagy ha eszedbe jutott, hogy milyen jó lenne hasonló színvilágú termékekből álló szettet ajándékozni, akkor nagyon jó helyen jársz!'
               }))
             );
           case 'featured':

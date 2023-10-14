@@ -11,7 +11,11 @@ import { Category } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { selectAllQuestion, selectProductCategories } from '@core/store';
+import {
+  selectAllQuestion,
+  selectInspirationCategories,
+  selectProductCategories
+} from '@core/store';
 import {
   addImagesToFormAndSetPreview,
   removeImagesFromFormAndInputAndClearPreview
@@ -26,6 +30,7 @@ import {
 export class AddProductComponent implements OnInit {
   categories$: Observable<Category[]>;
   questions$: Observable<Question[]>;
+  inspirationCategories$: Observable<Category[]>;
 
   questions: Question[];
   selectedQuestions: Question[] = [];
@@ -33,6 +38,7 @@ export class AddProductComponent implements OnInit {
   addProductForm = this.fb.group({
     name: ['', Validators.required],
     categoryId: ['', Validators.required],
+    inspirationCategoryId: ['', Validators.required],
     shortDescription: ['', Validators.required],
     description: ['', Validators.required],
     isCustom: [false, Validators.required],
@@ -69,6 +75,10 @@ export class AddProductComponent implements OnInit {
       }),
       untilDestroyed(this)
     );
+
+    this.inspirationCategories$ = this.store$
+      .select(selectInspirationCategories)
+      .pipe(untilDestroyed(this));
   }
 
   addQuestion(): void {
@@ -115,6 +125,7 @@ export class AddProductComponent implements OnInit {
       const product: RawProduct = {
         name: this.addProductForm.value.name,
         categoryId: this.addProductForm.value.categoryId,
+        inspirationCategoryId: this.addProductForm.value.inspirationCategoryId,
         shortDescription: this.addProductForm.value.shortDescription,
         isCustom: this.addProductForm.value.isCustom,
         isDollDress: this.addProductForm.value.isDollDress,
