@@ -38,7 +38,7 @@ export class AddProductComponent implements OnInit {
   addProductForm = this.fb.group({
     name: ['', Validators.required],
     categoryId: ['', Validators.required],
-    inspirationCategoryId: ['', Validators.required],
+    inspirationCategoryId: [''],
     shortDescription: ['', Validators.required],
     description: ['', Validators.required],
     isCustom: [false, Validators.required],
@@ -155,7 +155,7 @@ export class AddProductComponent implements OnInit {
         this.toastr.info('Kérlek adj meg egy termék nevet');
       }
     } else {
-      this.toastr.error('Kérlek töltsd ki az összes mezőt');
+      this.toastr.info('Kérlek töltsd ki az összes mezőt');
     }
   }
 }
