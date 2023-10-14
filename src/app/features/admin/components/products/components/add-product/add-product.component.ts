@@ -125,7 +125,9 @@ export class AddProductComponent implements OnInit {
       const product: RawProduct = {
         name: this.addProductForm.value.name,
         categoryId: this.addProductForm.value.categoryId,
-        inspirationCategoryId: this.addProductForm.value.inspirationCategoryId,
+        inspirationCategoryId: this.addProductForm.value.inspirationCategoryId
+          ? this.addProductForm.value.inspirationCategoryId
+          : undefined,
         shortDescription: this.addProductForm.value.shortDescription,
         isCustom: this.addProductForm.value.isCustom,
         isDollDress: this.addProductForm.value.isDollDress,
