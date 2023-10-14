@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+
 import { Observable, map } from 'rxjs';
-import { TrackData } from '@core/models/track.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { TrackingData } from '@core/models/tracking-data.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,9 @@ export class TrackService {
     this.apiService.post('track/trackVisitor', { data }).subscribe();
   }
 
-  getTrackingData$(): Observable<TrackData[]> {
+  getTrackingData$(): Observable<TrackingData> {
     return this.apiService
-      .get<ApiResponse<TrackData[]>>('track/getAll')
+      .get<ApiResponse<TrackingData>>('track/getAll')
       .pipe(map((trackingDTO) => trackingDTO.data));
   }
 }

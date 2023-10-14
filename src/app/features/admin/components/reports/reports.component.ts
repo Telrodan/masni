@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Log } from '@core/models/log.model';
+import { TrackingData } from '@core/models/tracking-data.model';
 import { LogService } from '@core/services/log.service';
 import { TrackService } from '@core/services/track.service';
 import { selectAllOrders, selectUsers } from '@core/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { Observable, filter, map, tap } from 'rxjs';
-
-interface TrackingData {
-  visitors: number;
-  pageView: number;
-  sameVisitors: number;
-}
 
 @UntilDestroy()
 @Component({
@@ -64,38 +59,6 @@ export class ReportsComponent implements OnInit {
         )
       );
 
-    this.trackingData$ = this.trackService.getTrackingData$().pipe(
-      map((trackingData) => {
-        let visitors = 0;
-        let pageView = 0;
-        let sameVisitors = 0;
-
-        trackingData.forEach((tracking) => {
-          if (tracking.visitor) {
-            visitors++;
-            pageView++;
-          } else {
-            pageView++;
-          }
-        });
-        for (let i = 0; i < trackingData.length; i++) {
-          if (trackingData[i].visitor) {
-            const currentIp = trackingData[i].ip;
-            for (let j = i + 1; j < trackingData.length; j++) {
-              if (currentIp === trackingData[j].ip) {
-                sameVisitors++;
-                break;
-              }
-            }
-          }
-        }
-
-        return {
-          visitors,
-          pageView,
-          sameVisitors
-        };
-      })
-    );
+    this.trackingData$ = this.trackService.getTrackingData$().pipe();
   }
 }

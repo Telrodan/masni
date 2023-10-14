@@ -129,46 +129,51 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart(): void {
-    const questions = [];
+    if (this.productForm.valid) {
+      const questions = [];
+      for (const key of Object.keys(this.productForm.value.questions)) {
+        const value = this.productForm.value.questions[key];
+        const question = this.product.questions.find(
+          (question) => question.id === key
+        );
+        const option = question.options.find((option) => option._id === value);
 
-    for (const key of Object.keys(this.productForm.value.questions)) {
-      const value = this.productForm.value.questions[key];
-      const question = this.product.questions.find(
-        (question) => question.id === key
-      );
-      const option = question.options.find((option) => option._id === value);
-
-      if (value) {
-        questions.push({
-          question: question.question,
-          optionId: value,
-          option: option.slug
-        });
+        if (value) {
+          questions.push({
+            question: question.question,
+            optionId: value,
+            option: option.slug
+          });
+        }
       }
+
+      const cartItem: ShoppingCartItem = {
+        product: this.product,
+        price: this.price,
+        questions,
+        nameEmbroidery: this.productForm.value.nameEmbroidery.trim(),
+        comment: this.productForm.value.comment
+      };
+
+      this.shoppingCartService
+        .addItemToCart(cartItem)
+        .pipe(
+          tap(() => {
+            this.toastr.success(
+              `${cartItem.product.name} hozzáadva a kosárhoz`
+            );
+            this.productForm.reset();
+            this.productForm.get('nameEmbroidery').patchValue('');
+
+            if (cartItem.product.isDressable) {
+              this.dialog.open(DollDressDialogComponent);
+            }
+          })
+        )
+        .subscribe();
+    } else {
+      this.toastr.info('Kérlek töltsd ki az összes mezőt!');
     }
-
-    const cartItem: ShoppingCartItem = {
-      product: this.product,
-      price: this.price,
-      questions,
-      nameEmbroidery: this.productForm.value.nameEmbroidery.trim(),
-      comment: this.productForm.value.comment
-    };
-
-    this.shoppingCartService
-      .addItemToCart(cartItem)
-      .pipe(
-        tap(() => {
-          this.toastr.success(`${cartItem.product.name} hozzáadva a kosárhoz`);
-          this.productForm.reset();
-          this.productForm.get('nameEmbroidery').patchValue('');
-
-          if (cartItem.product.isDressable) {
-            this.dialog.open(DollDressDialogComponent);
-          }
-        })
-      )
-      .subscribe();
   }
 
   imageClickGalery(index: number): void {
