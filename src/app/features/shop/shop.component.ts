@@ -91,7 +91,9 @@ export class ShopComponent implements OnInit, AfterViewChecked {
                 image:
                   '../../../assets/images/landing-page/carousel-placeholder.jpg',
                 products,
-                priceFilter: price
+                priceFilter: price,
+                description:
+                  'Ez a legizgalmasabb rész! Az "Álmodd meg" kategória különlegessége, hogy a gondosan összeválogatott kérdések és válaszok alapján teljes egészében saját magadnak tudod összeállítani a termékeket. Ha konkrét elképzeléssel érkeztél, vagy ha eszedbe jutott, hogy milyen jó lenne hasonló színvilágú termékekből álló szettet ajándékozni, akkor nagyon jó helyen jársz!'
               }))
             );
           case 'featured':

@@ -23,6 +23,7 @@
           <img
             [src]="material.image"
             [alt]="material.name"
+            class="border-round-sm"
             style="width: 100%; display: block" />
         </ng-template>
       </p-galleria>
@@ -35,19 +36,34 @@
           <img
             [src]="material.image"
             class="hidden"
-            (load)="imageLoaded(index)" />
+            (load)="imageLoaded(category.title, index)" />
 
           <img
-            *ngIf="imageLoadedStatus[index]"
+            *ngIf="
+              imageLoadedStatus[category.title] &&
+              imageLoadedStatus[category.title][index]
+            "
             [src]="material.image"
-            class="mb-1"
+            class="mb-1 border-round-sm"
             style="cursor: pointer"
             (click)="imageClickGalery(index, i)" />
 
-          <p-skeleton *ngIf="!imageLoadedStatus[index]" styleClass="skeleton">
+          <p-skeleton
+            *ngIf="
+              imageLoadedStatus[category.title] &&
+              !imageLoadedStatus[category.title][index]
+            "
+            styleClass="skeleton">
           </p-skeleton>
 
-          <p class="name text-center">{{ material.name }}</p>
+          <p
+            class="name text-center"
+            *ngIf="
+              imageLoadedStatus[category.title] &&
+              imageLoadedStatus[category.title][index]
+            ">
+            {{ material.name }}
+          </p>
         </div>
       </div>
     </div>

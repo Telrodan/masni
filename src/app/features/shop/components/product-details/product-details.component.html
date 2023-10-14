@@ -7,7 +7,7 @@
     <div class="content-right">
       <div class="product-details-container">
         <p
-          class="paragraph-primary sm:text-xl text-lg sm:mb-2 mb-1 text-orange-500">
+          class="paragraph-primary sm:text-xl text-lg sm:mb-2 mb-1 text-purple-400">
           <i class="pi pi-folder"></i>
           {{ product.category.name }} kategória
         </p>
@@ -159,6 +159,7 @@
         <img
           [src]="inspiration.image"
           [alt]="inspiration.name"
+          class="border-round-sm"
           style="width: 100%; display: block" />
       </ng-template>
     </p-galleria>
@@ -176,7 +177,7 @@
         <img
           *ngIf="imageLoadedStatus[index]"
           [src]="inspiration.image"
-          class="mb-1"
+          class="mb-1 border-round-sm"
           style="cursor: pointer"
           (click)="imageClickGalery(index)" />
 
