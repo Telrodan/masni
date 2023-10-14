@@ -8,6 +8,7 @@ import { filter, map, Observable, startWith, switchMap, tap } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import {
+  selectCategoryById,
   selectProductById,
   selectQuestionOptionExtraPriceByOptionId
 } from '@core/store';
@@ -17,6 +18,7 @@ import { PreviousRouteService } from '@core/services/previous-route.service';
 import { ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DollDressDialogComponent } from '../doll-dress-dialog/doll-dress-dialog.component';
+import { Inspiration } from '@core/models/inspiration.model';
 
 @Component({
   selector: 'mhd-product-details',
@@ -27,9 +29,16 @@ export class ProductDetailsComponent implements OnInit {
   product$: Observable<Product>;
   isAuthenticated$ = this.authService.getAuthStatus$();
 
+  inspirations: Inspiration[];
+
   productForm: FormGroup;
   product: Product;
   price = 0;
+
+  activeIndex = 0;
+  displayCustomGalery = false;
+
+  imageLoadedStatus: boolean[] = [];
 
   constructor(
     private authService: AuthService,
@@ -95,6 +104,18 @@ export class ProductDetailsComponent implements OnInit {
             return product;
           })
         )
+      ),
+      switchMap((product) =>
+        this.store$
+          .select(selectCategoryById(product.inspirationCategory?.id))
+          .pipe(
+            map((category) => {
+              if (category) {
+                this.inspirations = category.items as Inspiration[];
+              }
+              return product;
+            })
+          )
       )
     );
   }
@@ -148,5 +169,14 @@ export class ProductDetailsComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  imageClickGalery(index: number): void {
+    this.activeIndex = index;
+    this.displayCustomGalery = true;
+  }
+
+  imageLoaded(index: number) {
+    this.imageLoadedStatus[index] = true;
   }
 }

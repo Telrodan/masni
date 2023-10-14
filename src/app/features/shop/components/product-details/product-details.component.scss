@@ -27,3 +27,16 @@
     width: 100%;
   }
 }
+
+.inspiration {
+  margin: 60px 40px;
+
+  @include respond(sm) {
+    margin: 40px 20px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+}

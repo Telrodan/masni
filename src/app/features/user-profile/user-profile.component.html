@@ -11,9 +11,11 @@
           class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
           (click)="activeMenu = 'profile'">
           <i class="pi pi-user md:mr-2"></i>
+
           <span class="font-medium hidden md:block">Profil</span>
         </a>
       </li>
+
       <li>
         <a
           pRipple
@@ -21,9 +23,11 @@
           class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
           (click)="activeMenu = 'address'">
           <i class="pi pi-truck md:mr-2"></i>
+
           <span class="font-medium hidden md:block">Címek</span>
         </a>
       </li>
+
       <li>
         <a
           pRipple
@@ -31,10 +35,12 @@
           class="flex align-items-center cursor-pointer p-3 border-round text-800 hover:surface-hover transition-duration-150 transition-colors"
           (click)="activeMenu = 'settings'">
           <i class="pi pi-cog md:mr-2"></i>
+
           <span class="font-medium hidden md:block">Beállítások</span>
         </a>
       </li>
     </ul>
+
     <form class="w-full" [formGroup]="form" (submit)="onSubmit()">
       <div
         class="surface-card p-5 shadow-2 border-round flex-auto"
@@ -44,12 +50,12 @@
         <p-divider></p-divider>
         <div class="flex gap-5 flex-column-reverse md:flex-row">
           <div class="flex-auto p-fluid">
-            <div class="mb-4">
+            <div class="form-group">
               <label for="name" class="block text-900 mb-2">Név</label>
               <input id="name" type="text" formControlName="name" pInputText />
             </div>
 
-            <div class="mb-4">
+            <div class="form-group">
               <label for="phone" class="block text-900 mb-2">Telefon</label>
               <input
                 id="phone"
@@ -57,7 +63,8 @@
                 formControlName="phone"
                 pInputText />
             </div>
-            <div class="mb-4">
+
+            <div class="form-group">
               <label for="subscribed" class="block text-900 mb-2">
                 Hírlevél feliratkozás
               </label>
@@ -78,14 +85,10 @@
                 </p-radioButton>
               </div>
             </div>
-            <div>
-              <button
-                pButton
-                pRipple
-                label="Adatok módosítása"
-                type="submit"
-                class="w-auto"></button>
-            </div>
+
+            <button type="submit" class="primary-button w-full">
+              Adatok módosítása
+            </button>
           </div>
         </div>
       </div>
@@ -99,17 +102,19 @@
             <p class="heading-primary mt-3 mt-3">Szállítási cím</p>
             <p-divider></p-divider>
             <div formGroupName="shippingAddress">
-              <div class="mb-4">
-                <label for="street" class="block text-900 mb-2"
-                  >Utca/házszám/épület</label
-                >
+              <div class="form-group">
+                <label for="street" class="block text-900 mb-2">
+                  Utca/házszám/épület
+                </label>
+
                 <input
                   id="street"
                   type="text"
                   formControlName="street"
                   pInputText />
               </div>
-              <div class="mb-4">
+
+              <div class="form-group">
                 <label for="city" class="block text-900 mb-2">Város</label>
                 <input
                   id="city"
@@ -117,18 +122,22 @@
                   formControlName="city"
                   pInputText />
               </div>
-              <div class="mb-4">
-                <label for="postcode" class="block text-900 mb-2"
-                  >Irányítószám</label
-                >
+
+              <div class="form-group">
+                <label for="postcode" class="block text-900 mb-2">
+                  Irányítószám
+                </label>
+
                 <input
                   id="postcode"
                   type="text"
                   formControlName="postcode"
                   pInputText />
               </div>
-              <div class="mb-4">
+
+              <div class="form-group">
                 <label for="county" class="block text-900 mb-2">Megye</label>
+
                 <input
                   id="county"
                   type="text"
@@ -139,17 +148,19 @@
             <p class="heading-primary mt-3 mt-3">Számlázási cím</p>
             <p-divider></p-divider>
             <div formGroupName="billingAddress">
-              <div class="mb-4">
-                <label for="street" class="block text-900 mb-2"
-                  >Utca/házszám/épület</label
-                >
+              <div class="form-group">
+                <label for="street" class="block text-900 mb-2">
+                  Utca/házszám/épület
+                </label>
+
                 <input
                   id="street"
                   type="text"
                   formControlName="street"
                   pInputText />
               </div>
-              <div class="mb-4">
+
+              <div class="form-group">
                 <label for="city" class="block text-900 mb-2">Város</label>
                 <input
                   id="city"
@@ -157,7 +168,8 @@
                   formControlName="city"
                   pInputText />
               </div>
-              <div class="mb-4">
+
+              <div class="form-group">
                 <label for="postcode" class="block text-900 mb-2"
                   >Irányítószám</label
                 >
@@ -167,7 +179,8 @@
                   formControlName="postcode"
                   pInputText />
               </div>
-              <div class="mb-4">
+
+              <div class="form-group">
                 <label for="county" class="block text-900 mb-2">Megye</label>
                 <input
                   id="county"
@@ -176,64 +189,65 @@
                   pInputText />
               </div>
             </div>
-            <div>
-              <button
-                pButton
-                pRipple
-                label="Adatok módosítása"
-                class="w-auto"></button>
-            </div>
+
+            <button type="submit" class="primary-button w-full">
+              Adatok módosítása
+            </button>
           </div>
         </div>
       </div>
 
       <div
-        class="surface-card p-5 shadow-2 border-round flex-auto"
         @fadeIn
+        class="surface-card p-5 shadow-2 border-round flex-auto"
         *ngIf="activeMenu === 'settings'">
         <div class="heading-primary mt-3 mt-3">Beállítások</div>
         <p-divider></p-divider>
         <div class="flex gap-5 flex-column-reverse md:flex-row">
           <div class="flex-auto p-fluid">
-            <div class="mb-4">
+            <div class="form-group">
               <label class="block text-900 mb-2">Új jelszó beállítás</label>
+
               <input
                 class="mb-2"
                 type="password"
                 placeholder="Új jelszó"
                 pInputText
                 #newPassword />
+
               <input
                 class="mb-2"
                 type="password"
                 placeholder="Új jelszó megerősítése"
                 pInputText
                 #newPasswordConfirm />
+
               <input
                 class="mb-3"
                 type="password"
                 placeholder="Régi jelszó "
                 pInputText
                 #oldPassword />
+
               <button
-                pButton
-                pRipple
-                type="button"
-                label="Jelszó módosítása"
-                class="w-auto p-button-raised"
+                type="submit"
+                class="primary-button w-full"
                 (click)="
                   onChangePassword(
                     newPassword.value,
                     newPasswordConfirm.value,
                     oldPassword.value
                   )
-                "></button>
+                ">
+                Jelszó módosítása
+              </button>
             </div>
-            <div class="mb-4">
+
+            <div class="form-group">
               <p
                 class="text-red-300 underline cursor-pointer"
                 (click)="onDeleteCurrentUser(user)">
-                Fiók törléséhez kattints ide.
+                Fiók törléséhez kattints ide!
               </p>
             </div>
           </div>

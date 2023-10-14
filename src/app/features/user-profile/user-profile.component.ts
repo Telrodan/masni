@@ -85,7 +85,7 @@ export class UserProfileComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          message: `Biztos törölni szeretnéd ${user.name} felhasználót, ${user.email} címmel?`
+          message: `Biztos törölni szeretnéd a fiókod, ${user.email} címmel?`
         }
       })
       .afterClosed()

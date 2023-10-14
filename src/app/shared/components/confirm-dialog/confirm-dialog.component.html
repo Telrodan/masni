@@ -7,15 +7,13 @@
     <p>{{ data.message }}</p>
 
     <div class="dialog-actions flex justify-content-end mt-5">
-      <p-button
-        label="Mégsem"
-        styleClass="p-button p-button-danger mr-4"
-        mat-dialog-close></p-button>
+      <button type="submit" class="secondary-button mr-4" mat-dialog-close>
+        Mégsem
+      </button>
 
-      <p-button
-        label="Igen"
-        styleClass="p-button"
-        (click)="confirm()"></p-button>
+      <button type="submit" class="primary-button" (click)="confirm()">
+        Igen
+      </button>
     </div>
   </mat-dialog-content>
 </div>

@@ -9,6 +9,10 @@
   font-size: 18px;
   text-align: center;
   cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .primary-button {

@@ -137,4 +137,49 @@
       </ol>
     </div>
   </div>
+  <div *ngIf="inspirations" class="inspiration">
+    <h1 class="heading-primary">Inspirációk</h1>
+
+    <p-galleria
+      [value]="inspirations"
+      [(visible)]="displayCustomGalery"
+      [(activeIndex)]="activeIndex"
+      [containerStyle]="{ 'max-width': '850px' }"
+      [circular]="true"
+      [fullScreen]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [baseZIndex]="50">
+      <ng-template pTemplate="item" let-inspiration>
+        <img
+          [src]="inspiration.image"
+          [alt]="inspiration.name"
+          style="width: 100%; display: block" />
+      </ng-template>
+    </p-galleria>
+
+    <div class="grid" style="max-width: 100%">
+      <div
+        *ngFor="let inspiration of inspirations; let index = index"
+        class="item-content col-3 lg:col-2"
+        key="index">
+        <img
+          [src]="inspiration.image"
+          class="hidden"
+          (load)="imageLoaded(index)" />
+
+        <img
+          *ngIf="imageLoadedStatus[index]"
+          [src]="inspiration.image"
+          class="mb-1"
+          style="cursor: pointer"
+          (click)="imageClickGalery(index)" />
+
+        <p-skeleton *ngIf="!imageLoadedStatus[index]" styleClass="skeleton">
+        </p-skeleton>
+
+        <p class="name text-center">{{ inspiration.name }}</p>
+      </div>
+    </div>
+  </div>
 </ng-container>

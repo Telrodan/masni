@@ -15,6 +15,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DollDressDialogComponent } from './components/doll-dress-dialog/doll-dress-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
+import { GalleriaModule } from 'primeng/galleria';
+import { SkeletonModule } from 'primeng/skeleton';
 
 const MATERIAL = [MatDialogModule];
 
@@ -25,7 +27,9 @@ const PRIME_NG = [
   PaginatorModule,
   InputTextModule,
   InputTextareaModule,
-  ButtonModule
+  ButtonModule,
+  GalleriaModule,
+  SkeletonModule
 ];
 
 @NgModule({

@@ -16,7 +16,11 @@ import { Category } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { selectAllQuestion, selectProductCategories } from '@core/store';
+import {
+  selectAllQuestion,
+  selectInspirationCategories,
+  selectProductCategories
+} from '@core/store';
 import {
   addImagesToFormAndSetPreview,
   removeImagesFromFormAndInputAndClearPreview
@@ -31,6 +35,7 @@ import {
 })
 export class EditProductComponent implements OnInit {
   categories$: Observable<Category[]>;
+  inspirationCategories$: Observable<Category[]>;
 
   questions: Question[];
   selectedQuestions: Question[] = [];
@@ -49,6 +54,7 @@ export class EditProductComponent implements OnInit {
     this.editProductForm = this.fb.group({
       name: [this.data.name, Validators.required],
       categoryId: [this.data.category.id, Validators.required],
+      inspirationCategoryId: [this.data?.inspirationCategory?.id],
       shortDescription: [this.data.shortDescription, Validators.required],
       description: [this.data.description, Validators.required],
       isCustom: [this.data.isCustom, Validators.required],
@@ -94,6 +100,10 @@ export class EditProductComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe();
+
+    this.inspirationCategories$ = this.store$
+      .select(selectInspirationCategories)
+      .pipe(untilDestroyed(this));
   }
 
   addQuestion(): void {
@@ -139,6 +149,8 @@ export class EditProductComponent implements OnInit {
     if (this.editProductForm.valid) {
       const product: RawProduct = {
         categoryId: this.editProductForm.value.categoryId,
+        inspirationCategoryId:
+          this.editProductForm.value?.inspirationCategoryId,
         name: this.editProductForm.value.name,
         shortDescription: this.editProductForm.value.shortDescription,
         description: this.editProductForm.value.description,
