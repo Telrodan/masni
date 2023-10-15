@@ -101,7 +101,7 @@ const routes: Routes = [
     loadChildren: legalModule
   },
   {
-    path: 'order-success/:id',
+    path: 'order-success',
     loadChildren: orderSuccessPageModule
   }
 ];
