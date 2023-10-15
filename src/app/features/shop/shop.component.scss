@@ -15,10 +15,10 @@
 }
 
 .filter-form {
-  padding: 20px 40px;
+  padding: 20px;
 
   @include respond(sm) {
-    padding: 20px;
+    padding: 16px 8px;
   }
 }
 
@@ -35,12 +35,12 @@
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 28px;
   grid-row-gap: 28px;
-  padding: 12px 40px 40px;
+  padding: 0 20px;
 
   @include respond(sm) {
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 14px;
     grid-row-gap: 0;
-    padding: 12px 20px 40px;
+    padding: 0 8px;
   }
 }
