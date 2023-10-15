@@ -42,14 +42,14 @@ export class ShoppingCartComponent implements OnInit {
 
   shippingMethods: ShippingOption[] = [
     {
-      name: 'Házhozszállítás +2200 Ft',
-      method: 'delivery',
-      price: 2200
-    },
-    {
       name: 'Foxpost automata +1200 Ft',
       method: 'foxpost-collection',
       price: 1200
+    },
+    {
+      name: 'Házhozszállítás +2490 Ft',
+      method: 'delivery',
+      price: 2490
     },
     {
       name: 'Szemelyés átvétel (Szentes) +0 Ft ',

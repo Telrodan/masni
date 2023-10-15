@@ -2,10 +2,13 @@
 @import 'colors';
 
 .footer {
+  text-align: center;
   background-color: $color-primary;
+  padding-bottom: 16px;
 
   @include respond(sm) {
     padding: 2rem 3rem;
+    text-align: left;
   }
 
   &__container {
@@ -99,5 +102,9 @@
         margin: 0 0 2rem;
       }
     }
+  }
+
+  .developer {
+    color: $color-black;
   }
 }

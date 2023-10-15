@@ -125,8 +125,8 @@ img {
   margin-bottom: 16px;
 
   @include respond(sm) {
-    margin-bottom: 0;
-    font-size: 13px;
+    margin-bottom: 8px;
+    font-size: 14px;
   }
 
   .original-price {

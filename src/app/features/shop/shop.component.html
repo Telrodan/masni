@@ -5,7 +5,9 @@
     [elementToScrollTo]="form">
   </mhd-scrollable-image-with-title>
 
-  <p class="primary-paragraph category-description">
+  <p
+    class="primary-paragraph category-description"
+    *ngIf="pageData?.description">
     {{ pageData?.description }}
   </p>
 
