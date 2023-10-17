@@ -15,7 +15,8 @@ import {
   startWith,
   switchMap,
   Observable,
-  filter
+  filter,
+  tap
 } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -23,10 +24,10 @@ import { Product } from '@core/models/product.model';
 import { ShopPageData } from '@core/models/shop-page-data.model';
 import {
   selectAvailableProducts,
-  selectCategoryById,
   selectCustomProducts,
   selectDollDresses,
-  selectFeaturedProducts
+  selectFeaturedProducts,
+  selectProductCategoryWithAvailableProductsByCategoryId
 } from '@core/store';
 
 interface PageEvent {
@@ -121,16 +122,20 @@ export class ShopComponent implements OnInit, AfterViewChecked {
             );
 
           default:
-            return this.store$.select(selectCategoryById(id)).pipe(
-              filter((category) => !!category),
-              map((category) => ({
-                category: category.name,
-                image: category.image,
-                description: category.description,
-                products: category.items as Product[],
-                priceFilter: price
-              }))
-            );
+            return this.store$
+              .select(
+                selectProductCategoryWithAvailableProductsByCategoryId(id)
+              )
+              .pipe(
+                filter((category) => !!category),
+                map((category) => ({
+                  category: category.name,
+                  image: category.image,
+                  description: category.description,
+                  products: category.items as Product[],
+                  priceFilter: price
+                }))
+              );
         }
       }),
       map((pageData) => {

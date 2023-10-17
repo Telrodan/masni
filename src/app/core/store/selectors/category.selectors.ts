@@ -1,4 +1,5 @@
 import { CategoryType } from '@core/enums/category-type.enum';
+import { Product } from '@core/models/product.model';
 import { AppState } from '@core/store/app-state';
 
 import { createSelector } from '@ngrx/store';
@@ -38,3 +39,14 @@ export const selectCategoryById = (id: string) =>
   createSelector(selectAllCategories, (categories) =>
     categories.find((category) => category.id === id)
   );
+
+export const selectProductCategoryWithAvailableProductsByCategoryId = (
+  id: string
+) =>
+  createSelector(selectProductCategories, (categories) => {
+    const category = categories.find((category) => category.id === id);
+    return {
+      ...category,
+      items: (category.items as Product[]).filter((item) => item.stock > 0)
+    };
+  });

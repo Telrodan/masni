@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { DetailedErrorDialogComponent } from '../detailed-error-dialog/detailed-error-dialog.component';
 
 @Component({
   selector: 'mhd-logs',
@@ -21,7 +23,7 @@ export class LogsComponent implements OnInit {
     }[];
   }>;
 
-  constructor(private logService: LogService) {}
+  constructor(private logService: LogService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.logsData$ = this.logService.getLogs().pipe(
@@ -35,5 +37,12 @@ export class LogsComponent implements OnInit {
         )
       }))
     );
+  }
+
+  onDetailedError(log: Log): void {
+    this.dialog.open(DetailedErrorDialogComponent, {
+      data: log,
+      minWidth: '40vw'
+    });
   }
 }
