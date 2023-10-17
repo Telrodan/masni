@@ -14,22 +14,24 @@ export const selectAvailableProducts = createSelector(
 );
 
 export const selectCustomProducts = createSelector(
-  selectProductState,
-  (state) => state.products.filter((product) => product.isCustom)
+  selectAvailableProducts,
+  (products) => products.filter((product) => product.isCustom)
 );
 
 export const selectFeaturedProducts = createSelector(
-  selectProductState,
-  (state) =>
-    state.products.filter((product) => product.isFeatured && product.stock > 0)
+  selectAvailableProducts,
+  (products) => products.filter((product) => product.isFeatured)
+);
+
+export const selectDollDresses = createSelector(
+  selectAvailableProducts,
+  (products) => {
+    console.log(products);
+    return products.filter((product) => product.isDollDress);
+  }
 );
 
 export const selectProductById = (id: string) =>
-  createSelector(selectAllProducts, (products) => {
-    const index = products.findIndex((product) => product.id === id);
-    return products[index];
-  });
-
-export const selectDollDresses = createSelector(selectProductState, (state) =>
-  state.products.filter((product) => product.isDollDress)
-);
+  createSelector(selectAvailableProducts, (products) =>
+    products.find((product) => product.id === id)
+  );

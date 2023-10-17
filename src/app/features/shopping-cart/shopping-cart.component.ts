@@ -26,6 +26,7 @@ import { userSelector } from '@core/store';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { ShippingOption } from '@core/models/shipping-option.model';
 import { StripeService } from '@core/services/stripe.service';
+import { ShippingDetails } from '@core/models/shipping.model';
 
 @UntilDestroy()
 @Component({
@@ -139,7 +140,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   onSubmitOrder(): void {
-    let shipping = {};
+    let shipping: ShippingDetails = {};
     const billingAddress = this.user.billingAddress;
     const billing = `${billingAddress.postcode}, ${billingAddress.city} ${billingAddress.street} ${billingAddress.county}`;
     if (this.shippingForm.value.shippingMethod.method === 'delivery') {
@@ -168,16 +169,20 @@ export class ShoppingCartComponent implements OnInit {
       };
     }
 
-    this.orderService
-      .getCheckoutSession(shipping)
-      .subscribe(async (res: any) => {
-        const stripe = await this.stripeService.getStripe();
+    if (shipping.address) {
+      this.orderService
+        .getCheckoutSession(shipping)
+        .subscribe(async (res: any) => {
+          const stripe = await this.stripeService.getStripe();
 
-        if (stripe) {
-          stripe?.redirectToCheckout({
-            sessionId: res.data.id
-          });
-        }
-      });
+          if (stripe) {
+            stripe?.redirectToCheckout({
+              sessionId: res.data.id
+            });
+          }
+        });
+    } else {
+      this.toastr.info('Kérlek válassz szállítási módot');
+    }
   }
 }

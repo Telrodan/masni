@@ -18,6 +18,8 @@
 
       <th>Üzenet</th>
 
+      <th>Részletek</th>
+
       <th class="w-14rem">Dátum</th>
     </tr>
 
@@ -63,6 +65,8 @@
       <th></th>
 
       <th></th>
+
+      <th></th>
     </tr>
   </ng-template>
 
@@ -92,6 +96,15 @@
 
       <td>
         <span class="font-semibold">{{ log.message }}</span>
+      </td>
+
+      <td class="text-center">
+        <i
+          class="pi pi-info-circle text-red-500"
+          *ngIf="log.meta.stack"
+          (click)="onDetailedError(log)"
+          pTooltip="Részletes hibaüzenet"
+          tooltipPosition="bottom"></i>
       </td>
 
       <td>

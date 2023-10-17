@@ -19,7 +19,7 @@ export class AuthService {
   private isAuthenticated = false;
   private token: string;
   private tokenPayload: TokenPayload;
-  private tokenTimer: NodeJS.Timer;
+  private tokenTimer: NodeJS.Timeout;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
   constructor(

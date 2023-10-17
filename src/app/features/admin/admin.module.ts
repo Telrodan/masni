@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PanelModule } from 'primeng/panel';
 import { DividerModule } from 'primeng/divider';
@@ -27,6 +26,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TabViewModule } from 'primeng/tabview';
+import { ChartModule } from 'primeng/chart';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -52,6 +53,8 @@ import { QuestionsComponent } from './components/questions/questions.component';
 import { AddQuestionComponent } from './components/questions/components/add-question/add-question.component';
 import { EditQuestionComponent } from './components/questions/components/edit-question/edit-question.component';
 import { EditInspirationComponent } from './components/inspirations/components/edit-inspiration/edit-inspiration.component';
+import { DetailedErrorDialogComponent } from './components/reports/components/detailed-error-dialog/detailed-error-dialog.component';
+import { ReportChartsComponent } from './components/reports/components/report-charts/report-charts.component';
 
 const PRIME_NG = [
   CardModule,
@@ -76,7 +79,9 @@ const PRIME_NG = [
   CheckboxModule,
   InputNumberModule,
   RadioButtonModule,
-  SkeletonModule
+  SkeletonModule,
+  TabViewModule,
+  ChartModule
 ];
 
 @NgModule({
@@ -104,7 +109,9 @@ const PRIME_NG = [
     QuestionsComponent,
     AddQuestionComponent,
     EditQuestionComponent,
-    EditInspirationComponent
+    EditInspirationComponent,
+    DetailedErrorDialogComponent,
+    ReportChartsComponent
   ],
   imports: [
     CommonModule,
@@ -112,7 +119,6 @@ const PRIME_NG = [
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    NgxSkeletonLoaderModule,
     ...PRIME_NG
   ]
 })
