@@ -24,9 +24,9 @@ import { User } from '@core/models/user.model';
 import { FoxpostService } from '@core/services/foxpost.service';
 import { userSelector } from '@core/store';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { ShippingOption } from '@core/models/shipping-option.model';
 import { StripeService } from '@core/services/stripe.service';
-import { ShippingDetails } from '@core/models/shipping.model';
+import { ShippingDetails } from '@core/models/shipping-details.model';
+import { ShippingOption } from '@core/models/shipping-option.model';
 
 @UntilDestroy()
 @Component({
