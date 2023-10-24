@@ -8,10 +8,6 @@
 .product-card {
   width: 100%;
   cursor: pointer;
-
-  @include respond(sm) {
-    width: 100%;
-  }
 }
 
 .image-wrapper {
@@ -100,9 +96,14 @@ img {
   font-size: 36px;
   font-weight: 700;
   font-family: 'Amatic SC', cursive;
+  max-width: 360px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   @include respond(sm) {
     font-size: 24px;
+    max-width: 160px;
   }
 }
 

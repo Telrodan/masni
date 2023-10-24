@@ -45,8 +45,17 @@ export const selectProductCategoryWithAvailableProductsByCategoryId = (
 ) =>
   createSelector(selectProductCategories, (categories) => {
     const category = categories.find((category) => category.id === id);
-    return {
-      ...category,
-      items: (category.items as Product[]).filter((item) => item.stock > 0)
-    };
+
+    if (category) {
+      const availableItems = (category.items as Product[]).filter(
+        (item) => item.stock > 0
+      );
+
+      return {
+        ...category,
+        items: availableItems
+      };
+    }
+
+    return null;
   });
