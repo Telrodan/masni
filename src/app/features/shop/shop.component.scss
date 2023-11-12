@@ -39,9 +39,9 @@
   margin-bottom: 40px;
 
   @include respond(sm) {
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, 48%);
     grid-column-gap: 14px;
-    grid-row-gap: 0;
+    grid-row-gap: 8px;
     padding: 0 8px;
   }
 }

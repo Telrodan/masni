@@ -69,17 +69,17 @@ export class LandingPageComponent implements OnInit {
   ngOnInit(): void {
     this.featuredProducts$ = this.store$.select(selectFeaturedProducts).pipe(
       filter((products) => products.length > 0),
-      map((products) => products.slice(0, 8))
+      map((products) => products.slice(0, 6))
     );
 
     this.allProducts$ = this.store$.select(selectAvailableProducts).pipe(
       filter((products) => products.length > 0),
-      map((products) => products.slice(0, 8))
+      map((products) => products.slice(0, 6))
     );
 
     this.customProducts$ = this.store$.select(selectCustomProducts).pipe(
       filter((products) => products.length > 0),
-      map((products) => products.slice(0, 8))
+      map((products) => products.slice(0, 6))
     );
 
     this.productCategories$ = this.store$.select(selectProductCategories).pipe(
