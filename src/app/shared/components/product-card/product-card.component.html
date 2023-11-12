@@ -1,65 +1,58 @@
-<div class="product-card" (click)="onProductDetails()" *ngIf="product">
-  <div class="image-wrapper">
-    <div *ngIf="product.discountedPrice > 0" class="discount-wrapper">
-      <p class="text-red-500 font-bold">-{{ product.discountPercentage }}%</p>
-    </div>
+<div *ngIf="product" class="mhd-product-card" (click)="onProductDetails()">
+  <div class="mhd-product-card-image-wrapper">
+    <span
+      *ngIf="isDiscounted"
+      class="mhd-product-card-discount-percentage text-red-500 font-bold text-sm">
+      -{{ product.discountPercentage }}%
+    </span>
 
-    <div *ngIf="product.isCustom" class="dream-it-wrapper">
-      <p>"Álmodd meg"</p>
-    </div>
+    <span *ngIf="product.isCustom" class="mhd-product-card-dream-it text-sm">
+      "Álmodd meg"
+    </span>
 
-    <div *ngIf="isOneWeekPassed(product.createdAt)" class="new-wrapper">
-      <p>Új</p>
-    </div>
+    <span *ngIf="isNewArrival" class="mhd-product-card-new-arrival text-sm">
+      Új
+    </span>
 
-    <div class="image-wrapper">
-      <img
-        [ngStyle]="{ display: isImageLoading ? 'none' : '' }"
-        [src]="product.images[0]"
-        (load)="isImageLoading = false" />
+    <img
+      class="mhd-product-card-image"
+      [class.hidden]="isImageLoading"
+      [src]="product.images[0]"
+      (load)="imageLoaded()" />
 
-      <p-skeleton
-        *ngIf="isImageLoading"
-        styleClass="skeleton"
-        width="w-full"
-        height="h-full">
-      </p-skeleton>
-    </div>
+    <p-skeleton
+      *ngIf="isImageLoading"
+      styleClass="skeleton"
+      width="w-full"
+      height="h-full">
+    </p-skeleton>
   </div>
 
-  <div class="details">
-    <p class="title">
+  <div class="mhd-product-card-details">
+    <span class="mhd-product-card-details-title">
       {{ product.name | titlecase }}
-    </p>
+    </span>
 
-    <p class="description">
+    <span class="mhd-product-card-details-short-description text-gray-500">
       {{ product.shortDescription }}
-    </p>
+    </span>
 
-    <div class="wrapper">
-      <div class="price-wrapper">
-        <p
-          class="original-price"
-          [ngClass]="
-            product.discountedPrice > 0
-              ? 'text-red-500 line-through'
-              : 'text-primary'
-          ">
-          {{ product.price }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
-        </p>
+    <div class="mhd-product-card-details-price-wrapper">
+      <span
+        class="mhd-product-card-details-price-wrapper-price"
+        [ngClass]="isDiscounted ? 'text-red-500 line-through' : 'text-primary'">
+        {{ product.price }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+      </span>
 
-        <p
-          *ngIf="product.discountedPrice > 0"
-          class="discounted-price text-primary">
-          {{ product.discountedPrice }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
-        </p>
+      <span *ngIf="isDiscounted" class="text-primary">
+        {{ product.discountedPrice }} {{ product.isCustom ? 'Ft-tól' : 'Ft' }}
+      </span>
 
-        <p class="stock">Készleten: {{ product.stock }}</p>
-      </div>
-
-      <button class="primary-button">
-        <i class="pi pi-shopping-cart"></i>
-      </button>
+      <p class="stock">Készleten: {{ product.stock }}</p>
     </div>
   </div>
+
+  <button class="primary-button">
+    <i class="pi pi-shopping-cart"></i>
+  </button>
 </div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 import { Store } from '@ngrx/store';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 import { Product } from '@core/models/product.model';
@@ -67,24 +67,31 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.featuredProducts$ = this.store$
-      .select(selectFeaturedProducts)
-      .pipe(filter((products) => products.length > 0));
+    this.featuredProducts$ = this.store$.select(selectFeaturedProducts).pipe(
+      filter((products) => products.length > 0),
+      map((products) => products.slice(0, 8))
+    );
 
-    this.allProducts$ = this.store$
-      .select(selectAvailableProducts)
-      .pipe(filter((products) => products.length > 0));
+    this.allProducts$ = this.store$.select(selectAvailableProducts).pipe(
+      filter((products) => products.length > 0),
+      map((products) => products.slice(0, 8))
+    );
 
-    this.customProducts$ = this.store$
-      .select(selectCustomProducts)
-      .pipe(filter((products) => products.length > 0));
+    this.customProducts$ = this.store$.select(selectCustomProducts).pipe(
+      filter((products) => products.length > 0),
+      map((products) => products.slice(0, 8))
+    );
 
-    this.productCategories$ = this.store$
-      .select(selectProductCategories)
-      .pipe(filter((categories) => categories.length > 0));
+    this.productCategories$ = this.store$.select(selectProductCategories).pipe(
+      filter((categories) => categories.length > 0),
+      map((categories) =>
+        categories.filter((category) => category.items.length)
+      )
+    );
 
-    this.materials$ = this.store$
-      .select(selectAvailableMaterials)
-      .pipe(filter((materials) => materials.length > 0));
+    // this.materials$ = this.store$.select(selectAvailableMaterials).pipe(
+    //   filter((materials) => materials.length > 0),
+    //   map((materials) => materials.slice(0, 8))
+    // );
   }
 }

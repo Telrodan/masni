@@ -1,33 +1,23 @@
 @import 'mixins';
 
-section {
+.mhd-products-carousel {
   @include section;
-  display: flex;
-  flex-direction: column;
+  display: block;
 
-  @include respond(sm) {
-    margin: 80px 0;
+  &-header {
+    margin-bottom: 20px;
+
+    @include respond(sm) {
+      margin-bottom: 12px;
+    }
   }
-}
 
-h1 {
-  margin-bottom: 20px;
-  text-align: center;
-
-  @include respond(sm) {
-    margin-bottom: 12px;
+  &-item {
+    display: flex;
+    justify-content: center;
   }
-}
 
-.item-content {
-  margin: 0 28px 12px;
-
-  @include respond(sm) {
-    margin: 0;
+  &-button {
+    margin-top: 20px;
   }
-}
-
-button {
-  margin-top: 20px;
-  align-self: center;
 }

@@ -32,13 +32,14 @@
 
 .products-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: 28px;
   grid-row-gap: 28px;
   padding: 0 20px;
+  margin-bottom: 40px;
 
   @include respond(sm) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 50%);
     grid-column-gap: 14px;
     grid-row-gap: 0;
     padding: 0 8px;

@@ -3,6 +3,10 @@
 <h2 mat-dialog-title>Kérdés szerkesztese</h2>
 
 <mat-dialog-content>
+  <span class="text-sm">
+    Módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  </span>
+
   <ng-container *ngIf="data.type === questionType.QUESTION_WITH_STRING_ANSWER">
     <div class="content">
       <form [formGroup]="editStringQuestionForm">

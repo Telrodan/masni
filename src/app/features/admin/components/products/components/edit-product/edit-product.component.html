@@ -2,6 +2,10 @@
 <h2 mat-dialog-title>Termék szerkesztése</h2>
 
 <mat-dialog-content>
+  <span class="text-sm">
+    Módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  </span>
+
   <form class="flex-auto p-fluid" [formGroup]="editProductForm">
     <div class="form-group">
       <label for="name" class="block font-medium text-blue-500 mb-1 text-lg">

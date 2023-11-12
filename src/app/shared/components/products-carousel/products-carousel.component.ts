@@ -1,27 +1,25 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Input,
+  ViewEncapsulation
+} from '@angular/core';
 
 import { Product } from '@core/models/product.model';
+import { responsiveOptions } from '@shared/util/carousel-option';
 
 @Component({
   selector: 'mhd-products-carousel',
   templateUrl: './products-carousel.component.html',
-  styleUrls: ['./products-carousel.component.scss']
+  styleUrls: ['./products-carousel.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ProductsCarouselComponent {
-  @Input() title: string;
-  @Input() products: Product[];
-  @Input() link: string;
+  @HostBinding('class.mhd-products-carousel') class = true;
 
-  responsiveOptions = [
-    {
-      breakpoint: '768px',
-      numVisible: 2,
-      numScroll: 2
-    },
-    {
-      breakpoint: '560px',
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
+  @Input() header: string;
+  @Input() products: Product[];
+  @Input() path: string;
+
+  readonly responsiveOptions = responsiveOptions;
 }

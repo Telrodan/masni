@@ -26,7 +26,6 @@ export const selectFeaturedProducts = createSelector(
 export const selectDollDresses = createSelector(
   selectAvailableProducts,
   (products) => {
-    console.log(products);
     return products.filter((product) => product.isDollDress);
   }
 );

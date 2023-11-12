@@ -9,12 +9,24 @@ import { Product } from '@core/models/product.model';
   styleUrls: ['./product-card.component.scss']
 })
 export class ProductCardComponent {
+  get isDiscounted(): boolean {
+    return this.product.discountedPrice > 0;
+  }
+
+  get isNewArrival(): boolean {
+    return this.isOneWeekPassed(this.product.createdAt);
+  }
+
   @Input() product: Product;
   @Input() page: number;
 
   isImageLoading = true;
 
   constructor(private router: Router) {}
+
+  imageLoaded() {
+    this.isImageLoading = false;
+  }
 
   onProductDetails(): void {
     if (this.page >= 0) {

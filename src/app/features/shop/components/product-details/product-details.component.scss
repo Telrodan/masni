@@ -13,15 +13,15 @@
 }
 
 .content-left {
-  width: 50%;
+  max-width: 600px;
 
   @include respond(sm) {
-    width: 100%;
+    max-width: 100%;
   }
 }
 
 .content-right {
-  width: 50%;
+  flex: 1;
 
   @include respond(sm) {
     width: 100%;

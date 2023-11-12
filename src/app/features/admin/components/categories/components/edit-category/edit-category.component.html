@@ -2,6 +2,10 @@
 <h2 mat-dialog-title>Kategória szerkesztése</h2>
 
 <mat-dialog-content>
+  <span class="text-sm">
+    Módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  </span>
+
   <form [formGroup]="editCategoryForm" class="mt-2">
     <div class="mb-4">
       <ng-container *ngIf="data.type === CategoryType.PRODUCT_CATEGORY">
