@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 const MATERIAL = [MatDialogModule];
 
@@ -29,7 +30,8 @@ const PRIME_NG = [
   InputTextareaModule,
   ButtonModule,
   GalleriaModule,
-  SkeletonModule
+  SkeletonModule,
+  ProgressSpinnerModule
 ];
 
 @NgModule({

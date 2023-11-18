@@ -2,30 +2,36 @@
 <h2 mat-dialog-title>Kategória szerkesztése</h2>
 
 <mat-dialog-content>
-  <span class="text-sm">
-    Módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  <span class="text-sm text-blue-500">
+    Hozzáadva: {{ data.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
   </span>
 
+  <span class="text-sm text-green-500 block">
+    Utoljára módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  </span>
+
+  <p-divider></p-divider>
+
   <form [formGroup]="editCategoryForm" class="mt-2">
-    <div class="mb-4">
-      <ng-container *ngIf="data.type === CategoryType.PRODUCT_CATEGORY">
-        <p-badge
-          value="Termék kategória"
-          severity="success"
-          size="large"></p-badge>
-      </ng-container>
+    <ng-container *ngIf="data.type === CategoryType.PRODUCT_CATEGORY">
+      <p-badge
+        value="Termék kategória"
+        severity="success"
+        size="large"></p-badge>
+    </ng-container>
 
-      <ng-container *ngIf="data.type === CategoryType.MATERIAL_CATEGORY">
-        <p-badge
-          value="Minta kategória"
-          severity="warning"
-          size="large"></p-badge>
-      </ng-container>
+    <ng-container *ngIf="data.type === CategoryType.MATERIAL_CATEGORY">
+      <p-badge
+        value="Minta kategória"
+        severity="warning"
+        size="large"></p-badge>
+    </ng-container>
 
-      <ng-container *ngIf="data.type === CategoryType.INSPIRATION_CATEGORY">
-        <p-badge value="Inspiració kategória" size="large"></p-badge>
-      </ng-container>
-    </div>
+    <ng-container *ngIf="data.type === CategoryType.INSPIRATION_CATEGORY">
+      <p-badge value="Inspiració kategória" size="large"></p-badge>
+    </ng-container>
+
+    <p-divider></p-divider>
 
     <div class="form-group">
       <label for="name" class="block font-medium text-blue-500 mb-1">

@@ -5,5 +5,4 @@ export interface ShopPageData {
   image: string;
   description?: string;
   products: Product[];
-  priceFilter: string;
 }

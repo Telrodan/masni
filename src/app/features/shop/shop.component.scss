@@ -1,47 +1,30 @@
 @import 'mixins';
 
-.shop {
+.mhd-shop {
   padding-bottom: 120px;
 
   @include respond(sm) {
     padding-bottom: 0;
   }
-}
 
-.category-description {
-  width: 90%;
-  margin: 18px auto;
-  text-align: center;
-}
-
-.filter-form {
-  padding: 20px;
-
-  @include respond(sm) {
-    padding: 16px 8px;
+  &-category-description {
+    width: 90%;
+    margin: 18px auto 0;
+    text-align: center;
   }
-}
 
-.form-content {
-  display: flex;
+  &-products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-column-gap: 28px;
+    grid-row-gap: 28px;
+    padding: 20px 20px 40px;
 
-  @include respond(sm) {
-    flex-direction: column;
-  }
-}
-
-.products-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-column-gap: 28px;
-  grid-row-gap: 28px;
-  padding: 0 20px;
-  margin-bottom: 40px;
-
-  @include respond(sm) {
-    grid-template-columns: repeat(2, 48%);
-    grid-column-gap: 14px;
-    grid-row-gap: 8px;
-    padding: 0 8px;
+    @include respond(sm) {
+      grid-template-columns: repeat(2, 48%);
+      grid-column-gap: 14px;
+      grid-row-gap: 8px;
+      padding: 16px 8px 20px;
+    }
   }
 }

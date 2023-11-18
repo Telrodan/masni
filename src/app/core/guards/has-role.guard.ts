@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { ToastrService } from '@core/services/toastr.service';
 @Injectable({
   providedIn: 'root'
 })
-export class HasRoleGuard implements CanActivate {
+export class HasRoleGuard  {
   constructor(
     private cookieService: CookieService,
     private toastr: ToastrService

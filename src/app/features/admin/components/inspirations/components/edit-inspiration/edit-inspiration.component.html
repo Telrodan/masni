@@ -2,9 +2,15 @@
 <h2 mat-dialog-title>Inspiráció módosítása</h2>
 
 <mat-dialog-content>
-  <span class="text-sm">
-    Módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  <span class="text-sm text-blue-500">
+    Hozzáadva: {{ data.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
   </span>
+
+  <span class="text-sm text-green-500 block">
+    Utoljára módosítva: {{ data.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+  </span>
+
+  <p-divider></p-divider>
 
   <form class="flex-auto p-fluid" [formGroup]="editInspirationForm">
     <div class="form-group">

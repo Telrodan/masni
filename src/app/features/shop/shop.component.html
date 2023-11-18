@@ -1,49 +1,39 @@
-<div *ngIf="pageData$ | async as pageData" class="shop" id="shop">
+<ng-container *ngIf="pageData$ | async as pageData">
   <mhd-scrollable-image-with-title
     [title]="pageData.category"
     [imageUrl]="pageData.image"
-    [elementToScrollTo]="form">
+    [elementToScrollTo]="wrapper">
   </mhd-scrollable-image-with-title>
 
   <p
-    class="primary-paragraph category-description"
-    *ngIf="pageData?.description">
+    *ngIf="pageData?.description"
+    class="mhd-shop-category-description primary-paragraph">
     {{ pageData?.description }}
   </p>
 
-  <form [formGroup]="filterForm" class="filter-form" #form>
-    <div class="form-content">
-      <div class="flex-row align-items-center">
-        <label for="price" class="mr-1">Ár:</label>
-
-        <p-dropdown
-          id="price"
-          [options]="prices"
-          formControlName="price"
-          optionLabel="price"
-          optionValue="price">
-        </p-dropdown>
+  <div id="shop" #wrapper>
+    <ng-container *ngIf="pageData.products as products">
+      <div class="mhd-shop-products-container">
+        <mhd-product-card
+          *ngFor="let product of products.slice(first, first + rows)"
+          [product]="product"
+          [page]="first">
+        </mhd-product-card>
       </div>
-    </div>
-  </form>
 
-  <ng-container *ngIf="pageData.products as products">
-    <div class="products-container">
-      <mhd-product-card
-        *ngFor="let product of products.slice(first, first + rows)"
-        [product]="product"
-        [page]="first">
-      </mhd-product-card>
-    </div>
+      <div class="card flex justify-content-center">
+        <p-paginator
+          *ngIf="products.length"
+          [first]="first"
+          [rows]="rows"
+          [totalRecords]="products.length"
+          [rowsPerPageOptions]="[25, 50, 100]"
+          (onPageChange)="onPageChange($event)">
+        </p-paginator>
+      </div>
+    </ng-container>
+  </div>
 
-    <div class="card flex justify-content-center">
-      <p-paginator
-        (onPageChange)="onPageChange($event)"
-        [first]="first"
-        [rows]="rows"
-        [totalRecords]="products.length"
-        [rowsPerPageOptions]="[25, 50, 100]">
-      </p-paginator>
-    </div>
-  </ng-container>
-</div>
+  <p-progressSpinner *ngIf="!pageData.products.length" styleClass="w-full">
+  </p-progressSpinner>
+</ng-container>

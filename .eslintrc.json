@@ -1,9 +1,13 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": [
+        "*.ts"
+      ],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -12,7 +16,9 @@
       ],
       "rules": {
         "@typescript-eslint/no-empty-function": "off",
-        "@angular-eslint/no-empty-lifecycle-method": ["error"],
+        "@angular-eslint/no-empty-lifecycle-method": [
+          "error"
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -32,8 +38,12 @@
       }
     },
     {
-      "files": ["*.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
       "rules": {}
     }
   ]
