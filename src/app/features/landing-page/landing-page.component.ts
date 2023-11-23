@@ -7,11 +7,11 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 import { Product } from '@core/models/product.model';
 import {
-  selectAvailableMaterials,
   selectAvailableProducts,
   selectCustomProducts,
   selectFeaturedProducts,
-  selectProductCategories
+  selectProductCategories,
+  selectProductCategoryWithAvailableProductsByCategoryId
 } from '@core/store';
 import { Category } from '@core/models/category.model';
 import { Material } from '@core/models/material.model';
@@ -26,6 +26,7 @@ export class LandingPageComponent implements OnInit {
   featuredProducts$: Observable<Product[]>;
   allProducts$: Observable<Product[]>;
   customProducts$: Observable<Product[]>;
+  christmasProducts$: Observable<Product[]>;
 
   productCategories$: Observable<Category[]>;
 
@@ -88,6 +89,17 @@ export class LandingPageComponent implements OnInit {
         categories.filter((category) => category.items.length)
       )
     );
+
+    this.christmasProducts$ = this.store$
+      .select(
+        selectProductCategoryWithAvailableProductsByCategoryId(
+          '655e191f448107da2d1b55bb'
+        )
+      )
+      .pipe(
+        filter((category) => !!category),
+        map((category) => category.items.slice(0, 6))
+      );
 
     // this.materials$ = this.store$.select(selectAvailableMaterials).pipe(
     //   filter((materials) => materials.length > 0),

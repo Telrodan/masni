@@ -1,0 +1,17 @@
+.mhd-user-details {
+  padding: 20px 16px 0;
+
+  &-address {
+    .mhd-user-details-group {
+      margin-left: 16px;
+    }
+
+    &-title {
+      margin-bottom: 20px;
+    }
+  }
+
+  .p-divider.p-divider-horizontal {
+    padding: 0;
+  }
+}

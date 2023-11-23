@@ -36,6 +36,10 @@
           Kosár <p-sortIcon field="shoppingCart"></p-sortIcon>
         </th>
 
+        <th pSortableColumn="orders">
+          Rendelések <p-sortIcon field="orders"></p-sortIcon>
+        </th>
+
         <th>Opciók</th>
       </tr>
     </ng-template>
@@ -51,6 +55,8 @@
         <td class="font-semibold text-blue-500">{{ user.phone }}</td>
 
         <td class="font-semibold">{{ user.shoppingCart.length }} db</td>
+
+        <td class="font-semibold">{{ user.orders.length }} db</td>
 
         <td>
           <button

@@ -8,4 +8,6 @@ export interface ShoppingCartItem {
   nameEmbroidery?: string;
   comment?: string;
   price: number;
+  updatedAt?: Date;
+  createdAt?: Date;
 }

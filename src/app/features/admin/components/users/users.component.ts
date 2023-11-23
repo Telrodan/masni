@@ -50,7 +50,8 @@ export class UsersComponent implements OnInit {
 
   onUserDetails(user: User): void {
     this.dialog.open(UserDetailsComponent, {
-      minWidth: '40vw',
+      minWidth: '50vw',
+      maxWidth: '50vw',
       data: user
     });
   }

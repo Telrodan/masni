@@ -1,0 +1,109 @@
+<ng-container *ngIf="cartItems.length; else noItems">
+  <p-accordion>
+    <p-accordionTab *ngFor="let cartItem of cartItems; index as i">
+      <ng-template pTemplate="header">
+        <div class="mhd-shopping-cart-items-header">
+          <span class="mhd-shopping-cart-items-header-name">
+            {{ cartItem.product.name | titlecase }}
+          </span>
+
+          <span class="mhd-shopping-cart-items-header-added text-primary">
+            {{ cartItem.createdAt | date : "yyy/MMM/dd '-' hh:mm a" }}
+          </span>
+        </div>
+      </ng-template>
+
+      <div class="mhd-shopping-cart-items-content">
+        <div class="mhd-shopping-cart-items-content-image">
+          <img
+            class="hidden"
+            [src]="cartItem.product.images[0]"
+            (load)="imageLoaded(i)" />
+
+          <img
+            *ngIf="imageLoadedStatus[i]"
+            [src]="cartItem.product.images[0]"
+            [alt]="'Termék ' + i + ' képe'" />
+
+          <p-skeleton
+            *ngIf="!imageLoadedStatus[i]"
+            styleClass="skeleton"></p-skeleton>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Azonosító</div>
+
+          <div class="text-700">
+            {{ cartItem.id }}
+          </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Termék</div>
+
+          <div class="text-700">
+            {{ cartItem.product.name | titlecase }}
+          </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Ár</div>
+
+          <div class="text-700">{{ cartItem.price }} Ft</div>
+        </div>
+
+        <p-divider *ngIf="cartItem.questions.length"></p-divider>
+
+        <div
+          *ngIf="cartItem.questions.length"
+          class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Kérdések</div>
+
+          <div
+            *ngFor="let question of cartItem.questions"
+            class="mhd-shopping-cart-items-groug-sub-group">
+            <div class="mhd-shopping-cart-items-group">
+              <div class="text-primary font-semibold">
+                {{ question.question }}
+              </div>
+
+              <div class="text-700">{{ question.option }}</div>
+            </div>
+
+            <p-divider></p-divider>
+          </div>
+        </div>
+
+        <p-divider *ngIf="!cartItem.questions.length"></p-divider>
+
+        <div
+          *ngIf="cartItem.nameEmbroidery"
+          class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Hímzett név</div>
+
+          <div class="text-700">{{ cartItem.nameEmbroidery }} Ft</div>
+        </div>
+
+        <p-divider *ngIf="cartItem.comment"></p-divider>
+
+        <div *ngIf="cartItem.comment" class="mhd-shopping-cart-items-group">
+          <div class="text-primary font-semibold">Hímzett név</div>
+
+          <div class="text-700">{{ cartItem.comment }} Ft</div>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</ng-container>
+
+<ng-template #noItems>
+  <span class="block w-full text-900 text-center">
+    Nincs termék a kosárban
+  </span>
+</ng-template>

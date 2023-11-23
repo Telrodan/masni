@@ -1,5 +1,6 @@
 import { Address } from './address.model';
-import { ShoppingCart } from './shopping-cart.model';
+import { Order } from './order.model';
+import { ShoppingCartItem } from './shopping-cart-item.model';
 
 export interface User {
   id?: string;
@@ -8,7 +9,8 @@ export interface User {
   phone: string;
   password?: string;
   passwordConfirm?: string;
-  shoppingCart?: ShoppingCart;
+  shoppingCart?: ShoppingCartItem[];
+  orders?: Order[];
   shippingAddress: Address;
   billingAddress: Address;
   subscribed: boolean;

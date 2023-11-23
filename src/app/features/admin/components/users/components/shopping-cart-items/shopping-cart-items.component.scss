@@ -1,0 +1,13 @@
+.mhd-shopping-cart-items {
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &-content {
+    &-image {
+      max-width: 200px;
+    }
+  }
+}

@@ -2,111 +2,164 @@
 <h2 mat-dialog-title>Felhasználó információ</h2>
 
 <mat-dialog-content>
-  <ul>
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Azonosító</div>
+  <p-tabMenu
+    [model]="tabMenuItems"
+    [activeItem]="activeItem"
+    (activeItemChange)="onChangeTabMenu($event)">
+  </p-tabMenu>
 
-      <div class="text-900 font-bold">
-        {{ user.id }}
-      </div>
-    </li>
+  <ng-scrollbar class="ng-scrollbar" style="height: 50vh">
+    <div class="mhd-user-details">
+      <ng-container [ngSwitch]="activeItem.id">
+        <ng-container *ngSwitchCase="'details'">
+          <div class="mhd-user-details-group">
+            <div class="text-primary font-semibold">Azonosító</div>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Név</div>
+            <div class="text-700">
+              {{ user.id }}
+            </div>
+          </div>
 
-      <div class="text-900 font-normal">
-        {{ user.name }}
-      </div>
-    </li>
+          <p-divider></p-divider>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Email</div>
+          <div class="mhd-user-details-group">
+            <div class="text-primary font-semibold">Név</div>
 
-      <div class="text-900 font-normal">
-        {{ user.email }}
-      </div>
-    </li>
+            <div class="text-700">
+              {{ user.name }}
+            </div>
+          </div>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Telefon</div>
+          <p-divider></p-divider>
 
-      <div class="text-900 font-normal">
-        {{ user.phone }}
-      </div>
-    </li>
+          <div class="mhd-user-details-group">
+            <div class="text-primary font-semibold">Email</div>
 
-    <li class="py-2 px-1 border-top-1 surface-border">
-      <div class="text-400 font-medium">Szállítási cím</div>
-    </li>
+            <div class="text-700">
+              {{ user.email }}
+            </div>
+          </div>
 
-    <li class="py-2 px-3">
-      <div class="text-400 font-medium">Utca</div>
+          <p-divider></p-divider>
 
-      <div class="text-900 font-normal">
-        {{ user.shippingAddress.street }}
-      </div>
-    </li>
+          <div class="mhd-user-details-group">
+            <div class="text-primary font-semibold">Telefon</div>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Város</div>
+            <div class="text-700">
+              {{ user.phone }}
+            </div>
+          </div>
 
-      <div class="text-900 font-normal">
-        {{ user.shippingAddress.city }}
-      </div>
-    </li>
+          <p-divider *ngIf="user.createdAt"></p-divider>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Irányítószám</div>
+          <div *ngIf="user.createdAt" class="mhd-user-details-group">
+            <div class="text-primary font-semibold">Regisztrált</div>
 
-      <div class="text-900 font-normal">
-        {{ user.shippingAddress.postcode }}
-      </div>
-    </li>
+            <div class="text-700">
+              {{ user.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+            </div>
+          </div>
+        </ng-container>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Megye</div>
+        <ng-container *ngSwitchCase="'addresses'">
+          <div class="mhd-user-details-address">
+            <h1
+              class="mhd-user-details-address-title text-xl text-primary font-semibold">
+              Szállítási cím
+            </h1>
 
-      <div class="text-900 font-normal">
-        {{ user.shippingAddress.county }}
-      </div>
-    </li>
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Utca</div>
 
-    <li class="py-2 px-1 border-top-1 surface-border">
-      <div class="text-400 font-medium">Számlázási cím</div>
-    </li>
+              <div class="text-700">
+                {{ user.shippingAddress.street }}
+              </div>
+            </div>
 
-    <li class="py-2 px-3">
-      <div class="text-400 font-medium">Utca</div>
+            <p-divider></p-divider>
 
-      <div class="text-900 font-normal">
-        {{ user.billingAddress.street }}
-      </div>
-    </li>
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Város</div>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Város</div>
+              <div class="text-700">
+                {{ user.shippingAddress.city }}
+              </div>
+            </div>
 
-      <div class="text-900 font-normal">
-        {{ user.billingAddress.city }}
-      </div>
-    </li>
+            <p-divider></p-divider>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Irányítószám</div>
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Irányítószám</div>
 
-      <div class="text-900 font-normal">
-        {{ user.billingAddress.postcode }}
-      </div>
-    </li>
+              <div class="text-700">
+                {{ user.shippingAddress.postcode }}
+              </div>
+            </div>
 
-    <li class="py-2 px-3 border-top-1 surface-border">
-      <div class="text-400 font-medium">Megye</div>
+            <p-divider></p-divider>
 
-      <div class="text-900 font-normal">
-        {{ user.billingAddress.county }}
-      </div>
-    </li>
-  </ul>
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Megye</div>
+
+              <div class="text-700">
+                {{ user.shippingAddress.county }}
+              </div>
+            </div>
+
+            <p-divider></p-divider>
+
+            <h1
+              class="mhd-user-details-address-title text-xl text-primary font-semibold">
+              Számlázási cím
+            </h1>
+
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Utca</div>
+
+              <div class="text-700">
+                {{ user.billingAddress.street }}
+              </div>
+            </div>
+
+            <p-divider></p-divider>
+
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Város</div>
+
+              <div class="text-700">
+                {{ user.billingAddress.city }}
+              </div>
+            </div>
+
+            <p-divider></p-divider>
+
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Irányítószám</div>
+
+              <div class="text-700">
+                {{ user.billingAddress.postcode }}
+              </div>
+            </div>
+
+            <p-divider></p-divider>
+
+            <div class="mhd-user-details-group">
+              <div class="text-primary font-semibold">Megye</div>
+
+              <div class="text-700">
+                {{ user.billingAddress.county }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'cart'">
+          <mhd-shopping-cart-items [cartItems]="user.shoppingCart">
+          </mhd-shopping-cart-items>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-scrollbar>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

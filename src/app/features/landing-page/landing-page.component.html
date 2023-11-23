@@ -6,6 +6,12 @@
 
 <main #main>
   <mhd-products-carousel
+    header="Karácsonyi termékek"
+    [products]="christmasProducts$ | async"
+    path="/shop/655e191f448107da2d1b55bb">
+  </mhd-products-carousel>
+
+  <mhd-products-carousel
     header="Kiemelt termékek"
     [products]="featuredProducts$ | async"
     path="/shop/featured">

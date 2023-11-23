@@ -28,6 +28,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TabViewModule } from 'primeng/tabview';
 import { ChartModule } from 'primeng/chart';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { AccordionModule } from 'primeng/accordion';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
@@ -55,6 +57,9 @@ import { EditQuestionComponent } from './components/questions/components/edit-qu
 import { EditInspirationComponent } from './components/inspirations/components/edit-inspiration/edit-inspiration.component';
 import { DetailedErrorDialogComponent } from './components/reports/components/detailed-error-dialog/detailed-error-dialog.component';
 import { ReportChartsComponent } from './components/reports/components/report-charts/report-charts.component';
+import { ShoppingCartItemsComponent } from './components/users/components/shopping-cart-items/shopping-cart-items.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 const PRIME_NG = [
   CardModule,
@@ -81,7 +86,9 @@ const PRIME_NG = [
   RadioButtonModule,
   SkeletonModule,
   TabViewModule,
-  ChartModule
+  ChartModule,
+  TabMenuModule,
+  AccordionModule
 ];
 
 @NgModule({
@@ -111,7 +118,8 @@ const PRIME_NG = [
     EditQuestionComponent,
     EditInspirationComponent,
     DetailedErrorDialogComponent,
-    ReportChartsComponent
+    ReportChartsComponent,
+    ShoppingCartItemsComponent
   ],
   imports: [
     CommonModule,
@@ -119,6 +127,8 @@ const PRIME_NG = [
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    NgScrollbarModule,
+    ScrollingModule,
     ...PRIME_NG
   ]
 })
