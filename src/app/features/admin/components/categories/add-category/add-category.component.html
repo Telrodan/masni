@@ -1,0 +1,151 @@
+<ng-container *ngIf="!isLoading; else loading">
+  <div class="font-medium text-2xl text-900">Kategória hozzáadás</div>
+  <p-divider styleClass="mb-5"></p-divider>
+
+  <form [formGroup]="addCategoryForm">
+    <div class="form-group">
+      <label for="name" class="block font-medium text-900 mb-2 text-lg">
+        Kategória neve
+      </label>
+
+      <input id="name" formControlName="name" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+      <label class="block font-medium text-900 mb-2 text-lg">
+        Tételek típusa
+      </label>
+
+      <div class="flex align-items-center mb-2">
+        <p-radioButton
+          [value]="CategoryType.PRODUCT_CATEGORY"
+          formControlName="type"
+          inputId="productCategory">
+        </p-radioButton>
+
+        <label for="productCategory" class="ml-2">Termék</label>
+      </div>
+
+      <div class="flex align-items-center mb-2">
+        <p-radioButton
+          [value]="CategoryType.MATERIAL_CATEGORY"
+          formControlName="type"
+          inputId="materialCategory">
+        </p-radioButton>
+
+        <label for="materialCategory" class="ml-2"> Minta </label>
+      </div>
+
+      <div class="flex align-items-center">
+        <p-radioButton
+          [value]="CategoryType.INSPIRATION_CATEGORY"
+          formControlName="type"
+          inputId="inspirationCategory">
+        </p-radioButton>
+
+        <label for="inspirationCategory" class="ml-2"> Inspiráció </label>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="addCategoryForm.value.type === CategoryType.PRODUCT_CATEGORY">
+      <div class="form-group">
+        <label for="name" class="block font-medium text-900 mb-2 text-lg">
+          Alkategória
+        </label>
+
+        <p-inputSwitch formControlName="isSubCategory"></p-inputSwitch>
+      </div>
+
+      <div class="form-group" *ngIf="addCategoryForm.value.isSubCategory">
+        <label for="name" class="block font-medium text-900 mb-2 text-lg">
+          Válassz egy főkategóriát
+        </label>
+
+        <p-dropdown
+          *ngIf="mainCategories$ | async as mainCategories"
+          [options]="mainCategories"
+          formControlName="mainCategory"
+          placeholder="Válassz egy főkategóriát"
+          optionValue="id"
+          optionLabel="name"
+          styleClass="w-full">
+        </p-dropdown>
+      </div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="addCategoryForm.value.type === CategoryType.PRODUCT_CATEGORY">
+      <div class="form-group">
+        <label
+          for="description"
+          class="block font-medium text-900 mb-2 text-lg">
+          Kategória leírása
+        </label>
+
+        <textarea
+          rows="5"
+          cols="30"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="description">
+        </textarea>
+      </div>
+    </ng-container>
+
+    <div class="form-group">
+      <label for="imagePicker" class="block font-medium text-900 mb-2 text-lg">
+        Kategória képe
+      </label>
+
+      <p-button
+        *ngIf="!imagePreview"
+        icon="pi pi-image"
+        styleClass="p-button p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <button
+        *ngIf="imagePreview"
+        pButton
+        pRipple
+        pTooltip="Kép törlése"
+        tooltipPosition="bottom"
+        (click)="onImageClear(imagePicker)"
+        type="button"
+        icon="pi pi-times"
+        class="p-button p-button-danger p-button mb-2"></button>
+
+      <input
+        id="imagePicker"
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <img
+        *ngIf="imagePreview"
+        class="image-preview border-round"
+        [src]="imagePreview"
+        alt="Kategória" />
+
+      <img
+        *ngIf="!imagePreview"
+        class="mt-2 image-preview border-round"
+        src="../../../../../../assets/images/no-image.png"
+        alt="Kategória" />
+    </div>
+  </form>
+
+  <p-button
+    type="submit"
+    label="Hozzáadás"
+    styleClass="p-button w-full"
+    [disabled]="!addCategoryForm.valid || !addCategoryForm.dirty"
+    (click)="onAddCategory()">
+  </p-button>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

@@ -4,17 +4,10 @@ import { Store } from '@ngrx/store';
 import { map, Observable, tap } from 'rxjs';
 
 import { ApiResponse } from '@core/models/api-response.model';
-import { CategoryType } from '@core/enums/category-type.enum';
-import { Category, RawCategory } from '@core/models/category.model';
+import { Category, ProductCategory } from '@core/models/category.model';
 import { ApiService } from './api.service';
-import {
-  addCategory,
-  deleteCategory,
-  updateCategory,
-  updateInspirationsCategory,
-  updateMaterialsCategory,
-  updateProductsCategory
-} from '@core/store';
+import { deleteCategory } from '@core/store';
+import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
 
 @Injectable({
   providedIn: 'root'
@@ -22,29 +15,36 @@ import {
 export class CategoryService {
   constructor(private apiService: ApiService, private store: Store) {}
 
-  getCategories$(): Observable<Category[]> {
-    return this.apiService
-      .get<ApiResponse<Category[]>>('category/getAll')
-      .pipe(map((categoriesDTO) => categoriesDTO.data));
-  }
-
-  addCategory$(category: RawCategory): Observable<Category> {
+  addCategory$(category: Category): Observable<Category> {
     const categoryFormData = new FormData();
     categoryFormData.append('category', JSON.stringify(category));
     categoryFormData.append('image', category.image);
 
     return this.apiService
-      .post<ApiResponse<Category>>('category/addOne', categoryFormData)
-      .pipe(
-        map((categoryDTO) => categoryDTO.data),
-        tap((category) => {
-          this.store.dispatch(addCategory({ category }));
-        })
-      );
+      .post<ApiResponse<Category>>('category/addCategory', categoryFormData)
+      .pipe(map((categoryDTO) => categoryDTO.data));
+  }
+
+  getCategoryById$(id: string): Observable<Category> {
+    return this.apiService
+      .get<ApiResponse<Category>>(`category/getCategoryById/${id}`)
+      .pipe(map((categoryDTO) => categoryDTO.data));
+  }
+
+  getCategories$(): Observable<Category[]> {
+    return this.apiService
+      .get<ApiResponse<Category[]>>('category/getAllCategories')
+      .pipe(map((categoriesDTO) => categoriesDTO.data));
+  }
+
+  getProductCategories$(): Observable<ProductCategory[]> {
+    return this.apiService
+      .get<ApiResponse<ProductCategory[]>>('category/getProductCategories')
+      .pipe(map((categoriesDTO) => categoriesDTO.data));
   }
 
   updateCategory$(
-    category: RawCategory,
+    category: Category,
     categoryId: string
   ): Observable<Category> {
     const categoryFormData = new FormData();
@@ -53,27 +53,20 @@ export class CategoryService {
 
     return this.apiService
       .patch<ApiResponse<Category>>(
-        `category/updateOne/${categoryId}`,
+        `category/updateCategory/${categoryId}`,
         categoryFormData
       )
-      .pipe(
-        map((categoriesDTO) => categoriesDTO.data),
-        tap((category) => {
-          this.store.dispatch(updateCategory({ category }));
+      .pipe(map((categoryDTO) => categoryDTO.data));
+  }
 
-          switch (category.type) {
-            case CategoryType.PRODUCT_CATEGORY:
-              this.store.dispatch(updateProductsCategory({ category }));
-              break;
-            case CategoryType.MATERIAL_CATEGORY:
-              this.store.dispatch(updateMaterialsCategory({ category }));
-              break;
-            case CategoryType.INSPIRATION_CATEGORY:
-              this.store.dispatch(updateInspirationsCategory({ category }));
-              break;
-          }
-        })
-      );
+  updateCategoriesOrder$(
+    categoryOrderData: CategoryOrderData
+  ): Observable<null> {
+    return this.apiService
+      .patch<ApiResponse<null>>('category/updateCategoriesOrder', {
+        categoryOrderData
+      })
+      .pipe(map((categoryDTO) => categoryDTO.data));
   }
 
   deleteCategory$(id: string): Observable<null> {

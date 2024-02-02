@@ -1,0 +1,146 @@
+<ng-container *ngIf="!isLoading; else loading">
+  <ng-container *ngIf="category$ | async as category; else loading">
+    <div class="font-medium text-2xl text-900">Kategória szerkesztés</div>
+    <p-divider styleClass="mb-5"></p-divider>
+
+    <form [formGroup]="editCategoryForm" class="mt-2">
+      <div class="form-group">
+        <p-badge
+          *ngIf="category.type === CategoryType.PRODUCT_CATEGORY"
+          value="Termék kategória"
+          severity="success"
+          styleClass="mb-1">
+        </p-badge>
+
+        <p-badge
+          *ngIf="category.type === CategoryType.PRODUCT_CATEGORY"
+          [value]="category.isSubCategory ? 'Alkategória' : 'Főkategória'"
+          severity="warning">
+        </p-badge>
+
+        <p-badge
+          *ngIf="category.type === CategoryType.MATERIAL_CATEGORY"
+          value="Minta kategória"
+          severity="warning"
+          size="large">
+        </p-badge>
+
+        <p-badge
+          *ngIf="category.type === CategoryType.INSPIRATION_CATEGORY"
+          value="Inspiració kategória"
+          size="large">
+        </p-badge>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="block font-medium text-900 mb-2 text-lg">
+          Kategória neve
+        </label>
+
+        <input id="name" formControlName="name" type="text" pInputText />
+      </div>
+
+      <ng-container *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
+        <div class="form-group">
+          <label
+            for="description"
+            class="block font-medium text-900 mb-2 text-lg">
+            Kategória leírása
+          </label>
+
+          <textarea
+            rows="5"
+            cols="30"
+            pInputTextarea
+            [autoResize]="true"
+            formControlName="description"></textarea>
+        </div>
+      </ng-container>
+
+      <div class="form-group">
+        <label class="block font-medium text-900 mb-2 text-lg"
+          >Kategória képe</label
+        >
+
+        <p-button
+          *ngIf="!imagePreview"
+          icon="pi pi-image"
+          styleClass="p-button p-button-secondary"
+          (click)="imagePicker.click()">
+        </p-button>
+
+        <button
+          *ngIf="imagePreview"
+          pButton
+          pRipple
+          pTooltip="Kép törlése"
+          tooltipPosition="bottom"
+          (click)="onImageClear(imagePicker)"
+          type="button"
+          icon="pi pi-times"
+          class="p-button p-button-danger p-button mb-2"></button>
+
+        <input
+          id="imagePicker"
+          type="file"
+          class="hidden"
+          #imagePicker
+          (change)="onImagePicked($event)" />
+
+        <img
+          *ngIf="imagePreview"
+          class="image-preview border-round"
+          [src]="imagePreview"
+          alt="Kategória" />
+
+        <img
+          *ngIf="!imagePreview"
+          class="mt-2 image-preview border-round"
+          src="../../../../../../assets/images/no-image.png"
+          alt="Kategória" />
+      </div>
+    </form>
+
+    <p-button
+      label="Módosítás"
+      styleClass="p-button w-full mb-3"
+      [disabled]="!editCategoryForm.dirty || !editCategoryForm.valid"
+      (click)="onEditCategory()">
+    </p-button>
+
+    <div class="font-medium text-2xl text-900">Kategória előzmények</div>
+    <p-divider styleClass="mb-5"></p-divider>
+
+    <span class="text-blue-500">
+      Hozzáadva: {{ category.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <span class="text-green-500 block mb-4">
+      Utoljára módosítva:
+      {{ category.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <p-table [value]="category.logs">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Modul</th>
+          <th>Dátum</th>
+          <th>Üzenet</th>
+          <th>Felhasználó</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-log>
+        <tr>
+          <td>{{ log.meta.module }}</td>
+          <td>{{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}</td>
+          <td>{{ log.message }}</td>
+          <td>{{ log.meta.user }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

@@ -1,4 +1,4 @@
-<p-card header="Kategóriák" *ngIf="categories$ | async as categories">
+<ng-container *ngIf="categories$ | async as categories; else loading">
   <p-table
     #table
     styleClass="p-datatable-gridlines"
@@ -11,17 +11,19 @@
       <div class="flex">
         <p-button
           icon="pi pi-plus"
-          label="Kategória hozzáadása"
+          label="Kategória hozzáadás"
           styleClass="p-button p-button-success"
-          (click)="onAddCategory()">
+          routerLink="/admin/categories/add">
         </p-button>
 
-        <span class="p-input-icon-left ml-auto">
+        <span class="p-input-icon-left ml-auto w-6">
           <i class="pi pi-search"></i>
+
           <input
             pInputText
             pTooltip="Kereshető mezők: Azonosító, Név"
             tooltipPosition="bottom"
+            class="w-full"
             type="text"
             (input)="applyTableGlobalFilter($event, 'contains', table)"
             placeholder="Keresés" />
@@ -37,7 +39,11 @@
 
         <th>Név</th>
 
-        <th>Típus</th>
+        <th>Kategória típus</th>
+
+        <th>Alkategóriák</th>
+
+        <th>Tétel típus</th>
 
         <th pSortableColumn="items.length">
           Tételek
@@ -65,35 +71,81 @@
             styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td class="font-italic font-semibold">{{ category._id }}</td>
+        <td class="text-primary w-9rem">{{ category._id }}</td>
 
-        <td class="font-semibold text-blue-500">{{ category.name }}</td>
+        <td class="text-cyan-900">{{ category.name }}</td>
 
-        <td>
-          <ng-container *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
-            <p-badge value="Termék kategória" severity="success"></p-badge>
-          </ng-container>
+        <td class="text-cyan-900 w-3rem">
+          <span *ngIf="category.isSubCategory"> Alkategória </span>
 
-          <ng-container
-            *ngIf="category.type === CategoryType.MATERIAL_CATEGORY">
-            <p-badge value="Minta kategória" severity="warning"></p-badge>
-          </ng-container>
-
-          <ng-container
-            *ngIf="category.type === CategoryType.INSPIRATION_CATEGORY">
-            <p-badge value="Inspiració kategória"></p-badge>
-          </ng-container>
+          <span *ngIf="!category.isSubCategory"> Főkategória </span>
         </td>
 
-        <td class="font-semibold">{{ category.items.length }}</td>
+        <td class="font-semibold w-3rem text-center">
+          <ng-container
+            *ngIf="
+              category.type === CategoryType.PRODUCT_CATEGORY;
+              else notProductCategorySubcategoriesPlaceholder
+            ">
+            <span *ngIf="!category.isSubCategory">
+              {{ category.subCategories.length }}
+            </span>
+
+            <span *ngIf="category.isSubCategory"> - </span>
+          </ng-container>
+
+          <ng-template #notProductCategorySubcategoriesPlaceholder>
+            -
+          </ng-template>
+        </td>
+
+        <td class="w-3rem">
+          <div class="flex justify-content-center">
+            <ng-container
+              *ngIf="category.type === CategoryType.PRODUCT_CATEGORY">
+              <p-badge value="Termék" severity="success"></p-badge>
+            </ng-container>
+
+            <ng-container
+              *ngIf="category.type === CategoryType.MATERIAL_CATEGORY">
+              <p-badge value="Minta" severity="warning"></p-badge>
+            </ng-container>
+
+            <ng-container
+              *ngIf="category.type === CategoryType.INSPIRATION_CATEGORY">
+              <p-badge value="Inspiració"></p-badge>
+            </ng-container>
+          </div>
+        </td>
+
+        <td class="font-semibold w-3rem text-center">
+          <ng-container
+            *ngIf="
+              category.type === CategoryType.PRODUCT_CATEGORY;
+              else notProductCategoryItemsPlaceholder
+            ">
+            <span *ngIf="category.isSubCategory">
+              {{ category.items.length }}
+            </span>
+
+            <span *ngIf="!category.isSubCategory"> - </span>
+          </ng-container>
+
+          <ng-template #notProductCategoryItemsPlaceholder>
+            {{ category.items.length }}
+          </ng-template>
+        </td>
 
         <td>
           <button
-            (click)="onEditCategory(category)"
+            [routerLink]="['/admin/categories/edit', category.id]"
             pButton
-            pRipple
-            pTooltip="Kategória módosítás"
-            tooltipPosition="bottom"
+            [pTooltip]="
+              category.isSubCategory
+                ? 'Alkategória módosítás'
+                : 'Főkategória módosítás'
+            "
+            tooltipPosition="left"
             type="button"
             icon="pi pi-cog"
             class="p-button p-button p-button-warning p-button mb-1"></button>
@@ -101,14 +153,16 @@
           <button
             (click)="onDeleteCategory(category)"
             pButton
-            pRipple
-            [disabled]="category.items.length > 0"
-            [pTooltip]="
-              category.items.length > 0
-                ? 'Addig nem törölhető a kategória amíg vannak hozzárendelt tételek'
-                : 'Kategória törlése'
+            [disabled]="
+              (category.isSubCategory && category.items.length) ||
+              (!category.isSubCategory && category.subCategories.length)
             "
-            tooltipPosition="bottom"
+            [pTooltip]="
+              category.isSubCategory
+                ? 'Alkategória törlése'
+                : 'Főkategória törlése'
+            "
+            tooltipPosition="left"
             type="button"
             icon="pi pi-times"
             class="p-button p-button p-button-danger p-button"></button>
@@ -118,10 +172,20 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center text-800 text-4xl">
+        <td colspan="8" class="text-center text-800 text-4xl">
           Nem található kategória
+          <p-button
+            icon="pi pi-plus"
+            label="Kategória hozzáadás"
+            styleClass="p-button p-button-success block mx-auto mt-2"
+            routerLink="/admin/categories/add">
+          </p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-</p-card>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

@@ -3,20 +3,28 @@ import { Product } from './product.model';
 import { Material } from './material.model';
 import { Inspiration } from './inspiration.model';
 
-export interface RawCategory {
+export interface Category {
+  id?: string;
   type: CategoryType;
+  isSubCategory?: boolean;
+  subCategories?: Category[];
+  mainCategory?: string;
   name: string;
   image: string;
+  sortIndex?: number;
   description?: string;
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
-export interface Category {
-  id: string;
-  type: CategoryType;
-  name: string;
-  image: string;
-  description?: string;
-  items: (Product | Material | Inspiration)[];
-  updatedAt: Date;
-  createdAt: Date;
+export interface ProductCategory extends Category {
+  items: Product[];
+}
+
+export interface MaterialCategory extends Category {
+  items: Material[];
+}
+
+export interface InspirationCategory extends Category {
+  items: Inspiration[];
 }

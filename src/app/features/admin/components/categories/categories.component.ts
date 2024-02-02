@@ -1,61 +1,69 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+import { filter, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { Table, TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ImageModule } from 'primeng/image';
+import { SkeletonModule } from 'primeng/skeleton';
+import { BadgeModule } from 'primeng/badge';
+import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
 
-import { Store } from '@ngrx/store';
-import { Table } from 'primeng/table';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, map, Observable, switchMap, tap } from 'rxjs';
-
-import { selectAllCategories } from '@core/store';
 import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { EditCategoryComponent } from './components/edit-category/edit-category.component';
-import { AddCategoryComponent } from './components/add-category/add-category.component';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { TooltipOptions } from 'primeng/api';
 
-@UntilDestroy()
 @Component({
-  selector: 'mhd-categories',
+  selector: 'nyk-categories',
+  standalone: true,
+  imports: [
+    CommonModule,
+    CardModule,
+    TableModule,
+    ButtonModule,
+    ImageModule,
+    SkeletonModule,
+    BadgeModule,
+    TooltipModule,
+    InputTextModule,
+    RouterModule,
+    SpinnerComponent
+  ],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoriesComponent implements OnInit {
-  readonly CategoryType = CategoryType;
-
   categories$: Observable<Category[]>;
+
+  tooltipOptions: TooltipOptions;
 
   images: string[] = [];
   imageLoadedStatus: boolean[] = [];
 
+  readonly CategoryType = CategoryType;
+
+  private categoryDeleteSubject = new Subject<void>();
+
   constructor(
-    private store: Store,
     private categoryService: CategoryService,
     private toastr: ToastrService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.store.select(selectAllCategories).pipe(
-      filter((categories) => !!categories),
-      map((categories) => [...categories]),
-      untilDestroyed(this)
+    this.categories$ = this.categoryDeleteSubject.pipe(
+      startWith(null),
+      switchMap(() => this.categoryService.getCategories$())
     );
-  }
-
-  onAddCategory(): void {
-    this.dialog.open(AddCategoryComponent, {
-      minWidth: '40vw'
-    });
-  }
-
-  onEditCategory(category: Category): void {
-    this.dialog.open(EditCategoryComponent, {
-      minWidth: '40vw',
-      data: category
-    });
   }
 
   onDeleteCategory(category: Category): void {
@@ -71,6 +79,7 @@ export class CategoriesComponent implements OnInit {
         filter((confirmed) => !!confirmed),
         switchMap(() => this.categoryService.deleteCategory$(category.id)),
         tap(() => {
+          this.categoryDeleteSubject.next();
           this.toastr.success(`${category.name} kategória törölve`);
         })
       )

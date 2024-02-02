@@ -1,0 +1,40 @@
+.nyk-categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 40px;
+  grid-row-gap: 28px;
+  margin-top: 28px;
+
+  &-item {
+    padding: 40px 60px;
+    background-color: var(--color-grey);
+    cursor: pointer;
+
+    &:hover {
+      .nyk-categories-item-image {
+        transform: scale(1.1);
+      }
+
+      .nyk-categories-item-title {
+        color: var(--color-on-grey);
+      }
+    }
+
+    &-image {
+      width: 160px;
+      margin: 0 auto 8px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    &-title {
+      margin-bottom: 8px;
+      font-size: var(--font-size-l);
+      transition: all 0.3s ease-in-out;
+    }
+
+    &-count {
+      color: var(--color-black);
+      font-size: var(--font-size-m);
+    }
+  }
+}

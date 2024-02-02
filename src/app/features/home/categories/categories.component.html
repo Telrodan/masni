@@ -1,0 +1,17 @@
+<ng-container *ngIf="data">
+  <a
+    *ngFor="let category of data"
+    class="nyk-categories-item"
+    routerLink="{{ category.routerLink }}">
+    <img
+      class="nyk-categories-item-image"
+      [src]="category.image"
+      [alt]="category.label" />
+
+    <p class="nyk-categories-item-title">
+      {{ category.label }}
+    </p>
+
+    <div class="nyk-categories-item-count">{{ category.count }} Termék</div>
+  </a>
+</ng-container>
