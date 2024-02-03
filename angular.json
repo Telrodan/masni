@@ -35,12 +35,17 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeflex/primeflex.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
               "src/scss/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["src/scss"]
             },
-            "scripts": ["node_modules/chart.js/dist/chart.js"],
+            "scripts": [
+              "node_modules/chart.js/dist/chart.js",
+              "node_modules/quill/dist/quill.js"
+            ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },

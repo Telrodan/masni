@@ -14,6 +14,7 @@
         class="nyk-order-categories-category"
         [class.selected]="selectedCategory?.id === category.id"
         (click)="onSelectCategory(category)"
+        cdkDragBoundary=".drag-boundary"
         cdkDrag>
         {{ category.name }}
       </div>
@@ -41,7 +42,8 @@
         <div
           *ngFor="let category of selectedCategory.subCategories"
           class="nyk-order-categories-category"
-          cdkDrag>
+          cdkDrag
+          cdkDragBoundary=".drag-boundary">
           {{ category.name }}
         </div>
       </div>

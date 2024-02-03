@@ -43,6 +43,12 @@ export class CategoryService {
       .pipe(map((categoriesDTO) => categoriesDTO.data));
   }
 
+  getInspirationCategories$(): Observable<ProductCategory[]> {
+    return this.apiService
+      .get<ApiResponse<ProductCategory[]>>('category/getInspirationCategories')
+      .pipe(map((categoriesDTO) => categoriesDTO.data));
+  }
+
   updateCategory$(
     category: Category,
     categoryId: string

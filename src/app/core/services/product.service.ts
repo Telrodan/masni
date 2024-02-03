@@ -76,9 +76,22 @@ export class ProductService {
     );
   }
 
-  getProducts(): Observable<Product[]> {
+  getProducts$(): Observable<Product[]> {
     return this.apiService
-      .get<ApiResponse<Product[]>>('product/getAll')
+      .get<ApiResponse<Product[]>>('product/getAllProducts')
+      .pipe(map((productsDTO) => productsDTO.data));
+  }
+
+  getProductById$(id: string): Observable<Product> {
+    console.log(id);
+    return this.apiService
+      .get<ApiResponse<Product>>(`product/getProductById/${id}`)
+      .pipe(map((productDTO) => productDTO.data));
+  }
+
+  getDreamItProducts$(): Observable<Product[]> {
+    return this.apiService
+      .get<ApiResponse<Product[]>>('product/getDreamItProducts')
       .pipe(map((productsDTO) => productsDTO.data));
   }
 }

@@ -6,6 +6,8 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -15,23 +17,20 @@ import {
 
 import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
+import { DividerModule } from 'primeng/divider';
+import { BadgeModule } from 'primeng/badge';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
-
 import {
   addImageToFormAndSetPreview,
   removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { CommonModule } from '@angular/common';
-import { DividerModule } from 'primeng/divider';
-import { BadgeModule } from 'primeng/badge';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ButtonModule } from 'primeng/button';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InputTextModule } from 'primeng/inputtext';
 import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
@@ -86,16 +85,23 @@ export class EditCategoryComponent implements OnInit {
       switchMap((params) =>
         combineLatest([
           this.categoryService.getCategoryById$(params['id']),
-          this.logService.getItemLogsByItemId$(params['id'])
+          this.logService
+            .getItemLogsByItemId$(params['id'])
+            .pipe(
+              map((logs) =>
+                logs.sort(
+                  (a, b) =>
+                    new Date(b.timestamp).getTime() -
+                    new Date(a.timestamp).getTime()
+                )
+              )
+            )
         ])
       ),
       filter((category) => !!category),
       map(([category, logs]) => ({
         ...category,
-        logs: logs.sort(
-          (a, b) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        )
+        logs
       })),
       tap((category) => {
         this.categoryId = category.id;

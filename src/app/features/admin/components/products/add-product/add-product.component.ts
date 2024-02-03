@@ -1,10 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 
-import { Store } from '@ngrx/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, tap } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { Observable, map, tap } from 'rxjs';
 
 import { RawProduct } from '@core/models/product.model';
 import { Category } from '@core/models/category.model';
@@ -12,25 +23,64 @@ import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
-  selectAllQuestion,
-  selectInspirationCategories,
-  selectProductCategories
-} from '@core/store';
-import {
   addImagesToFormAndSetPreview,
   removeImagesFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
+import { CommonModule } from '@angular/common';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputTextModule } from 'primeng/inputtext';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { DividerModule } from 'primeng/divider';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CategoryService } from '@core/services/category.service';
+import { EditorModule } from 'primeng/editor';
+import { QuestionService } from '@core/services/question.service';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragPreview,
+  CdkDropList,
+  moveItemInArray
+} from '@angular/cdk/drag-drop';
 
 @UntilDestroy()
 @Component({
-  selector: 'mhd-add-product',
+  selector: 'nyk-add-product',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    DropdownModule,
+    InputTextareaModule,
+    ButtonModule,
+    RadioButtonModule,
+    InputTextModule,
+    SpinnerComponent,
+    DividerModule,
+    InputSwitchModule,
+    EditorModule,
+    FormsModule,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPreview
+  ],
   templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.scss']
+  styleUrls: ['./add-product.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProductComponent implements OnInit {
-  categories$: Observable<Category[]>;
+  @HostBinding('class') class = 'nyk-add-product';
+
+  productSubCategories$: Observable<Category[]>;
   questions$: Observable<Question[]>;
   inspirationCategories$: Observable<Category[]>;
+
+  isLoading = false;
 
   questions: Question[];
   selectedQuestions: Question[] = [];
@@ -57,28 +107,27 @@ export class AddProductComponent implements OnInit {
   imagesPreview: string[] = [];
 
   constructor(
-    private store$: Store,
-    private dialogRef: MatDialogRef<AddProductComponent>,
     private productService: ProductService,
+    private categoryService: CategoryService,
+    private questionService: QuestionService,
+    private changeDetectorRef: ChangeDetectorRef,
     private toastr: ToastrService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.store$
-      .select(selectProductCategories)
-      .pipe(untilDestroyed(this));
+    this.productSubCategories$ = this.categoryService
+      .getProductCategories$()
+      .pipe(
+        map((categories) =>
+          categories.filter((category) => category.isSubCategory)
+        )
+      );
 
-    this.questions$ = this.store$.select(selectAllQuestion).pipe(
-      tap((questions) => {
-        this.questions = questions;
-      }),
-      untilDestroyed(this)
-    );
+    this.inspirationCategories$ =
+      this.categoryService.getInspirationCategories$();
 
-    this.inspirationCategories$ = this.store$
-      .select(selectInspirationCategories)
-      .pipe(untilDestroyed(this));
+    this.questions$ = this.questionService.getQuestions$();
   }
 
   addQuestion(): void {
@@ -106,17 +155,40 @@ export class AddProductComponent implements OnInit {
     this.toastr.success('Kérdés törölve');
   }
 
-  onImagePicked(event: Event): void {
-    this.imagesPreview = addImagesToFormAndSetPreview(
+  async onImagePicked(event: Event): Promise<void> {
+    console.log((event.target as HTMLInputElement).files);
+    this.imagesPreview = await addImagesToFormAndSetPreview(
       event,
       this.addProductForm
     );
+    this.changeDetectorRef.markForCheck();
+
+    if (this.imagesPreview.length > 4) {
+      this.toastr.info('Maximum 4 képet tölthetsz fel');
+      this.imagesPreview = removeImagesFromFormAndInputAndClearPreview(
+        this.addProductForm,
+        event.target as HTMLInputElement
+      );
+    }
   }
 
   onImageClear(imageInput: HTMLInputElement): void {
     this.imagesPreview = removeImagesFromFormAndInputAndClearPreview(
       this.addProductForm,
       imageInput
+    );
+  }
+
+  drop(event: CdkDragDrop<{ image: string }[]>) {
+    moveItemInArray(
+      this.imagesPreview,
+      event.previousIndex,
+      event.currentIndex
+    );
+    moveItemInArray(
+      this.addProductForm.value.images,
+      event.previousIndex,
+      event.currentIndex
     );
   }
 
@@ -149,12 +221,11 @@ export class AddProductComponent implements OnInit {
           .pipe(
             tap(() => {
               this.toastr.success(`${product.name} hozzáadva`);
-              this.dialogRef.close();
             })
           )
           .subscribe();
       } else {
-        this.toastr.info('Kérlek adj meg egy termék nevet');
+        this.toastr.info('Kérlek add meg a termék nevét');
       }
     } else {
       this.toastr.info('Kérlek töltsd ki az összes mezőt');
