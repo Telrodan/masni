@@ -1,8 +1,14 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  ViewEncapsulation
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
-import { tap } from 'rxjs';
+import { catchError, tap } from 'rxjs';
 
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
@@ -11,13 +17,31 @@ import { PostcodeApiService } from '@core/services/postcode-api.service';
 import { emailRegex } from '@shared/util/email-regex';
 import { phoneRegex } from '@shared/util/phone-regex';
 import { Title, Meta } from '@angular/platform-browser';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DividerModule } from 'primeng/divider';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'mhd-signup',
+  selector: 'nyk-signup',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputSwitchModule,
+    DividerModule,
+    SpinnerComponent,
+    RouterModule
+  ],
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupComponent {
+  @HostBinding('class.nyk-signup') hostClass = true;
+
   signupForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.pattern(emailRegex)]],
@@ -35,6 +59,8 @@ export class SignupComponent {
     privacy: [false, Validators.requiredTrue],
     subscribed: [false, Validators.required]
   });
+
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -75,6 +101,7 @@ export class SignupComponent {
 
   onSignup(): void {
     if (this.signupForm.valid) {
+      this.isLoading = true;
       const user: User = {
         name: this.signupForm.value.name,
         email: this.signupForm.value.email,
@@ -100,8 +127,9 @@ export class SignupComponent {
         .signup$(user)
         .pipe(
           tap(() => {
-            this.toastr.success('Sikeres regisztráció, átirányítva a főoldra');
+            this.toastr.success('Regisztráció sikeres, átirányítva a főoldra');
             this.signupForm.reset();
+            this.isLoading = false;
             this.router.navigate(['/']);
           })
         )
@@ -116,6 +144,10 @@ export class SignupComponent {
       this.postcodeApiService
         .getPostcodeInformation$(postcode)
         .pipe(
+          catchError(() => {
+            this.toastr.error('Nem található ilyen irányítószám');
+            return [];
+          }),
           tap((place) => {
             this.signupForm.get('shippingCity').setValue(place['place name']);
             this.signupForm.get('shippingCounty').setValue(place.state);
