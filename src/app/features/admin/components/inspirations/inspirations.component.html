@@ -1,5 +1,5 @@
-<ng-container *ngIf="inspirations$ | async as inspirations">
-  <p-card header="Inspirációk">
+<ng-container *ngIf="!isLoading; else loading">
+  <ng-container *ngIf="inspirations$ | async as inspirations">
     <p-table
       #table
       styleClass="p-datatable-gridlines"
@@ -14,15 +14,17 @@
             icon="pi pi-plus"
             label="Hozzáadás"
             styleClass="p-button p-button-success"
-            (click)="onAddInspiration()">
+            routerLink="/admin/inspirations/add">
           </p-button>
 
-          <span class="p-input-icon-left ml-auto">
+          <span class="p-input-icon-left ml-auto w-6">
             <i class="pi pi-search"></i>
+
             <input
               pInputText
               pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
               tooltipPosition="bottom"
+              class="w-full"
               type="text"
               (input)="applyFilterGlobal($event, 'contains', table)"
               placeholder="Keresés" />
@@ -32,7 +34,7 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th class="w-9rem">Kép</th>
+          <th>Kép</th>
 
           <th>Azonosító</th>
 
@@ -46,7 +48,7 @@
 
       <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
         <tr>
-          <td>
+          <td class="w-1">
             <img
               class="hidden"
               [src]="inspiration.image"
@@ -65,32 +67,36 @@
               styleClass="skeleton"></p-skeleton>
           </td>
 
-          <td class="font-italic font-semibold">{{ inspiration.id }}</td>
+          <td class="text-primary w-9rem">{{ inspiration.id }}</td>
 
-          <td class="font-semibold text-blue-500">{{ inspiration.name }}</td>
+          <td class="text-cyan-900">{{ inspiration.name }}</td>
 
-          <td><p-badge [value]="inspiration.category.name"></p-badge></td>
+          <td class="text-cyan-900 w-3rem">
+            <p-badge [value]="inspiration.category.name"></p-badge>
+          </td>
 
           <td>
-            <button
-              (click)="onEditInspiration(inspiration)"
-              pButton
-              pRipple
-              pTooltip="Inspiráció módosítása"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-cog"
-              class="p-button p-button-warning p-button mb-1"></button>
+            <div class="flex flex-row">
+              <button
+                [routerLink]="['/admin/inspirations/edit', inspiration.id]"
+                pButton
+                pRipple
+                pTooltip="Inspiráció módosítása"
+                tooltipPosition="left"
+                type="button"
+                icon="pi pi-cog"
+                class="p-button p-button-warning p-button mr-1"></button>
 
-            <button
-              (click)="onDeleteInspiration(inspiration)"
-              pButton
-              pRipple
-              pTooltip="Inspiráció törlése"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-times"
-              class="p-button p-button-danger p-button"></button>
+              <button
+                (click)="onDeleteInspiration(inspiration)"
+                pButton
+                pRipple
+                pTooltip="Inspiráció törlése"
+                tooltipPosition="left"
+                type="button"
+                icon="pi pi-times"
+                class="p-button p-button-danger p-button"></button>
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -99,9 +105,20 @@
         <tr>
           <td colspan="6" class="text-center text-800 text-4xl">
             Nem található inspiráció
+
+            <p-button
+              icon="pi pi-plus"
+              label="Hozzáadás"
+              styleClass="p-button p-button-success block mx-auto mt-2"
+              routerLink="/admin/inspirations/add">
+            </p-button>
           </td>
         </tr>
       </ng-template>
     </p-table>
-  </p-card>
+  </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

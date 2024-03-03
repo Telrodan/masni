@@ -1,0 +1,104 @@
+<ng-container *ngIf="!isLoading; else loading">
+  <div class="font-medium text-2xl text-900">Minta hozzáadás</div>
+  <p-divider styleClass="mb-5"></p-divider>
+
+  <form class="flex-auto p-fluid" [formGroup]="addMaterialForm">
+    <div class="form-group">
+      <label for="name" class="block font-medium text-900 mb-2 text-lg">
+        Minta neve
+      </label>
+
+      <input id="name" type="text" formControlName="name" pInputText />
+    </div>
+
+    <div class="form-group" *ngIf="categories$ | async as categories">
+      <label for="category" class="block font-medium text-900 mb-2 text-lg">
+        Minta kategóriája
+      </label>
+
+      <p-dropdown
+        id="category"
+        formControlName="category"
+        placeholder="Válassz egy kategóriát"
+        [options]="categories"
+        optionValue="id"
+        optionLabel="name">
+      </p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="extraPrice" class="block font-medium text-900 mb-2 text-lg">
+        Minta extra ára
+      </label>
+
+      <input
+        id="extraPrice"
+        formControlName="extraPrice"
+        type="number"
+        pInputText />
+    </div>
+
+    <div class="form-group">
+      <label for="stock" class="block font-medium text-900 mb-2 text-lg">
+        Rendelhető?
+      </label>
+
+      <p-inputSwitch formControlName="isAvailable"></p-inputSwitch>
+    </div>
+
+    <div class="form-group">
+      <label for="image" class="block font-medium text-900 mb-2 text-lg">
+        Minta képe
+      </label>
+
+      <p-button
+        *ngIf="!imagePreview"
+        icon="pi pi-image"
+        styleClass="p-button p-button-secondary"
+        (click)="imagePicker.click()">
+      </p-button>
+
+      <button
+        *ngIf="imagePreview"
+        pButton
+        pRipple
+        pTooltip="Kép törlése"
+        tooltipPosition="bottom"
+        (click)="onImageClear(imagePicker)"
+        type="button"
+        icon="pi pi-times"
+        class="p-button p-button-danger p-button mb-2"></button>
+
+      <input
+        id="imagePicker"
+        type="file"
+        class="hidden"
+        #imagePicker
+        (change)="onImagePicked($event)" />
+
+      <img
+        *ngIf="imagePreview"
+        class="image-preview border-round"
+        [src]="imagePreview"
+        alt="Kategória" />
+
+      <img
+        *ngIf="!imagePreview"
+        class="mt-2 image-preview border-round"
+        src="../../../../../../assets/images/no-image.png"
+        alt="Kategória" />
+    </div>
+  </form>
+
+  <p-button
+    type="submit"
+    label="Hozzáadás"
+    styleClass="p-button w-full"
+    [disabled]="!addMaterialForm.valid || !addMaterialForm.dirty"
+    (click)="onAddMaterial()">
+  </p-button>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

@@ -1,0 +1,191 @@
+@import 'mixins';
+
+.nyk-product-card {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  cursor: pointer;
+
+  &-top {
+    position: relative;
+    background-color: var(--color-tertiary);
+
+    &-like,
+    &-discount,
+    &-dream-it,
+    &-new-arrival {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--color-pure-white);
+      border-radius: 500px;
+      box-shadow: var(--shadow);
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    &-like {
+      top: 8px;
+      right: 8px;
+      padding: 8px;
+      color: var(--color-red);
+      background-color: var(--color-primary);
+      font-size: 16px;
+      cursor: pointer;
+
+      i {
+        font-size: 20px;
+      }
+
+      @include respond(sm) {
+        top: 4px;
+        right: 4px;
+      }
+    }
+
+    &-discount {
+      display: flex;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      top: 8px;
+      left: 8px;
+      padding: 4px;
+      color: var(--color-red);
+      background-color: var(--color-primary);
+      font-weight: 500;
+      aspect-ratio: 1 / 1;
+
+      @include respond(sm) {
+        top: 4px;
+        left: 4px;
+      }
+    }
+
+    &-dream-it {
+      bottom: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      font-size: 18px;
+      font-family: 'Dancing Script', cursive;
+      background-color: var(--color-primary);
+
+      @include respond(sm) {
+        bottom: 4px;
+        right: 4px;
+      }
+    }
+
+    &-new-arrival {
+      display: flex;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      bottom: 8px;
+      left: 8px;
+      padding: 4px 8px;
+      aspect-ratio: 1 / 1;
+      background-color: var(--color-secondary);
+
+      @include respond(sm) {
+        bottom: 4px;
+        left: 4px;
+      }
+    }
+
+    &-image {
+      margin-bottom: 8px;
+    }
+  }
+
+  &-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+    text-align: left;
+
+    &-title {
+      font-size: 36px;
+      font-family: 'Dancing Script', cursive;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      @include respond(sm) {
+        font-size: 24px;
+      }
+    }
+
+    &-short-description {
+      height: 38px;
+      color: var(--color-dark-grey);
+      font-size: 16px;
+      font-weight: 300;
+
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      text-overflow: ellipsis;
+
+      @include respond(sm) {
+        display: none;
+      }
+    }
+
+    &-price-wrapper {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 500;
+
+      @include respond(sm) {
+        margin-bottom: 0;
+        font-size: 14px;
+      }
+
+      &-price {
+        margin-right: 12px;
+        color: var(--color-black);
+
+        @include respond(sm) {
+          margin-right: auto;
+        }
+
+        &.discounted {
+          color: var(--color-red);
+          text-decoration: line-through;
+        }
+      }
+
+      &-discounted-price {
+        color: var(--color-black);
+        font-size: 18px;
+      }
+
+      .stock {
+        margin-left: auto;
+        color: var(--color-dark-grey);
+        font-size: 16px;
+        font-weight: 300;
+
+        @include respond(sm) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &-button {
+    width: 100%;
+
+    @include respond(sm) {
+      display: none;
+    }
+  }
+
+  .skeleton {
+    width: 100%;
+  }
+}

@@ -4,7 +4,12 @@ import { Store } from '@ngrx/store';
 import { map, Observable, tap } from 'rxjs';
 
 import { ApiResponse } from '@core/models/api-response.model';
-import { Category, ProductCategory } from '@core/models/category.model';
+import {
+  Category,
+  InspirationCategory,
+  MaterialCategory,
+  ProductCategory
+} from '@core/models/category.model';
 import { ApiService } from './api.service';
 import { deleteCategory } from '@core/store';
 import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
@@ -43,9 +48,17 @@ export class CategoryService {
       .pipe(map((categoriesDTO) => categoriesDTO.data));
   }
 
-  getInspirationCategories$(): Observable<ProductCategory[]> {
+  getInspirationCategories$(): Observable<InspirationCategory[]> {
     return this.apiService
-      .get<ApiResponse<ProductCategory[]>>('category/getInspirationCategories')
+      .get<ApiResponse<InspirationCategory[]>>(
+        'category/getInspirationCategories'
+      )
+      .pipe(map((categoriesDTO) => categoriesDTO.data));
+  }
+
+  getMaterialCategories$(): Observable<MaterialCategory[]> {
+    return this.apiService
+      .get<ApiResponse<MaterialCategory[]>>('category/getMaterialCategories')
       .pipe(map((categoriesDTO) => categoriesDTO.data));
   }
 

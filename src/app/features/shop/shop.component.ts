@@ -5,12 +5,13 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 
 import { Store } from '@ngrx/store';
 import { map, switchMap, Observable, filter } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { ShopPageData } from '@core/models/shop-page-data.model';
 import {
@@ -20,17 +21,20 @@ import {
   selectFeaturedProducts,
   selectProductCategoryWithAvailableProductsByCategoryId
 } from '@core/store';
-import { PaginatorState } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { CommonModule } from '@angular/common';
 
 @UntilDestroy()
 @Component({
   selector: 'mhd-shop',
+  standalone: true,
+  imports: [CommonModule, RouterModule, PaginatorModule, ProgressSpinnerModule],
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ShopComponent implements OnInit, AfterViewChecked {
-  @HostBinding('class.mhd-shop') class = true;
+  @HostBinding('class.nyk-shop') hostClass = true;
 
   pageData$: Observable<ShopPageData>;
 

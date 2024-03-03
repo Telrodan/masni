@@ -39,9 +39,12 @@ export class SliderComponent implements OnChanges {
     autoplaySpeed: 1000,
     touchDrag: true,
     pullDrag: true,
-    dots: true,
+    dots: false,
     navSpeed: 1000,
-    navText: ['', ''],
+    navText: [
+      '<i class="pi pi-chevron-left"></i>',
+      '<i class="pi pi-chevron-right"></i>'
+    ],
     responsive: {
       0: {
         items: 1
@@ -53,7 +56,7 @@ export class SliderComponent implements OnChanges {
         items: 1
       }
     },
-    nav: false
+    nav: true
   };
 
   ngOnChanges(changes: { productCategories: SimpleChange }) {

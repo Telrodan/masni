@@ -7,5 +7,6 @@ export interface Log {
     user?: string;
     module: string;
     stack?: string;
+    itemId?: string;
   };
 }

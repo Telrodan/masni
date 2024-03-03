@@ -43,8 +43,14 @@ export class QuestionService {
 
   getQuestions$(): Observable<Question[]> {
     return this.apiService
-      .get<ApiResponse<Question[]>>('question/getAll')
+      .get<ApiResponse<Question[]>>('question/getAllQuestions')
       .pipe(map((questionsDTO) => questionsDTO.data));
+  }
+
+  getQuestionById$(id: string): Observable<Question> {
+    return this.apiService
+      .get<ApiResponse<Question>>(`question/getQuestionById/${id}`)
+      .pipe(map((questionDTO) => questionDTO.data));
   }
 
   deleteQuestion$(id: string): Observable<null> {

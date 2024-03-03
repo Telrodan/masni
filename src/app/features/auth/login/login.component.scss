@@ -1,0 +1,30 @@
+@import 'mixins';
+
+.nyk-login {
+  &-container {
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: var(--color-pure-white);
+
+    @include respond(sm) {
+      width: 95%;
+    }
+  }
+
+  &-header {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 220, 203, 1) 60%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+
+    a {
+      color: var(--color-blue);
+      cursor: pointer;
+    }
+  }
+}

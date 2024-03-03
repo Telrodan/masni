@@ -2,7 +2,9 @@
 @import './button';
 @import './colors';
 @import './form';
-@import './global';
+@import './overrides';
 @import './reset';
 @import './typography';
-@import './utils';
+
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';

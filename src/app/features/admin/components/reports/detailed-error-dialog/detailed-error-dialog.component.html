@@ -1,0 +1,42 @@
+<div class="confirm-dialog">
+  <i class="pi pi-times close" mat-dialog-close></i>
+
+  <h2 mat-dialog-title class="mb-2">Részletes hiba</h2>
+
+  <mat-dialog-content>
+    <p class="text-primary">
+      Azonosító: <span class="text-800">{{ log._id }}</span>
+    </p>
+
+    <p-divider></p-divider>
+
+    <p class="text-primary">
+      Modul:<span class="text-800"> {{ log.meta.module }}</span>
+    </p>
+
+    <p-divider></p-divider>
+
+    <p class="text-primary">
+      Felhasználó: <span class="text-800"> {{ log.meta.user }}</span>
+    </p>
+
+    <p-divider></p-divider>
+
+    <p class="text-primary">
+      Üzenet: <span class="text-800"> {{ log.message }}</span>
+    </p>
+
+    <p-divider></p-divider>
+
+    <p class="text-primary">
+      Stack:<span class="text-800"> {{ log.meta.stack }}</span>
+    </p>
+
+    <p-divider></p-divider>
+
+    <p class="text-primary">
+      Dátum:
+      <span class="text-800"> {{ log.timestamp | date : 'medium' }}</span>
+    </p>
+  </mat-dialog-content>
+</div>

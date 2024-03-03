@@ -11,6 +11,7 @@ import { AuthData } from '@core/models/auth-data.model';
 import { User } from '@core/models/user.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { TokenPayload } from '@core/models/token-payload.model';
+import { RoleType } from '@core/enums/role-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,16 @@ export class AuthService {
       );
   }
 
-  public logout(): void {
+  getAuthStatus$(): Observable<boolean> {
+    return this.authStatusListener.asObservable();
+  }
+
+  isAdmin(): boolean {
+    const role = this.cookieService.getCookie('role');
+    return role === RoleType.ADMIN;
+  }
+
+  logout(): void {
     clearTimeout(this.tokenTimer);
     this.token = null;
     this.tokenPayload = null;
@@ -57,12 +67,8 @@ export class AuthService {
     this.setAuthStatus(false);
   }
 
-  public getIsAuthenticated(): boolean {
+  getIsAuthenticated(): boolean {
     return this.isAuthenticated;
-  }
-
-  public getAuthStatus$(): Observable<boolean> {
-    return this.authStatusListener.asObservable();
   }
 
   private setAuthStatus(status: boolean): void {
@@ -70,13 +76,13 @@ export class AuthService {
     this.authStatusListener.next(this.isAuthenticated);
   }
 
-  public forgotPassword$(email: string): Observable<ApiResponse<null>> {
+  forgotPassword$(email: string): Observable<ApiResponse<null>> {
     return this.apiService.post<ApiResponse<null>>('auth/forgotPassword', {
       email
     });
   }
 
-  public resetPassword$(
+  resetPassword$(
     password: string,
     passwordConfirm: string,
     resetToken: string

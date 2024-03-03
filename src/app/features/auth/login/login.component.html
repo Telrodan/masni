@@ -1,0 +1,69 @@
+<div *ngIf="!isLoading; else loading" class="nyk-login-container shadow-2">
+  <div class="nyk-login-header text-center py-5">
+    <div class="heading-primary">Belépés</div>
+
+    <span class="paragraph-primary">
+      Nem regisztráltál még?
+      <a routerLink="/auth/signup">Regisztrálj!</a>
+    </span>
+  </div>
+
+  <form (submit)="onLogin()" [formGroup]="loginForm" class="p-4">
+    <div class="form-group">
+      <label for="email" class="block font-medium text-900 mb-2 text-lg">
+        Email
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        placeholder="Email cím"
+        pInputText
+        class="w-full"
+        formControlName="email"
+        autocomplete="username" />
+      <p
+        class="form-helper"
+        *ngIf="loginForm.get('email').invalid && loginForm.get('email').dirty">
+        Kérlek add meg az email címed.
+      </p>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="block font-medium text-900 mb-2 text-lg">
+        Jelszó
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Jelszó"
+        pInputText
+        class="w-full"
+        formControlName="password"
+        autocomplete="current-password" />
+      <p
+        class="form-helper"
+        *ngIf="
+          loginForm.get('password').invalid && loginForm.get('password').dirty
+        ">
+        Kérlek add meg a jelszavad.
+      </p>
+    </div>
+
+    <div class="form-group">
+      <a routerLink="../forgot-password">Elfelejtetted a jelszavad? </a>
+    </div>
+
+    <button
+      class="primary-button w-full"
+      type="submit"
+      [disabled]="!loginForm.valid">
+      Belépés
+    </button>
+  </form>
+</div>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

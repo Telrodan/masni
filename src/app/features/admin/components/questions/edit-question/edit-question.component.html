@@ -1,0 +1,227 @@
+<ng-container *ngIf="!isLoading; else loading">
+  <ng-container *ngIf="question$ | async as question">
+    <div class="font-medium text-2xl text-900">Kérdés módosítás</div>
+    <p-divider styleClass="mb-5"></p-divider>
+    <ng-container
+      *ngIf="questionType === QuestionType.QUESTION_WITH_STRING_ANSWER">
+      <div class="content">
+        <form [formGroup]="editStringQuestionForm">
+          <div class="form-group">
+            <label for="name" class="block font-medium text-900 mb-2 text-lg">
+              Kérdés neve
+            </label>
+
+            <input id="name" formControlName="name" type="text" pInputText />
+          </div>
+
+          <div class="form-group">
+            <label
+              for="question"
+              class="block font-medium text-900 mb-2 text-lg">
+              Kérdés
+            </label>
+
+            <input
+              id="question"
+              formControlName="question"
+              type="text"
+              pInputText />
+          </div>
+
+          <div class="form-group">
+            <label
+              for="optionName"
+              class="block font-medium text-900 mb-2 text-lg">
+              Választási lehetőség
+            </label>
+
+            <input
+              id="optionName"
+              formControlName="optionName"
+              type="text"
+              pInputText />
+          </div>
+
+          <div class="form-group">
+            <label
+              for="extraPrice"
+              class="block font-medium text-900 mb-2 text-lg">
+              Lehetőség extra ára
+            </label>
+
+            <p-inputNumber
+              inputId="extraPrice"
+              styleClass="w-full"
+              formControlName="extraPrice"></p-inputNumber>
+          </div>
+
+          <p-button
+            label="Lehetőség hozzáadása"
+            icon="pi pi-plus"
+            styleClass="p-button p-button-success w-full"
+            (click)="addStringOption()"></p-button>
+        </form>
+
+        <div class="preview">
+          <h3 class="font-medium text-blue-500 mb-1">Előnézet</h3>
+
+          <h4 class="font-medium text-500 mb-1">
+            {{ editStringQuestionForm.value.name }}
+          </h4>
+
+          <ng-container *ngIf="editStringQuestionForm.value.options.length">
+            <div class="form-group">
+              <label
+                for="option"
+                class="block font-medium text-900 mb-2 text-lg">
+                {{ editStringQuestionForm.value.question }}
+              </label>
+
+              <p-dropdown
+                [options]="editStringQuestionForm.value.options"
+                optionLabel="slug"
+                styleClass="w-full">
+              </p-dropdown>
+            </div>
+
+            <h3 class="font-medium text-blue-500 mb-1">Lehetőségek</h3>
+
+            <div
+              class="option-wrapper mb-2"
+              *ngFor="
+                let option of editStringQuestionForm.value.options;
+                let i = index
+              ">
+              <p class="block font-medium text-800 mb-1">
+                {{ i + 1 }}. {{ option?.slug }}
+              </p>
+
+              <p-button
+                icon="pi pi-times"
+                styleClass="p-button-danger"
+                (click)="deleteStringOption(i)">
+              </p-button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        questionType === QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+      ">
+      <div class="content">
+        <form [formGroup]="editMaterialQuestionForm">
+          <div class="form-group">
+            <label for="name" class="block font-medium text-900 mb-2 text-lg">
+              Kérdés neve
+            </label>
+
+            <input id="name" formControlName="name" type="text" pInputText />
+          </div>
+
+          <div class="form-group">
+            <label
+              for="question"
+              class="block font-medium text-900 mb-2 text-lg">
+              Kérdés
+            </label>
+
+            <input
+              id="question"
+              formControlName="question"
+              type="text"
+              pInputText />
+          </div>
+
+          <ng-container *ngIf="categories$ | async as categories">
+            <div class="form-group">
+              <label
+                for="category"
+                class="block font-medium text-900 mb-2 text-lg">
+                Valassz minta kategóriát
+              </label>
+
+              <p-dropdown
+                id="category"
+                formControlName="categoryId"
+                placeholder="Válassz egy kategóriát"
+                [options]="categories"
+                optionValue="id"
+                optionLabel="name">
+              </p-dropdown>
+            </div>
+
+            <p-button
+              label="Kategória hozzáadása"
+              icon="pi pi-plus"
+              (click)="addMaterialOption()">
+            </p-button>
+          </ng-container>
+        </form>
+
+        <div class="preview">
+          <h3 class="font-medium text-blue-500 mb-1">Előnézet</h3>
+
+          <h4 class="font-medium text-500 mb-1">
+            {{ editMaterialQuestionForm.value.name }}
+          </h4>
+
+          <div class="form-group">
+            <label for="option" class="block font-medium text-900 mb-2 text-lg">
+              {{ editMaterialQuestionForm.value.question }}
+            </label>
+
+            <ng-container *ngIf="editMaterialQuestionForm.value.options.length">
+              <p-dropdown
+                [options]="editMaterialQuestionForm.value.options"
+                optionLabel="slug"
+                styleClass="w-full">
+              </p-dropdown>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="selectedCategories.length">
+            <h3 class="font-medium text-blue-500 mb-1">Lehetőségek</h3>
+
+            <div
+              class="option-wrapper mb-2"
+              *ngFor="let option of selectedCategories; let i = index">
+              <p class="block font-medium text-800 mb-1">
+                {{ i + 1 }}. {{ option.name }}
+              </p>
+
+              <p-button
+                icon="pi pi-times"
+                styleClass="p-button-danger"
+                (click)="deleteMaterialCategoryOption(option.id, i)">
+              </p-button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    <p-button
+      *ngIf="questionType === QuestionType.QUESTION_WITH_STRING_ANSWER"
+      type="submit"
+      label="Kérdés módosítása"
+      styleClass="p-button w-full mt-3"
+      (click)="onSubmit()">
+    </p-button>
+
+    <p-button
+      *ngIf="
+        questionType === QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
+      "
+      type="submit"
+      label="Kérdés módosítása"
+      styleClass="p-button w-full mt-3"
+      (click)="onSubmit()">
+    </p-button>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

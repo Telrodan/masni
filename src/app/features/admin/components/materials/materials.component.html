@@ -1,4 +1,4 @@
-<p-card header="Minták" *ngIf="materials$ | async as materials">
+<ng-container header="Minták" *ngIf="materials$ | async as materials">
   <p-table
     #table
     styleClass="p-datatable-gridlines"
@@ -13,15 +13,17 @@
           icon="pi pi-plus"
           label="Minta hozzáadása"
           styleClass="p-button p-button-success"
-          (click)="onAddMaterial()">
+          routerLink="/admin/materials/add">
         </p-button>
 
-        <span class="p-input-icon-left ml-auto">
+        <span class="p-input-icon-left ml-auto w-6">
           <i class="pi pi-search"></i>
+
           <input
             pInputText
             pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
             tooltipPosition="bottom"
+            class="w-full"
             type="text"
             (input)="applyFilterGlobal($event, 'contains', table)"
             placeholder="Keresés" />
@@ -31,7 +33,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="w-9rem">Kép</th>
+        <th>Kép</th>
 
         <th>Azonosító</th>
 
@@ -44,7 +46,7 @@
           <p-sortIcon field="extra"></p-sortIcon>
         </th>
 
-        <th pSortableColumn="isAvailable" class="w-10rem">
+        <th pSortableColumn="isAvailable">
           Rendelhető
           <p-sortIcon field="isAvailable"></p-sortIcon>
         </th>
@@ -55,7 +57,7 @@
 
     <ng-template pTemplate="body" let-material let-i="rowIndex">
       <tr>
-        <td>
+        <td class="w-7rem">
           <img
             class="hidden"
             [src]="material.image"
@@ -74,19 +76,21 @@
             styleClass="skeleton"></p-skeleton>
         </td>
 
-        <td class="font-italic font-semibold">{{ material.id }}</td>
+        <td class="text-primary w-9rem">{{ material.id }}</td>
 
-        <td class="font-semibold text-blue-500">{{ material.name }}</td>
+        <td class="text-cyan-900 font-normal">{{ material.name }}</td>
 
-        <td>
+        <td class="w-10rem text-center">
           <p-badge
             [value]="material.category.name"
             severity="warning"></p-badge>
         </td>
 
-        <td class="font-semibold">{{ material?.extraPrice }} Ft</td>
+        <td class="text-cyan-900 font-normal w-5rem text-center">
+          {{ material?.extraPrice }} Ft
+        </td>
 
-        <td>
+        <td class="w-4rem text-center">
           <div class="is-available">
             <p-badge
               [value]="material.isAvailable ? 'igen' : 'nem'"
@@ -96,35 +100,43 @@
         </td>
 
         <td>
-          <button
-            (click)="onEditMaterial(material)"
-            pButton
-            pRipple
-            pTooltip="Minta módosítása"
-            tooltipPosition="bottom"
-            type="button"
-            icon="pi pi-cog"
-            class="p-button p-button-warning p-button mb-1"></button>
+          <div class="flex flex-row">
+            <button
+              [routerLink]="['/admin/materials/edit', material.id]"
+              pButton
+              pRipple
+              pTooltip="Minta módosítása"
+              tooltipPosition="left"
+              type="button"
+              icon="pi pi-cog"
+              class="p-button p-button-warning p-button mr-1"></button>
 
-          <button
-            (click)="onDeleteMaterial(material)"
-            pButton
-            pRipple
-            pTooltip="Minta törlése"
-            tooltipPosition="bottom"
-            type="button"
-            icon="pi pi-times"
-            class="p-button p-button-danger p-button"></button>
+            <button
+              (click)="onDeleteMaterial(material)"
+              pButton
+              pRipple
+              pTooltip="Minta törlése"
+              tooltipPosition="left"
+              type="button"
+              icon="pi pi-times"
+              class="p-button p-button-danger p-button"></button>
+          </div>
         </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center text-800 text-4xl">
+        <td colspan="7" class="text-center text-800 text-4xl">
           Nem található minta
+          <p-button
+            icon="pi pi-plus"
+            label="Minta hozzáadása"
+            styleClass="p-button p-button-success block mx-auto mt-2"
+            routerLink="/admin/materials/add">
+          </p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-</p-card>
+</ng-container>

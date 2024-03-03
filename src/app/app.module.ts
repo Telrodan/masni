@@ -13,15 +13,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ScrollTopModule } from 'primeng/scrolltop';
-import { StyleClassModule } from 'primeng/styleclass';
 
 import { AuthInterceptorProvider } from '@core/interceptors/auth-interceptor';
 import { HttpInterceptorProvider } from '@core/interceptors/http.interceptor';
 import { AuthService } from '@core/services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from '@features/layout/components/navbar/navbar.component';
-import { FooterComponent } from '@features/layout/components/footer/footer.component';
 import { environment } from 'src/environments/environment';
 import { reducers } from './core/store/app-state';
 import { LayoutComponent } from './features/layout/layout.component';
@@ -32,28 +29,24 @@ import {
   UserEffects,
   QuestionEffects,
   InspirationEffects,
-  ProductEffects,
   OrderEffects
 } from '@core/store/effects';
 import { SharedModule } from '@shared/shared.module';
 
-const PRIME_NG = [ToastModule, StyleClassModule, ScrollTopModule];
+const PRIME_NG = [ToastModule, ScrollTopModule];
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    FooterComponent,
-    LayoutComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
+    LayoutComponent,
+
     ...MATERIAL,
     ...PRIME_NG,
     StoreModule.forRoot(reducers),
@@ -64,7 +57,6 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
     EffectsModule.forRoot([
       MaterialEffects,
       ShoppingCartEffects,
-      ProductEffects,
       CategoryEffects,
       UserEffects,
       OrderEffects,

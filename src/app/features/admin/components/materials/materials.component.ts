@@ -2,29 +2,50 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Observable, filter, map, switchMap, tap } from 'rxjs';
-import { Table } from 'primeng/table';
+import { Observable, filter, switchMap, tap } from 'rxjs';
+import { Table, TableModule } from 'primeng/table';
 
-import { selectAllMaterials } from '@core/store';
 import { Material } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { EditMaterialComponent } from './components/edit-material/edit-material.component';
-import { AddMaterialComponent } from './components/add-material/add-material.component';
+import { EditMaterialComponent } from './edit-material/edit-material.component';
+import { AddMaterialComponent } from './add-material/add-material.component';
+import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ImageModule } from 'primeng/image';
+import { SkeletonModule } from 'primeng/skeleton';
+import { BadgeModule } from 'primeng/badge';
+import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { RouterModule } from '@angular/router';
 
-@UntilDestroy()
 @Component({
-  selector: 'mhd-materials',
+  selector: 'nyk-materials',
+  standalone: true,
+  imports: [
+    CommonModule,
+    CardModule,
+    TableModule,
+    ButtonModule,
+    ImageModule,
+    SkeletonModule,
+    BadgeModule,
+    TooltipModule,
+    InputTextModule,
+    RouterModule
+  ],
   templateUrl: './materials.component.html',
   styleUrls: ['./materials.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class MaterialsComponent implements OnInit {
   @ViewChild('table') materialsTable: Table;
@@ -41,10 +62,7 @@ export class MaterialsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materials$ = this.store$.select(selectAllMaterials).pipe(
-      map((materials) => [...materials]),
-      untilDestroyed(this)
-    );
+    this.materials$ = this.materialService.getMaterials$();
   }
 
   onAddMaterial(): void {

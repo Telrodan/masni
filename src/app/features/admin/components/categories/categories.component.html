@@ -147,8 +147,8 @@
                 pButton
                 [pTooltip]="
                   category.isSubCategory
-                    ? 'Alkategória módosítás'
-                    : 'Főkategória módosítás'
+                    ? 'Alkategória módosítáas'
+                    : 'Főkategória módosítása'
                 "
                 tooltipPosition="left"
                 type="button"
@@ -159,8 +159,7 @@
                 (click)="onDeleteCategory(category)"
                 pButton
                 [disabled]="
-                  (category.isSubCategory && category.items.length) ||
-                  (!category.isSubCategory && category.subCategories.length)
+                  category.items.length || category.subCategories.length
                 "
                 [pTooltip]="
                   category.isSubCategory

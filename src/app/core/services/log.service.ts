@@ -15,4 +15,10 @@ export class LogService {
       .get<ApiResponse<Log[]>>('log/getAll')
       .pipe(map((logsDTO) => logsDTO.data));
   }
+
+  getItemLogsByItemId$(itemId: string): Observable<Log[]> {
+    return this.apiService
+      .get<ApiResponse<Log[]>>(`log/getLogsByItemId/${itemId}`)
+      .pipe(map((logsDTO) => logsDTO.data));
+  }
 }

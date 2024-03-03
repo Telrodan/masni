@@ -1,5 +1,4 @@
 @import 'mixins';
-@import 'colors';
 
 section {
   @include section;
@@ -39,9 +38,9 @@ h1 {
   font-family: 'Amatic SC', cursive;
   font-weight: 700;
   font-size: 32px;
-  color: $color-black;
+  color: var(--color-black);
   background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 button {

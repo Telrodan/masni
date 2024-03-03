@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isLoading; else loading">
   <ng-container *ngIf="category$ | async as category; else loading">
-    <div class="font-medium text-2xl text-900">Kategória módosítása</div>
+    <div class="font-medium text-2xl text-900">Kategória módosítás</div>
     <p-divider styleClass="mb-5"></p-divider>
 
     <form [formGroup]="editCategoryForm" class="mt-2">

@@ -26,17 +26,19 @@ export class HTTPInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       tap(() => {
-        this.spinnerService.startSpinner();
+        // this.spinnerService.startSpinner();
       }),
       catchError((error: HttpErrorResponse) => {
         let errorMsg = '';
         errorMsg = error.error.message;
-        this.toastr.error(errorMsg);
+        if (errorMsg) {
+          this.toastr.error(errorMsg);
+        }
 
         return throwError(() => new Error(errorMsg));
       }),
       finalize(() => {
-        this.spinnerService.stopSpinner();
+        // this.spinnerService.stopSpinner();
       })
     );
   }

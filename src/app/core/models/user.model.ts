@@ -15,6 +15,7 @@ export interface User {
   billingAddress: Address;
   subscribed: boolean;
   active?: boolean;
+  role?: string;
   passwordChangedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;

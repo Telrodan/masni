@@ -11,4 +11,6 @@ export interface Inspiration {
   name: string;
   category: Category;
   image: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

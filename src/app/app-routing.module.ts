@@ -4,21 +4,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { HasRoleGuard } from '@core/guards/has-role.guard';
 
-const landingPageModule = () =>
-  import('./features/landing-page/landing-page.module').then(
-    (m) => m.LandingPageModule
-  );
+const homeComponent = () =>
+  import('./features/home/home.component').then((c) => c.HomeComponent);
 
-const authModule = () =>
-  import('./features/auth/auth.module').then((m) => m.AuthModule);
+const authComponentRoutes = () => import('./features/auth/auth-routing');
 
-const userProfileModule = () =>
-  import('./features/user-profile/user-profile.module').then(
-    (m) => m.UserProfileModule
-  );
+const shopComponentRoutes = () => import('./features/shop/shop-routing');
 
-const shopModule = () =>
-  import('./features/shop/shop.module').then((m) => m.ShopModule);
+const adminComponentRoutes = () => import('./features/admin/admin-routing');
+
+const userModule = () =>
+  import('./features/user/user.module').then((m) => m.UserModule);
 
 const shoppingCartModule = () =>
   import('./features/shopping-cart/shopping-cart.module').then(
@@ -48,9 +44,6 @@ const orderSuccessPageModule = () =>
     (m) => m.OrderSuccessPageModule
   );
 
-const adminModule = () =>
-  import('./features/admin/admin.module').then((m) => m.AdminModule);
-
 const routes: Routes = [
   {
     path: '',
@@ -59,46 +52,56 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: landingPageModule
-  },
-  {
-    path: 'auth',
-    loadChildren: authModule
+    loadComponent: homeComponent,
+    data: { animation: 'HomePage' }
   },
   {
     path: 'admin',
-    loadChildren: adminModule,
+    loadChildren: adminComponentRoutes,
     canActivate: [HasRoleGuard],
-    data: { role: 'admin' }
-  },
-  {
-    path: 'user-profile',
-    loadChildren: userProfileModule
+    data: { role: 'admin', animation: 'AdminPage' }
   },
   {
     path: 'shop',
-    loadChildren: shopModule
+    loadChildren: shopComponentRoutes,
+    data: { animation: 'ShopPage' }
   },
+  {
+    path: 'auth',
+    loadChildren: authComponentRoutes,
+    data: { animation: 'AuthPage' }
+  },
+  {
+    path: 'user',
+    loadChildren: userModule,
+    data: { animation: 'UserPage' }
+  },
+
   {
     path: 'shopping-cart',
     loadChildren: shoppingCartModule,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { animation: 'ShoppingCartPage' }
   },
   {
     path: 'material',
-    loadChildren: materialPageModule
+    loadChildren: materialPageModule,
+    data: { animation: 'MaterialPage' }
   },
   {
     path: 'inspiration',
-    loadChildren: inspirationPageModule
+    loadChildren: inspirationPageModule,
+    data: { animation: 'InspirationPage' }
   },
   {
     path: 'contact',
-    loadChildren: contactPageModule
+    loadChildren: contactPageModule,
+    data: { animation: 'ContactPage' }
   },
   {
     path: 'legal',
-    loadChildren: legalModule
+    loadChildren: legalModule,
+    data: { animation: 'LegalPage' }
   },
   {
     path: 'order-success',

@@ -1,13 +1,17 @@
 @import 'mixins';
 
-@import url('https://fonts.googleapis.com/css2?family=Zeyada&display=swap');
-// font-family: 'Zeyada', cursive;
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+// font-family: "Dancing Script", cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Shalimar&display=swap');
+// font-family: 'Shalimar', cursive;
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;600&display=swap');
 // font-family: 'Roboto Condensed', sans-serif;
 
 body {
   font-family: 'Roboto Condensed', sans-serif;
+  font-size: 16px;
   font-weight: 300;
 }
 
@@ -26,9 +30,13 @@ body {
 
 .heading-primary,
 .heading-secondary,
-.heading-tertiary {
+.heading-tertiary,
+.hero-title {
   color: var(--color-black);
-  font-family: 'Zeyada', cursive;
+  font-family: 'Shalimar', cursive;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 100%;
 }
 
 .heading-primary {
@@ -47,10 +55,37 @@ body {
   }
 }
 
+.heading-tertiary {
+  font-size: var(--font-size-l);
+
+  @include respond(sm) {
+    font-size: var(--font-size-m);
+  }
+}
+
 .paragraph-primary {
   font-size: var(--font-size-m);
+  line-height: 100%;
 
   @include respond(sm) {
     font-size: var(--font-size-s);
+  }
+}
+
+.hero-title {
+  font-size: var(--font-size-3xl);
+
+  @include respond(sm) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.hero-description {
+  color: var(--color-dark-grey);
+  font-size: var(--font-size-l);
+  line-height: 100%;
+
+  @include respond(sm) {
+    font-size: var(--font-size-m);
   }
 }

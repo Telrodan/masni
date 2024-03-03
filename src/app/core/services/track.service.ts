@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 import { ApiResponse } from '@core/models/api-response.model';
-import { TrackingData } from '@core/models/tracking-data.model';
 import { ApiService } from './api.service';
+import { TrackingData } from '@features/admin/components/reports/reports-data.model';
 
 @Injectable({
   providedIn: 'root'

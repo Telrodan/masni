@@ -64,7 +64,7 @@ export class MaterialPageComponent implements OnInit {
         categories.forEach((category) => {
           const data: MaterialPageData = {
             title: category.name,
-            items: category.items as Material[]
+            items: category.items
           };
           pageData.push(data);
         });

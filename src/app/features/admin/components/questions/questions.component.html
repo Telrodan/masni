@@ -1,5 +1,5 @@
-<ng-container *ngIf="questions$ | async as questions">
-  <p-card header="Kérdések">
+<ng-container *ngIf="!isLoading; else loading">
+  <ng-container *ngIf="questions$ | async as questions">
     <p-table
       #table
       styleClass="p-datatable-gridlines"
@@ -14,15 +14,17 @@
             icon="pi pi-plus"
             label="Kérdés hozzáadása"
             styleClass="p-button p-button-success"
-            (click)="onAddQuestion()">
+            routerLink="/admin/questions/add">
           </p-button>
 
-          <span class="p-input-icon-left ml-auto">
+          <span class="p-input-icon-left ml-auto w-6">
             <i class="pi pi-search"></i>
+
             <input
               pInputText
-              pTooltip="Kereshető mezők: Azonosító, Kérdés neve"
+              pTooltip="Kereshető mezők: Azonosító, Név"
               tooltipPosition="bottom"
+              class="w-full"
               type="text"
               (input)="applyTableGlobalFilter($event, 'contains', table)"
               placeholder="Keresés" />
@@ -40,56 +42,57 @@
 
           <th>Kérdés kategória</th>
 
-          <th>Opciók</th>
+          <th class="w-3rem">Opciók</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-question>
         <tr>
-          <td class="font-italic font-semibold">{{ question.id }}</td>
+          <td class="text-primary w-9rem">{{ question.id }}</td>
 
-          <td class="font-semibold text-blue-500">{{ question.name }}</td>
+          <td class="text-cyan-900">{{ question.name }}</td>
 
-          <td class="font-semibold">{{ question.question }}</td>
+          <td class="text-cyan-900">{{ question.question }}</td>
 
-          <td class="font-semibold text-blue-500">
-            <ng-container
+          <td class="w-12rem text-center">
+            <p-badge
               *ngIf="
                 question.type ===
                 QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
-              ">
-              <p-badge value="Kérdés anyag kategóriákkal" severity="success">
-              </p-badge>
-            </ng-container>
+              "
+              value="Kérdés anyag kategóriákkal"
+              severity="success">
+            </p-badge>
 
-            <ng-container
-              *ngIf="
-                question.type === QuestionType.QUESTION_WITH_STRING_ANSWER
-              ">
-              <p-badge value="Kérdés válaszokkal" severity="warning"> </p-badge>
-            </ng-container>
+            <p-badge
+              *ngIf="question.type === QuestionType.QUESTION_WITH_STRING_ANSWER"
+              value="Kérdés egyedi válaszokkal"
+              severity="warning">
+            </p-badge>
           </td>
 
           <td>
-            <button
-              (click)="onEditQuestion(question)"
-              pButton
-              pRipple
-              pTooltip="Kérdés módosítás"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-cog"
-              class="p-button p-button p-button-warning p-button mr-1"></button>
+            <div class="flex flex-row">
+              <button
+                [routerLink]="['/admin/questions/edit', question.id]"
+                pButton
+                pRipple
+                pTooltip="Kérdés módosítás"
+                tooltipPosition="left"
+                type="button"
+                icon="pi pi-cog"
+                class="p-button p-button p-button-warning p-button mr-1"></button>
 
-            <button
-              (click)="onDeleteQuestion(question)"
-              pButton
-              pRipple
-              pTooltip="Kérdés törlés"
-              tooltipPosition="bottom"
-              type="button"
-              icon="pi pi-times"
-              class="p-button p-button p-button-danger p-button"></button>
+              <button
+                (click)="onDeleteQuestion(question)"
+                pButton
+                pRipple
+                pTooltip="Kérdés törlés"
+                tooltipPosition="left"
+                type="button"
+                icon="pi pi-times"
+                class="p-button p-button p-button-danger p-button"></button>
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -98,9 +101,19 @@
         <tr>
           <td colspan="6" class="text-center text-800 text-4xl">
             Nem található kérdés
+            <p-button
+              icon="pi pi-plus"
+              label="Kérdés hozzáadás"
+              styleClass="p-button p-button-success block mx-auto mt-2"
+              routerLink="/admin/questions/add">
+            </p-button>
           </td>
         </tr>
       </ng-template>
     </p-table>
-  </p-card>
+  </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   HostBinding,
-  Inject,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
@@ -16,7 +15,7 @@ import {
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
-import { Observable, filter, map, switchMap, tap } from 'rxjs';
+import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
 
 import { Product, RawProduct } from '@core/models/product.model';
 import { Category } from '@core/models/category.model';
@@ -47,6 +46,13 @@ import {
   moveItemInArray
 } from '@angular/cdk/drag-drop';
 import { CategoryService } from '@core/services/category.service';
+import { Log } from '@core/models/log.model';
+import { LogService } from '@core/services/log.service';
+import { TableModule } from 'primeng/table';
+
+interface ProductData extends Product {
+  logs: Log[];
+}
 
 @Component({
   selector: 'nyk-edit-product',
@@ -66,7 +72,8 @@ import { CategoryService } from '@core/services/category.service';
     InputSwitchModule,
     CdkDropList,
     CdkDrag,
-    CdkDragPreview
+    CdkDragPreview,
+    TableModule
   ],
   templateUrl: './edit-product.component.html',
   styleUrls: ['./edit-product.component.scss'],
@@ -76,7 +83,7 @@ import { CategoryService } from '@core/services/category.service';
 export class EditProductComponent implements OnInit {
   @HostBinding('class') class = 'nyk-edit-product';
 
-  product$: Observable<Product>;
+  product$: Observable<ProductData>;
   productId: string;
   isLoading = false;
 
@@ -92,6 +99,7 @@ export class EditProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    private logService: LogService,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
@@ -102,9 +110,22 @@ export class EditProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.product$ = this.route.params.pipe(
-      switchMap((params) => this.productService.getProductById$(params['id'])),
+      switchMap((params) =>
+        combineLatest([
+          this.productService.getProductById$(params['id']),
+          this.logService.getItemLogsByItemId$(params['id'])
+        ])
+      ),
       filter((product) => !!product),
+      map(([product, logs]) => ({
+        ...product,
+        logs: logs.sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )
+      })),
       tap((product) => {
+        console.log(product);
         this.productId = product.id;
         this.editProductForm = this.fb.group({
           name: [product.name, Validators.required],
@@ -163,11 +184,6 @@ export class EditProductComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<{ image: string }[]>) {
-    moveItemInArray(
-      this.imagesPreview,
-      event.previousIndex,
-      event.currentIndex
-    );
     moveItemInArray(
       this.editProductForm.value.images,
       event.previousIndex,
@@ -238,6 +254,7 @@ export class EditProductComponent implements OnInit {
       };
       if (product.name) {
         this.isLoading = true;
+        console.log(product);
         this.productService
           .updateProduct$(product, this.productId)
           .pipe(

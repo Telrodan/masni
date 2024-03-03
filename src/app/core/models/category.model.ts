@@ -7,7 +7,7 @@ export interface Category {
   id?: string;
   type: CategoryType;
   isSubCategory?: boolean;
-  subCategories?: Category[];
+  subCategories?: ProductCategory[];
   mainCategory?: string;
   name: string;
   image: string;
@@ -19,6 +19,7 @@ export interface Category {
 
 export interface ProductCategory extends Category {
   items: Product[];
+  slug?: string;
 }
 
 export interface MaterialCategory extends Category {

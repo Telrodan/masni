@@ -14,11 +14,10 @@ import {
 } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { Observable, map, tap } from 'rxjs';
 
 import { RawProduct } from '@core/models/product.model';
-import { Category } from '@core/models/category.model';
+import { Category, ProductCategory } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -45,8 +44,8 @@ import {
   CdkDropList,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 
-@UntilDestroy()
 @Component({
   selector: 'nyk-add-product',
   standalone: true,
@@ -76,7 +75,7 @@ import {
 export class AddProductComponent implements OnInit {
   @HostBinding('class') class = 'nyk-add-product';
 
-  productSubCategories$: Observable<Category[]>;
+  productSubCategories$: Observable<ProductCategory[]>;
   questions$: Observable<Question[]>;
   inspirationCategories$: Observable<Category[]>;
 
@@ -111,6 +110,7 @@ export class AddProductComponent implements OnInit {
     private categoryService: CategoryService,
     private questionService: QuestionService,
     private changeDetectorRef: ChangeDetectorRef,
+    private router: Router,
     private toastr: ToastrService,
     private fb: FormBuilder
   ) {}
@@ -121,7 +121,10 @@ export class AddProductComponent implements OnInit {
       .pipe(
         map((categories) =>
           categories.filter((category) => category.isSubCategory)
-        )
+        ),
+        tap((categories) => {
+          console.log(categories);
+        })
       );
 
     this.inspirationCategories$ =
@@ -216,11 +219,14 @@ export class AddProductComponent implements OnInit {
       };
 
       if (product.name) {
+        this.isLoading = true;
         this.productService
           .addProduct$(product)
           .pipe(
             tap(() => {
+              this.isLoading = false;
               this.toastr.success(`${product.name} hozzáadva`);
+              this.router.navigate(['/admin/products']);
             })
           )
           .subscribe();

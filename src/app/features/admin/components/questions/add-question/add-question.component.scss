@@ -1,0 +1,39 @@
+.nyk-add-question {
+  display: block;
+  padding: 20px 40px;
+
+  .p-selectbutton.p-buttonset {
+    display: flex;
+
+    div {
+      flex: 1;
+    }
+  }
+
+  .content {
+    display: flex;
+    min-height: 500px;
+
+    form,
+    .preview {
+      width: 50%;
+      margin-top: 20px;
+    }
+
+    form {
+      margin-right: 20px;
+    }
+
+    .preview {
+      padding: 8px;
+
+      border-radius: 5px;
+
+      .option-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  }
+}

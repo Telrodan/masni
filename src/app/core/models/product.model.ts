@@ -37,6 +37,7 @@ export interface Product {
   discountedPrice?: number;
   discountPercentage?: number;
   stock: number;
+  likes: string[];
   updatedAt: Date;
   createdAt: Date;
 }

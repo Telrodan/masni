@@ -7,6 +7,7 @@ import { Inspiration } from '@core/models/inspiration.model';
 import { InspirationPageData } from '@core/models/inspiration-page-data.model';
 import { selectInspirationCategories } from '@core/store';
 import { Title, Meta } from '@angular/platform-browser';
+import { InspirationCategory } from '@core/models/category.model';
 
 @Component({
   selector: 'mhd-inspiration-page',
@@ -66,7 +67,7 @@ export class InspirationPageComponent implements OnInit {
           categories.forEach((category) => {
             const data: InspirationPageData = {
               title: category.name,
-              items: category.items as Inspiration[]
+              items: category.items
             };
             pageData.push(data);
           });

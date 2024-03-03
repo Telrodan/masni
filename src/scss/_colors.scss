@@ -1,9 +1,22 @@
-$color-primary: #ffdccb;
-$color-secondary: #d0baad;
-$color-tertiary: #ffc8fb;
+:root {
+  --color-primary: #ffdccb;
+  --color-secondary: #ffc8fb;
+  --color-tertiary: #faedeb;
 
-$color-black: #202020;
-$color-white: #f2f2f2;
-$color-red: #e22200;
+  --color-black: #191919;
+  --color-white: #f2f2f2;
+  --color-pure-white: #ffffff;
 
-$color-background: #f2f2f2;
+  --color-red: #e24c4c;
+  --color-green: #00a000;
+  --color-blue: #0000ff;
+  --color-grey: #dedede;
+  --color-dark-grey: #676767;
+  --color-on-grey: #ff9058;
+
+  --color-background: var(--color-pure-white);
+
+  --color-overlay: rgba(0, 0, 0, 0.2);
+
+  --shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+}

@@ -99,4 +99,10 @@ export class MaterialService {
       .get<ApiResponse<Material[]>>('material/getAll')
       .pipe(map((materialsDTO) => materialsDTO.data));
   }
+
+  getMaterialById$(id: string): Observable<Material> {
+    return this.apiService
+      .get<ApiResponse<Material>>(`material/getMaterialById/${id}`)
+      .pipe(map((materialDTO) => materialDTO.data));
+  }
 }

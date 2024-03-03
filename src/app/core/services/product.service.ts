@@ -94,4 +94,12 @@ export class ProductService {
       .get<ApiResponse<Product[]>>('product/getDreamItProducts')
       .pipe(map((productsDTO) => productsDTO.data));
   }
+
+  likeProduct$(productId: string): Observable<Product> {
+    return this.apiService
+      .patch<ApiResponse<Product>>(`product/likeProduct/${productId}`, {
+        id: productId
+      })
+      .pipe(map((productDTO) => productDTO.data));
+  }
 }

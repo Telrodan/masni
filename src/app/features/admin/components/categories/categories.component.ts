@@ -68,7 +68,11 @@ export class CategoriesComponent implements OnInit {
   ngOnInit(): void {
     this.categories$ = this.categoryDeleteSubject.pipe(
       startWith(null),
-      switchMap(() => this.categoryService.getCategories$())
+      switchMap(() =>
+        this.categoryService
+          .getCategories$()
+          .pipe(tap((categories) => console.log(categories)))
+      )
     );
   }
 

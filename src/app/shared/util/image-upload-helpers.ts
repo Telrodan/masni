@@ -28,29 +28,44 @@ export const addImageToFormAndSetPreview = async (
   return imagePreview;
 };
 
-export const addImagesToFormAndSetPreview = (
+export const addImagesToFormAndSetPreview = async (
   event: Event,
   form: FormGroup
-): string[] => {
+): Promise<string[]> => {
   const files = Array.from((event.target as HTMLInputElement).files);
-  const imagesPreview = [];
+  const imagesPreview: string[] = [];
 
   form.patchValue({ images: files });
   form.get('images').updateValueAndValidity();
 
-  if (files && files[0]) {
-    const numberOfFiles = files.length;
-    for (let i = 0; i < numberOfFiles; i++) {
-      const reader = new FileReader();
+  const imagePreviewPromises: Promise<string>[] = [];
 
-      reader.onload = (e: any) => {
-        imagesPreview.push(e.target.result);
-      };
+  if (files && files.length > 0) {
+    files.forEach((file) => {
+      const imagePreviewPromise = new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
 
-      reader.readAsDataURL(files[i]);
-    }
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result);
+        };
+
+        reader.onerror = (error) => {
+          reject(error);
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+      imagePreviewPromises.push(imagePreviewPromise);
+    });
+
+    imagesPreview.push(...(await Promise.all(imagePreviewPromises)));
   }
+
   form.markAsDirty();
+
+  console.log(imagesPreview);
 
   return imagesPreview;
 };
@@ -74,5 +89,5 @@ export const removeImagesFromFormAndInputAndClearPreview = (
   form.get('images').updateValueAndValidity();
   input.value = '';
 
-  return [''];
+  return [];
 };

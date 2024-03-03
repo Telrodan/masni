@@ -1,0 +1,113 @@
+<ng-container *ngIf="!isLoading; else loading">
+  <ng-container *ngIf="inspiration$ | async as inspiration; else loading">
+    <form class="flex-auto p-fluid" [formGroup]="editInspirationForm">
+      <div class="form-group">
+        <label for="name" class="block font-medium text-900 mb-2 text-lg">
+          Inspiráció neve
+        </label>
+
+        <input id="name" type="text" formControlName="name" pInputText />
+      </div>
+
+      <div class="form-group" *ngIf="categories$ | async as categories">
+        <label for="categoryId" class="block font-medium text-900 mb-2 text-lg">
+          Inspiráció kategóriája
+        </label>
+
+        <p-dropdown
+          id="categoryId"
+          formControlName="categoryId"
+          placeholder="Válassz egy kategóriát"
+          [options]="categories"
+          optionValue="id"
+          optionLabel="name">
+        </p-dropdown>
+      </div>
+
+      <div class="form-group">
+        <label class="block font-medium text-900 mb-2 text-lg">
+          Inspiráció képe
+        </label>
+
+        <p-button
+          *ngIf="!imagePreview"
+          icon="pi pi-image"
+          styleClass="p-button p-button-secondary"
+          (click)="imagePicker.click()">
+        </p-button>
+
+        <button
+          *ngIf="imagePreview"
+          pButton
+          pRipple
+          pTooltip="Kép törlése"
+          tooltipPosition="bottom"
+          (click)="onImageClear(imagePicker)"
+          type="button"
+          icon="pi pi-times"
+          class="p-button p-button-danger p-button mb-2"></button>
+
+        <input
+          id="imagePicker"
+          type="file"
+          class="hidden"
+          #imagePicker
+          (change)="onImagePicked($event)" />
+
+        <img
+          *ngIf="imagePreview"
+          class="image-preview border-round"
+          [src]="imagePreview"
+          alt="Kategória" />
+
+        <img
+          *ngIf="!imagePreview"
+          class="mt-2 image-preview border-round"
+          src="../../../../../../assets/images/no-image.png"
+          alt="Kategória" />
+      </div>
+    </form>
+
+    <p-button
+      label="Módosítás"
+      styleClass="p-button w-full mb-3"
+      [disabled]="!editInspirationForm.dirty || !editInspirationForm.valid"
+      (click)="onEditInspiration()">
+    </p-button>
+
+    <div class="font-medium text-2xl text-900">Inspiració előzmények</div>
+    <p-divider styleClass="mb-5"></p-divider>
+
+    <span class="text-blue-500">
+      Hozzáadva: {{ inspiration.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <span class="text-green-500 block mb-4">
+      Utoljára módosítva:
+      {{ inspiration.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <p-table [value]="inspiration.logs">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Modul</th>
+          <th>Dátum</th>
+          <th>Üzenet</th>
+          <th>Felhasználó</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-log>
+        <tr>
+          <td>{{ log.meta.module }}</td>
+          <td>{{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}</td>
+          <td>{{ log.message }}</td>
+          <td>{{ log.meta.user }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <nyk-spinner></nyk-spinner>
+</ng-template>

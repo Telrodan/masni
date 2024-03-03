@@ -83,4 +83,10 @@ export class InspirationService {
       .get<ApiResponse<Inspiration[]>>('inspiration/getAll')
       .pipe(map((inspirationsDTO) => inspirationsDTO.data));
   }
+
+  getInspirationById$(id: string): Observable<Inspiration> {
+    return this.apiService
+      .get<ApiResponse<Inspiration>>(`inspiration/getInspirationById/${id}`)
+      .pipe(map((inspirationDTO) => inspirationDTO.data));
+  }
 }

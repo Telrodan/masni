@@ -70,7 +70,7 @@ export const categoryReducers = createReducer(
       (category) => category.id === (action.item.category as Category).id
     );
 
-    categories[index].items.push(action.item);
+    // categories[index].items.push(action.item);
 
     return {
       ...state,
@@ -86,9 +86,9 @@ export const categoryReducers = createReducer(
       (category) => category.id === (action.item.category as Category).id
     );
 
-    categories[index].items = categories[index].items.filter(
-      (item) => (item as Product | Material | Inspiration).id !== action.item.id
-    );
+    // categories[index].items = categories[index].items.filter(
+    //   (item) => (item as Product | Material | Inspiration).id !== action.item.id
+    // );
 
     return {
       ...state,
@@ -100,19 +100,19 @@ export const categoryReducers = createReducer(
     // TODO: refactor this when category can be only Category
     const categories = _.cloneDeep(state.categories);
 
-    categories.forEach((category) => {
-      const index = category.items.findIndex(
-        (item) => item.id === action.item.id
-      );
+    // categories.forEach((category) => {
+    //   const index = category.items.findIndex(
+    //     (item) => item.id === action.item.id
+    //   );
 
-      if (index > -1) {
-        category.items.splice(index, 1);
-      }
+    //   if (index > -1) {
+    //     category.items.splice(index, 1);
+    //   }
 
-      if (category.id === (action.item.category as Category).id) {
-        category.items.push(action.item);
-      }
-    });
+    //   if (category.id === (action.item.category as Category).id) {
+    //     category.items.push(action.item);
+    //   }
+    // });
 
     return { ...state, categories };
   })

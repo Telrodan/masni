@@ -1,16 +1,6 @@
-.app-layout {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-width: 1920px;
-  margin: 0 auto;
-  overflow-x: hidden;
-}
-
-.app-router {
-  min-height: 100vh;
-}
-
-.p-dialog {
-  background-color: transparent;
+.nyk-app {
+  &-outlet {
+    position: relative;
+    min-height: 100vh;
+  }
 }
