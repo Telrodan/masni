@@ -9,4 +9,17 @@
       padding: 40px 0 20px;
     }
   }
+
+  &-slider-skeleton {
+    height: 700px !important;
+
+    @include respond(sm) {
+      height: 500px !important;
+    }
+  }
+
+  &-products-carousel-skeleton {
+    height: 100vh !important;
+    margin-top: 40px;
+  }
 }

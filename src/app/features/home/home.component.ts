@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
@@ -10,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
-import { Observable, startWith, switchMap, tap } from 'rxjs';
+import { Observable, map, startWith, switchMap } from 'rxjs';
 
 import { CategoryService } from '@core/services/category.service';
 import { CategoriesComponent } from './categories/categories.component';
@@ -19,6 +18,7 @@ import { ProductCategory } from '@core/models/category.model';
 import { ProductService } from '@core/services/product.service';
 import { SliderComponent } from './slider/slider.component';
 import { ProductsCarouselComponent } from './products-carousel/products-carousel.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 interface SortedProducts {
   title: string;
@@ -34,7 +34,8 @@ interface SortedProducts {
     CommonModule,
     SliderComponent,
     CategoriesComponent,
-    ProductsCarouselComponent
+    ProductsCarouselComponent,
+    SkeletonModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -45,14 +46,13 @@ export class HomeComponent implements OnInit {
   @HostBinding('class.nyk-home') hostClass = true;
 
   productCategories$: Observable<ProductCategory[]>;
-  sortedProducts: SortedProducts[];
+  sortedProducts$: Observable<SortedProducts[]>;
 
   private likeProduct = new EventEmitter<Product>();
 
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
-    private changeDetectorRef: ChangeDetectorRef,
     private titleService: Title,
     private metaService: Meta
   ) {
@@ -89,38 +89,33 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.productCategories$ = this.categoryService.getProductCategories$();
 
-    this.likeProduct
-      .pipe(
-        startWith(null),
-        switchMap(() =>
-          this.productService.getProducts$().pipe(
-            tap((products) => {
-              this.sortedProducts = [
-                {
-                  title: 'Kiemelt termékek',
-                  products: products.filter((product) => product.isFeatured),
-                  routerLink: '/shop/featured',
-                  image: '../../../assets/images/home-page-decoration-1.png'
-                },
-                {
-                  title: 'Álmodd meg',
-                  products: products.filter((product) => product.isCustom),
-                  routerLink: '/shop/dream-it',
-                  image: '../../../assets/images/home-page-decoration-2.png'
-                },
-                {
-                  title: 'Összes termék',
-                  products: products,
-                  routerLink: '/shop/all',
-                  image: '../../../assets/images/home-page-decoration-3.png'
-                }
-              ];
-              this.changeDetectorRef.markForCheck();
-            })
-          )
+    this.sortedProducts$ = this.likeProduct.pipe(
+      startWith(null),
+      switchMap(() =>
+        this.productService.getProducts$().pipe(
+          map((products) => [
+            {
+              title: 'Kiemelt termékek',
+              products: products.filter((product) => product.isFeatured),
+              routerLink: '/shop/featured',
+              image: '../../../assets/images/home-page-decoration-1.png'
+            },
+            {
+              title: 'Álmodd meg',
+              products: products.filter((product) => product.isCustom),
+              routerLink: '/shop/dream-it',
+              image: '../../../assets/images/home-page-decoration-2.png'
+            },
+            {
+              title: 'Összes termék',
+              products: products,
+              routerLink: '/shop/all',
+              image: '../../../assets/images/home-page-decoration-3.png'
+            }
+          ])
         )
       )
-      .subscribe();
+    );
   }
 
   trackByTitle(index: number, SortedProducts: SortedProducts): string {

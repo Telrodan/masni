@@ -1,25 +1,42 @@
-<ng-container *ngIf="productCategories$ | async as productCategories">
+<ng-container
+  *ngIf="productCategories$ | async as productCategories; else sliderSkeleton">
   <nyk-slider [productCategories]="productCategories"></nyk-slider>
 
   <nyk-categories [productCategories]="productCategories"> </nyk-categories>
 </ng-container>
 
-<ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
-  <img
-    class="nyk-home-decoration"
-    [src]="carousel.image"
-    alt="Dekoráció"
-    data-aos="zoom-in"
-    data-aos-duration="400"
-    data-aos-anchor-placement="center-center" />
+<ng-container
+  *ngIf="
+    sortedProducts$ | async as sortedProducts;
+    else productsCarouselSkeleton
+  ">
+  <ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
+    <img
+      class="nyk-home-decoration"
+      [src]="carousel.image"
+      alt="Dekoráció"
+      data-aos="zoom-in"
+      data-aos-duration="400"
+      data-aos-anchor-placement="center-center" />
 
-  <nyk-products-carousel
-    [title]="carousel.title"
-    [products]="carousel.products"
-    (likeProduct)="onLikeProduct()"
-    [routerLink]="carousel.routerLink"
-    data-aos="zoom-in"
-    data-aos-duration="400"
-    data-aos-anchor-placement="center-center">
-  </nyk-products-carousel>
+    <nyk-products-carousel
+      [title]="carousel.title"
+      [products]="carousel.products"
+      (likeProduct)="onLikeProduct()"
+      [routerLink]="carousel.routerLink"
+      data-aos="zoom-in"
+      data-aos-duration="400"
+      data-aos-anchor-placement="center-center">
+    </nyk-products-carousel>
+  </ng-container>
 </ng-container>
+
+<ng-template #sliderSkeleton>
+  <p-skeleton styleClass="nyk-home-slider-skeleton" width="w-full">
+  </p-skeleton>
+</ng-template>
+
+<ng-template #productsCarouselSkeleton>
+  <p-skeleton styleClass="nyk-home-products-carousel-skeleton" width="w-full">
+  </p-skeleton>
+</ng-template>
