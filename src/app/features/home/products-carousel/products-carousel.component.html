@@ -1,0 +1,20 @@
+<h1 class="nyk-products-carousel-header heading-primary">{{ title }}</h1>
+
+<owl-carousel-o [options]="customOptions">
+  <ng-template
+    *ngFor="let product of products; trackBy: trackById"
+    carouselSlide>
+    <div class="nyk-products-carousel-item">
+      <nyk-product-card
+        [product]="product"
+        (likeProduct)="onLikeProduct()"></nyk-product-card>
+    </div>
+  </ng-template>
+</owl-carousel-o>
+
+<button
+  [routerLink]="routerLink"
+  class="nyk-products-carousel-button tertiary-button">
+  <i class="pi pi-shopping-bag"></i>
+  Mindet Megnézem
+</button>

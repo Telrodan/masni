@@ -1,0 +1,30 @@
+@import 'mixins';
+
+.nyk-products-carousel {
+  display: block;
+  text-align: center;
+  padding-bottom: 80px;
+
+  &-header {
+    margin-bottom: 18px;
+
+    @include respond(sm) {
+      margin-bottom: 12px;
+    }
+  }
+
+  &-item {
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  &-button {
+    width: 50%;
+    margin: 20px auto 0;
+
+    @include respond(sm) {
+      width: 100%;
+    }
+  }
+}
