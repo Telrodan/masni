@@ -1,0 +1,45 @@
+<div class="nyk-slider-item-left">
+  <p
+    class="hero-description"
+    data-aos="fade-down"
+    data-aos-duration="400"
+    data-aos-delay="400">
+    {{ slide.fromPrice }} Ft-tól
+  </p>
+
+  <p
+    class="hero-title"
+    data-aos="fade-right"
+    data-aos-duration="400"
+    data-aos-delay="600">
+    {{ slide.label }}
+  </p>
+
+  <button
+    class="nyk-slider-item-left-shop-now tertiary-button"
+    routerLink="{{ slide.routerLink }}"
+    data-aos="fade-up"
+    data-aos-duration="400"
+    data-aos-delay="800">
+    <i class="pi pi-shopping-bag"></i>
+    Kategória megtekintése
+  </button>
+</div>
+
+<div class="nyk-slider-item-right">
+  <img
+    src="../../../../../assets/images/hero-bg.png"
+    alt="Dekoráció"
+    class="nyk-slider-item-right-decoration"
+    data-aos="fade-down"
+    data-aos-duration="400"
+    data-aos-delay="1200" />
+
+  <img
+    class="nyk-slider-item-right-image"
+    [src]="slide.image"
+    [alt]="slide.label"
+    data-aos="fade-up"
+    data-aos-duration="400"
+    data-aos-delay="1400" />
+</div>
