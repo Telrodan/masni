@@ -11,25 +11,18 @@
     else productsCarouselSkeleton
   ">
   <ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
-    <img
-      class="nyk-home-decoration"
-      [src]="carousel.image"
-      alt="Dekoráció"
-      data-aos="zoom-in"
-      data-aos-duration="400"
-      data-aos-anchor-placement="center-center" />
+    <img class="nyk-home-decoration" [src]="carousel.image" alt="Dekoráció" />
 
     <nyk-products-carousel
       [title]="carousel.title"
       [products]="carousel.products"
       (likeProduct)="onLikeProduct()"
-      [routerLink]="carousel.routerLink"
-      data-aos="zoom-in"
-      data-aos-duration="400"
-      data-aos-anchor-placement="center-center">
+      [routerLink]="carousel.routerLink">
     </nyk-products-carousel>
   </ng-container>
 </ng-container>
+
+<nyk-dream-it-cta></nyk-dream-it-cta>
 
 <ng-template #sliderSkeleton>
   <p-skeleton styleClass="nyk-home-slider-skeleton" width="w-full">

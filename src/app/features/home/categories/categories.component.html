@@ -2,10 +2,7 @@
   <div
     *ngFor="let category of data; trackByLabel"
     class="nyk-categories-item"
-    routerLink="{{ category.routerLink }}"
-    data-aos="fade-up"
-    data-aos-duration="400"
-    data-aos-anchor-placement="top-center">
+    routerLink="{{ category.routerLink }}">
     <img
       class="nyk-categories-item-image"
       [src]="category.image"

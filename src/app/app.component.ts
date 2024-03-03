@@ -91,7 +91,9 @@ export class AppComponent implements OnInit {
     //   )
     //   .subscribe();
 
-    AOS.init();
+    AOS.init({
+      mobile: true
+    });
   }
 
   getRouteAnimationData() {

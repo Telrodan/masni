@@ -3,15 +3,14 @@ import {
   Component,
   HostBinding,
   Input,
-  OnInit,
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 
+import { NavbarComponent } from './navbar/navbar.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 import { FooterComponent } from './footer/footer.component';
 
 @Component({

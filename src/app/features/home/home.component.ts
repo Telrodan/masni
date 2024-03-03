@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
 import { Observable, map, startWith, switchMap } from 'rxjs';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { CategoryService } from '@core/services/category.service';
 import { CategoriesComponent } from './categories/categories.component';
@@ -18,7 +19,7 @@ import { ProductCategory } from '@core/models/category.model';
 import { ProductService } from '@core/services/product.service';
 import { SliderComponent } from './slider/slider.component';
 import { ProductsCarouselComponent } from './products-carousel/products-carousel.component';
-import { SkeletonModule } from 'primeng/skeleton';
+import { DreamItCtaComponent } from './dream-it-cta/dream-it-cta.component';
 
 interface SortedProducts {
   title: string;
@@ -34,6 +35,7 @@ interface SortedProducts {
     CommonModule,
     SliderComponent,
     CategoriesComponent,
+    DreamItCtaComponent,
     ProductsCarouselComponent,
     SkeletonModule
   ],
