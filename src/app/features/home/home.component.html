@@ -1,0 +1,25 @@
+<ng-container *ngIf="productCategories$ | async as productCategories">
+  <nyk-slider [productCategories]="productCategories"></nyk-slider>
+
+  <nyk-categories [productCategories]="productCategories"> </nyk-categories>
+</ng-container>
+
+<ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
+  <img
+    class="nyk-home-decoration"
+    [src]="carousel.image"
+    alt="Dekoráció"
+    data-aos="zoom-in"
+    data-aos-duration="400"
+    data-aos-anchor-placement="center-center" />
+
+  <nyk-products-carousel
+    [title]="carousel.title"
+    [products]="carousel.products"
+    (likeProduct)="onLikeProduct()"
+    [routerLink]="carousel.routerLink"
+    data-aos="zoom-in"
+    data-aos-duration="400"
+    data-aos-anchor-placement="center-center">
+  </nyk-products-carousel>
+</ng-container>
