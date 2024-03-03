@@ -4,13 +4,13 @@ import {
   HostBinding,
   Input,
   OnChanges,
-  SimpleChanges,
+  SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { ProductCategory } from '@core/models/category.model';
-import { RouterModule } from '@angular/router';
 
 interface CategoriesData {
   label: string;
@@ -35,18 +35,29 @@ export class CategoriesComponent implements OnChanges {
 
   data: CategoriesData[];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const { productCategories } = changes;
+  ngOnChanges(changes: { productCategories: SimpleChange }): void {
+    if (changes.productCategories) {
+      const subProductCategories: ProductCategory[] =
+        changes.productCategories.currentValue
+          .filter(
+            (subProductCategory: ProductCategory) =>
+              subProductCategory.isSubCategory
+          )
+          .filter(
+            (subProductCategory: ProductCategory) =>
+              subProductCategory.items.length > 0
+          );
 
-    if (productCategories) {
-      this.data = productCategories.currentValue
-        .map((category: ProductCategory) => ({
-          label: category.name,
-          image: category.image,
-          routerLink: `/shop/${category.id}`,
-          count: category.items.length
-        }))
-        .filter((category: CategoriesData) => category.count > 0);
+      this.data = subProductCategories.map((category: ProductCategory) => ({
+        label: category.slug,
+        image: category.image,
+        routerLink: `/shop/${category.id}`,
+        count: category.items.length
+      }));
     }
+  }
+
+  trackByLabel(index: number, item: CategoriesData): string {
+    return item.label;
   }
 }

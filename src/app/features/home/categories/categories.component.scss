@@ -1,22 +1,38 @@
+@import 'mixins';
+
 .nyk-categories {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 40px;
   grid-row-gap: 28px;
-  margin-top: 28px;
+  margin-top: 40px;
+
+  @include respond(sm) {
+    grid-column-gap: 20px;
+    grid-row-gap: 14px;
+  }
 
   &-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     padding: 40px 60px;
     background-color: var(--color-grey);
     cursor: pointer;
 
-    &:hover {
-      .nyk-categories-item-image {
-        transform: scale(1.1);
-      }
+    @include respond(sm) {
+      padding: 20px 15px;
+    }
 
-      .nyk-categories-item-title {
-        color: var(--color-on-grey);
+    &:hover {
+      .nyk-categories-item {
+        &-image {
+          transform: scale(1.1);
+        }
+
+        &-title {
+          color: var(--color-dark-grey);
+        }
       }
     }
 
@@ -28,13 +44,11 @@
 
     &-title {
       margin-bottom: 8px;
-      font-size: var(--font-size-l);
       transition: all 0.3s ease-in-out;
     }
 
     &-count {
-      color: var(--color-black);
-      font-size: var(--font-size-m);
+      color: var(--color-dark-grey);
     }
   }
 }
