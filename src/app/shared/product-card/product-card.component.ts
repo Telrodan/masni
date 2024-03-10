@@ -54,7 +54,7 @@ export class ProductCardComponent implements OnInit {
   }
 
   constructor(
-    private productSerivce: ProductService,
+    private productService: ProductService,
     private authService: AuthService,
     private cookieService: CookieService,
     private router: Router
@@ -67,7 +67,7 @@ export class ProductCardComponent implements OnInit {
   onLike(event: MouseEvent) {
     event.stopPropagation();
 
-    this.productSerivce
+    this.productService
       .likeProduct$(this.product.id)
       .pipe(
         tap(() => {

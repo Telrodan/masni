@@ -12,5 +12,7 @@ export const UrlTranslation = {
   add: 'Hozzáadás',
   edit: 'Módosítás',
   all: 'Összes',
-  order: 'Sorrend'
+  order: 'Sorrend',
+  shop: 'Shop',
+  'product-details': 'Termékleírás'
 };

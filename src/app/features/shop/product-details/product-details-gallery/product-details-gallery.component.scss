@@ -1,0 +1,53 @@
+@import 'mixins';
+
+.nyk-gallery {
+  display: flex;
+  gap: 16px;
+
+  @include respond(sm) {
+    flex-direction: column-reverse;
+  }
+
+  &-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    width: 20%;
+
+    @include respond(sm) {
+      flex-direction: row;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    &-image {
+      transition: all 0.3s ease;
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+
+      @include respond(sm) {
+        width: 20%;
+      }
+
+      &.active {
+        background-color: var(--color-tertiary);
+      }
+    }
+  }
+
+  &-main {
+    width: 80%;
+    background-color: var(--color-tertiary);
+
+    @include respond(sm) {
+      width: 100%;
+    }
+
+    &-image {
+      margin: 0 auto;
+      transition: all 0.3s ease;
+      aspect-ratio: 1 / 1;
+    }
+  }
+}

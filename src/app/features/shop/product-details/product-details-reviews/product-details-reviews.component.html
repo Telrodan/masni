@@ -1,0 +1,185 @@
+<ng-container *ngIf="ratingStatistics">
+    <div class="grid mt-4">
+        <div class="col-12 lg:col-4">
+            <ng-container *ngIf="product.canReview">
+                <ng-container
+                    *ngIf="!isReviewFormVisible; else reviewFormTemplate">
+                    <div
+                        class="nyk-product-details-reviews-share-experience-title">
+                        Oszd meg a véleményed a termékről!
+                    </div>
+
+                    <button
+                        class="nyk-product-details-reviews-share-experience-button primary-button"
+                        (click)="onShareReview()">
+                        Megosztás
+                    </button>
+                </ng-container>
+
+                <ng-template #reviewFormTemplate>
+                    <form
+                        *ngIf="!isLoading; else spinner"
+                        [formGroup]="reviewForm"
+                        (submit)="onSubmitReviewForm()"
+                        class="nyk-product-details-reviews-share-experience-rating">
+                        <p
+                            class="nyk-product-details-reviews-share-experience-rating-title">
+                            Értékelés
+                        </p>
+
+                        <div
+                            class="nyk-product-details-reviews-share-experience-rating-stars">
+                            <i
+                                *ngFor="
+                                    let rating of [1, 2, 3, 4, 5];
+                                    let i = index
+                                "
+                                class="nyk-product-details-reviews-share-experience-rating-stars-star pi pi-star-fill text-2xl mr-1"
+                                [ngClass]="
+                                    reviewForm.value.rating >= rating
+                                        ? 'text-yellow-500'
+                                        : 'text-300'
+                                "
+                                (click)="onSelectRating(rating)">
+                            </i>
+
+                            <input
+                                type="number"
+                                name="rating"
+                                formControlName="rating"
+                                value="1"
+                                class="hidden"
+                                id="rating-1" />
+                        </div>
+
+                        <textarea
+                            rows="5"
+                            cols="30"
+                            pInputTextarea
+                            [autoResize]="true"
+                            formControlName="description"
+                            placeholder="Kérlek írd le a véleményed..."></textarea>
+
+                        <button
+                            class="nyk-product-details-reviews-share-experience-rating-submit-button primary-button">
+                            Elküldés
+                        </button>
+                    </form>
+
+                    <ng-template #spinner>
+                        <nyk-spinner></nyk-spinner>
+                    </ng-template>
+                </ng-template>
+            </ng-container>
+        </div>
+
+        <div
+            class="col-12 lg:col-4 flex align-items-start justify-content-center py-5 lg:py-0">
+            <div>
+                <span class="nyk-product-details-reviews-total-count">
+                    {{ product.reviews.length }}
+                </span>
+
+                <span class="nyk-product-details-reviews-total-title">
+                    Vélemény
+                </span>
+
+                <div class="mt-3 text-center">
+                    <i
+                        *ngFor="let rating of [1, 2, 3, 4, 5]; let i = index"
+                        class="pi pi-star-fill text-2xl mr-1"
+                        [ngClass]="
+                            ratingStatistics.averageRating > i
+                                ? 'text-yellow-500'
+                                : 'text-300'
+                        ">
+                    </i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-4">
+            <ul class="list-none p-0 m-0">
+                <li
+                    *ngFor="let rating of ratingStatistics.ratingStatistics"
+                    class="flex align-items-center mb-2">
+                    <span class="text-900 font-medium mr-1 w-1rem">
+                        {{ rating.rating }}
+                    </span>
+
+                    <i class="pi pi-star-fill text-yellow-500 mr-2"></i>
+
+                    <div
+                        style="height: 7px"
+                        class="border-round overflow-hidden flex-auto surface-300">
+                        <div
+                            class="h-full bg-yellow-500 border-round"
+                            [style]="'width:' + rating.percentage"></div>
+                    </div>
+                    <span class="text-500 font-medium ml-2">
+                        {{ rating.count }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <ul class="list-none m-0 p-0">
+            <li
+                *ngFor="let review of reviews"
+                class="nyk-product-details-reviews-review">
+                <div class="flex align-items-center justify-content-between">
+                    <div class="flex align-items-center">
+                        <div class="flex flex-column">
+                            <span
+                                class="nyk-product-details-reviews-review-user">
+                                {{ review.user }}
+                            </span>
+
+                            <span
+                                class="nyk-product-details-reviews-review-date">
+                                {{ review.createdAt | date : 'yyyy. MM. dd.' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex align-items-center">
+                        <span class="mr-2">
+                            <i
+                                *ngIf="review.rating >= 1"
+                                class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i
+                                *ngIf="review.rating >= 2"
+                                class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i
+                                *ngIf="review.rating >= 3"
+                                class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i
+                                *ngIf="review.rating >= 4"
+                                class="pi pi-star-fill text-yellow-500 mr-1"></i>
+                            <i
+                                *ngIf="review.rating >= 5"
+                                class="pi pi-star-fill text-yellow-500"></i>
+                        </span>
+
+                        <span class="text-500 font-medium">
+                            {{ review.rating }}
+                        </span>
+                    </div>
+                </div>
+
+                <p>
+                    {{ review.description }}
+                </p>
+            </li>
+        </ul>
+
+        <button
+            *ngIf="reviews.length >= 3"
+            class="nyk-product-details-reviews-review-button tertiary-button"
+            (click)="onToggleReviews()">
+            {{ showAllReviews ? 'Kevesebb vélemény' : 'Összes vélemény' }}
+        </button>
+    </div>
+</ng-container>
