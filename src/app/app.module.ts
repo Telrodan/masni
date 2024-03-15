@@ -8,20 +8,16 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ScrollTopModule } from 'primeng/scrolltop';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AuthInterceptorProvider } from '@core/interceptors/auth-interceptor';
 import { HttpInterceptorProvider } from '@core/interceptors/http.interceptor';
 import { AuthService } from '@core/services/auth.service';
+import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { environment } from 'src/environments/environment';
 import { LayoutComponent } from './features/layout/layout.component';
-
-import { SharedModule } from '@shared/shared.module';
-
-const PRIME_NG = [ToastModule, ScrollTopModule];
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
@@ -34,8 +30,9 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
         HttpClientModule,
         SharedModule,
         LayoutComponent,
+        ScrollTopModule,
+        ToastrModule.forRoot(),
         ...MATERIAL,
-        ...PRIME_NG,
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),
             // Register the ServiceWorker as soon as the application is stable

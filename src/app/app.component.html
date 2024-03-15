@@ -1,8 +1,7 @@
 <nyk-layout [isAdminPage]="isAdminPage">
-  <div [@routeAnimations]="getRouteAnimationData()" class="nyk-app-outlet">
-    <router-outlet #outlet="outlet"></router-outlet>
-  </div>
+    <div [@routeAnimations]="getRouteAnimationData()" class="nyk-app-outlet">
+        <router-outlet #outlet="outlet"></router-outlet>
+    </div>
 </nyk-layout>
 
-<p-toast></p-toast>
 <p-scrollTop></p-scrollTop>
