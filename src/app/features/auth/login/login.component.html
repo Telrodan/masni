@@ -16,12 +16,13 @@
                 pInputText
                 class="w-full"
                 formControlName="email" />
+
             <p
-                class="form-helper"
                 *ngIf="
                     loginForm.get('email').invalid &&
                     loginForm.get('email').dirty
-                ">
+                "
+                class="form-helper">
                 Kérlek add meg az email címed.
             </p>
         </div>
@@ -54,11 +55,11 @@
             </div>
 
             <small
-                class="form-helper"
                 *ngIf="
                     loginForm.get('password').invalid &&
                     loginForm.get('password').dirty
-                ">
+                "
+                class="form-helper">
                 Kérlek add meg a jelszavad.
             </small>
         </div>

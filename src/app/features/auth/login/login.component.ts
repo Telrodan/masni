@@ -8,15 +8,15 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { catchError, tap } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { ToastrService } from '@core/services/toastr.service';
 import { AuthService } from '@core/services/auth.service';
 import { AuthData } from '@core/models/auth-data.model';
 import { emailRegex } from '@shared/util/email-regex';
-import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
@@ -98,6 +98,7 @@ export class LoginComponent {
     onLogin(): void {
         if (this.loginForm.valid) {
             this.isLoading = true;
+
             const authData: AuthData = {
                 email: this.loginForm.value.email.trim(),
                 password: this.loginForm.value.password.trim()
@@ -115,7 +116,6 @@ export class LoginComponent {
                         this.isLoading = false;
                     }),
                     catchError(() => {
-                        this.toastr.error('Hibás email vagy jelszó');
                         this.isLoading = false;
                         this.changeDetectorRef.detectChanges();
 

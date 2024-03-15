@@ -18,14 +18,14 @@
                 type="text"
                 pInputText
                 formControlName="name"
-                placeholder="Kérlek add meg a neved." />
+                placeholder="Kérlek add meg a neved" />
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('name').invalid &&
                     signupForm.get('name').dirty
-                ">
-                Kérlek add meg a neved.
+                "
+                class="form-helper">
+                Kérlek add meg a neved
             </p>
         </div>
 
@@ -37,16 +37,16 @@
                 type="email"
                 pInputText
                 formControlName="email"
-                placeholder="Kérlek add meg az e-mail címed."
+                placeholder="Kérlek add meg az e-mail címed"
                 autocomplete="username" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('email').invalid &&
                     signupForm.get('email').dirty
-                ">
-                Kérlek add meg az email címed.
+                "
+                class="form-helper">
+                Kérlek add meg az email címed
             </p>
         </div>
 
@@ -58,15 +58,15 @@
                 type="string"
                 pInputText
                 formControlName="phone"
-                placeholder="Kérlek add meg a telefonszámod." />
+                placeholder="Kérlek add meg a telefonszámod" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('phone').invalid &&
                     signupForm.get('phone').dirty
-                ">
-                Kérlek add meg a telefonszámod. <br />
+                "
+                class="form-helper">
+                Kérlek add meg a telefonszámod <br />
                 Például: 06301234567
             </p>
         </div>
@@ -79,17 +79,17 @@
                 type="password"
                 pInputText
                 formControlName="password"
-                placeholder="Kérlek adj meg egy jelszót. Minimum 8 karakter."
+                placeholder="Kérlek adj meg egy jelszót. Minimum 8 karakter"
                 autocomplete="new-password" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('password').invalid &&
                     signupForm.get('password').dirty
-                ">
-                Kérlek adj meg egy jelszót. <br />
-                Minimum 8 karakter.
+                "
+                class="form-helper">
+                Kérlek adj meg egy jelszót <br />
+                Minimum 8 karakter
             </p>
         </div>
 
@@ -101,16 +101,16 @@
                 type="password"
                 pInputText
                 formControlName="passwordConfirm"
-                placeholder="Kérlek erősítsd meg a jelszavad."
+                placeholder="Kérlek erősítsd meg a jelszavad"
                 autocomplete="new-password" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('passwordConfirm').dirty &&
                     signupForm.get('password').value !==
                         signupForm.get('passwordConfirm').value
-                ">
+                "
+                class="form-helper">
                 Megadott jelszó nem egyezik
             </p>
         </div>
@@ -132,12 +132,12 @@
                 (blur)="onShippingPostcodeBlur($event)" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     signupForm.get('shippingPostcode').invalid &&
                     signupForm.get('shippingPostcode').dirty
-                ">
-                Kérlek add meg az irányítószámot.
+                "
+                class="form-helper">
+                Kérlek add meg az irányítószámot
             </p>
         </div>
 
@@ -151,12 +151,12 @@
                 formControlName="shippingStreet" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('shippingStreet').valid &&
                     signupForm.get('shippingStreet').dirty
-                ">
-                Kérlek add meg a címed.
+                "
+                class="form-helper">
+                Kérlek add meg a címed
             </p>
         </div>
 
@@ -170,12 +170,12 @@
                 formControlName="shippingCity" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('shippingCity').valid &&
                     signupForm.get('shippingCity').dirty
-                ">
-                Kérlek add meg a várost.
+                "
+                class="form-helper">
+                Kérlek add meg a várost
             </p>
         </div>
 
@@ -189,12 +189,12 @@
                 formControlName="shippingCounty" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('shippingCounty').valid &&
                     signupForm.get('shippingCounty').dirty
-                ">
-                Kérlek add meg a megyét.
+                "
+                class="form-helper">
+                Kérlek add meg a megyét
             </p>
         </div>
 
@@ -215,12 +215,12 @@
                 (blur)="onBillingPostcodeBlur($event)" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('billingPostcode').valid &&
                     signupForm.get('billingPostcode').dirty
-                ">
-                Kérlek add meg az irányítószámot.
+                "
+                class="form-helper">
+                Kérlek add meg az irányítószámot
             </p>
         </div>
 
@@ -234,12 +234,12 @@
                 formControlName="billingStreet" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('billingStreet').valid &&
                     signupForm.get('billingStreet').dirty
-                ">
-                Kérlek add meg a címed.
+                "
+                class="form-helper">
+                Kérlek add meg a címed
             </p>
         </div>
 
@@ -253,12 +253,12 @@
                 formControlName="billingCity" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('billingCity').valid &&
                     signupForm.get('billingCity').dirty
-                ">
-                Kérlek add meg a várost.
+                "
+                class="form-helper">
+                Kérlek add meg a várost
             </p>
         </div>
 
@@ -272,12 +272,12 @@
                 formControlName="billingCounty" />
 
             <p
-                class="form-helper"
                 *ngIf="
                     !signupForm.get('billingCounty').valid &&
                     signupForm.get('billingCounty').dirty
-                ">
-                Kérlek add meg a megyét.
+                "
+                class="form-helper">
+                Kérlek add meg a megyét
             </p>
         </div>
 
@@ -314,7 +314,7 @@
                             formControlName="subscribed"></p-inputSwitch>
 
                         <label for="subscribed" class="ml-2 text-900">
-                            Szeretnék feliratkozni a hírlevélre.
+                            Szeretnék feliratkozni a hírlevélre
                         </label>
                     </div>
                 </div>

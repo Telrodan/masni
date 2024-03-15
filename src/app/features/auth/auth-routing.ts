@@ -1,17 +1,17 @@
 import { Route } from '@angular/router';
 
-const loginComponent = () =>
+const LoginComponent = () =>
     import('./login/login.component').then((m) => m.LoginComponent);
 
-const signupComponent = () =>
+const SignupComponent = () =>
     import('./signup/signup.component').then((m) => m.SignupComponent);
 
-const forgotPasswordComponent = () =>
+const ForgotPasswordComponent = () =>
     import('./forgot-password/forgot-password.component').then(
         (m) => m.ForgotPasswordComponent
     );
 
-const resetPasswordComponent = () =>
+const ResetPasswordComponent = () =>
     import('./reset-password/reset-password.component').then(
         (m) => m.ResetPasswordComponent
     );
@@ -24,18 +24,18 @@ export default [
     },
     {
         path: 'signup',
-        loadComponent: signupComponent
+        loadComponent: SignupComponent
     },
     {
         path: 'login',
-        loadComponent: loginComponent
+        loadComponent: LoginComponent
     },
     {
         path: 'forgot-password',
-        loadComponent: forgotPasswordComponent
+        loadComponent: ForgotPasswordComponent
     },
     {
         path: 'reset-password/:token',
-        loadComponent: resetPasswordComponent
+        loadComponent: ResetPasswordComponent
     }
 ] as Route[];
