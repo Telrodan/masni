@@ -1,13 +1,12 @@
 import {
-  Component,
-  OnInit,
-  ViewChild,
-  ChangeDetectionStrategy,
-  ViewEncapsulation
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+    ViewEncapsulation
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Store } from '@ngrx/store';
 import { Observable, filter, switchMap, tap } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 
@@ -28,81 +27,80 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'nyk-materials',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    TableModule,
-    ButtonModule,
-    ImageModule,
-    SkeletonModule,
-    BadgeModule,
-    TooltipModule,
-    InputTextModule,
-    RouterModule
-  ],
-  templateUrl: './materials.component.html',
-  styleUrls: ['./materials.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+    selector: 'nyk-materials',
+    standalone: true,
+    imports: [
+        CommonModule,
+        CardModule,
+        TableModule,
+        ButtonModule,
+        ImageModule,
+        SkeletonModule,
+        BadgeModule,
+        TooltipModule,
+        InputTextModule,
+        RouterModule
+    ],
+    templateUrl: './materials.component.html',
+    styleUrls: ['./materials.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class MaterialsComponent implements OnInit {
-  @ViewChild('table') materialsTable: Table;
+    @ViewChild('table') materialsTable: Table;
 
-  materials$: Observable<Material[]>;
+    materials$: Observable<Material[]>;
 
-  imageLoadedStatus: boolean[] = [];
+    imageLoadedStatus: boolean[] = [];
 
-  constructor(
-    private store$: Store,
-    private materialService: MaterialService,
-    private toastr: ToastrService,
-    private dialog: MatDialog
-  ) {}
+    constructor(
+        private materialService: MaterialService,
+        private toastr: ToastrService,
+        private dialog: MatDialog
+    ) {}
 
-  ngOnInit(): void {
-    this.materials$ = this.materialService.getMaterials$();
-  }
+    ngOnInit(): void {
+        this.materials$ = this.materialService.getMaterials$();
+    }
 
-  onAddMaterial(): void {
-    this.dialog.open(AddMaterialComponent, {
-      minWidth: '40vw'
-    });
-  }
+    onAddMaterial(): void {
+        this.dialog.open(AddMaterialComponent, {
+            minWidth: '40vw'
+        });
+    }
 
-  onEditMaterial(material: Material): void {
-    this.dialog.open(EditMaterialComponent, {
-      minWidth: '40vw',
-      data: material
-    });
-  }
+    onEditMaterial(material: Material): void {
+        this.dialog.open(EditMaterialComponent, {
+            minWidth: '40vw',
+            data: material
+        });
+    }
 
-  onDeleteMaterial(material: Material): void {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        minWidth: '40vw',
-        data: {
-          message: `Biztos törölni szeretnéd "${material.name}" mintát?`
-        }
-      })
-      .afterClosed()
-      .pipe(
-        filter((confirmed) => !!confirmed),
-        switchMap(() => this.materialService.deleteMaterial$(material)),
-        tap(() => {
-          this.toastr.success(`${material.name} minta törölve`);
-        })
-      )
-      .subscribe();
-  }
+    onDeleteMaterial(material: Material): void {
+        this.dialog
+            .open(ConfirmDialogComponent, {
+                minWidth: '40vw',
+                data: {
+                    message: `Biztos törölni szeretnéd "${material.name}" mintát?`
+                }
+            })
+            .afterClosed()
+            .pipe(
+                filter((confirmed) => !!confirmed),
+                switchMap(() => this.materialService.deleteMaterial$(material)),
+                tap(() => {
+                    this.toastr.success(`${material.name} minta törölve`);
+                })
+            )
+            .subscribe();
+    }
 
-  imageLoaded(index: number) {
-    this.imageLoadedStatus[index] = true;
-  }
+    imageLoaded(index: number) {
+        this.imageLoadedStatus[index] = true;
+    }
 
-  applyFilterGlobal($event: any, stringVal: string, table: Table): void {
-    const filter = ($event.target as HTMLInputElement).value;
-    table.filterGlobal(filter, stringVal);
-  }
+    applyFilterGlobal($event: any, stringVal: string, table: Table): void {
+        const filter = ($event.target as HTMLInputElement).value;
+        table.filterGlobal(filter, stringVal);
+    }
 }

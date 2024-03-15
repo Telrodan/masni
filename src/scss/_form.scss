@@ -1,28 +1,40 @@
 .form {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+        color: var(--color-black);
+        font-weight: 400;
+    }
+
+    input {
+        &::placeholder {
+            color: var(--color-dark-grey);
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 300;
+        }
+    }
 }
 
 .form-label {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .form-helper {
-  margin-top: 3px;
-  color: var(--color-red);
-  font-size: 14px;
+    color: var(--color-red);
+    font-size: var(--font-size-xs);
 }
 
 .form-highlight {
-  background-color: var(--color-primary);
-  padding: 8px 20px;
-  border: none;
-  border-radius: 50px;
-  font-size: 18px;
+    background-color: var(--color-primary);
+    padding: 8px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
 }

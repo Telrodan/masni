@@ -1,6 +1,12 @@
 /* eslint-disable no-useless-escape */
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostBinding,
+    ViewEncapsulation
+} from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
 
 import { tap } from 'rxjs';
@@ -8,67 +14,79 @@ import { tap } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { emailRegex } from '@shared/util/email-regex';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'mhd-forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+    selector: 'nyk-forgot-password',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, InputTextModule, RouterModule],
+    templateUrl: './forgot-password.component.html',
+    styleUrls: ['./forgot-password.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class ForgotPasswordComponent {
-  forgotPasswordForm = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern(emailRegex)]]
-  });
+    @HostBinding('class') hostClass = 'nyk-forgot-password';
 
-  isEmailSent = false;
+    forgotPasswordForm = this.fb.group({
+        email: ['', [Validators.required, Validators.pattern(emailRegex)]]
+    });
 
-  constructor(
-    private authService: AuthService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private titleService: Title,
-    private metaService: Meta
-  ) {
-    this.titleService.setTitle('Nyuszkó Kuckó | Elfelejtett jelszó');
-    this.metaService.addTags([
-      {
-        name: 'description',
-        content: 'Elfelejtett jelszó.'
-      },
-      {
-        name: 'keywords',
-        content:
-          'új jelszó kérése, elfelejtett jelszó, babák, nyuszi, nyuszik, nyuszkó, nyuszkók, maci, macik, mackók, szundikendő, szundikendők, kézzel készített, webshop'
-      },
-      {
-        property: 'og:title',
-        content: 'Nyuszkó Kuckó | Elfelejtett jelszó'
-      },
-      {
-        property: 'og:description',
-        content: 'Elfelejtett jelszó.'
-      },
-      {
-        property: 'og:image',
-        content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
-      },
-      { name: 'robots', content: 'index, follow' },
-      { name: 'author', content: 'Nyuszkó Kuckó' }
-    ]);
-  }
+    isEmailSent = false;
 
-  onSubmit(): void {
-    if (this.forgotPasswordForm.valid) {
-      const email = this.forgotPasswordForm.value.email.trim();
-
-      this.authService
-        .forgotPassword$(email)
-        .pipe(
-          tap(() => {
-            this.toastr.success('Az emailt elküldtük');
-            this.isEmailSent = true;
-          })
-        )
-        .subscribe();
+    constructor(
+        private authService: AuthService,
+        private fb: FormBuilder,
+        private toastr: ToastrService,
+        private titleService: Title,
+        private metaService: Meta,
+        private changeDetectorRef: ChangeDetectorRef
+    ) {
+        this.titleService.setTitle('Nyuszkó Kuckó | Elfelejtett jelszó');
+        this.metaService.addTags([
+            {
+                name: 'description',
+                content: 'Elfelejtett jelszó.'
+            },
+            {
+                name: 'keywords',
+                content:
+                    'új jelszó kérése, elfelejtett jelszó, babák, nyuszi, nyuszik, nyuszkó, nyuszkók, maci, macik, mackók, szundikendő, szundikendők, kézzel készített, webshop'
+            },
+            {
+                property: 'og:title',
+                content: 'Nyuszkó Kuckó | Elfelejtett jelszó'
+            },
+            {
+                property: 'og:description',
+                content: 'Elfelejtett jelszó.'
+            },
+            {
+                property: 'og:image',
+                content:
+                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+            },
+            { name: 'robots', content: 'index, follow' },
+            { name: 'author', content: 'Nyuszkó Kuckó' }
+        ]);
     }
-  }
+
+    onSubmit(): void {
+        if (this.forgotPasswordForm.valid) {
+            const email = this.forgotPasswordForm.value.email.trim();
+
+            this.authService
+                .forgotPassword$(email)
+                .pipe(
+                    tap(() => {
+                        this.toastr.success('Az emailt elküldtük');
+                        this.isEmailSent = true;
+                        this.changeDetectorRef.markForCheck();
+                    })
+                )
+                .subscribe();
+        }
+    }
 }

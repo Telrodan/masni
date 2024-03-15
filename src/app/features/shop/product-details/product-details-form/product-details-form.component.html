@@ -1,0 +1,10 @@
+<form *ngIf="product" [formGroup]="productDetailsForm">
+    <div *ngIf="product.isNameEmbroideryAvailable" class="form-group">
+        <label for="username">Hímzett név +500 Ft</label>
+        <input
+            pInputText
+            id="username"
+            placeholder="Kérlek add meg a nevet"
+            formControlName="nameEmbroidery" />
+    </div>
+</form>

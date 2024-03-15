@@ -1,30 +1,61 @@
 @import 'mixins';
 
 .nyk-login {
-  &-container {
-    display: block;
-    width: 50%;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: var(--color-pure-white);
+    &-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        padding: 40px 20px;
+        margin: 0 auto;
+        background: linear-gradient(
+            180deg,
+            rgba(250, 237, 235, 1) 0%,
+            rgba(255, 255, 255, 1) 100%
+        );
 
-    @include respond(sm) {
-      width: 95%;
+        @include respond(sm) {
+            width: 100%;
+        }
     }
-  }
 
-  &-header {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 220, 203, 1) 60%,
-      rgba(255, 255, 255, 1) 100%
-    );
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+    &-header {
+        margin-bottom: 8px;
+    }
+
+    &-sub-header {
+        margin-bottom: 8px;
+    }
+
+    &-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+    &-password-wrapper {
+        position: relative;
+
+        button {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            color: var(--color-dark-grey);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+
+            i {
+                font-size: var(--font-size-m);
+            }
+        }
+    }
 
     a {
-      color: var(--color-blue);
-      cursor: pointer;
+        color: var(--color-blue);
+        text-decoration: underline;
+        cursor: pointer;
     }
-  }
 }

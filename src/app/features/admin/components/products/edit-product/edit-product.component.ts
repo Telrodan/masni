@@ -14,7 +14,6 @@ import {
 } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { Store } from '@ngrx/store';
 import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
 
 import { Product, BackendProduct } from '@core/models/product.model';
@@ -22,7 +21,6 @@ import { Category } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { selectAllQuestion } from '@core/store';
 import {
     addImagesToFormAndSetPreview,
     removeImagesFromFormAndInputAndClearPreview
@@ -103,7 +101,6 @@ export class EditProductComponent implements OnInit {
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
         private route: ActivatedRoute,
-        private store$: Store,
         private toastr: ToastrService,
         private fb: FormBuilder
     ) {}
@@ -169,24 +166,6 @@ export class EditProductComponent implements OnInit {
                     categories.filter((category) => category.isSubCategory)
                 )
             );
-
-        this.store$
-            .select(selectAllQuestion)
-            .pipe(
-                tap((questions) => {
-                    this.questions = questions;
-                    // this.data.questions.forEach((question) => {
-                    //   if (
-                    //     this.editProductForm.value.questions.find(
-                    //       (id: string) => id === question.id
-                    //     )
-                    //   ) {
-                    //     this.selectedQuestions.push(question);
-                    //   }
-                    // });
-                })
-            )
-            .subscribe();
 
         this.inspirationCategories$ =
             this.categoryService.getInspirationCategories$();

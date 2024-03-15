@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 
 import { BackendProduct, Product } from '@core/models/product.model';
@@ -11,7 +10,7 @@ import { ApiService } from './api.service';
     providedIn: 'root'
 })
 export class ProductService {
-    constructor(private apiService: ApiService, private store: Store) {}
+    constructor(private apiService: ApiService) {}
 
     addProduct$(product: BackendProduct): Observable<Product> {
         const productFormData = new FormData();

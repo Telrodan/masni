@@ -7,9 +7,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ScrollTopModule } from 'primeng/scrolltop';
@@ -20,17 +17,8 @@ import { AuthService } from '@core/services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
-import { reducers } from './core/store/app-state';
 import { LayoutComponent } from './features/layout/layout.component';
-import {
-  CategoryEffects,
-  MaterialEffects,
-  ShoppingCartEffects,
-  UserEffects,
-  QuestionEffects,
-  InspirationEffects,
-  OrderEffects
-} from '@core/store/effects';
+
 import { SharedModule } from '@shared/shared.module';
 
 const PRIME_NG = [ToastModule, ScrollTopModule];
@@ -38,59 +26,43 @@ const PRIME_NG = [ToastModule, ScrollTopModule];
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    SharedModule,
-    LayoutComponent,
-
-    ...MATERIAL,
-    ...PRIME_NG,
-    StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-      logOnly: environment.production
-    }),
-    EffectsModule.forRoot([
-      MaterialEffects,
-      ShoppingCartEffects,
-      CategoryEffects,
-      UserEffects,
-      OrderEffects,
-      InspirationEffects,
-      QuestionEffects
-    ]),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
-  ],
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [AuthService],
-      useFactory: (auth: AuthService) => {
-        return () => {
-          auth.autoAuthentication();
-        };
-      }
-    },
-    AuthInterceptorProvider,
-    HttpInterceptorProvider,
-    MessageService,
-    ConfirmationService,
-    {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy
-    }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        SharedModule,
+        LayoutComponent,
+        ...MATERIAL,
+        ...PRIME_NG,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            // Register the ServiceWorker as soon as the application is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        })
+    ],
+    providers: [
+        {
+            provide: APP_INITIALIZER,
+            multi: true,
+            deps: [AuthService],
+            useFactory: (auth: AuthService) => {
+                return () => {
+                    auth.autoAuthentication();
+                };
+            }
+        },
+        AuthInterceptorProvider,
+        HttpInterceptorProvider,
+        MessageService,
+        ConfirmationService,
+        {
+            provide: LocationStrategy,
+            useClass: HashLocationStrategy
+        }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
