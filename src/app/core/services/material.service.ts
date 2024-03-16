@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
-import { Material, RawMaterial } from '@core/models/material.model';
+import { Material, BackendMaterial } from '@core/models/material.model';
 import { ApiResponse } from '@core/models/api-response.model';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { ApiResponse } from '@core/models/api-response.model';
 export class MaterialService {
     constructor(private apiService: ApiService) {}
 
-    addMaterial$(material: RawMaterial): Observable<Material> {
+    addMaterial$(material: BackendMaterial): Observable<Material> {
         const materialFormData = new FormData();
         materialFormData.append('material', JSON.stringify(material));
         materialFormData.append('image', material.image);
@@ -23,7 +23,7 @@ export class MaterialService {
     }
 
     updateMaterial$(
-        material: RawMaterial,
+        material: BackendMaterial,
         materialId: string
     ): Observable<Material> {
         const materialFormData = new FormData();
@@ -39,9 +39,7 @@ export class MaterialService {
     }
 
     deleteMaterial$(material: Material): Observable<null> {
-        return this.apiService
-            .delete<null>('material/deleteOne', material.id)
-            .pipe();
+        return this.apiService.delete<null>('material/deleteOne', material.id);
     }
 
     getMaterials$(): Observable<Material[]> {

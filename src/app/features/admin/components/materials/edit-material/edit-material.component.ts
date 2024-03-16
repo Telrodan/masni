@@ -19,11 +19,11 @@ import {
     MatDialogRef
 } from '@angular/material/dialog';
 
-import { Observable, tap, filter, switchMap, map } from 'rxjs';
+import { Observable, tap, filter, switchMap, map, combineLatest } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { Category } from '@core/models/category.model';
-import { Material, RawMaterial } from '@core/models/material.model';
+import { Material, BackendMaterial } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
@@ -40,6 +40,13 @@ import { CategoryService } from '@core/services/category.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TableModule } from 'primeng/table';
+import { Log } from '@core/models/log.model';
+import { LogService } from '@core/services/log.service';
+
+interface MaterialData extends Material {
+    logs: Log[];
+}
 
 @UntilDestroy()
 @Component({
@@ -55,7 +62,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         ButtonModule,
         SpinnerComponent,
         InputTextModule,
-        InputSwitchModule
+        InputSwitchModule,
+        TableModule
     ],
     templateUrl: './edit-material.component.html',
     styleUrls: ['./edit-material.component.scss'],
@@ -65,19 +73,17 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 export class EditMaterialComponent implements OnInit {
     @HostBinding('class') class = 'nyk-edit-material';
 
-    material$: Observable<Material>;
-    materialId: string;
-
-    isLoading = false;
-
+    material$: Observable<MaterialData>;
     categories$: Observable<Category[]>;
+    materialId: string;
+    isLoading = false;
     editMaterialForm: FormGroup;
-
     imagePreview: string;
 
     constructor(
         private materialService: MaterialService,
         private categoryService: CategoryService,
+        private logService: LogService,
         private route: ActivatedRoute,
         private router: Router,
         private toastr: ToastrService,
@@ -88,9 +94,25 @@ export class EditMaterialComponent implements OnInit {
     ngOnInit(): void {
         this.material$ = this.route.params.pipe(
             switchMap((params) =>
-                this.materialService.getMaterialById$(params['id'])
+                combineLatest([
+                    this.materialService.getMaterialById$(params['id']),
+                    this.logService
+                        .getItemLogsByItemId$(params['id'])
+                        .pipe(
+                            map((logs) =>
+                                logs.sort(
+                                    (a, b) =>
+                                        new Date(b.timestamp).getTime() -
+                                        new Date(a.timestamp).getTime()
+                                )
+                            )
+                        )
+                ])
             ),
+            filter((material) => !!material),
+            map(([material, logs]) => ({ ...material, logs })),
             tap((material) => {
+                console.log(material);
                 this.materialId = material.id;
                 this.editMaterialForm = this.fb.group({
                     name: [material.name, Validators.required],
@@ -123,7 +145,7 @@ export class EditMaterialComponent implements OnInit {
 
     onEditMaterial(): void {
         if (this.editMaterialForm.valid) {
-            const material: RawMaterial = {
+            const material: BackendMaterial = {
                 name: this.editMaterialForm.value.name.trim(),
                 categoryId: this.editMaterialForm.value.categoryId,
                 image: this.editMaterialForm.value.image,

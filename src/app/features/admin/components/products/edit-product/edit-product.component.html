@@ -219,12 +219,12 @@
             <p-button
                 label="Módosítás"
                 styleClass="p-button w-full mb-3"
-                [disabled]="!editProductForm.valid && editProductForm.dirty"
+                [disabled]="!editProductForm.valid || !editProductForm.dirty"
                 (click)="onEditProduct()">
             </p-button>
         </form>
 
-        <div class="nyk-edit-category-header">Kategória előzmények</div>
+        <div class="nyk-edit-product-header">Termék előzmények</div>
 
         <span class="text-blue-500">
             Hozzáadva:
