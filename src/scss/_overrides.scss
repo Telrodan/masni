@@ -68,6 +68,31 @@ p-inputswitch {
     border-radius: 0 !important;
 }
 
+.p-dropdown {
+    border-radius: 0 !important;
+
+    &-label,
+    &-item {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+}
+
+.p-datatable-thead {
+    th {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+}
+
+.p-datatable-tbody {
+    td {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+}
+
+.p-badge {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .owl-prev,
 .owl-next {
     display: flex;

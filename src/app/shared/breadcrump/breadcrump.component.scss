@@ -1,7 +1,11 @@
 .nyk-breadcrumb {
-  .p-breadcrumb {
-    display: flex;
-    height: 60px;
-    border: none;
-  }
+    .p-breadcrumb {
+        display: flex;
+        height: 60px;
+        border: none;
+    }
+
+    .p-menuitem-text {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
 }

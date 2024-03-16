@@ -1,447 +1,465 @@
 <div class="min-h-screen flex surface-ground nyk-admin-main">
-  <div
-    #sidebar
-    id="app-sidebar"
-    class="h-full lg:h-auto hidden lg:block flex-shrink-0 fixed lg:sticky left-0 top-0 z-5 border-right-1 surface-border w-full md:w-auto">
-    <div class="flex h-full">
-      <div
-        class="flex flex-column h-full flex-shrink-0 select-none w-4rem"
-        style="background-color: var(--color-primary)">
-        <div
-          class="flex align-items-center justify-content-center flex-shrink-0"
-          style="height: 60px">
-          <img
-            routerLink="/home"
-            class="cursor-pointer"
-            src="../../../assets/images/nyuszko-kucko-logo.png"
-            alt="Image"
-            height="40" />
-        </div>
-        <div class="overflow-y-auto mt-3">
-          <ul class="list-none py-3 pl-2 pr-0 m-0">
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/reports"
-                [ngClass]="{ 'bg-red-200 shadow-1': activeTab === 'reports' }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-chart-line text-xl"></i>
-              </a>
-            </li>
+    <div
+        #sidebar
+        id="app-sidebar"
+        class="h-full lg:h-auto hidden lg:block flex-shrink-0 fixed lg:sticky left-0 top-0 z-5 border-right-1 surface-border w-full md:w-auto">
+        <div class="flex h-full">
+            <div
+                class="flex flex-column h-full flex-shrink-0 select-none w-4rem"
+                style="background-color: var(--color-primary)">
+                <div
+                    class="flex align-items-center justify-content-center flex-shrink-0"
+                    style="height: 60px">
+                    <img
+                        routerLink="/home"
+                        class="cursor-pointer"
+                        src="../../../assets/images/nyuszko-kucko-logo.png"
+                        alt="Image"
+                        height="40" />
+                </div>
+                <div class="overflow-y-auto mt-3">
+                    <ul class="list-none py-3 pl-2 pr-0 m-0">
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/reports"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'reports'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-chart-line text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/categories"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'categories'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-bookmark text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/categories"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'categories'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-bookmark text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/products"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'products'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-box text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/products"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'products'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-box text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/materials"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'materials'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-palette text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/materials"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'materials'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-palette text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/inspirations"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'inspirations'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-sun text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/inspirations"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'inspirations'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-sun text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/questions"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'questions'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-question text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/questions"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'questions'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-question text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/orders"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'orders'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-file text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/orders"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1':
+                                        activeTab === 'orders'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-file text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/users"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'users'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-users text-xl"></i>
-              </a>
-            </li>
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/users"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1': activeTab === 'users'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-users text-xl"></i>
+                            </a>
+                        </li>
 
-            <li class="mb-2">
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
-                routerLink="/admin/mails"
-                [ngClass]="{
-                  'bg-red-200 shadow-1': activeTab === 'mails'
-                }"
-                style="
-                  border-top-left-radius: 30px;
-                  border-bottom-left-radius: 30px;
-                ">
-                <i class="pi pi-envelope text-xl"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div
-        class="flex flex-column bg-red-200 p-4 overflow-y-auto flex-shrink-0 flex-grow-1 md:flex-grow-0 shadow-1"
-        style="width: 300px">
-        <div class="justify-content-end mb-3 flex lg:hidden">
-          <button
-            icon="pi pi-times"
-            class="cursor-pointer text-white appearance-none bg-transparent border-none inline-flex justify-content-center align-items-center border-circle hover:bg-white transition-duration-150 transition-colors"
-            style="width: 2rem; height: 2rem"
-            (click)="onCloseSidebar()">
-            <i class="pi pi-times text-xl text-900"></i>
-          </button>
-        </div>
-
-        <div class="border-round flex-auto">
-          <!-- Jelentések -->
-          <div [ngClass]="{ hidden: activeTab !== 'reports' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Jelentések
+                        <li class="mb-2">
+                            <a
+                                pRipple
+                                class="flex align-items-center cursor-pointer py-3 pl-0 pr-2 justify-content-center hover:bg-red-300 text-900 hover:text-800 transition-duration-150 transition-colors"
+                                routerLink="/admin/mails"
+                                [ngClass]="{
+                                    'bg-red-200 shadow-1': activeTab === 'mails'
+                                }"
+                                style="
+                                    border-top-left-radius: 30px;
+                                    border-bottom-left-radius: 30px;
+                                ">
+                                <i class="pi pi-envelope text-xl"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="reports/summary"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összegzés</span>
+            <div
+                class="flex flex-column bg-red-200 p-4 overflow-y-auto flex-shrink-0 flex-grow-1 md:flex-grow-0 shadow-1"
+                style="width: 300px">
+                <div class="justify-content-end mb-3 flex lg:hidden">
+                    <button
+                        icon="pi pi-times"
+                        class="cursor-pointer text-white appearance-none bg-transparent border-none inline-flex justify-content-center align-items-center border-circle hover:bg-white transition-duration-150 transition-colors"
+                        style="width: 2rem; height: 2rem"
+                        (click)="onCloseSidebar()">
+                        <i class="pi pi-times text-xl text-900"></i>
+                    </button>
                 </div>
-              </li>
 
-              <li
-                routerLink="reports/charts"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-chart-bar text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Grafikonok</span>
-                </div>
-              </li>
+                <div class="border-round flex-auto">
+                    <!-- Jelentések -->
+                    <div [ngClass]="{ hidden: activeTab !== 'reports' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Jelentések
+                        </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="reports/summary"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összegzés</span>
+                                </div>
+                            </li>
 
-              <li
-                routerLink="reports/logs"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-database text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Naplók</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                            <li
+                                routerLink="reports/charts"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-chart-bar text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Grafikonok</span>
+                                </div>
+                            </li>
 
-          <!-- Kategóriák -->
-          <div [ngClass]="{ hidden: activeTab !== 'categories' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Kategóriák
-            </div>
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="categories/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
+                            <li
+                                routerLink="reports/logs"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-database text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Naplók</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-              <li
-                routerLink="categories/add"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-plus text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Hozzáadás</span>
-                </div>
-              </li>
+                    <!-- Kategóriák -->
+                    <div [ngClass]="{ hidden: activeTab !== 'categories' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Kategóriák
+                        </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="categories/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
 
-              <li
-                routerLink="categories/order"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-clone text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Sorrend</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                            <li
+                                routerLink="categories/add"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-plus text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Hozzáadás</span>
+                                </div>
+                            </li>
 
-          <!-- Termékek -->
-          <div [ngClass]="{ hidden: activeTab !== 'products' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Termékek
-            </div>
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="products/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
+                            <li
+                                routerLink="categories/order"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-clone text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Sorrend</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-              <li
-                routerLink="products/add"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-plus text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Hozzáadás</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    <!-- Termékek -->
+                    <div [ngClass]="{ hidden: activeTab !== 'products' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Termékek
+                        </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="products/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
 
-          <!-- Minták -->
-          <div [ngClass]="{ hidden: activeTab !== 'materials' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Minták
-            </div>
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="materials/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
+                            <li
+                                routerLink="products/add"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-plus text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Hozzáadás</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-              <li
-                routerLink="materials/add"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-plus text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Hozzáadás</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    <!-- Minták -->
+                    <div [ngClass]="{ hidden: activeTab !== 'materials' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Minták
+                        </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="materials/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
 
-          <!-- Inspirációk -->
-          <div [ngClass]="{ hidden: activeTab !== 'inspirations' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Inspirációk
-            </div>
+                            <li
+                                routerLink="materials/add"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-plus text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Hozzáadás</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="inspirations/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
+                    <!-- Inspirációk -->
+                    <div [ngClass]="{ hidden: activeTab !== 'inspirations' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Inspirációk
+                        </div>
 
-              <li
-                routerLink="inspirations/add"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-plus text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Hozzáadás</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="inspirations/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
 
-          <!-- Kérdések -->
-          <div [ngClass]="{ hidden: activeTab !== 'questions' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Kérdések
-            </div>
+                            <li
+                                routerLink="inspirations/add"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-plus text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Hozzáadás</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="questions/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
+                    <!-- Kérdések -->
+                    <div [ngClass]="{ hidden: activeTab !== 'questions' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Kérdések
+                        </div>
 
-              <li
-                routerLink="questions/add"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-plus text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Hozzáadás</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="questions/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
 
-          <!-- Rendelések -->
-          <div [ngClass]="{ hidden: activeTab !== 'orders' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Rendelések
-            </div>
+                            <li
+                                routerLink="questions/add"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-plus text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Hozzáadás</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="orders/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    <!-- Rendelések -->
+                    <div [ngClass]="{ hidden: activeTab !== 'orders' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Rendelések
+                        </div>
 
-          <!-- Felhasználók -->
-          <div [ngClass]="{ hidden: activeTab !== 'users' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Felhasználók
-            </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="orders/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="users/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    <!-- Felhasználók -->
+                    <div [ngClass]="{ hidden: activeTab !== 'users' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Felhasználók
+                        </div>
 
-          <!-- Üzenetek -->
-          <div [ngClass]="{ hidden: activeTab !== 'mails' }">
-            <div class="p-3 font-medium text-2xl text-cyan-900 mb-5">
-              Üzenetek
-            </div>
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="users/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-            <ul class="list-none p-0 m-0 text-cyan-900">
-              <li
-                routerLink="mails/all"
-                routerLinkActive="bg-red-300 shadow-1"
-                class="mb-3 flex align-items-start p-3 cursor-pointer"
-                style="border-radius: 12px">
-                <i class="pi pi-book text-xl mr-3"></i>
-                <div class="flex flex-column">
-                  <span>Összes</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    <!-- Üzenetek -->
+                    <div [ngClass]="{ hidden: activeTab !== 'mails' }">
+                        <div
+                            class="p-3 font-medium text-2xl text-cyan-900 mb-5">
+                            Üzenetek
+                        </div>
 
-          <!-- <div [ngClass]="{ hidden: activeTab !== 5 }">
+                        <ul class="list-none p-0 m-0 text-cyan-900">
+                            <li
+                                routerLink="mails/all"
+                                routerLinkActive="bg-red-300 shadow-1"
+                                class="mb-3 flex align-items-start p-3 cursor-pointer"
+                                style="border-radius: 12px">
+                                <i class="pi pi-book text-xl mr-3"></i>
+                                <div class="flex flex-column">
+                                    <span>Összes</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- <div [ngClass]="{ hidden: activeTab !== 5 }">
             <div class="p-3 font-medium text-2xl text-white mb-5">Settings</div>
             <ul class="list-none p-0 m-0 text-white">
               <li
@@ -490,64 +508,69 @@
               </li>
             </ul>
           </div> -->
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="min-h-screen flex flex-column relative flex-auto">
-    <div
-      class="flex justify-content-between lg:justify-content-start align-items-center px-5 surface-section border-bottom-1 surface-border relative lg:static"
-      style="height: 60px">
-      <div class="flex">
-        <a
-          pRipple
-          class="cursor-pointer block lg:hidden text-700 mr-3"
-          pStyleClass="#app-sidebar"
-          enterClass="hidden"
-          enterActiveClass="fadeinleft">
-          <i class="pi pi-bars text-4xl"></i>
-        </a>
-      </div>
-
-      <img
-        src="../../../assets/images/nyuszko-kucko-logo.png"
-        alt="Image"
-        height="40"
-        class="block lg:hidden" />
-      <a
-        pRipple
-        class="cursor-pointer block lg:hidden text-700"
-        pStyleClass="@next"
-        enterClass="hidden"
-        enterActiveClass="fadein"
-        leaveToClass="hidden"
-        leaveActiveClass="fadeout"
-        [hideOnOutsideClick]="true">
-        <i class="pi pi-ellipsis-v text-2xl"></i>
-      </a>
-      <ul
-        class="list-none p-0 m-0 hidden lg:flex lg:align-items-center select-none lg:flex-row lg:w-full surface-section border-1 lg:border-none surface-border right-0 top-100 z-1 shadow-2 lg:shadow-none absolute lg:static">
-        <li class="border-top-1 surface-border lg:border-top-none">
-          <nyk-breadcrumb></nyk-breadcrumb>
-        </li>
-
-        <li class="border-top-1 surface-border lg:border-top-none lg:ml-auto">
-          <a
-            pRipple
-            class="flex p-3 lg:px-3 lg:py-2 align-items-center hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors lg:hidden">
-            <i class="pi pi-user text-2xl mr-2"></i>
-            <div *ngIf="user$ | async as user" class="block">
-              <div class="text-900 font-medium">{{ user.name }}</div>
-              <span class="text-600 font-medium text-sm">{{ user.role }}</span>
+                </div>
             </div>
-          </a>
-        </li>
-      </ul>
+        </div>
     </div>
-    <div class="p-5 flex flex-column flex-auto nyk-admin-content">
-      <div class="border-round surface-section flex-auto drag-boundary">
-        <router-outlet></router-outlet>
-      </div>
+    <div class="min-h-screen flex flex-column relative flex-auto">
+        <div
+            class="flex justify-content-between lg:justify-content-start align-items-center px-5 surface-section border-bottom-1 surface-border relative lg:static"
+            style="height: 60px">
+            <div class="flex">
+                <a
+                    pRipple
+                    class="cursor-pointer block lg:hidden text-700 mr-3"
+                    pStyleClass="#app-sidebar"
+                    enterClass="hidden"
+                    enterActiveClass="fadeinleft">
+                    <i class="pi pi-bars text-4xl"></i>
+                </a>
+            </div>
+
+            <img
+                src="../../../assets/images/nyuszko-kucko-logo.png"
+                alt="Image"
+                height="40"
+                class="block lg:hidden" />
+            <a
+                pRipple
+                class="cursor-pointer block lg:hidden text-700"
+                pStyleClass="@next"
+                enterClass="hidden"
+                enterActiveClass="fadein"
+                leaveToClass="hidden"
+                leaveActiveClass="fadeout"
+                [hideOnOutsideClick]="true">
+                <i class="pi pi-ellipsis-v text-2xl"></i>
+            </a>
+            <ul
+                class="list-none p-0 m-0 hidden lg:flex lg:align-items-center select-none lg:flex-row lg:w-full surface-section border-1 lg:border-none surface-border right-0 top-100 z-1 shadow-2 lg:shadow-none absolute lg:static">
+                <li class="border-top-1 surface-border lg:border-top-none">
+                    <nyk-breadcrumb></nyk-breadcrumb>
+                </li>
+
+                <li
+                    class="border-top-1 surface-border lg:border-top-none lg:ml-auto">
+                    <a
+                        pRipple
+                        class="flex p-3 lg:px-3 lg:py-2 align-items-center hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors lg:hidden">
+                        <i class="pi pi-user text-2xl mr-2"></i>
+                        <div *ngIf="user$ | async as user" class="block">
+                            <div class="text-900 font-medium">
+                                {{ user.name }}
+                            </div>
+                            <span class="text-600 font-medium text-sm">{{
+                                user.role
+                            }}</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="p-2 md:p-5 flex flex-column flex-auto nyk-admin-content">
+            <div class="border-round surface-section flex-auto drag-boundary">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
