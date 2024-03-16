@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostBinding,
+    OnInit,
+    ViewEncapsulation
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -20,80 +27,82 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'nyk-products',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    TableModule,
-    ButtonModule,
-    ImageModule,
-    SkeletonModule,
-    BadgeModule,
-    InputTextModule,
-    RouterModule,
-    SpinnerComponent,
-    TooltipModule
-  ],
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+    selector: 'nyk-products',
+    standalone: true,
+    imports: [
+        CommonModule,
+        CardModule,
+        TableModule,
+        ButtonModule,
+        ImageModule,
+        SkeletonModule,
+        BadgeModule,
+        InputTextModule,
+        RouterModule,
+        SpinnerComponent,
+        TooltipModule
+    ],
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductsComponent implements OnInit {
-  products$: Observable<Product[]>;
+    @HostBinding('class') hostClass = 'nyk-products';
 
-  images: string[];
-  imageLoadedStatus: boolean[] = [];
+    products$: Observable<Product[]>;
+    images: string[];
+    imageLoadedStatus: boolean[] = [];
+    isLoading = false;
 
-  isLoading = false;
+    private productDeleteSubject = new Subject<void>();
 
-  private productDeleteSubject = new Subject<void>();
+    constructor(
+        private productService: ProductService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private dialog: MatDialog,
+        private toastr: ToastrService
+    ) {}
 
-  constructor(
-    private productService: ProductService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private dialog: MatDialog,
-    private toastr: ToastrService
-  ) {}
+    ngOnInit(): void {
+        this.products$ = this.productDeleteSubject.pipe(
+            startWith(null),
+            switchMap(() => this.productService.getProducts$())
+        );
+    }
 
-  ngOnInit(): void {
-    this.products$ = this.productDeleteSubject.pipe(
-      startWith(null),
-      switchMap(() => this.productService.getProducts$())
-    );
-  }
+    onDeleteProduct(product: Product): void {
+        this.dialog
+            .open(ConfirmDialogComponent, {
+                minWidth: '40vw',
+                data: {
+                    message: `Biztos törölni szeretnéd "${product.name}" terméket?`
+                }
+            })
+            .afterClosed()
+            .pipe(
+                filter((confirmed) => !!confirmed),
+                tap(() => {
+                    this.isLoading = true;
+                    this.changeDetectorRef.detectChanges();
+                }),
+                switchMap(() => this.productService.deleteProduct$(product)),
+                tap(() => {
+                    this.isLoading = false;
+                    this.productDeleteSubject.next();
+                    this.toastr.success(`${product.name} termék törölve`);
+                    this.changeDetectorRef.detectChanges();
+                })
+            )
+            .subscribe();
+    }
 
-  onDeleteProduct(product: Product): void {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        minWidth: '40vw',
-        data: {
-          message: `Biztos törölni szeretnéd "${product.name}" terméket?`
-        }
-      })
-      .afterClosed()
-      .pipe(
-        filter((confirmed) => !!confirmed),
-        tap(() => {
-          this.isLoading = true;
-          this.changeDetectorRef.detectChanges();
-        }),
-        switchMap(() => this.productService.deleteProduct$(product)),
-        tap(() => {
-          this.isLoading = false;
-          this.productDeleteSubject.next();
-          this.toastr.success(`${product.name} termék törölve`);
-          this.changeDetectorRef.detectChanges();
-        })
-      )
-      .subscribe();
-  }
+    imageLoaded(index: number) {
+        this.imageLoadedStatus[index] = true;
+    }
 
-  imageLoaded(index: number) {
-    this.imageLoadedStatus[index] = true;
-  }
-
-  applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
-    const filter = ($event.target as HTMLInputElement).value;
-    table.filterGlobal(filter, stringVal);
-  }
+    applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
+        const filter = ($event.target as HTMLInputElement).value;
+        table.filterGlobal(filter, stringVal);
+    }
 }

@@ -23,7 +23,7 @@ export interface BackendProduct {
 export interface Product {
     id: string;
     category: ProductCategory;
-    inspirationCategory: InspirationCategory;
+    inspirationCategory?: InspirationCategory;
     name: string;
     shortDescription: string;
     description: string;

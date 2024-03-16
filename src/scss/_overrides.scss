@@ -71,6 +71,10 @@ p-inputswitch {
 .p-dropdown {
     border-radius: 0 !important;
 
+    &-panel {
+        border-radius: 0 !important;
+    }
+
     &-label,
     &-item {
         font-family: 'Roboto Condensed', sans-serif;

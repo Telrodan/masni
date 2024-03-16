@@ -13,29 +13,8 @@ import {
     Validators
 } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-
-import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
-
-import { Product, BackendProduct } from '@core/models/product.model';
-import { Category } from '@core/models/category.model';
-import { Question } from '@core/models/question.model';
-import { ProductService } from '@core/services/product.service';
-import { ToastrService } from '@core/services/toastr.service';
-import {
-    addImagesToFormAndSetPreview,
-    removeImagesFromFormAndInputAndClearPreview
-} from '@shared/util/image-upload-helpers';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ButtonModule } from 'primeng/button';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { EditorModule } from 'primeng/editor';
-import { InputTextModule } from 'primeng/inputtext';
-import { DividerModule } from 'primeng/divider';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import {
     CdkDrag,
     CdkDragDrop,
@@ -43,10 +22,32 @@ import {
     CdkDropList,
     moveItemInArray
 } from '@angular/cdk/drag-drop';
+
+import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
+import { EditorModule } from 'primeng/editor';
+import { InputTextModule } from 'primeng/inputtext';
+import { DividerModule } from 'primeng/divider';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { TableModule } from 'primeng/table';
+
+import { Product, BackendProduct } from '@core/models/product.model';
+import { Category } from '@core/models/category.model';
+import { Question } from '@core/models/question.model';
+import { ProductService } from '@core/services/product.service';
+import { ToastrService } from '@core/services/toastr.service';
 import { CategoryService } from '@core/services/category.service';
 import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
-import { TableModule } from 'primeng/table';
+import { QuestionService } from '@core/services/question.service';
+import {
+    addImagesToFormAndSetPreview,
+    removeImagesFromFormAndInputAndClearPreview
+} from '@shared/util/image-upload-helpers';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 interface ProductData extends Product {
     logs: Log[];
@@ -82,21 +83,20 @@ export class EditProductComponent implements OnInit {
     @HostBinding('class') class = 'nyk-edit-product';
 
     product$: Observable<ProductData>;
-    productId: string;
-    isLoading = false;
-
     categories$: Observable<Category[]>;
     inspirationCategories$: Observable<Category[]>;
-
+    questions$: Observable<Question[]>;
+    productId: string;
+    isLoading = false;
     questions: Question[];
     selectedQuestions: Question[] = [];
-
     editProductForm: FormGroup;
     imagesPreview: string[] = [];
 
     constructor(
         private productService: ProductService,
         private categoryService: CategoryService,
+        private questionService: QuestionService,
         private logService: LogService,
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
@@ -123,8 +123,8 @@ export class EditProductComponent implements OnInit {
                 )
             })),
             tap((product) => {
-                console.log(product);
                 this.productId = product.id;
+                this.selectedQuestions = product.questions;
                 this.editProductForm = this.fb.group({
                     name: [product.name, Validators.required],
                     categoryId: [product.category.id, Validators.required],
@@ -167,11 +167,17 @@ export class EditProductComponent implements OnInit {
                 )
             );
 
+        this.questions$ = this.questionService.getQuestions$().pipe(
+            tap((questions) => {
+                this.questions = questions;
+            })
+        );
+
         this.inspirationCategories$ =
             this.categoryService.getInspirationCategories$();
     }
 
-    drop(event: CdkDragDrop<{ image: string }[]>) {
+    drop(event: CdkDragDrop<{ image: string }[]>): void {
         moveItemInArray(
             this.editProductForm.value.images,
             event.previousIndex,
@@ -179,8 +185,7 @@ export class EditProductComponent implements OnInit {
         );
     }
 
-    addQuestion(): void {
-        const id = this.editProductForm.value.selectedQuestion;
+    addQuestion(id: string): void {
         if (id) {
             this.editProductForm.value.questions.push(id);
             const selectedQuestion = this.questions.find(

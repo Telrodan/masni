@@ -1,254 +1,224 @@
 <ng-container *ngIf="!isLoading; else loading">
-  <div class="font-medium text-2xl text-900">Termék hozzáadás</div>
-  <p-divider styleClass="mb-5"></p-divider>
+    <div class="nyk-add-product-header">Termék hozzáadás</div>
 
-  <form [formGroup]="addProductForm">
-    <div class="form-group">
-      <label for="name" class="block font-medium text-900 mb-2 text-lg">
-        Termék neve
-      </label>
+    <form class="nyk-add-product-form" [formGroup]="addProductForm">
+        <div class="form-group">
+            <label for="name"> Termék neve </label>
 
-      <input id="name" type="text" formControlName="name" pInputText />
-    </div>
+            <input id="name" type="text" formControlName="name" pInputText />
+        </div>
 
-    <div
-      class="form-group"
-      *ngIf="productSubCategories$ | async as productSubCategories">
-      <label for="categoryId" class="block font-medium text-900 mb-2 text-lg">
-        Termék kategória
-      </label>
+        <div class="form-group">
+            <label for="categoryId"> Termék kategória </label>
 
-      <p-dropdown
-        id="categoryId"
-        formControlName="categoryId"
-        [options]="productSubCategories"
-        placeholder="Válassz egy kategóriát"
-        optionValue="id"
-        optionLabel="slug"
-        styleClass="w-full">
-      </p-dropdown>
-    </div>
+            <p-dropdown
+                id="categoryId"
+                formControlName="categoryId"
+                [options]="productSubCategories$ | async"
+                placeholder="Válassz egy kategóriát"
+                optionValue="id"
+                optionLabel="slug"
+                styleClass="w-full">
+            </p-dropdown>
+        </div>
 
-    <div class="form-group">
-      <label
-        for="shortDescription"
-        class="block font-medium text-900 mb-2 text-lg">
-        Termék rövid leírás
-      </label>
+        <div class="form-group">
+            <label for="shortDescription"> Termék rövid leírás </label>
 
-      <input
-        id="shortDescription"
-        formControlName="shortDescription"
-        type="text"
-        pInputText />
-    </div>
+            <input
+                id="shortDescription"
+                formControlName="shortDescription"
+                type="text"
+                pInputText />
+        </div>
 
-    <div class="form-group">
-      <label for="description" class="block font-medium text-900 mb-2 text-lg">
-        Termék leírás
-      </label>
+        <div class="form-group">
+            <label for="description"> Termék leírás </label>
 
-      <p-editor
-        formControlName="description"
-        [style]="{ height: '320px' }"></p-editor>
-    </div>
+            <p-editor
+                formControlName="description"
+                [style]="{ height: '320px' }"></p-editor>
+        </div>
 
-    <div class="form-group">
-      <label for="price" class="block font-medium text-900 mb-2 text-lg">
-        Termék ára
-      </label>
+        <div class="form-group">
+            <label for="price"> Termék ára </label>
 
-      <input id="price" formControlName="price" type="number" pInputText />
-    </div>
+            <input
+                id="price"
+                formControlName="price"
+                type="number"
+                pInputText />
+        </div>
 
-    <div class="form-group">
-      <label
-        for="discountedPrice"
-        class="block font-medium text-900 mb-2 text-lg">
-        Termék akciós ára
-      </label>
+        <div class="form-group">
+            <label for="discountedPrice"> Termék akciós ára </label>
 
-      <input
-        id="discountedPrice"
-        formControlName="discountedPrice"
-        type="number"
-        pInputText />
-    </div>
+            <input
+                id="discountedPrice"
+                formControlName="discountedPrice"
+                type="number"
+                pInputText />
+        </div>
 
-    <div class="form-group">
-      <label for="stock" class="block font-medium text-900 mb-2 text-lg">
-        Készleten
-      </label>
+        <div class="form-group">
+            <label for="stock"> Készleten </label>
 
-      <input id="stock" formControlName="stock" type="number" pInputText />
-    </div>
+            <input
+                id="stock"
+                formControlName="stock"
+                type="number"
+                pInputText />
+        </div>
 
-    <div class="form-group">
-      <label
-        for="selectedQuestion"
-        class="block font-medium text-900 mb-2 text-lg">
-        Kérdések
-      </label>
+        <div class="form-group">
+            <label for="selectedQuestion"> Kérdések </label>
 
-      <div class="questions-wrapper">
-        <p-dropdown
-          id="selectedQuestion"
-          formControlName="selectedQuestion"
-          [options]="questions$ | async"
-          placeholder="Válassz egy kérdést"
-          optionValue="id"
-          optionLabel="name"
-          styleClass="w-full">
-        </p-dropdown>
+            <div class="nyk-add-product-questions-wrapper">
+                <p-dropdown
+                    id="selectedQuestion"
+                    formControlName="selectedQuestion"
+                    [options]="questions$ | async"
+                    placeholder="Válassz egy kérdést"
+                    optionValue="id"
+                    optionLabel="name">
+                </p-dropdown>
+
+                <p-button
+                    icon="pi pi-plus"
+                    styleClass="p-button-success ml-2"
+                    pTooltip="Kérdés hozzáadása"
+                    tooltipPosition="bottom"
+                    (click)="
+                        addQuestion(
+                            addProductForm.get('selectedQuestion').value
+                        )
+                    "></p-button>
+            </div>
+        </div>
+
+        <div *ngIf="selectedQuestions.length" class="form-group">
+            <label>Választott kérdések</label>
+
+            <div
+                class="nyk-add-product-option-wrapper mb-2"
+                *ngFor="let question of selectedQuestions; let i = index">
+                <p>{{ i + 1 }}. {{ question.name }}</p>
+
+                <p-button
+                    icon="pi pi-times"
+                    styleClass="p-button-danger"
+                    (click)="deleteQuestion(question.id, i)">
+                </p-button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> Egyedi termék </label>
+
+            <p-inputSwitch formControlName="isCustom"></p-inputSwitch>
+        </div>
+
+        <div *ngIf="addProductForm.value.isCustom" class="form-group">
+            <label for="inspirationCategoryId"> Inspiráció kategória </label>
+
+            <p-dropdown
+                id="inspirationCategoryId"
+                formControlName="inspirationCategoryId"
+                [options]="inspirationCategories$ | async"
+                placeholder="Válassz egy kategóriát"
+                optionValue="id"
+                optionLabel="name"
+                styleClass="w-full">
+            </p-dropdown>
+        </div>
+
+        <div class="form-group">
+            <label>Babaruha</label>
+
+            <p-inputSwitch formControlName="isDollDress"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label> Öltöztethető </label>
+
+            <p-inputSwitch formControlName="isDressable"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label> Kiemelt termék </label>
+
+            <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label for="isNameEmbroideryAvailable"> Név hímzés elérhető </label>
+
+            <p-inputSwitch
+                formControlName="isNameEmbroideryAvailable"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label for="images">
+                Termék képek (az első kép lesz mindig a nagy kép)
+            </label>
+
+            <p-button
+                *ngIf="imagesPreview.length === 0; else clearImagesButton"
+                icon="pi pi-image"
+                styleClass="p-button p-button-secondary"
+                (click)="imagesPicker.click()">
+            </p-button>
+
+            <ng-template #clearImagesButton>
+                <button
+                    pButton
+                    pRipple
+                    pTooltip="Kép törlése"
+                    tooltipPosition="bottom"
+                    (click)="onImageClear(imagesPicker)"
+                    type="button"
+                    icon="pi pi-times"
+                    class="p-button p-button-danger p-button mb-2"></button>
+            </ng-template>
+
+            <input
+                id="imagesPicker"
+                multiple
+                type="file"
+                class="hidden"
+                #imagesPicker
+                (change)="onImagePicked($event)" />
+
+            <img
+                *ngIf="!imagesPreview.length"
+                class="mt-2 image-preview border-round"
+                src="../../../../../../assets/images/no-image.png"
+                alt="Termék" />
+
+            <div
+                cdkDropList
+                cdkDropListOrientation="horizontal"
+                class="nyk-add-product-images-container"
+                (cdkDropListDropped)="drop($event)">
+                <div
+                    *ngFor="let image of imagesPreview"
+                    class="nyk-add-product-image"
+                    cdkDrag>
+                    <img [src]="image" />
+                    <img *cdkDragPreview [src]="image" />
+                </div>
+            </div>
+        </div>
 
         <p-button
-          icon="pi pi-plus"
-          styleClass="p-button-success ml-2"
-          pTooltip="Kérdés hozzáadása"
-          tooltipPosition="bottom"
-          (click)="addQuestion()"></p-button>
-      </div>
-    </div>
-
-    <ng-container *ngIf="selectedQuestions.length">
-      <div class="form-group w-6">
-        <h3 class="font-medium text-blue-500 mb-1">Választott kérdések</h3>
-
-        <div
-          class="option-wrapper mb-2"
-          *ngFor="let question of selectedQuestions; let i = index">
-          <p class="block font-medium text-800 mb-1">
-            {{ i + 1 }}. {{ question.name }}
-          </p>
-
-          <p-button
-            icon="pi pi-times"
-            styleClass="p-button-danger"
-            (click)="deleteQuestion(question.id, i)">
-          </p-button>
-        </div>
-      </div>
-    </ng-container>
-
-    <div class="form-group">
-      <label class="block font-medium text-900 mb-2 text-lg">
-        Egyedi termék
-      </label>
-
-      <p-inputSwitch formControlName="isCustom"></p-inputSwitch>
-    </div>
-
-    <ng-container *ngIf="addProductForm.value.isCustom">
-      <div
-        *ngIf="inspirationCategories$ | async as inspirationCategories"
-        class="form-group">
-        <label
-          for="inspirationCategoryId"
-          class="block font-medium text-900 mb-2 text-lg">
-          Inspiráció kategória
-        </label>
-
-        <p-dropdown
-          id="inspirationCategoryId"
-          formControlName="inspirationCategoryId"
-          [options]="inspirationCategories"
-          placeholder="Válassz egy kategóriát"
-          optionValue="id"
-          optionLabel="name"
-          styleClass="w-full">
-        </p-dropdown>
-      </div>
-    </ng-container>
-
-    <div class="form-group">
-      <label class="block font-medium text-900 mb-2 text-lg">Babaruha</label>
-
-      <p-inputSwitch formControlName="isDollDress"></p-inputSwitch>
-    </div>
-
-    <div class="form-group">
-      <label class="block font-medium text-900 mb-2 text-lg">
-        Öltöztethető
-      </label>
-
-      <p-inputSwitch formControlName="isDressable"></p-inputSwitch>
-    </div>
-
-    <div class="form-group">
-      <label class="block font-medium text-900 mb-2 text-lg">
-        Kiemelt termék
-      </label>
-
-      <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
-    </div>
-
-    <div class="form-group">
-      <label
-        for="isNameEmbroideryAvailable"
-        class="block font-medium text-900 mb-2 text-lg">
-        Név hímzés elérhető
-      </label>
-
-      <p-inputSwitch
-        formControlName="isNameEmbroideryAvailable"></p-inputSwitch>
-    </div>
-
-    <div class="form-group">
-      <label for="images" class="block font-medium text-900 mb-2 text-lg">
-        Termék képek (az első kép lesz mindig a nagy kép)
-      </label>
-
-      <p-button
-        *ngIf="imagesPreview.length === 0; else clearImagesButton"
-        icon="pi pi-image"
-        styleClass="p-button p-button-secondary"
-        (click)="imagesPicker.click()">
-      </p-button>
-
-      <ng-template #clearImagesButton>
-        <button
-          pButton
-          pRipple
-          pTooltip="Kép törlése"
-          tooltipPosition="bottom"
-          (click)="onImageClear(imagesPicker)"
-          type="button"
-          icon="pi pi-times"
-          class="p-button p-button-danger p-button mb-2"></button>
-      </ng-template>
-
-      <input
-        id="imagesPicker"
-        multiple
-        type="file"
-        class="hidden"
-        #imagesPicker
-        (change)="onImagePicked($event)" />
-
-      <div
-        cdkDropList
-        cdkDropListOrientation="horizontal"
-        class="nyk-add-product-images-container"
-        (cdkDropListDropped)="drop($event)">
-        <div
-          *ngFor="let image of imagesPreview"
-          class="nyk-add-product-image"
-          cdkDrag>
-          <img [src]="image" />
-          <img *cdkDragPreview [src]="image" />
-        </div>
-      </div>
-    </div>
-  </form>
-
-  <p-button
-    label="Hozzáadás"
-    styleClass="p-button w-full"
-    [disabled]="!addProductForm.valid"
-    (click)="onAddProduct()">
-  </p-button>
+            label="Hozzáadás"
+            styleClass="p-button w-full"
+            [disabled]="!addProductForm.valid"
+            (click)="onAddProduct()">
+        </p-button>
+    </form>
 </ng-container>
 
 <ng-template #loading>
-  <nyk-spinner></nyk-spinner>
+    <nyk-spinner></nyk-spinner>
 </ng-template>

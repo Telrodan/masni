@@ -1,34 +1,34 @@
 import { Route } from '@angular/router';
 
-const productsComponent = () =>
-  import('./products.component').then((c) => c.ProductsComponent);
+const ProductsComponent = () =>
+    import('./products.component').then((c) => c.ProductsComponent);
 
-const addProductComponent = () =>
-  import('./add-product/add-product.component').then(
-    (c) => c.AddProductComponent
-  );
+const AddProductComponent = () =>
+    import('./add-product/add-product.component').then(
+        (c) => c.AddProductComponent
+    );
 
-const editProductComponent = () =>
-  import('./edit-product/edit-product.component').then(
-    (c) => c.EditProductComponent
-  );
+const EditProductComponent = () =>
+    import('./edit-product/edit-product.component').then(
+        (c) => c.EditProductComponent
+    );
 
 export default [
-  {
-    path: '',
-    redirectTo: 'all',
-    pathMatch: 'full'
-  },
-  {
-    path: 'all',
-    loadComponent: productsComponent
-  },
-  {
-    path: 'add',
-    loadComponent: addProductComponent
-  },
-  {
-    path: 'edit/:id',
-    loadComponent: editProductComponent
-  }
+    {
+        path: '',
+        redirectTo: 'all',
+        pathMatch: 'full'
+    },
+    {
+        path: 'all',
+        loadComponent: ProductsComponent
+    },
+    {
+        path: 'add',
+        loadComponent: AddProductComponent
+    },
+    {
+        path: 'edit/:id',
+        loadComponent: EditProductComponent
+    }
 ] as Route[];

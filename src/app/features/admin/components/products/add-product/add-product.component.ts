@@ -13,30 +13,8 @@ import {
     Validators
 } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-
-import { Observable, map, tap } from 'rxjs';
-
-import { BackendProduct } from '@core/models/product.model';
-import { Category, ProductCategory } from '@core/models/category.model';
-import { Question } from '@core/models/question.model';
-import { ProductService } from '@core/services/product.service';
-import { ToastrService } from '@core/services/toastr.service';
-import {
-    addImagesToFormAndSetPreview,
-    removeImagesFromFormAndInputAndClearPreview
-} from '@shared/util/image-upload-helpers';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ButtonModule } from 'primeng/button';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { DividerModule } from 'primeng/divider';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { CategoryService } from '@core/services/category.service';
-import { EditorModule } from 'primeng/editor';
-import { QuestionService } from '@core/services/question.service';
+import { Router } from '@angular/router';
 import {
     CdkDrag,
     CdkDragDrop,
@@ -44,7 +22,29 @@ import {
     CdkDropList,
     moveItemInArray
 } from '@angular/cdk/drag-drop';
-import { Router } from '@angular/router';
+
+import { Observable, map, tap } from 'rxjs';
+import { EditorModule } from 'primeng/editor';
+import { DividerModule } from 'primeng/divider';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputTextModule } from 'primeng/inputtext';
+
+import { BackendProduct } from '@core/models/product.model';
+import { Category, ProductCategory } from '@core/models/category.model';
+import { Question } from '@core/models/question.model';
+import { ProductService } from '@core/services/product.service';
+import { ToastrService } from '@core/services/toastr.service';
+import { CategoryService } from '@core/services/category.service';
+import { QuestionService } from '@core/services/question.service';
+import {
+    addImagesToFormAndSetPreview,
+    removeImagesFromFormAndInputAndClearPreview
+} from '@shared/util/image-upload-helpers';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
     selector: 'nyk-add-product',
@@ -78,16 +78,14 @@ export class AddProductComponent implements OnInit {
     productSubCategories$: Observable<ProductCategory[]>;
     questions$: Observable<Question[]>;
     inspirationCategories$: Observable<Category[]>;
-
     isLoading = false;
-
     questions: Question[];
     selectedQuestions: Question[] = [];
-
+    imagesPreview: string[] = [];
     addProductForm = this.fb.group({
         name: ['', Validators.required],
         categoryId: ['', Validators.required],
-        inspirationCategoryId: [''],
+        inspirationCategoryId: [undefined],
         shortDescription: ['', Validators.required],
         description: ['', Validators.required],
         isCustom: [false, Validators.required],
@@ -102,8 +100,6 @@ export class AddProductComponent implements OnInit {
         discountedPrice: [0, Validators.required],
         stock: [0, Validators.required]
     });
-
-    imagesPreview: string[] = [];
 
     constructor(
         private productService: ProductService,
@@ -121,20 +117,20 @@ export class AddProductComponent implements OnInit {
             .pipe(
                 map((categories) =>
                     categories.filter((category) => category.isSubCategory)
-                ),
-                tap((categories) => {
-                    console.log(categories);
-                })
+                )
             );
 
         this.inspirationCategories$ =
             this.categoryService.getInspirationCategories$();
 
-        this.questions$ = this.questionService.getQuestions$();
+        this.questions$ = this.questionService.getQuestions$().pipe(
+            tap((questions) => {
+                this.questions = questions;
+            })
+        );
     }
 
-    addQuestion(): void {
-        const id = this.addProductForm.value.selectedQuestion;
+    addQuestion(id: string): void {
         if (id) {
             this.addProductForm.value.questions.push(id);
             const selectedQuestion = this.questions.find(
@@ -200,10 +196,8 @@ export class AddProductComponent implements OnInit {
             const product: BackendProduct = {
                 name: this.addProductForm.value.name,
                 categoryId: this.addProductForm.value.categoryId,
-                inspirationCategoryId: this.addProductForm.value
-                    .inspirationCategoryId
-                    ? this.addProductForm.value.inspirationCategoryId
-                    : undefined,
+                inspirationCategoryId:
+                    this.addProductForm.value.inspirationCategoryId,
                 shortDescription: this.addProductForm.value.shortDescription,
                 isCustom: this.addProductForm.value.isCustom,
                 isDollDress: this.addProductForm.value.isDollDress,
