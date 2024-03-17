@@ -12,9 +12,19 @@ import {
     ReactiveFormsModule,
     Validators
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { Observable, tap } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { QuestionType } from '@core/enums/question-type.enum';
 import { Category, MaterialCategory } from '@core/models/category.model';
@@ -22,19 +32,9 @@ import { BackendQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { QuestionOption } from '@core/models/question.model';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { InputTextModule } from 'primeng/inputtext';
 import { CategoryService } from '@core/services/category.service';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { Router } from '@angular/router';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { MaterialService } from '@core/services/material.service';
 
 const QUESTION_TYPE_FORM_OPTIONS = [
     {
@@ -47,7 +47,6 @@ const QUESTION_TYPE_FORM_OPTIONS = [
     }
 ];
 
-@UntilDestroy()
 @Component({
     selector: 'nyk-add-question',
     standalone: true,
@@ -76,15 +75,11 @@ export class AddQuestionComponent implements OnInit {
     categories$: Observable<Category[]>;
     categories: Category[] = [];
     selectedCategories: Category[] = [];
-
     isLoading = false;
-
     questionTypeHelper = QuestionType.QUESTION_WITH_STRING_ANSWER;
-
     questionTypeForm = this.fb.group({
         questionType: [this.questionTypeHelper, Validators.required]
     });
-
     addStringQuestionForm = this.fb.group({
         name: ['', Validators.required],
         question: ['', Validators.required],
@@ -92,7 +87,6 @@ export class AddQuestionComponent implements OnInit {
         options: this.fb.array<QuestionOption>([], Validators.required),
         extraPrice: [0, Validators.required]
     });
-
     addMaterialQuestionForm = this.fb.group({
         isOptional: [false],
         name: ['', Validators.required],
@@ -108,6 +102,7 @@ export class AddQuestionComponent implements OnInit {
     constructor(
         private questionService: QuestionService,
         private categoryService: CategoryService,
+        private materialService: MaterialService,
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
         private fb: FormBuilder,
@@ -121,8 +116,7 @@ export class AddQuestionComponent implements OnInit {
             .pipe(
                 tap((value) => {
                     this.questionTypeHelper = value.questionType;
-                }),
-                untilDestroyed(this)
+                })
             )
             .subscribe();
     }
@@ -136,28 +130,23 @@ export class AddQuestionComponent implements OnInit {
             slug: extraPrice ? name + ' +' + extraPrice + ' Ft' : name
         };
 
-        if (option.name) {
-            const options = this.addStringQuestionForm.get(
-                'options'
-            ) as FormArray;
-            options.push(
-                this.fb.group({
-                    name: option.name,
-                    extraPrice: option.extraPrice,
-                    slug: option.slug
-                })
-            );
-            this.addStringQuestionForm.get('optionName').patchValue('');
-            this.addStringQuestionForm.get('extraPrice').patchValue(0);
-            this.toastr.success('Választási lehetőség hozzáadva');
-        } else {
-            this.toastr.info('Kérlek adj meg egy választási lehetőséget');
-        }
+        const options = this.addStringQuestionForm.get('options') as FormArray;
+        options.push(
+            this.fb.group({
+                name: option.name,
+                extraPrice: option.extraPrice,
+                slug: option.slug
+            })
+        );
+        this.addStringQuestionForm.get('optionName').patchValue('');
+        this.addStringQuestionForm.get('extraPrice').patchValue(0);
+        this.toastr.success('Választási lehetőség hozzáadva');
     }
 
     deleteStringOption(index: number): void {
         const options = this.addStringQuestionForm.get('options') as FormArray;
         options.removeAt(index);
+        this.toastr.success('Választási lehetőség törölve');
     }
 
     addMaterialOption(materialCategoryId: string): void {
@@ -165,6 +154,7 @@ export class AddQuestionComponent implements OnInit {
             .getCategoryById$(materialCategoryId)
             .pipe(
                 tap((category: MaterialCategory) => {
+                    console.log(category);
                     this.addMaterialQuestionForm.value.materialCategories.push(
                         category.id
                     );
@@ -187,39 +177,40 @@ export class AddQuestionComponent implements OnInit {
                                     : material.name
                             });
                             options.push(option);
-                            this.changeDetectorRef.detectChanges();
-                            this.toastr.success('Minta kategória hozzáadva');
                         }
                     });
+                    this.changeDetectorRef.detectChanges();
+                    this.toastr.success(`${category.name} kategória hozzáadva`);
                 })
             )
             .subscribe();
     }
 
     deleteMaterialCategoryOption(categoryId: string, index: number): void {
-        // this.store$
-        //     .select(selectMaterialsByCategoryId(categoryId))
-        //     .pipe(
-        //         tap((items) => {
-        //             const options = this.addMaterialQuestionForm.get(
-        //                 'options'
-        //             ) as FormArray;
-        //             const materialIds = items.map((item) => item.id);
-        //             const materialOptions = options.controls.filter((control) =>
-        //                 materialIds.includes(control.value.materialId)
-        //             );
-        //             materialOptions.forEach((option) => {
-        //                 options.removeAt(options.controls.indexOf(option));
-        //             });
-        //             this.addMaterialQuestionForm.value.materialCategories.splice(
-        //                 index,
-        //                 1
-        //             );
-        //             this.selectedCategories.splice(index, 1);
-        //         }),
-        //         untilDestroyed(this)
-        //     )
-        //     .subscribe();
+        this.materialService
+            .getMaterialsByCategoryId$(categoryId)
+            .pipe(
+                tap((materials) => {
+                    const options = this.addMaterialQuestionForm.get(
+                        'options'
+                    ) as FormArray;
+                    const materialIds = materials.map((item) => item.id);
+                    const materialOptions = options.controls.filter((control) =>
+                        materialIds.includes(control.value.materialId)
+                    );
+                    materialOptions.forEach((option) => {
+                        options.removeAt(options.controls.indexOf(option));
+                    });
+                    this.addMaterialQuestionForm.value.materialCategories.splice(
+                        index,
+                        1
+                    );
+                    this.selectedCategories.splice(index, 1);
+                    this.changeDetectorRef.detectChanges();
+                    this.toastr.success('Kategória törölve');
+                })
+            )
+            .subscribe();
     }
 
     addQuestionWithStringAnswer(): void {
@@ -253,6 +244,7 @@ export class AddQuestionComponent implements OnInit {
         const materialCategories =
             this.addMaterialQuestionForm.value.materialCategories;
         const options = this.addMaterialQuestionForm.value.options;
+
         const questionObj: BackendQuestion = {
             type: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
             name,
@@ -269,12 +261,15 @@ export class AddQuestionComponent implements OnInit {
             });
         }
 
+        this.isLoading = true;
         this.questionService
             .addQuestion$(questionObj)
             .pipe(
                 tap(() => {
+                    this.isLoading = false;
                     this.toastr.success('Kérdés sikeresen hozzáadva');
                     this.addMaterialQuestionForm.reset();
+                    this.router.navigate(['/admin/questions']);
                 })
             )
             .subscribe();

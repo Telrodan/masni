@@ -1,242 +1,252 @@
 <ng-container *ngIf="!isLoading; else loading">
-  <div class="font-medium text-2xl text-900">Kérdés hozzáadás</div>
-  <p-divider styleClass="mb-5"></p-divider>
+    <div class="nyk-add-question-header">Kérdés hozzáadás</div>
 
-  <form [formGroup]="questionTypeForm">
-    <p-selectButton
-      formControlName="questionType"
-      [options]="questionTypeFormOptions"
-      optionLabel="label"
-      optionValue="value">
-    </p-selectButton>
-  </form>
+    <form class="nyk-add-question-type-form" [formGroup]="questionTypeForm">
+        <p-selectButton
+            formControlName="questionType"
+            [options]="questionTypeFormOptions"
+            optionLabel="label"
+            optionValue="value">
+        </p-selectButton>
+    </form>
 
-  <ng-container
-    *ngIf="
-      questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER;
-      then stringQuestionFormTemplate;
-      else categoryQuestionFormTemplate
-    ">
-  </ng-container>
+    <ng-container
+        *ngIf="
+            questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER;
+            then stringQuestionFormTemplate;
+            else categoryQuestionFormTemplate
+        ">
+    </ng-container>
 
-  <ng-template #stringQuestionFormTemplate>
-    <div class="content">
-      <form [formGroup]="addStringQuestionForm">
-        <div class="form-group">
-          <label for="name" class="block font-medium text-900 mb-2 text-lg">
-            Kérdés neve
-          </label>
+    <ng-template #stringQuestionFormTemplate>
+        <div class="nyk-add-question-string-content">
+            <form
+                class="nyk-add-question-string-content-form"
+                [formGroup]="addStringQuestionForm">
+                <div class="form-group">
+                    <label for="name"> Kérdés neve </label>
 
-          <input id="name" formControlName="name" type="text" pInputText />
+                    <input
+                        id="name"
+                        formControlName="name"
+                        type="text"
+                        pInputText />
+                </div>
+
+                <div class="form-group">
+                    <label for="question"> Kérdés </label>
+
+                    <input
+                        id="question"
+                        formControlName="question"
+                        type="text"
+                        pInputText />
+                </div>
+
+                <div class="form-group">
+                    <label for="optionName"> Választási lehetőség </label>
+
+                    <input
+                        id="optionName"
+                        formControlName="optionName"
+                        type="text"
+                        pInputText />
+                </div>
+
+                <div class="form-group">
+                    <label for="extraPrice"> Lehetőség extra ára </label>
+
+                    <p-inputNumber
+                        inputId="extraPrice"
+                        formControlName="extraPrice"
+                        styleClass="w-full"></p-inputNumber>
+                </div>
+
+                <p-button
+                    label="Lehetőség hozzáadás"
+                    icon="pi pi-plus"
+                    styleClass="p-button p-button-success w-full"
+                    [disabled]="
+                        !addStringQuestionForm.value.optionName ||
+                        !addStringQuestionForm.value.name
+                    "
+                    (click)="addStringOption()"></p-button>
+            </form>
+
+            <div
+                *ngIf="addStringQuestionForm.value.name"
+                class="nyk-add-question-string-content-preview">
+                <p class="nyk-add-question-string-content-preview-header">
+                    Előnézet
+                </p>
+
+                <p class="nyk-add-question-string-content-preview-name">
+                    <span>Kérdés neve:</span>
+                    {{ addStringQuestionForm.value.name }}
+                </p>
+
+                <div class="form-group">
+                    <label
+                        class="nyk-add-question-string-content-preview-question"
+                        for="option">
+                        <span>Kérdés:</span>
+                        {{ addStringQuestionForm.value.question }}
+                    </label>
+
+                    <p-dropdown
+                        *ngIf="addStringQuestionForm.value.options.length"
+                        [options]="addStringQuestionForm.value.options"
+                        optionLabel="slug"
+                        styleClass="w-full">
+                    </p-dropdown>
+                </div>
+
+                <p class="nyk-add-question-string-content-preview-header">
+                    Lehetőségek
+                </p>
+
+                <div
+                    class="nyk-add-question-string-content-preview-option-wrapper"
+                    *ngFor="
+                        let option of addStringQuestionForm.value.options;
+                        let i = index
+                    ">
+                    <p
+                        class="nyk-add-question-string-content-preview-option-wrapper-option">
+                        <span>{{ i + 1 }}.</span> {{ option.slug }}
+                    </p>
+
+                    <p-button
+                        icon="pi pi-times"
+                        styleClass="p-button-danger"
+                        (click)="deleteStringOption(i)">
+                    </p-button>
+                </div>
+            </div>
         </div>
+    </ng-template>
 
-        <div class="form-group">
-          <label for="question" class="block font-medium text-900 mb-2 text-lg">
-            Kérdés
-          </label>
+    <ng-template #categoryQuestionFormTemplate>
+        <div class="nyk-add-question-material-content">
+            <form
+                class="nyk-add-question-material-content-form"
+                [formGroup]="addMaterialQuestionForm">
+                <div class="form-group">
+                    <label for="isOptional"> Opcionális kérdés </label>
 
-          <input
-            id="question"
-            formControlName="question"
-            type="text"
-            pInputText />
+                    <p-inputSwitch formControlName="isOptional"></p-inputSwitch>
+                </div>
+                <div class="form-group">
+                    <label for="name"> Kérdés neve </label>
+
+                    <input
+                        id="name"
+                        formControlName="name"
+                        type="text"
+                        pInputText />
+                </div>
+
+                <div class="form-group">
+                    <label for="question"> Kérdés </label>
+
+                    <input
+                        id="question"
+                        formControlName="question"
+                        type="text"
+                        pInputText />
+                </div>
+
+                <div class="form-group">
+                    <label for="category"> Valassz minta kategóriát </label>
+
+                    <p-dropdown
+                        id="category"
+                        formControlName="categoryId"
+                        styleClass="w-full"
+                        placeholder="Válassz egy kategóriát"
+                        [options]="categories$ | async"
+                        optionValue="id"
+                        optionLabel="name">
+                    </p-dropdown>
+                </div>
+
+                <p-button
+                    label="Lehetőség hozzáadás"
+                    icon="pi pi-plus"
+                    styleClass="p-button p-button-success w-full"
+                    (click)="
+                        addMaterialOption(
+                            addMaterialQuestionForm.value.categoryId
+                        )
+                    "></p-button>
+            </form>
+
+            <div
+                *ngIf="addMaterialQuestionForm.value.name"
+                class="nyk-add-question-material-content-preview">
+                <p class="nyk-add-question-material-content-preview-header">
+                    Előnézet
+                </p>
+
+                <p class="nyk-add-question-material-content-preview-name">
+                    <span>Kérdés neve:</span
+                    >{{ addMaterialQuestionForm.value.name }}
+                </p>
+
+                <div class="form-group">
+                    <label
+                        class="nyk-add-question-material-content-preview-question"
+                        for="option">
+                        <span>Kédés:</span>
+                        {{ addMaterialQuestionForm.value.question }}
+                    </label>
+
+                    <p-dropdown
+                        *ngIf="addMaterialQuestionForm.value.options.length"
+                        [options]="addMaterialQuestionForm.value.options"
+                        optionLabel="slug"
+                        styleClass="w-full">
+                    </p-dropdown>
+                </div>
+
+                <ng-container
+                    *ngIf="addMaterialQuestionForm.value.options.length">
+                    <p class="nyk-add-question-material-content-preview-header">
+                        Lehetőségek
+                    </p>
+
+                    <div
+                        class="nyk-add-question-material-content-preview-option-wrapper"
+                        *ngFor="
+                            let option of selectedCategories;
+                            let i = index
+                        ">
+                        <p
+                            class="nyk-add-question-material-content-preview-option-wrapper-option">
+                            <span>{{ i + 1 }}.</span> {{ option.name }}
+                        </p>
+
+                        <p-button
+                            icon="pi pi-times"
+                            styleClass="p-button-danger"
+                            (click)="
+                                deleteMaterialCategoryOption(option.id, i)
+                            ">
+                        </p-button>
+                    </div>
+                </ng-container>
+            </div>
         </div>
+    </ng-template>
 
-        <div class="form-group">
-          <label
-            for="optionName"
-            class="block font-medium text-900 mb-2 text-lg">
-            Választási lehetőség
-          </label>
-
-          <input
-            id="optionName"
-            formControlName="optionName"
-            type="text"
-            pInputText />
-        </div>
-
-        <div class="form-group">
-          <label
-            for="extraPrice"
-            class="block font-medium text-900 mb-2 text-lg">
-            Lehetőség extra ára
-          </label>
-
-          <p-inputNumber
-            inputId="extraPrice"
-            formControlName="extraPrice"
-            styleClass="w-full"></p-inputNumber>
-        </div>
-
-        <p-button
-          label="Lehetőség hozzáadása"
-          icon="pi pi-plus"
-          styleClass="p-button p-button-success w-full"
-          (click)="addStringOption()"></p-button>
-      </form>
-
-      <div class="preview">
-        <p class="font-medium text-2xl text-900">Előnézet</p>
-
-        <p-divider></p-divider>
-
-        <p class="block font-medium text-900 mb-2 text-lg">
-          {{ addStringQuestionForm.value.name }}
-        </p>
-
-        <div class="form-group">
-          <label for="option" class="block font-medium text-900 mb-2 text-lg">
-            {{ addStringQuestionForm.value.question }}
-          </label>
-
-          <ng-container *ngIf="addStringQuestionForm.value.options.length">
-            <p-dropdown
-              [options]="addStringQuestionForm.value.options"
-              optionLabel="slug"
-              styleClass="w-full">
-            </p-dropdown>
-          </ng-container>
-        </div>
-
-        <ng-container *ngIf="addStringQuestionForm.value.options as options">
-          <p class="font-medium text-2xl text-900">Lehetőségek</p>
-
-          <p-divider></p-divider>
-
-          <div
-            class="option-wrapper mb-2"
-            *ngFor="let option of options; let i = index">
-            <p class="block font-medium text-800 mb-1">
-              {{ i + 1 }}. {{ option.slug }}
-            </p>
-
-            <p-button
-              icon="pi pi-times"
-              styleClass="p-button-danger "
-              (click)="deleteStringOption(i)">
-            </p-button>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </ng-template>
-
-  <ng-template #categoryQuestionFormTemplate>
-    <div class="content">
-      <form [formGroup]="addMaterialQuestionForm">
-        <div class="form-group">
-          <label
-            for="isOptional"
-            class="block font-medium text-900 mb-2 text-lg">
-            Opcionális kérdés
-          </label>
-
-          <p-inputSwitch formControlName="isOptional"></p-inputSwitch>
-        </div>
-        <div class="form-group">
-          <label for="name" class="block font-medium text-900 mb-2 text-lg">
-            Kérdés neve
-          </label>
-
-          <input id="name" formControlName="name" type="text" pInputText />
-        </div>
-
-        <div class="form-group">
-          <label for="question" class="block font-medium text-900 mb-2 text-lg">
-            Kérdés
-          </label>
-
-          <input
-            id="question"
-            formControlName="question"
-            type="text"
-            pInputText />
-        </div>
-
-        <ng-container *ngIf="categories$ | async as categories">
-          <div class="form-group">
-            <label
-              for="category"
-              class="block font-medium text-900 mb-2 text-lg">
-              Valassz minta kategóriát
-            </label>
-
-            <p-dropdown
-              id="category"
-              formControlName="categoryId"
-              styleClass="w-full"
-              placeholder="Válassz egy kategóriát"
-              [options]="categories"
-              optionValue="id"
-              optionLabel="name">
-            </p-dropdown>
-          </div>
-
-          <p-button
-            label="Lehetőség hozzáadása"
-            icon="pi pi-plus"
-            styleClass="p-button p-button-success w-full"
-            (click)="
-              addMaterialOption(addMaterialQuestionForm.value.categoryId)
-            "></p-button>
-        </ng-container>
-      </form>
-
-      <div class="preview">
-        <p class="font-medium text-2xl text-900">Előnézet</p>
-
-        <p-divider></p-divider>
-
-        <p class="font-medium text-500 mb-1">
-          {{ addMaterialQuestionForm.value.name }}
-        </p>
-
-        <div class="form-group">
-          <label for="option" class="block font-medium text-900 mb-2 text-lg">
-            {{ addMaterialQuestionForm.value.question }}
-          </label>
-
-          <ng-container *ngIf="addMaterialQuestionForm.value.options.length">
-            <p-dropdown
-              [options]="addMaterialQuestionForm.value.options"
-              optionLabel="slug"
-              styleClass="w-full">
-            </p-dropdown>
-          </ng-container>
-        </div>
-
-        <ng-container *ngIf="addMaterialQuestionForm.value.options.length">
-          <p class="font-medium text-2xl text-900">Lehetőségek</p>
-
-          <p-divider></p-divider>
-
-          <div
-            class="option-wrapper mb-2"
-            *ngFor="let option of selectedCategories; let i = index">
-            <p class="block font-medium text-800 mb-1">
-              {{ i + 1 }}. {{ option.name }}
-            </p>
-
-            <p-button
-              icon="pi pi-times"
-              styleClass="p-button-danger"
-              (click)="deleteMaterialCategoryOption(option.id, i)">
-            </p-button>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </ng-template>
-
-  <p-button
-    type="submit"
-    label="Kérdés hozzáadása"
-    styleClass="p-button w-full mt-3"
-    (click)="onSubmit()">
-  </p-button>
+    <p-button
+        type="submit"
+        label="Kérdés hozzáadás"
+        styleClass="p-button w-full mt-3"
+        (click)="onSubmit()">
+    </p-button>
 </ng-container>
 
 <ng-template #loading>
-  <nyk-spinner></nyk-spinner>
+    <nyk-spinner></nyk-spinner>
 </ng-template>

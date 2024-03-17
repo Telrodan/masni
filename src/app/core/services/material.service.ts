@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
-import { ApiService } from './api.service';
 import { Material, BackendMaterial } from '@core/models/material.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { ApiService } from './api.service';
 
 @Injectable({
     providedIn: 'root'
@@ -52,5 +52,13 @@ export class MaterialService {
         return this.apiService
             .get<ApiResponse<Material>>(`material/getMaterialById/${id}`)
             .pipe(map((materialDTO) => materialDTO.data));
+    }
+
+    getMaterialsByCategoryId$(categoryId: string): Observable<Material[]> {
+        return this.apiService
+            .get<ApiResponse<Material[]>>(
+                `material/getMaterialsByCategoryId/${categoryId}`
+            )
+            .pipe(map((materialsDTO) => materialsDTO.data));
     }
 }

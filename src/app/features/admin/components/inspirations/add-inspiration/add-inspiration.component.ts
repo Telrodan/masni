@@ -101,7 +101,9 @@ export class AddInspirationComponent implements OnInit {
                     .pipe(
                         tap(() => {
                             this.isLoading = false;
-                            this.toastr.success('Inspiráció hozzáadva');
+                            this.toastr.success(
+                                `${inspiration.name} inspiráció hozzáadva`
+                            );
                             this.router.navigate(['/admin/inspirations']);
                         })
                     )

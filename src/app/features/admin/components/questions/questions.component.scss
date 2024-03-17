@@ -1,0 +1,38 @@
+@import 'mixins';
+
+.nyk-questions {
+    display: block;
+    padding: 20px 40px;
+
+    @include respond(sm) {
+        padding: 20px;
+    }
+
+    &-header {
+        margin-bottom: 20px;
+        color: var(--color-black);
+        font-size: var(--font-size-l);
+        font-weight: 700;
+
+        @include respond(sm) {
+            font-size: var(--font-size-m);
+        }
+    }
+
+    &-actions {
+        display: flex;
+
+        @include respond(sm) {
+            flex-direction: column;
+            gap: 16px;
+        }
+    }
+
+    &-id,
+    &-question,
+    &-type {
+        @include respond(sm) {
+            display: none;
+        }
+    }
+}

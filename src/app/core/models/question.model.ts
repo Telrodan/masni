@@ -1,7 +1,5 @@
 import { QuestionType } from '@core/enums/question-type.enum';
 
-import { Category } from './category.model';
-
 export interface BackendQuestion {
     type: QuestionType;
     name: string;
@@ -15,15 +13,15 @@ export interface QuestionOption {
     materialId?: string;
     name: string;
     extraPrice: number;
-    slug?: string;
+    slug: string;
 }
 
 export interface Question {
-    id?: string;
+    id: string;
     type: QuestionType;
     name: string;
     question: string;
-    materialCategories?: Category[];
+    materialCategories: string[];
     options: QuestionOption[];
     updatedAt: Date;
     createdAt: Date;

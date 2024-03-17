@@ -1,32 +1,34 @@
 import { Route } from '@angular/router';
 
-const materialsComponent = () =>
-  import('./materials.component').then((m) => m.MaterialsComponent);
-const addMaterialComponent = () =>
-  import('./add-material/add-material.component').then(
-    (m) => m.AddMaterialComponent
-  );
-const editMaterialComponent = () =>
-  import('./edit-material/edit-material.component').then(
-    (m) => m.EditMaterialComponent
-  );
+const MaterialsComponent = () =>
+    import('./materials.component').then((m) => m.MaterialsComponent);
+
+const AddMaterialComponent = () =>
+    import('./add-material/add-material.component').then(
+        (m) => m.AddMaterialComponent
+    );
+
+const EditMaterialComponent = () =>
+    import('./edit-material/edit-material.component').then(
+        (m) => m.EditMaterialComponent
+    );
 
 export default [
-  {
-    path: '',
-    redirectTo: 'all',
-    pathMatch: 'full'
-  },
-  {
-    path: 'all',
-    loadComponent: materialsComponent
-  },
-  {
-    path: 'add',
-    loadComponent: addMaterialComponent
-  },
-  {
-    path: 'edit/:id',
-    loadComponent: editMaterialComponent
-  }
+    {
+        path: '',
+        redirectTo: 'all',
+        pathMatch: 'full'
+    },
+    {
+        path: 'all',
+        loadComponent: MaterialsComponent
+    },
+    {
+        path: 'add',
+        loadComponent: AddMaterialComponent
+    },
+    {
+        path: 'edit/:id',
+        loadComponent: EditMaterialComponent
+    }
 ] as Route[];
