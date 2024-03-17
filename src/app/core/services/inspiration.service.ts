@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Observable, map, tap } from 'rxjs';
 
-import { Inspiration, RawInspiration } from '@core/models/inspiration.model';
+import {
+    Inspiration,
+    BackendInspiration
+} from '@core/models/inspiration.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { ApiService } from './api.service';
 
@@ -12,7 +15,7 @@ import { ApiService } from './api.service';
 export class InspirationService {
     constructor(private apiService: ApiService) {}
 
-    addInspiration$(inspiration: RawInspiration): Observable<Inspiration> {
+    addInspiration$(inspiration: BackendInspiration): Observable<Inspiration> {
         const inspirationFormData = new FormData();
         inspirationFormData.append('inspiration', JSON.stringify(inspiration));
         inspirationFormData.append('image', inspiration.image);
@@ -26,7 +29,7 @@ export class InspirationService {
     }
 
     updateInspiration$(
-        inspiration: RawInspiration,
+        inspiration: BackendInspiration,
         inspirationId: string
     ): Observable<Inspiration> {
         const inspirationFormData = new FormData();
@@ -42,9 +45,10 @@ export class InspirationService {
     }
 
     deleteInspiration$(inspiration: Inspiration): Observable<null> {
-        return this.apiService
-            .delete<null>('inspiration/deleteOne', inspiration.id)
-            .pipe();
+        return this.apiService.delete<null>(
+            'inspiration/deleteOne',
+            inspiration.id
+        );
     }
 
     getInspirations$(): Observable<Inspiration[]> {

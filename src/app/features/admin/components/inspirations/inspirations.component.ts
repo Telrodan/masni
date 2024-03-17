@@ -1,30 +1,30 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
-    Host,
     HostBinding,
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
-import { Observable, filter, map, switchMap, tap } from 'rxjs';
-
-import { Inspiration } from '@core/models/inspiration.model';
-import { InspirationService } from '@core/services/inspiration.service';
-import { ToastrService } from '@core/services/toastr.service';
-import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { AddInspirationComponent } from './add-inspiration/add-inspiration.component';
+import { Observable, Subject, filter, startWith, switchMap, tap } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
 import { SkeletonModule } from 'primeng/skeleton';
 import { BadgeModule } from 'primeng/badge';
-import { RouterModule } from '@angular/router';
+
+import { Inspiration } from '@core/models/inspiration.model';
+import { InspirationService } from '@core/services/inspiration.service';
+import { ToastrService } from '@core/services/toastr.service';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { TooltipModule } from 'primeng/tooltip';
+import { AddInspirationComponent } from './add-inspiration/add-inspiration.component';
 
 @Component({
     selector: 'nyk-inspirations',
@@ -53,14 +53,20 @@ export class InspirationsComponent implements OnInit {
     imageLoadedStatus: boolean[] = [];
     isLoading = false;
 
+    private deleteInspirationSubject = new Subject<void>();
+
     constructor(
         private inspirationService: InspirationService,
+        private changeDetectorRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private toastr: ToastrService
     ) {}
 
     ngOnInit(): void {
-        this.inspirations$ = this.inspirationService.getInspirations$();
+        this.inspirations$ = this.deleteInspirationSubject.pipe(
+            startWith(null),
+            switchMap(() => this.inspirationService.getInspirations$())
+        );
     }
 
     onAddInspiration(): void {
@@ -80,11 +86,20 @@ export class InspirationsComponent implements OnInit {
             .afterClosed()
             .pipe(
                 filter((confirmed) => !!confirmed),
+                tap(() => {
+                    this.isLoading = true;
+                    this.changeDetectorRef.detectChanges();
+                }),
                 switchMap(() =>
                     this.inspirationService.deleteInspiration$(inspiration)
                 ),
                 tap(() => {
-                    this.toastr.success('Inspiráció törölve');
+                    this.isLoading = false;
+                    this.deleteInspirationSubject.next();
+                    this.toastr.success(
+                        `${inspiration.name} inspiráció törölve`
+                    );
+                    this.changeDetectorRef.detectChanges();
                 })
             )
             .subscribe();

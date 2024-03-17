@@ -1,124 +1,133 @@
 <ng-container *ngIf="!isLoading; else loading">
-  <ng-container *ngIf="inspirations$ | async as inspirations">
-    <p-table
-      #table
-      styleClass="p-datatable-gridlines"
-      [value]="inspirations"
-      [globalFilterFields]="['id', 'name', 'category.name']"
-      [paginator]="true"
-      [rows]="25"
-      [rowsPerPageOptions]="[25, 50, 100]">
-      <ng-template pTemplate="caption">
-        <div class="flex">
-          <p-button
-            icon="pi pi-plus"
-            label="Hozzáadás"
-            styleClass="p-button p-button-success"
-            routerLink="/admin/inspirations/add">
-          </p-button>
+    <ng-container *ngIf="inspirations$ | async as inspirations; else loading">
+        <div class="nyk-inspirations-header">Összes inspiráció</div>
 
-          <span class="p-input-icon-left ml-auto w-6">
-            <i class="pi pi-search"></i>
+        <p-table
+            #table
+            styleClass="p-datatable-gridlines"
+            [value]="inspirations"
+            [globalFilterFields]="['id', 'name', 'category.name']"
+            [paginator]="true"
+            [rows]="50"
+            [rowsPerPageOptions]="[50, 100, 200]">
+            <ng-template pTemplate="caption">
+                <div class="nyk-inspirations-actions">
+                    <p-button
+                        icon="pi pi-plus"
+                        label="Inspiráció hozzáadása"
+                        styleClass="p-button p-button-success"
+                        routerLink="/admin/inspirations/add">
+                    </p-button>
 
-            <input
-              pInputText
-              pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
-              tooltipPosition="bottom"
-              class="w-full"
-              type="text"
-              (input)="applyFilterGlobal($event, 'contains', table)"
-              placeholder="Keresés" />
-          </span>
-        </div>
-      </ng-template>
+                    <span class="p-input-icon-left ml-auto w-full md:w-6">
+                        <i class="pi pi-search"></i>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Kép</th>
+                        <input
+                            pInputText
+                            pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
+                            tooltipPosition="bottom"
+                            class="w-full"
+                            type="text"
+                            (input)="
+                                applyFilterGlobal($event, 'contains', table)
+                            "
+                            placeholder="Keresés" />
+                    </span>
+                </div>
+            </ng-template>
 
-          <th>Azonosító</th>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Kép</th>
 
-          <th>Név</th>
+                    <th class="nyk-inspirations-id">Azonosító</th>
 
-          <th>Kategória</th>
+                    <th>Név</th>
 
-          <th class="w-3rem">Opciók</th>
-        </tr>
-      </ng-template>
+                    <th class="nyk-inspirations-category">Kategória</th>
 
-      <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
-        <tr>
-          <td class="w-1">
-            <img
-              class="hidden"
-              [src]="inspiration.image"
-              [alt]="inspiration.name"
-              (load)="imageLoaded(i)" />
+                    <th class="w-3rem">Opciók</th>
+                </tr>
+            </ng-template>
 
-            <p-image
-              *ngIf="imageLoadedStatus[i]"
-              [src]="inspiration.image"
-              [alt]="inspiration.name"
-              [preview]="true">
-            </p-image>
+            <ng-template pTemplate="body" let-inspiration let-i="rowIndex">
+                <tr>
+                    <td class="w-1">
+                        <img
+                            class="hidden"
+                            [src]="inspiration.image"
+                            [alt]="inspiration.name"
+                            (load)="imageLoaded(i)" />
 
-            <p-skeleton
-              *ngIf="!imageLoadedStatus[i]"
-              styleClass="skeleton"></p-skeleton>
-          </td>
+                        <p-image
+                            *ngIf="imageLoadedStatus[i]"
+                            [src]="inspiration.image"
+                            [alt]="inspiration.name"
+                            [preview]="true">
+                        </p-image>
 
-          <td class="text-primary w-9rem">{{ inspiration.id }}</td>
+                        <p-skeleton
+                            *ngIf="!imageLoadedStatus[i]"
+                            styleClass="skeleton"></p-skeleton>
+                    </td>
 
-          <td class="text-cyan-900">{{ inspiration.name }}</td>
+                    <td class="nyk-inspirations-id text-primary w-9rem">
+                        {{ inspiration.id }}
+                    </td>
 
-          <td class="text-cyan-900 w-3rem">
-            <p-badge [value]="inspiration.category.name"></p-badge>
-          </td>
+                    <td class="text-cyan-900">{{ inspiration.name }}</td>
 
-          <td>
-            <div class="flex flex-row">
-              <button
-                [routerLink]="['/admin/inspirations/edit', inspiration.id]"
-                pButton
-                pRipple
-                pTooltip="Inspiráció módosítása"
-                tooltipPosition="left"
-                type="button"
-                icon="pi pi-cog"
-                class="p-button p-button-warning p-button mr-1"></button>
+                    <td class="nyk-inspirations-category text-cyan-900 w-9rem">
+                        <p-badge [value]="inspiration.category.name"></p-badge>
+                    </td>
 
-              <button
-                (click)="onDeleteInspiration(inspiration)"
-                pButton
-                pRipple
-                pTooltip="Inspiráció törlése"
-                tooltipPosition="left"
-                type="button"
-                icon="pi pi-times"
-                class="p-button p-button-danger p-button"></button>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
+                    <td>
+                        <div class="flex flex-row">
+                            <button
+                                [routerLink]="[
+                                    '/admin/inspirations/edit',
+                                    inspiration.id
+                                ]"
+                                pButton
+                                pRipple
+                                pTooltip="Inspiráció módosítása"
+                                tooltipPosition="left"
+                                type="button"
+                                icon="pi pi-cog"
+                                class="p-button p-button-warning p-button mr-1"></button>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="6" class="text-center text-800 text-4xl">
-            Nem található inspiráció
+                            <button
+                                (click)="onDeleteInspiration(inspiration)"
+                                pButton
+                                pRipple
+                                pTooltip="Inspiráció törlése"
+                                tooltipPosition="left"
+                                type="button"
+                                icon="pi pi-times"
+                                class="p-button p-button-danger p-button"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
 
-            <p-button
-              icon="pi pi-plus"
-              label="Hozzáadás"
-              styleClass="p-button p-button-success block mx-auto mt-2"
-              routerLink="/admin/inspirations/add">
-            </p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </ng-container>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" class="text-center text-800 text-4xl">
+                        Nem található inspiráció
+
+                        <p-button
+                            icon="pi pi-plus"
+                            label="Inspiráció hozzáadása"
+                            styleClass="p-button p-button-success block mx-auto mt-2"
+                            routerLink="/admin/inspirations/add">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-container>
 </ng-container>
 
 <ng-template #loading>
-  <nyk-spinner></nyk-spinner>
+    <nyk-spinner></nyk-spinner>
 </ng-template>
