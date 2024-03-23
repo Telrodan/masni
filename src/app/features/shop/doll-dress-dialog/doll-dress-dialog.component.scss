@@ -1,27 +1,47 @@
 @import 'mixins';
 
-mat-dialog-content {
-  background-color: #da8fa258;
+.nyk-doll-dress-dialog {
+    mat-dialog-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        background-color: var(--color-tertiary) !important;
+        text-align: center;
 
-  h1 {
-    width: 50%;
-    text-align: center;
-    margin: 0 auto;
+        @include respond(sm) {
+            padding: 8px;
+        }
 
-    @include respond(sm) {
-      width: 100%;
+        .nyk-doll-dress-dialog {
+            &-header {
+                @include respond(sm) {
+                    font-size: var(--font-size-l);
+                }
+            }
+            &-image {
+                margin: 0 auto;
+                width: 300px;
+
+                @include respond(sm) {
+                    width: 200px;
+                }
+            }
+
+            &-action-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+
+                @include respond(sm) {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
     }
-  }
-
-  .action-buttons {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-
-    a:not(:last-child) {
-      margin: 24px 0 20px;
-    }
-  }
 }
