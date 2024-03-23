@@ -9,7 +9,7 @@ export interface BackendQuestion {
 }
 
 export interface QuestionOption {
-    id?: string;
+    _id?: string;
     materialId?: string;
     name: string;
     extraPrice: number;

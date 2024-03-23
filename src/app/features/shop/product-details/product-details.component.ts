@@ -3,10 +3,15 @@ import {
     Component,
     HostBinding,
     OnInit,
+    ViewChild,
     ViewEncapsulation
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonModule, Location } from '@angular/common';
 
 import {
     BehaviorSubject,
@@ -16,33 +21,34 @@ import {
     switchMap,
     tap
 } from 'rxjs';
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '@core/services/auth.service';
-import { ShoppingCartService } from '@core/services/shopping-cart.service';
-
-import { Product } from '@core/models/product.model';
-import { ToastrService } from '@core/services/toastr.service';
-import { PreviousRouteService } from '@core/services/previous-route.service';
-import { CommonModule, Location } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { GalleriaModule } from 'primeng/galleria';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ProductService } from '@core/services/product.service';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CookieService } from '@core/services/cookie.service';
 import { TabViewModule } from 'primeng/tabview';
 import { ButtonModule } from 'primeng/button';
-import { BreadcrumpComponent } from '@shared/breadcrump/breadcrump.component';
-import { ProductDetailsGalleryComponent } from './product-details-gallery/product-details-gallery.component';
-import { ProductDetailsFormComponent } from './product-details-form/product-details-form.component';
-import { CategoryService } from '@core/services/category.service';
-import { ProductCardComponent } from '@shared/product-card/product-card.component';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
-import { ProductDetailsReviewsComponent } from './product-details-reviews/product-details-reviews.component';
+
+import { Product } from '@core/models/product.model';
+import { AuthService } from '@core/services/auth.service';
+import { ToastrService } from '@core/services/toastr.service';
+import { PreviousRouteService } from '@core/services/previous-route.service';
+import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { BackendReview } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
+import {
+    BackendShoppingCartItem,
+    ShoppingCartItem
+} from '@core/models/shopping-cart-item.model';
+import { ProductService } from '@core/services/product.service';
+import { CookieService } from '@core/services/cookie.service';
+import { BreadcrumpComponent } from '@shared/breadcrump/breadcrump.component';
+import { ProductCardComponent } from '@shared/product-card/product-card.component';
+import { ProductDetailsGalleryComponent } from './product-details-gallery/product-details-gallery.component';
+import { ProductDetailsFormComponent } from './product-details-form/product-details-form.component';
+import { ProductDetailsReviewsComponent } from './product-details-reviews/product-details-reviews.component';
+import { DollDressDialogComponent } from '../doll-dress-dialog/doll-dress-dialog.component';
 
 @Component({
     selector: 'nyk-product-details',
@@ -77,6 +83,9 @@ import { ReviewService } from '@core/services/review.service';
 export class ProductDetailsComponent implements OnInit {
     @HostBinding('class.nyk-product-details') hostClass = true;
 
+    @ViewChild('productDetailsForm', { static: false })
+    productDetailsFormComponent: ProductDetailsFormComponent;
+
     get isLiked(): boolean {
         return this.product.likes.includes(
             this.cookieService.getCookie('userId')
@@ -91,7 +100,8 @@ export class ProductDetailsComponent implements OnInit {
     product: Product;
     fullUrl = '';
     orderQty = 1;
-    price = 0;
+    originalPrice = 0;
+    totalPrice = 0;
 
     customOptions: OwlOptions = {
         loop: true,
@@ -124,17 +134,16 @@ export class ProductDetailsComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private productService: ProductService,
-        private categoryService: CategoryService,
-        private shoppingCartService: ShoppingCartService,
         private reviewService: ReviewService,
         private previousRouteService: PreviousRouteService,
+        private shoppingCartService: ShoppingCartService,
         private cookieService: CookieService,
         private route: ActivatedRoute,
         private toastr: ToastrService,
-        private fb: FormBuilder,
         private router: Router,
         private location: Location,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -161,7 +170,7 @@ export class ProductDetailsComponent implements OnInit {
         );
     }
 
-    shareProduct(): void {
+    onShareProduct(): void {
         this.snackBar.open('A termék linkje másolva a vágólapra', 'Bezár', {
             duration: 3000
         });
@@ -183,6 +192,7 @@ export class ProductDetailsComponent implements OnInit {
             return;
         }
         this.orderQty++;
+        this.totalPrice = this.originalPrice * this.orderQty;
     }
 
     onDecreaseQty(): void {
@@ -190,6 +200,7 @@ export class ProductDetailsComponent implements OnInit {
             return;
         }
         this.orderQty--;
+        this.totalPrice = this.originalPrice * this.orderQty;
     }
 
     onBack(): void {
@@ -200,12 +211,16 @@ export class ProductDetailsComponent implements OnInit {
         }
     }
 
-    trackById(index: number, product: Product): string {
-        return product.id;
+    onPriceChange(price: number): void {
+        if (this.originalPrice !== price) {
+            this.originalPrice = price;
+        }
+
+        this.totalPrice = price * this.orderQty;
     }
 
-    onrefreshProduct(): void {
-        this.refreshProduct$.next();
+    trackById(index: number, product: Product): string {
+        return product.id;
     }
 
     onReviewProduct(review: BackendReview): void {
@@ -221,48 +236,69 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     onAddToCart(): void {
-        // if (this.productForm.valid) {
-        //     const questions = [];
-        //     for (const key of Object.keys(this.productForm.value.questions)) {
-        //         const value = this.productForm.value.questions[key];
-        //         const question = this.product.questions.find(
-        //             (question) => question.id === key
-        //         );
-        //         const option = question.options.find(
-        //             (option) => option._id === value
-        //         );
-        //         if (value) {
-        //             questions.push({
-        //                 question: question.question,
-        //                 optionId: value,
-        //                 option: option.slug
-        //             });
-        //         }
-        //     }
-        //     const cartItem: ShoppingCartItem = {
-        //         product: this.product,
-        //         price: this.price,
-        //         questions,
-        //         nameEmbroidery: this.productForm.value.nameEmbroidery.trim(),
-        //         comment: this.productForm.value.comment
-        //     };
-        //     this.shoppingCartService
-        //         .addItemToCart(cartItem)
-        //         .pipe(
-        //             tap(() => {
-        //                 this.toastr.success(
-        //                     `${cartItem.product.name} hozzáadva a kosárhoz`
-        //                 );
-        //                 this.productForm.reset();
-        //                 this.productForm.get('nameEmbroidery').patchValue('');
-        //                 if (cartItem.product.isDressable) {
-        //                     this.dialog.open(DollDressDialogComponent);
-        //                 }
-        //             })
-        //         )
-        //         .subscribe();
-        // } else {
-        //     this.toastr.info('Kérlek töltsd ki az összes mezőt!');
-        // }
+        if (this.productDetailsFormComponent.productDetailsForm.valid) {
+            const questions = [];
+            for (const key of Object.keys(
+                this.productDetailsFormComponent.productDetailsForm.value
+                    .questions
+            )) {
+                const value =
+                    this.productDetailsFormComponent.productDetailsForm.value
+                        .questions[key];
+                const question = this.product.questions.find(
+                    (question) => question.id === key
+                );
+                const option = question.options.find(
+                    (option) => option._id === value
+                );
+                if (value) {
+                    questions.push({
+                        question: question.question,
+                        optionId: value,
+                        option: option.slug
+                    });
+                }
+            }
+            const cartItem: BackendShoppingCartItem = {
+                product: this.product,
+                price: this.totalPrice,
+                questions,
+                nameEmbroidery:
+                    this.productDetailsFormComponent.productDetailsForm.value.nameEmbroidery.trim(),
+                comment:
+                    this.productDetailsFormComponent.productDetailsForm.value
+                        .comment,
+                quantity: this.orderQty
+            };
+
+            this.shoppingCartService
+                .addItemToCart(cartItem)
+                .pipe(
+                    tap(() => {
+                        this.toastr.success(
+                            `${cartItem.product.name} hozzáadva a kosárhoz`
+                        );
+                        this.productDetailsFormComponent.productDetailsForm.reset();
+                        this.productDetailsFormComponent.productDetailsForm
+                            .get('nameEmbroidery')
+                            .patchValue('');
+                        this.productDetailsFormComponent.productDetailsForm
+                            .get('comment')
+                            .patchValue('');
+
+                        this.orderQty = 1;
+                        this.totalPrice = this.originalPrice;
+
+                        if (cartItem.product.isDressable) {
+                            this.dialog.open(DollDressDialogComponent, {
+                                minWidth: '40vw'
+                            });
+                        }
+                    })
+                )
+                .subscribe();
+        } else {
+            this.toastr.info('Kérlek töltsd ki az összes mezőt!');
+        }
     }
 }

@@ -1,4 +1,11 @@
 .nyk-product-details-form {
     display: block;
     margin-bottom: 16px;
+
+    &-container,
+    &-group {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
 }

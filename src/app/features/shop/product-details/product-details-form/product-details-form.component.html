@@ -1,4 +1,27 @@
-<form *ngIf="product" [formGroup]="productDetailsForm">
+<form
+    *ngIf="product"
+    class="nyk-product-details-form-container"
+    [formGroup]="productDetailsForm">
+    <div class="nyk-product-details-form-group" formGroupName="questions">
+        <ng-container *ngFor="let question of product.questions">
+            <div class="form-group">
+                <label for="question.id">
+                    {{ question.question }}
+                </label>
+
+                <p-dropdown
+                    id="question.id"
+                    [formControlName]="question.id"
+                    [options]="question.options"
+                    placeholder="Kérlek válassz"
+                    optionValue="_id"
+                    optionLabel="slug"
+                    styleClass="w-full">
+                </p-dropdown>
+            </div>
+        </ng-container>
+    </div>
+
     <div *ngIf="product.isNameEmbroideryAvailable" class="form-group">
         <label for="username">Hímzett név +500 Ft</label>
         <input
@@ -7,4 +30,19 @@
             placeholder="Kérlek add meg a nevet"
             formControlName="nameEmbroidery" />
     </div>
+
+    <ng-container *ngIf="product.isCustom">
+        <div class="form-group">
+            <label for="comment"> Megjegyzés </label>
+
+            <textarea
+                rows="5"
+                cols="30"
+                pInputTextarea
+                placeholder="Ha szeretnél valamit megjegyezni a rendeléseddel kapcsolatban, itt megteheted"
+                [autoResize]="true"
+                formControlName="comment">
+            </textarea>
+        </div>
+    </ng-container>
 </form>

@@ -102,6 +102,15 @@
                 margin-bottom: 16px;
             }
 
+            &-final-price {
+                font-size: var(--font-size-l);
+                margin-bottom: 16px;
+
+                span {
+                    font-weight: 400;
+                }
+            }
+
             &-stock {
                 margin-bottom: 16px;
                 color: var(--color-black);

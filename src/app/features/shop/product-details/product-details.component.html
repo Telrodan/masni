@@ -19,7 +19,7 @@
                 <button
                     class="nyk-product-details-product-right-header-share-button"
                     [cdkCopyToClipboard]="fullUrl"
-                    (click)="shareProduct()">
+                    (click)="onShareProduct()">
                     <i class="pi pi-share-alt"></i>
                 </button>
 
@@ -60,8 +60,15 @@
                 {{ product.shortDescription }}
             </p>
 
-            <nyk-product-details-form [product]="product">
+            <nyk-product-details-form
+                [product]="product"
+                (priceChange)="onPriceChange($event)"
+                #productDetailsForm>
             </nyk-product-details-form>
+
+            <p class="nyk-product-details-product-right-final-price">
+                <span>Végösszeg:</span> {{ totalPrice }} Ft
+            </p>
 
             <div class="nyk-product-details-product-right-stock">
                 <i class="pi pi-box"></i>
@@ -88,7 +95,10 @@
 
                 <button
                     class="nyk-product-details-product-right-actions-add-to-cart-button primary-button"
-                    (click)="onAddToCart()">
+                    (click)="onAddToCart()"
+                    [disabled]="
+                        !productDetailsFormComponent?.productDetailsForm.valid
+                    ">
                     <i class="pi pi-shopping-cart"></i>
                     Kosárba
                 </button>
