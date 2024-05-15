@@ -1,24 +1,26 @@
 <mat-sidenav-container [hasBackdrop]="true" class="nyk-layout-container">
-  <mat-sidenav #mobileMenu mode="over" [(opened)]="isSidenavOpen">
-    <nyk-sidenav></nyk-sidenav>
-  </mat-sidenav>
+    <mat-sidenav #mobileMenu mode="over" [(opened)]="isSidenavOpen">
+        <nyk-sidenav></nyk-sidenav>
+    </mat-sidenav>
 
-  <mat-sidenav
-    #shoppingCart
-    mode="over"
-    position="end"
-    [(opened)]="isShoppingCartOpen">
-    asdasd
-  </mat-sidenav>
+    <mat-sidenav
+        #shoppingCart
+        mode="over"
+        position="end"
+        [(opened)]="isShoppingCartOpen">
+        <nyk-shopping-cart
+            [isShoppingCartOpen]="isShoppingCartOpen"
+            (closeShoppingCart)="toggleShoppingCart()"></nyk-shopping-cart>
+    </mat-sidenav>
 
-  <mat-sidenav-content>
-    <nyk-navbar
-      *ngIf="!isAdminPage"
-      (sidenavStateChange)="toggleSidenav()"
-      (shoppingCartStateChange)="toggleShoppingCart()"></nyk-navbar>
+    <mat-sidenav-content>
+        <nyk-navbar
+            *ngIf="!isAdminPage"
+            (sidenavStateChange)="toggleSidenav()"
+            (shoppingCartStateChange)="toggleShoppingCart()"></nyk-navbar>
 
-    <ng-content></ng-content>
+        <ng-content></ng-content>
 
-    <nyk-footer *ngIf="!isAdminPage"></nyk-footer>
-  </mat-sidenav-content>
+        <nyk-footer *ngIf="!isAdminPage"></nyk-footer>
+    </mat-sidenav-content>
 </mat-sidenav-container>

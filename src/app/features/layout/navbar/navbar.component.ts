@@ -1,11 +1,11 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  HostBinding,
-  OnInit,
-  Output,
-  ViewEncapsulation
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    HostBinding,
+    OnInit,
+    Output,
+    ViewEncapsulation
 } from '@angular/core';
 
 import { Observable, tap } from 'rxjs';
@@ -23,70 +23,69 @@ import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'nyk-navbar',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    StyleClassModule,
-    MatSidenavModule,
-    MatMenuModule
-  ],
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+    selector: 'nyk-navbar',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterModule,
+        StyleClassModule,
+        MatSidenavModule,
+        MatMenuModule
+    ],
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
-  @HostBinding('class.nyk-navbar') hostClass = true;
+    @HostBinding('class.nyk-navbar') hostClass = true;
 
-  @Output() sidenavStateChange = new EventEmitter<void>();
-  @Output() shoppingCartStateChange = new EventEmitter<void>();
+    @Output() sidenavStateChange = new EventEmitter<void>();
+    @Output() shoppingCartStateChange = new EventEmitter<void>();
 
-  navbarMenu$: Observable<NavbarMenuItem[]>;
+    navbarMenu$: Observable<NavbarMenuItem[]>;
+    isAuthenticated$: Observable<boolean>;
+    itemCounter$: Observable<string>;
 
-  isSearchBarOpen = false;
-  isProductsMenuOpen = false;
+    isSearchBarOpen = false;
+    isProductsMenuOpen = false;
 
-  isAuthenticated$: Observable<boolean>;
-  itemCounter$: Observable<string>;
+    isAdmin = false;
 
-  isAdmin = false;
+    constructor(
+        private authService: AuthService,
+        private messageService: MessageService,
+        private navbarService: NavbarService
+    ) {}
 
-  constructor(
-    private authService: AuthService,
-    private messageService: MessageService,
-    private navbarService: NavbarService
-  ) {}
+    ngOnInit(): void {
+        this.navbarMenu$ = this.navbarService.getNavbarMenu$();
 
-  ngOnInit(): void {
-    this.navbarMenu$ = this.navbarService.getNavbarMenu$();
+        this.isAuthenticated$ = this.authService.getAuthStatus$().pipe(
+            tap(() => {
+                this.isAdmin = this.authService.isAdmin();
+            })
+        );
+    }
 
-    this.isAuthenticated$ = this.authService.getAuthStatus$().pipe(
-      tap(() => {
-        this.isAdmin = this.authService.isAdmin();
-      })
-    );
-  }
+    toggleSidenav(): void {
+        this.sidenavStateChange.emit();
+    }
 
-  toggleSidenav(): void {
-    this.sidenavStateChange.emit();
-  }
+    toggleShoppingCart(): void {
+        this.shoppingCartStateChange.emit();
+    }
 
-  toggleShoppingCart(): void {
-    this.shoppingCartStateChange.emit();
-  }
+    toggleSearchBar(): void {
+        this.isSearchBarOpen = !this.isSearchBarOpen;
+    }
 
-  toggleSearchBar(): void {
-    this.isSearchBarOpen = !this.isSearchBarOpen;
-  }
-
-  onLogout(): void {
-    this.authService.logout();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Siker!',
-      detail: 'Sikeres kilépés, átirányítva a főoldalra'
-    });
-  }
+    onLogout(): void {
+        this.authService.logout();
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Siker!',
+            detail: 'Sikeres kilépés, átirányítva a főoldalra'
+        });
+    }
 }

@@ -1,0 +1,72 @@
+@import 'mixins';
+
+.nyk-shopping-cart {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 50vw;
+    height: 100dvh;
+    padding: 16px 24px;
+    overflow: scroll;
+
+    @include respond(sm) {
+        width: 100vw;
+    }
+
+    &-back-button {
+        margin-left: auto;
+    }
+
+    &-total-price {
+        margin: 24px 0;
+        font-size: var(--font-size-xl);
+        font-weight: 400;
+        text-align: center;
+
+        span {
+            color: var(--color-blue);
+        }
+    }
+
+    &-item {
+        display: flex;
+        padding-bottom: 16px;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--color-grey);
+        }
+
+        &-image {
+            width: 200px;
+            background-color: var(--color-tertiary);
+        }
+
+        &-details {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-left: 16px;
+
+            &-left {
+                flex: 1;
+
+                &-name-and-short-description {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                &-name {
+                    font-size: var(--font-size-l);
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                }
+
+                &-short-description {
+                    color: var(--color-dark-grey);
+                    font-size: var(--font-size-s);
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+}

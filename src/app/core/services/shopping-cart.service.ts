@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { ApiResponse } from '@core/models/api-response.model';
@@ -9,27 +9,28 @@ import {
     ShoppingCartItem
 } from '@core/models/shopping-cart-item.model';
 
+const ROUTE_SUFFIX = 'shoppingCart';
+
 @Injectable({
     providedIn: 'root'
 })
 export class ShoppingCartService {
     constructor(private apiService: ApiService) {}
 
-    addItemToCart(
-        cartItem: BackendShoppingCartItem
-    ): Observable<ShoppingCartItem> {
-        return this.apiService
-            .post<ApiResponse<ShoppingCartItem>>('shoppingCart', { cartItem })
-            .pipe(map((shoppingCartItemDTO) => shoppingCartItemDTO.data));
+    addItem$(item: BackendShoppingCartItem): Observable<void> {
+        return this.apiService.post<void>(`${ROUTE_SUFFIX}/addItem`, { item });
     }
 
-    getUserCartItems(): Observable<ShoppingCartItem[]> {
+    deleteItem$(item: ShoppingCartItem): Observable<void> {
+        return this.apiService.delete<void>(
+            `${ROUTE_SUFFIX}/deleteOne`,
+            item.id
+        );
+    }
+
+    getItems$(): Observable<ShoppingCartItem[]> {
         return this.apiService
-            .get<ApiResponse<ShoppingCartItem[]>>('shoppingCart')
+            .get<ApiResponse<ShoppingCartItem[]>>(`${ROUTE_SUFFIX}/getItems`)
             .pipe(map((cartItemsDTO) => cartItemsDTO.data));
-    }
-
-    deleteItemFromCart(item: ShoppingCartItem): Observable<null> {
-        return this.apiService.delete<null>('shoppingCart', item.id).pipe();
     }
 }

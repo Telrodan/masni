@@ -1,152 +1,176 @@
-<div
-  class="px-4 py-8 md:px-6 lg:px-8"
-  *ngIf="shoppingCartData$ | async as cartData">
-  <div
-    class="flex flex-column align-items-center"
-    *ngIf="!cartData.items.length">
-    <h1 class="heading-primary">A kosarad jelenleg üres</h1>
-
-    <button routerLink="/shop/all" class="primary-button mt-5">
-      <i class="pi pi-shopping-cart mr-2"></i>
-      Vásárlás
+<ng-container *ngIf="shoppingCartData; else spinner">
+    <button
+        class="nyk-shopping-cart-back-button tertiary-button"
+        (click)="onCloseShoppingCart()">
+        Vissza
     </button>
-  </div>
 
-  <div *ngIf="cartData.items.length">
-    <div class="flex flex-column align-items-center mb-6">
-      <div class="text-900 text-4xl mb-4 font-medium">
-        Kosár értéke:
-        <span class="text-primary">{{ cartData.price }} Ft</span>
-      </div>
+    <div
+        class="flex flex-column align-items-center"
+        *ngIf="!shoppingCartData.items.length; else items">
+        <h1 class="heading-primary">A kosarad jelenleg üres</h1>
+
+        <button routerLink="/shop/all" class="primary-button mt-5">
+            <i class="pi pi-shopping-cart mr-2"></i>
+            Vásárlás
+        </button>
     </div>
 
-    <ul class="list-none p-0 m-0">
-      <li
-        *ngFor="let item of cartData.items"
-        class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
-        <img
-          [src]="item.product.images[0]"
-          class="w-12rem flex-shrink-0 mx-auto md:mx-0 border-round-sm" />
+    <ng-template #items>
+        <p class="nyk-shopping-cart-total-price">
+            A kosarad teljes értéke:
+            <span>{{ shoppingCartData.price }} Ft</span>
+        </p>
 
-        <div class="flex-auto py-3 md:pl-5">
-          <div
-            class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-3">
-            <div class="w-full sm:w-6 flex flex-column">
-              <span class="text-900 text-xl font-medium mb-2 text-pink-500">
-                {{ item.product.name }}
-              </span>
+        <div
+            *ngFor="let item of shoppingCartData.items; trackById"
+            class="nyk-shopping-cart-item">
+            <img
+                [src]="item.product.images[0]"
+                class="nyk-shopping-cart-item-image" />
 
-              <span class="text-600">
-                {{ item.product.shortDescription }}
-              </span>
+            <div class="nyk-shopping-cart-item-details">
+                <div class="nyk-shopping-cart-item-details-left">
+                    <div
+                        class="nyk-shopping-cart-item-details-left-name-and-short-description">
+                        <span
+                            class="nyk-shopping-cart-item-details-left-name heading-tertiary">
+                            {{ item.product.name }}
+                        </span>
+
+                        <span
+                            class="nyk-shopping-cart-item-details-left-short-description">
+                            {{ item.product.shortDescription }}
+                        </span>
+                    </div>
+
+                    <div>
+                        <div></div>
+                        <div class="flex flex-column sm:align-items-end">
+                            <span
+                                class="text-900 text-2xl font-medium mb-2 sm:mb-3"
+                                >{{ item.price }} Ft
+                            </span>
+
+                            <a
+                                (click)="onDeleteOrder(item)"
+                                class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"
+                                tabindex="0">
+                                Törlés
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-column">
+                    <span class="inline-flex align-items-center mb-1">
+                        <span class="text-900 text-primary">
+                            Termék adatok:
+                        </span>
+                    </span>
+
+                    <ng-container *ngFor="let question of item.questions">
+                        <span class="text-600">
+                            {{ question.question }}
+                            <span class="font-bold text-800">
+                                {{ question.option }}
+                            </span>
+                        </span>
+                    </ng-container>
+
+                    <span
+                        class="inline-flex align-items-center mb-2"
+                        *ngIf="item.nameEmbroidery">
+                        <span class="text-600"
+                            >Hímzett név:
+                            <span class="font-bold text-800">{{
+                                item.nameEmbroidery
+                            }}</span>
+                        </span>
+                    </span>
+
+                    <span class="flex flex-column" *ngIf="item.comment">
+                        <span class="text-900 text-primary">
+                            Megjegyzés a termékkel kapcsolatban:
+                        </span>
+                        <span class="font-bold text-800">
+                            {{ item.comment }}
+                        </span>
+                    </span>
+                </div>
             </div>
-            <div
-              class="w-full sm:w-6 flex align-items-start justify-content-between mt-3 sm:mt-0">
-              <div></div>
-              <div class="flex flex-column sm:align-items-end">
-                <span class="text-900 text-2xl font-medium mb-2 sm:mb-3"
-                  >{{ item.price }} Ft
-                </span>
-
-                <a
-                  (click)="onDeleteOrder(item)"
-                  class="cursor-pointer text-pink-500 font-medium hover:text-pink-600 transition-colors transition-duration-300"
-                  tabindex="0">
-                  Törlés
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-column">
-            <span class="inline-flex align-items-center mb-1">
-              <span class="text-900 text-primary"> Termék adatok: </span>
-            </span>
-
-            <ng-container *ngFor="let question of item.questions">
-              <span class="text-600">
-                {{ question.question }}
-                <span class="font-bold text-800">
-                  {{ question.option }}
-                </span>
-              </span>
-            </ng-container>
-
-            <span
-              class="inline-flex align-items-center mb-2"
-              *ngIf="item.nameEmbroidery">
-              <span class="text-600"
-                >Hímzett név:
-                <span class="font-bold text-800">{{
-                  item.nameEmbroidery
-                }}</span>
-              </span>
-            </span>
-
-            <span class="flex flex-column" *ngIf="item.comment">
-              <span class="text-900 text-primary">
-                Megjegyzés a termékkel kapcsolatban:
-              </span>
-              <span class="font-bold text-800">
-                {{ item.comment }}
-              </span>
-            </span>
-          </div>
         </div>
-      </li>
-    </ul>
-    <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
-      <li class="flex flex-column sm:flex-row justify-content-between mb-4">
-        <span class="text-xl text-900">Szállítás</span>
+        <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
+            <li
+                class="flex flex-column sm:flex-row justify-content-between mb-4">
+                <span class="text-xl text-900">Szállítás</span>
 
-        <form [formGroup]="shippingForm" class="flex flex-column w-full md:w-6">
-          <div class="field max-w-full">
-            <p-dropdown
-              styleClass="w-full mb-3"
-              [options]="shippingMethods"
-              formControlName="shippingMethod"
-              optionLabel="name">
-            </p-dropdown>
-          </div>
+                <form
+                    [formGroup]="shippingForm"
+                    class="flex flex-column w-full md:w-6">
+                    <div class="field max-w-full">
+                        <p-dropdown
+                            styleClass="w-full mb-3"
+                            [options]="shippingMethods"
+                            formControlName="shippingMethod"
+                            optionLabel="name">
+                        </p-dropdown>
+                    </div>
 
-          <div class="field">
-            <p-dropdown
-              styleClass="w-full"
-              *ngIf="
-                shippingForm.value.shippingMethod.method ===
-                'foxpost-collection'
-              "
-              formControlName="foxpost"
-              [options]="foxpostPoints"
-              optionLabel="address"
-              [filter]="true"
-              filterBy="address"
-              placeholder="Kérlek válassz">
-            </p-dropdown>
-          </div>
-          <p *ngIf="shippingForm.value.shippingMethod.method === 'delivery'">
-            Házhozszállítás esetén a regisztráció során megadott címre
-            szállítunk, ha most másik szállítási címet szeretnél használni, azt
-            fizetés előtt a profilodban a cím megváltoztatásával tudod jelezni.
-            <a routerLink="/user-profile" class="underline text-primary">
-              Vagy kattints ide.
-            </a>
-          </p>
-        </form>
-      </li>
+                    <div class="field">
+                        <p-dropdown
+                            styleClass="w-full"
+                            *ngIf="
+                                shippingForm.value.shippingMethod.method ===
+                                'foxpost-collection'
+                            "
+                            formControlName="foxpost"
+                            [options]="foxpostPoints"
+                            optionLabel="address"
+                            [filter]="true"
+                            filterBy="address"
+                            placeholder="Kérlek válassz">
+                        </p-dropdown>
+                    </div>
+                    <p
+                        *ngIf="
+                            shippingForm.value.shippingMethod.method ===
+                            'delivery'
+                        ">
+                        Házhozszállítás esetén a regisztráció során megadott
+                        címre szállítunk, ha most másik szállítási címet
+                        szeretnél használni, azt fizetés előtt a profilodban a
+                        cím megváltoztatásával tudod jelezni.
+                        <a
+                            routerLink="/user-profile"
+                            class="underline text-primary">
+                            Vagy kattints ide.
+                        </a>
+                    </p>
+                </form>
+            </li>
 
-      <li
-        class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
-        <span class="text-xl text-900 font-bold text-3xl"> Összesen </span>
-        <span class="text-xl text-900 font-bold text-3xl">
-          {{ cartData.price }} Ft
-        </span>
-      </li>
-      <li class="flex justify-content-end">
-        <button class="primary-button w-12rem" (click)="onSubmitOrder()">
-          <i class="pi pi-credit-card mr-1"></i>
-          Fizetés
-        </button>
-      </li>
-    </ul>
-  </div>
-</div>
+            <li
+                class="flex justify-content-between border-top-1 surface-border mb-4 pt-4">
+                <span class="text-xl text-900 font-bold text-3xl">
+                    Összesen
+                </span>
+                <span class="text-xl text-900 font-bold text-3xl">
+                    {{ shoppingCartData.price }} Ft
+                </span>
+            </li>
+            <li class="flex justify-content-end">
+                <button
+                    class="primary-button w-12rem"
+                    (click)="onSubmitOrder()">
+                    <i class="pi pi-credit-card mr-1"></i>
+                    Fizetés
+                </button>
+            </li>
+        </ul>
+    </ng-template>
+</ng-container>
+
+<ng-template #spinner>
+    <nyk-spinner></nyk-spinner>
+</ng-template>

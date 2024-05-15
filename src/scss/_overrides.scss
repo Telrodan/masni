@@ -97,6 +97,10 @@ p-inputswitch {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+.p-button-label {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .owl-prev,
 .owl-next {
     display: flex;
@@ -109,4 +113,12 @@ p-inputswitch {
     &:hover {
         background-color: var(--color-dark-grey) !important;
     }
+}
+
+.mat-drawer-inner-container {
+    overflow: hidden !important;
+}
+
+.scroll-locked {
+    overflow: hidden;
 }

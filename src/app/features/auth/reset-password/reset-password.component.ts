@@ -9,6 +9,7 @@ import { ToastrService } from '@core/services/toastr.service';
 import { Title, Meta } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { ResetPasswordData } from '@core/models/auth-data.model';
 
 @Component({
     selector: 'nyk-reset-password',
@@ -57,8 +58,7 @@ export class ResetPasswordComponent {
             },
             {
                 property: 'og:image',
-                content:
-                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+                content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
             },
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }
@@ -67,26 +67,22 @@ export class ResetPasswordComponent {
 
     onSubmit() {
         if (this.resetPasswordForm.valid) {
-            const { password, passwordConfirm } = this.resetPasswordForm.value;
-
             this.route.params
                 .pipe(
-                    switchMap((params) =>
-                        this.authService
-                            .resetPassword$(
-                                password,
-                                passwordConfirm,
-                                params['token']
-                            )
-                            .pipe(
-                                tap(() => {
-                                    this.toastr.success(
-                                        'Új jelszó sikeresen beállítva'
-                                    );
-                                    this.router.navigate(['/']);
-                                })
-                            )
-                    )
+                    switchMap((params) => {
+                        const resetPasswordData: ResetPasswordData = {
+                            password: this.resetPasswordForm.value.password,
+                            passwordConfirm: this.resetPasswordForm.value.passwordConfirm,
+                            resetToken: params['token']
+                        };
+
+                        return this.authService.resetPassword$(resetPasswordData).pipe(
+                            tap(() => {
+                                this.toastr.success('Új jelszó sikeresen beállítva');
+                                this.router.navigate(['/']);
+                            })
+                        );
+                    })
                 )
                 .subscribe();
         }

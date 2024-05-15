@@ -272,7 +272,7 @@ export class ProductDetailsComponent implements OnInit {
             };
 
             this.shoppingCartService
-                .addItemToCart(cartItem)
+                .addItem$(cartItem)
                 .pipe(
                     tap(() => {
                         this.toastr.success(
