@@ -5,13 +5,14 @@ import {
     HostBinding,
     ViewEncapsulation
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { catchError, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 import { ToastrService } from '@core/services/toastr.service';
 import { AuthService } from '@core/services/auth.service';
@@ -27,7 +28,8 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         ReactiveFormsModule,
         RouterModule,
         InputTextModule,
-        SpinnerComponent
+        SpinnerComponent,
+        ButtonModule
     ],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
@@ -43,6 +45,7 @@ export class LoginComponent {
     });
     isPasswordVisible = false;
     isLoading = false;
+    togglePasswordButtonIcon = 'pi-eye';
 
     constructor(
         private authService: AuthService,
@@ -53,11 +56,11 @@ export class LoginComponent {
         private titleService: Title,
         private metaService: Meta
     ) {
-        this.titleService.setTitle('Nyuszkó Kuckó | Belépés');
+        this.titleService.setTitle('Belépés | Nyuszkó Kuckó');
         this.metaService.addTags([
             {
                 name: 'description',
-                content: 'Belépés az oldalra.'
+                content: 'Belépés az oldalra'
             },
             {
                 name: 'keywords',
@@ -66,26 +69,32 @@ export class LoginComponent {
             },
             {
                 property: 'og:title',
-                content: 'Nyuszkó Kuckó | Belépés'
+                content: 'Belépés | Nyuszkó Kuckó'
             },
             {
                 property: 'og:description',
-                content: 'Belépés az oldalra.'
+                content: 'Belépés az oldalra'
             },
             {
                 property: 'og:image',
-                content:
-                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+                content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
             },
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }
         ]);
     }
 
+    isFormFieldValid(form: FormGroup, controllerName: string): boolean {
+        return (
+            form.get(`${controllerName}`).invalid &&
+            form.get(`${controllerName}`).touched &&
+            form.get(`${controllerName}`).dirty
+        );
+    }
+
     onTogglePasswordVisibility(): void {
-        const passwordInput = document.getElementById(
-            'password'
-        ) as HTMLInputElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
         } else {
@@ -93,36 +102,32 @@ export class LoginComponent {
         }
 
         this.isPasswordVisible = !this.isPasswordVisible;
+        this.togglePasswordButtonIcon = this.isPasswordVisible ? 'pi-eye-slash' : 'pi-eye';
     }
 
     onLogin(): void {
-        if (this.loginForm.valid) {
-            this.isLoading = true;
+        this.isLoading = true;
 
-            const authData: AuthData = {
-                email: this.loginForm.value.email.trim(),
-                password: this.loginForm.value.password.trim()
-            };
+        const authData: AuthData = {
+            email: this.loginForm.value.email.trim(),
+            password: this.loginForm.value.password.trim()
+        };
 
-            this.authService
-                .login$(authData)
-                .pipe(
-                    tap(() => {
-                        this.toastr.success(
-                            'Sikeres belépés, átirányítva a főoldra'
-                        );
-                        this.loginForm.reset();
-                        this.router.navigate(['/']);
-                        this.isLoading = false;
-                    }),
-                    catchError(() => {
-                        this.isLoading = false;
-                        this.changeDetectorRef.detectChanges();
+        this.authService
+            .login$(authData)
+            .pipe(
+                tap(() => {
+                    this.isLoading = false;
+                    this.router.navigate(['/']);
+                    this.toastr.success('Sikeres belépés, átirányítva a főoldalra');
+                }),
+                catchError(() => {
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
 
-                        return [];
-                    })
-                )
-                .subscribe();
-        }
+                    return [];
+                })
+            )
+            .subscribe();
     }
 }

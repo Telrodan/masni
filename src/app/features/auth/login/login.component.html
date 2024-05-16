@@ -1,30 +1,20 @@
 <div *ngIf="!isLoading; else loading" class="nyk-login-container">
     <div class="nyk-login-header heading-primary">Belépés</div>
 
-    <span class="nyk-login-sub-header">
+    <span class="nyk-login-sub-header paragraph-primary">
         Nem regisztráltál még?
         <a routerLink="/auth/signup">Regisztrálj!</a>
     </span>
 
     <form class="nyk-login-form" [formGroup]="loginForm" (submit)="onLogin()">
         <div class="form-group">
-            <label for="email"> Email </label>
+            <label for="email">Email</label>
 
-            <input
-                id="email"
-                type="email"
-                pInputText
-                class="w-full"
-                formControlName="email" />
+            <input id="email" type="email" pInputText class="w-full" formControlName="email" />
 
-            <p
-                *ngIf="
-                    loginForm.get('email').invalid &&
-                    loginForm.get('email').dirty
-                "
-                class="form-helper">
-                Kérlek add meg az email címed.
-            </p>
+            <small *ngIf="isFormFieldValid(loginForm, 'email')" class="form-helper">
+                Kérlek add meg az email címed
+            </small>
         </div>
 
         <div class="form-group">
@@ -38,40 +28,27 @@
                     class="w-full"
                     formControlName="password" />
 
-                <button
-                    type="button"
-                    pButton
-                    pRipple
-                    class="nyk-login-password-toggle"
+                <i
+                    class="nyk-login-password-toggle pi"
+                    [class]="togglePasswordButtonIcon"
                     (click)="onTogglePasswordVisibility()">
-                    <i
-                        class="pi"
-                        [ngClass]="{
-                            'pi-eye': !isPasswordVisible,
-                            'pi-eye-slash': isPasswordVisible
-                        }">
-                    </i>
-                </button>
+                </i>
             </div>
 
-            <small
-                *ngIf="
-                    loginForm.get('password').invalid &&
-                    loginForm.get('password').dirty
-                "
-                class="form-helper">
+            <small *ngIf="isFormFieldValid(loginForm, 'password')" class="form-helper">
                 Kérlek add meg a jelszavad.
             </small>
         </div>
 
-        <a routerLink="../forgot-password">Elfelejtetted a jelszavad? </a>
+        <a class="paragraph-primary" routerLink="../forgot-password">Elfelejtetted a jelszavad?</a>
 
-        <button
-            class="primary-button w-full"
+        <p-button
+            label="Belépés"
+            severity="secondary"
+            icon="pi pi-user"
+            styleClass="w-full"
             type="submit"
-            [disabled]="!loginForm.valid">
-            Belépés
-        </button>
+            [disabled]="!loginForm.valid"></p-button>
     </form>
 </div>
 
