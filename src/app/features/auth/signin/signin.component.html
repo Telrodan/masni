@@ -1,18 +1,18 @@
-<div *ngIf="!isLoading; else loading" class="nyk-login-container">
-    <div class="nyk-login-header heading-primary">Belépés</div>
+<div *ngIf="!isLoading; else loading" class="nyk-signin-container">
+    <div class="nyk-signin-header heading-primary">Belépés</div>
 
-    <span class="nyk-login-sub-header paragraph-primary">
+    <span class="nyk-signin-sub-header paragraph-primary">
         Nem regisztráltál még?
         <a routerLink="/auth/signup">Regisztrálj!</a>
     </span>
 
-    <form class="nyk-login-form" [formGroup]="loginForm" (submit)="onLogin()">
+    <form class="nyk-signin-form" [formGroup]="signinForm" (submit)="onSignin()">
         <div class="form-group">
             <label for="email">Email</label>
 
             <input id="email" type="email" pInputText class="w-full" formControlName="email" />
 
-            <small *ngIf="isFormFieldValid(loginForm, 'email')" class="form-helper">
+            <small *ngIf="isFormFieldValid(signinForm, 'email')" class="form-helper">
                 Kérlek add meg az email címed
             </small>
         </div>
@@ -20,7 +20,7 @@
         <div class="form-group">
             <label for="password"> Jelszó </label>
 
-            <div class="nyk-login-password-wrapper">
+            <div class="nyk-signin-password-wrapper">
                 <input
                     id="password"
                     type="password"
@@ -29,13 +29,13 @@
                     formControlName="password" />
 
                 <i
-                    class="nyk-login-password-toggle pi"
+                    class="nyk-signin-password-toggle pi"
                     [class]="togglePasswordButtonIcon"
                     (click)="onTogglePasswordVisibility()">
                 </i>
             </div>
 
-            <small *ngIf="isFormFieldValid(loginForm, 'password')" class="form-helper">
+            <small *ngIf="isFormFieldValid(signinForm, 'password')" class="form-helper">
                 Kérlek add meg a jelszavad.
             </small>
         </div>
@@ -48,7 +48,7 @@
             icon="pi pi-user"
             styleClass="w-full"
             type="submit"
-            [disabled]="!loginForm.valid"></p-button>
+            [disabled]="!signinForm.valid"></p-button>
     </form>
 </div>
 

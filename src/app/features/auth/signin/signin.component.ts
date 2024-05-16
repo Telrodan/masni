@@ -5,7 +5,7 @@ import {
     HostBinding,
     ViewEncapsulation
 } from '@angular/core';
-import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ import { emailRegex } from '@shared/util/email-regex';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
-    selector: 'nyk-login',
+    selector: 'nyk-signin',
     standalone: true,
     imports: [
         CommonModule,
@@ -31,15 +31,15 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         SpinnerComponent,
         ButtonModule
     ],
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    templateUrl: './signin.component.html',
+    styleUrls: ['./signin.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
-    @HostBinding('class') hostClass = 'nyk-login';
+export class SigninComponent {
+    @HostBinding('class') hostClass = 'nyk-signin';
 
-    loginForm = this.fb.group({
+    signinForm = this.fb.group({
         email: ['', [Validators.required, Validators.pattern(emailRegex)]],
         password: ['', [Validators.required, Validators.minLength(8)]]
     });
@@ -105,16 +105,16 @@ export class LoginComponent {
         this.togglePasswordButtonIcon = this.isPasswordVisible ? 'pi-eye-slash' : 'pi-eye';
     }
 
-    onLogin(): void {
+    onSignin(): void {
         this.isLoading = true;
 
         const authData: AuthData = {
-            email: this.loginForm.value.email.trim(),
-            password: this.loginForm.value.password.trim()
+            email: this.signinForm.value.email.trim(),
+            password: this.signinForm.value.password.trim()
         };
 
         this.authService
-            .login$(authData)
+            .signin$(authData)
             .pipe(
                 tap(() => {
                     this.isLoading = false;

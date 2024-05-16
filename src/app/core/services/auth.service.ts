@@ -37,7 +37,7 @@ export class AuthService {
         return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signup`, user);
     }
 
-    login$(authData: AuthData): Observable<ApiResponse<string>> {
+    signin$(authData: AuthData): Observable<ApiResponse<string>> {
         return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signin`, authData).pipe(
             filter((authDTO) => !!authDTO.data),
             tap((authDTO) => {

@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot,
-    Router,
-    RouterStateSnapshot,
-    UrlTree
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -21,14 +16,10 @@ export class AuthGuard {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ):
-        | boolean
-        | UrlTree
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree> {
+    ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         const isAuthenticated = this.authService.getAuthStatus();
         if (!isAuthenticated) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/signin']);
             this.toastr.info('Kérlek előbb jelentkezz be');
         }
         return isAuthenticated;
