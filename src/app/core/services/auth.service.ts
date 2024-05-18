@@ -63,7 +63,7 @@ export class AuthService {
 
         return this.apiService
             .patch<ApiResponse<string>>(
-                `${ROUTE_SUFFIX}/resetPassword/${resetPasswordData.resetToken}`,
+                `${ROUTE_SUFFIX}/resetPassword/${resetPasswordData.passwordResetToken}`,
                 password
             )
             .pipe(

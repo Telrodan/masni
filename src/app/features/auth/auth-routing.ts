@@ -29,7 +29,7 @@ export default [
         loadComponent: ForgotPasswordComponent
     },
     {
-        path: 'reset-password/:token',
+        path: 'reset-password/:passwordResetToken',
         loadComponent: ResetPasswordComponent
     }
 ] as Route[];

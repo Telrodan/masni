@@ -6,22 +6,31 @@ import {
     HostBinding,
     ViewEncapsulation
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
-import { tap } from 'rxjs';
+import { catchError, tap } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { emailRegex } from '@shared/util/email-regex';
-import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
-import { RouterModule } from '@angular/router';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
     selector: 'nyk-forgot-password',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputTextModule, RouterModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        InputTextModule,
+        RouterModule,
+        ButtonModule,
+        SpinnerComponent
+    ],
     templateUrl: './forgot-password.component.html',
     styleUrls: ['./forgot-password.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +43,7 @@ export class ForgotPasswordComponent {
         email: ['', [Validators.required, Validators.pattern(emailRegex)]]
     });
 
+    isLoading = false;
     isEmailSent = false;
 
     constructor(
@@ -65,25 +75,42 @@ export class ForgotPasswordComponent {
             },
             {
                 property: 'og:image',
-                content:
-                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+                content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
             },
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }
         ]);
     }
 
+    isFormFieldValid(form: FormGroup, controllerName: string): boolean {
+        return (
+            form.get(`${controllerName}`).invalid &&
+            form.get(`${controllerName}`).touched &&
+            form.get(`${controllerName}`).dirty
+        );
+    }
+
     onSubmit(): void {
         if (this.forgotPasswordForm.valid) {
             const email = this.forgotPasswordForm.value.email.trim();
+            this.isLoading = true;
 
             this.authService
                 .forgotPassword$(email)
                 .pipe(
                     tap(() => {
-                        this.toastr.success('Az emailt elküldtük');
                         this.isEmailSent = true;
-                        this.changeDetectorRef.markForCheck();
+                        this.isLoading = false;
+                        this.toastr.success(
+                            'Ha van egyezés ezzel az email címmel, akkor hamarosan megérkezik az új jelszó beállító email.'
+                        );
+                        this.changeDetectorRef.detectChanges();
+                    }),
+                    catchError(() => {
+                        this.isLoading = false;
+                        this.changeDetectorRef.detectChanges();
+
+                        return [];
                     })
                 )
                 .subscribe();

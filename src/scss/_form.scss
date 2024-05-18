@@ -1,7 +1,9 @@
-.form {
-    display: flex;
-    flex-direction: column;
-}
+@import 'mixins';
+
+// .form {
+//     display: flex;
+//     flex-direction: column;
+// }
 
 .form-group {
     display: flex;
@@ -10,7 +12,12 @@
 
     label {
         color: var(--color-black);
-        font-weight: 500;
+        font-weight: 400;
+        font-size: var(--font-size-m);
+
+        @include respond(sm) {
+            font-size: var(--font-size-s);
+        }
     }
 
     input {
@@ -22,19 +29,15 @@
     }
 }
 
-.form-label {
-    margin-bottom: 5px;
-}
-
 .form-helper {
     color: var(--color-red);
     font-size: var(--font-size-xs);
 }
 
-.form-highlight {
-    background-color: var(--color-primary);
-    padding: 8px 20px;
-    border: none;
-    border-radius: 50px;
-    font-size: 18px;
-}
+// .form-highlight {
+//     background-color: var(--color-primary);
+//     padding: 8px 20px;
+//     border: none;
+//     border-radius: 50px;
+//     font-size: 18px;
+// }

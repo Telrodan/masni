@@ -6,5 +6,5 @@ export interface AuthData {
 export interface ResetPasswordData {
     password: string;
     passwordConfirm: string;
-    resetToken: string;
+    passwordResetToken: string;
 }

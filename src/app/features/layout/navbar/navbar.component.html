@@ -43,10 +43,7 @@
                     </mat-menu>
                 </ng-container>
                 <ng-template #noSubMenu>
-                    <button
-                        mat-menu-item
-                        [routerLink]="menu.routerLink"
-                        routerLinkActive="active">
+                    <button mat-menu-item [routerLink]="menu.routerLink" routerLinkActive="active">
                         {{ menu.label }}
                     </button>
                 </ng-template>
@@ -54,33 +51,19 @@
         </ng-container>
     </mat-menu>
 
-    <button
-        class="button-underline"
-        routerLink="/material"
-        routerLinkActive="active">
+    <button class="button-underline" routerLink="/material" routerLinkActive="active">
         Minták
     </button>
 
-    <button
-        routerLink="/inspiration"
-        routerLinkActive="active"
-        class="button-underline">
+    <button routerLink="/inspiration" routerLinkActive="active" class="button-underline">
         Inspirációk
     </button>
 
-    <button
-        routerLink="/contact"
-        routerLinkActive="active"
-        class="button-underline">
+    <button routerLink="/contact" routerLinkActive="active" class="button-underline">
         Kapcsolat
     </button>
 
-    <button
-        routerLink="/about"
-        routerLinkActive="active"
-        class="button-underline">
-        Rolam
-    </button>
+    <button routerLink="/about" routerLinkActive="active" class="button-underline">Rolam</button>
 </nav>
 
 <div class="nyk-navbar-actions">
@@ -90,71 +73,43 @@
         class="nyk-navbar-actions-search-bar"
         [class.open]="isSearchBarOpen" />
 
-    <i
-        class="pi pi-search nyk-navbar-actions-search-button"
-        (click)="toggleSearchBar()">
-    </i>
+    <i class="pi pi-search nyk-navbar-actions-search-button" (click)="toggleSearchBar()"> </i>
 
-    <i
-        [matMenuTriggerFor]="accountMenu"
-        class="pi pi-user nyk-navbar-actions-account-button"></i>
+    <i [matMenuTriggerFor]="accountMenu" class="pi pi-user nyk-navbar-actions-account-button"></i>
 
     <mat-menu #accountMenu="matMenu">
         <ng-container *ngIf="isAuthenticated$ | async; else loggedOutContent">
-            <button
-                mat-menu-item
-                routerLink="user/profile"
-                routerLinkActive="active">
-                Fiók
-            </button>
+            <button mat-menu-item routerLink="user/profile" routerLinkActive="active">Fiók</button>
 
-            <button
-                mat-menu-item
-                routerLink="user/orders"
-                routerLinkActive="active">
+            <button mat-menu-item routerLink="user/orders" routerLinkActive="active">
                 Rendelések
             </button>
 
-            <button
-                mat-menu-item
-                routerLink="user/orders"
-                routerLinkActive="active">
+            <button mat-menu-item routerLink="user/orders" routerLinkActive="active">
                 Kuponok
             </button>
 
-            <button
-                mat-menu-item
-                routerLink="user/orders"
-                routerLinkActive="active">
+            <button mat-menu-item routerLink="user/orders" routerLinkActive="active">
                 Értesítések
             </button>
 
-            <button
-                *ngIf="isAdmin"
-                mat-menu-item
-                routerLink="admin"
-                routerLinkActive="active">
+            <button *ngIf="isAdmin" mat-menu-item routerLink="admin" routerLinkActive="active">
                 Admin
             </button>
 
-            <button
-                mat-menu-item
-                class="nyk-navbar-authorized-menu-logout"
-                (click)="onLogout()">
+            <button mat-menu-item class="nyk-navbar-authorized-menu-logout" (click)="onLogout()">
                 Kilépés
             </button>
         </ng-container>
         <ng-template #loggedOutContent>
-            <button mat-menu-item routerLink="auth/login">Belepes</button>
+            <button mat-menu-item routerLink="auth/signin">Belepes</button>
             <button mat-menu-item routerLink="auth/signup">Regisztracio</button>
         </ng-template>
     </mat-menu>
 
     <i class="pi pi-shopping-cart" (click)="toggleShoppingCart()"></i>
 
-    <i
-        class="nyk-navbar-sidenav-button pi pi-bars"
-        (click)="toggleSidenav()"></i>
+    <i class="nyk-navbar-sidenav-button pi pi-bars" (click)="toggleSidenav()"></i>
     <!-- 
   <mat-drawer
     #shoppingCart
