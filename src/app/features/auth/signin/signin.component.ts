@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { catchError, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
 
 import { ToastrService } from '@core/services/toastr.service';
 import { AuthService } from '@core/services/auth.service';
@@ -29,7 +30,8 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         RouterModule,
         InputTextModule,
         SpinnerComponent,
-        ButtonModule
+        ButtonModule,
+        PasswordModule
     ],
     templateUrl: './signin.component.html',
     styleUrls: ['./signin.component.scss'],
@@ -90,19 +92,6 @@ export class SigninComponent {
             form.get(`${controllerName}`).touched &&
             form.get(`${controllerName}`).dirty
         );
-    }
-
-    onTogglePasswordVisibility(): void {
-        const passwordInput = document.getElementById('password') as HTMLInputElement;
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-        } else {
-            passwordInput.type = 'password';
-        }
-
-        this.isPasswordVisible = !this.isPasswordVisible;
-        this.togglePasswordButtonIcon = this.isPasswordVisible ? 'pi-eye-slash' : 'pi-eye';
     }
 
     onSignin(): void {

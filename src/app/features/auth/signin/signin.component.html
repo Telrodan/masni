@@ -1,10 +1,10 @@
 <div *ngIf="!isLoading; else loading" class="nyk-signin-container">
     <div class="nyk-signin-header heading-primary">Belépés</div>
 
-    <span class="nyk-signin-sub-header paragraph-primary">
+    <p class="nyk-signin-sub-header paragraph-primary">
         Nem regisztráltál még?
         <a routerLink="/auth/signup">Regisztrálj!</a>
-    </span>
+    </p>
 
     <form class="nyk-signin-form" [formGroup]="signinForm" (submit)="onSignin()">
         <div class="form-group">
@@ -20,27 +20,25 @@
         <div class="form-group">
             <label for="password"> Jelszó </label>
 
-            <div class="nyk-signin-password-wrapper">
-                <input
-                    id="password"
-                    type="password"
-                    pInputText
-                    class="w-full"
-                    formControlName="password" />
-
-                <i
-                    class="nyk-signin-password-toggle pi"
-                    [class]="togglePasswordButtonIcon"
-                    (click)="onTogglePasswordVisibility()">
-                </i>
-            </div>
+            <p-password
+                inputId="password"
+                inputStyleClass="w-full"
+                styleClass="w-full"
+                formControlName="password"
+                [feedback]="false"
+                [toggleMask]="true">
+            </p-password>
 
             <small *ngIf="isFormFieldValid(signinForm, 'password')" class="form-helper">
                 Kérlek add meg a jelszavad.
             </small>
         </div>
 
-        <a class="paragraph-primary" routerLink="../forgot-password">Elfelejtetted a jelszavad?</a>
+        <p class="nyk-signin-forgot-password paragraph-primary">
+            Elfelejtetted a jelszavad? Kattints
+            <a routerLink="../forgot-password">ide</a>
+            és állíts be egy újat.
+        </p>
 
         <p-button
             label="Belépés"
@@ -48,7 +46,9 @@
             icon="pi pi-user"
             styleClass="w-full"
             type="submit"
-            [disabled]="!signinForm.valid"></p-button>
+            [disabled]="!signinForm.valid"
+            [raised]="true">
+        </p-button>
     </form>
 </div>
 
