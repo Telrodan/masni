@@ -78,6 +78,12 @@ export class AuthService {
             );
     }
 
+    getPostcodeInformation$(postcode: number) {
+        return this.apiService.get<{ city: string; county: string }>(
+            `${ROUTE_SUFFIX}/postcodeInformation?postcode=${postcode}`
+        );
+    }
+
     autoAuthentication(): void {
         const authData = this.getAuthData();
 
