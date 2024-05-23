@@ -8,12 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
@@ -34,6 +29,8 @@ import {
 import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Store } from '@ngrx/store';
+import { CategorySelector } from '@core/store/category';
 
 interface CategoryData extends Category {
     logs: Log[];
@@ -63,7 +60,7 @@ export class EditCategoryComponent implements OnInit {
 
     editCategoryForm: FormGroup;
     categoryId: string;
-    category$: Observable<CategoryData>;
+    category$: Observable<Category>;
     categoryLogs$: Observable<Log[]>;
     imagePreview: string;
     isLoading = false;
@@ -77,33 +74,18 @@ export class EditCategoryComponent implements OnInit {
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private changeDetectorRef: ChangeDetectorRef,
-        private router: Router
+        private router: Router,
+        private store: Store
     ) {}
 
     ngOnInit(): void {
         this.category$ = this.route.params.pipe(
-            switchMap((params) =>
-                combineLatest([
-                    this.categoryService.getCategoryById$(params['id']),
-                    this.logService
-                        .getItemLogsByItemId$(params['id'])
-                        .pipe(
-                            map((logs) =>
-                                logs.sort(
-                                    (a, b) =>
-                                        new Date(b.timestamp).getTime() -
-                                        new Date(a.timestamp).getTime()
-                                )
-                            )
-                        )
-                ])
+            switchMap((params: { id: string }) =>
+                this.store.select(CategorySelector.selectCategoryById(params.id))
             ),
             filter((category) => !!category),
-            map(([category, logs]) => ({
-                ...category,
-                logs
-            })),
             tap((category) => {
+                console.log('debug category', category);
                 this.categoryId = category.id;
                 this.editCategoryForm = this.fb.group({
                     type: [category.type, Validators.required],
@@ -115,13 +97,44 @@ export class EditCategoryComponent implements OnInit {
                 this.imagePreview = category.image;
             })
         );
+        // this.route.params.pipe(
+        //     switchMap((params) =>
+        //         combineLatest([
+        //             this.categoryService.getCategoryById$(params['id']),
+        //             this.logService
+        //                 .getItemLogsByItemId$(params['id'])
+        //                 .pipe(
+        //                     map((logs) =>
+        //                         logs.sort(
+        //                             (a, b) =>
+        //                                 new Date(b.timestamp).getTime() -
+        //                                 new Date(a.timestamp).getTime()
+        //                         )
+        //                     )
+        //                 )
+        //         ])
+        //     ),
+        //     filter((category) => !!category),
+        //     map(([category, logs]) => ({
+        //         ...category,
+        //         logs
+        //     })),
+        //     tap((category) => {
+        //         this.categoryId = category.id;
+        //         this.editCategoryForm = this.fb.group({
+        //             type: [category.type, Validators.required],
+        //             name: [category.name, Validators.required],
+        //             image: [category.image, Validators.required],
+        //             description: [category.description]
+        //         });
+
+        //         this.imagePreview = category.image;
+        //     })
+        // );
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.editCategoryForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.editCategoryForm);
         this.changeDetectorRef.detectChanges();
     }
 

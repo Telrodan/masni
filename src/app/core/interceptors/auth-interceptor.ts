@@ -14,14 +14,13 @@ import { CookieService } from '@core/services/cookie.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     constructor(private cookieService: CookieService) {}
-    intercept(
-        req: HttpRequest<any>,
-        next: HttpHandler
-    ): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const authToken = this.cookieService.getCookie('token');
         const authRequest = req.clone({
             headers: req.headers.set('Authorization', 'Bearer ' + authToken)
         });
+
+        console.log('debug authRequest', authRequest);
 
         return next.handle(authRequest);
     }

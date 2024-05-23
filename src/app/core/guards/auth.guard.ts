@@ -18,10 +18,13 @@ export class AuthGuard {
         state: RouterStateSnapshot
     ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         const isAuthenticated = this.authService.getAuthStatus();
-        if (!isAuthenticated) {
-            this.router.navigate(['/signin']);
-            this.toastr.info('Kérlek előbb jelentkezz be');
+        if (isAuthenticated) {
+            return isAuthenticated;
         }
+
+        this.router.navigate(['/auth/signin']);
+        this.toastr.info('Kérlek előbb jelentkezz be.');
+
         return isAuthenticated;
     }
 }

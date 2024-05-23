@@ -37,6 +37,14 @@ export class AuthService {
         return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signup`, user);
     }
 
+    googleSignup$(token: string) {
+        return this.apiService.post(`${ROUTE_SUFFIX}/googleSignup`, { token });
+    }
+
+    googleSignin$() {
+        return this.apiService.get(`${ROUTE_SUFFIX}/googleSignin`);
+    }
+
     signin$(authData: AuthData): Observable<ApiResponse<string>> {
         return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signin`, authData).pipe(
             filter((authDTO) => !!authDTO.data),
@@ -167,6 +175,6 @@ export class AuthService {
         this.tokenTimer = setTimeout(() => {
             this.toastr.info('Időkorlát lejárt, kérlek lépj be újra');
             this.logout();
-        }, duration * 10);
+        }, duration * 1000);
     }
 }

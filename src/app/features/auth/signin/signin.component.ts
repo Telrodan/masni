@@ -1,8 +1,12 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     HostBinding,
+    OnDestroy,
+    OnInit,
+    Renderer2,
     ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,10 +14,11 @@ import { Title, Meta } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { catchError, tap } from 'rxjs';
+import { catchError, take, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
 
 import { ToastrService } from '@core/services/toastr.service';
 import { AuthService } from '@core/services/auth.service';
@@ -31,23 +36,23 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         InputTextModule,
         SpinnerComponent,
         ButtonModule,
-        PasswordModule
+        PasswordModule,
+        GoogleSigninButtonModule
     ],
     templateUrl: './signin.component.html',
     styleUrls: ['./signin.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SigninComponent {
+export class SigninComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-signin';
 
     signinForm = this.fb.group({
         email: ['', [Validators.required, Validators.pattern(emailRegex)]],
         password: ['', [Validators.required, Validators.minLength(8)]]
     });
-    isPasswordVisible = false;
+
     isLoading = false;
-    togglePasswordButtonIcon = 'pi-eye';
 
     constructor(
         private authService: AuthService,
@@ -56,7 +61,8 @@ export class SigninComponent {
         private fb: FormBuilder,
         private router: Router,
         private titleService: Title,
-        private metaService: Meta
+        private metaService: Meta,
+        private socialAuthService: SocialAuthService
     ) {
         this.titleService.setTitle('Belépés | Nyuszkó Kuckó');
         this.metaService.addTags([
@@ -86,6 +92,18 @@ export class SigninComponent {
         ]);
     }
 
+    ngOnInit(): void {
+        this.socialAuthService.authState
+            .pipe(
+                take(1),
+                tap((user) => {
+                    console.log(user.idToken);
+                    //perform further logics
+                })
+            )
+            .subscribe();
+    }
+
     isFormFieldValid(form: FormGroup, controllerName: string): boolean {
         return (
             form.get(`${controllerName}`).invalid &&
@@ -108,7 +126,7 @@ export class SigninComponent {
                 tap(() => {
                     this.isLoading = false;
                     this.router.navigate(['/']);
-                    this.toastr.success('Sikeres belépés, átirányítva a főoldalra');
+                    this.toastr.success('Sikeres belépés, átirányítva a főoldalra.');
                 }),
                 catchError(() => {
                     this.isLoading = false;

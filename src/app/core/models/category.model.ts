@@ -4,28 +4,28 @@ import { Material } from './material.model';
 import { Inspiration } from './inspiration.model';
 
 export interface Category {
-  id?: string;
-  type: CategoryType;
-  isSubCategory?: boolean;
-  subCategories?: ProductCategory[];
-  mainCategory?: string;
-  name: string;
-  image: string;
-  sortIndex?: number;
-  description?: string;
-  updatedAt?: Date;
-  createdAt?: Date;
+    id?: string;
+    type: CategoryType;
+    isSubCategory?: boolean;
+    subCategories?: ProductCategory[];
+    mainCategory?: string;
+    name: string;
+    image: string;
+    sortIndex?: number;
+    description?: string;
+    updatedAt?: Date;
+    createdAt?: Date;
 }
 
 export interface ProductCategory extends Category {
-  items: Product[];
-  slug?: string;
+    items: Product[];
+    slug?: string;
 }
 
 export interface MaterialCategory extends Category {
-  items: Material[];
+    items: Material[];
 }
 
 export interface InspirationCategory extends Category {
-  items: Inspiration[];
+    items: Inspiration[];
 }

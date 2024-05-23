@@ -1,5 +1,5 @@
 export enum CategoryType {
-  PRODUCT_CATEGORY = 'PRODUCT_CATEGORY',
-  MATERIAL_CATEGORY = 'MATERIAL_CATEGORY',
-  INSPIRATION_CATEGORY = 'INSPIRATION_CATEGORY'
+    Product = 'product',
+    Material = 'material',
+    Inspiration = 'inspiration'
 }

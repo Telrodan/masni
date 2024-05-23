@@ -13,14 +13,11 @@ import { AuthService } from './core/services/auth.service';
 import { TrackService } from '@core/services/track.service';
 
 import { routeTransitionAnimation } from './route-transition.animations';
-import {
-    ChildrenOutletContexts,
-    NavigationEnd,
-    Router,
-    RouterOutlet
-} from '@angular/router';
+import { ChildrenOutletContexts, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import AOS from 'aos';
+import { Store } from '@ngrx/store';
+import { CategoryAction } from '@core/store/category';
 
 @Component({
     selector: 'mhd-root',
@@ -39,7 +36,8 @@ export class AppComponent implements OnInit {
         private router: Router,
         private contexts: ChildrenOutletContexts,
         private authService: AuthService,
-        private trackService: TrackService
+        private trackService: TrackService,
+        private store: Store
     ) {
         /**
          * Allows user to scroll on carousel (mobile scroll issue fix)
@@ -48,6 +46,8 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.store.dispatch(CategoryAction.getCategories());
+
         this.router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),
@@ -67,8 +67,6 @@ export class AppComponent implements OnInit {
     }
 
     getRouteAnimationData() {
-        return this.contexts.getContext('primary')?.route?.snapshot?.data?.[
-            'animation'
-        ];
+        return this.contexts.getContext('primary')?.route?.snapshot?.data?.['animation'];
     }
 }

@@ -1,0 +1,22 @@
+.nyk-confirm-dialog {
+    position: relative;
+
+    &-close {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        color: var(--color-dark-grey);
+        cursor: pointer;
+        z-index: 50;
+    }
+
+    &-message {
+        margin-bottom: 24px;
+    }
+
+    &-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+}

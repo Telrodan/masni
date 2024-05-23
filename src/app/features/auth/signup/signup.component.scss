@@ -20,7 +20,7 @@
     }
 
     &-sub-header {
-        margin-bottom: 8px;
+        margin-bottom: 24px;
     }
 
     &-form {
@@ -65,6 +65,27 @@
             padding: 8px 0 !important;
             border-top: 1px solid var(--color-grey);
             border-bottom: 1px solid var(--color-grey);
+        }
+    }
+
+    &-or-container {
+        display: block;
+        margin: 16px auto 8px;
+        text-align: center;
+
+        &::before,
+        &::after {
+            display: inline-block;
+            content: '';
+            margin: 0 8px;
+            position: relative;
+            top: -6px;
+            width: 100px;
+            border-bottom: 1px solid var(--color-dark-grey);
+
+            @include respond(sm) {
+                top: -5px;
+            }
         }
     }
 

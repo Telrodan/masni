@@ -10,6 +10,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { ToastrModule } from 'ngx-toastr';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AuthInterceptorProvider } from '@core/interceptors/auth-interceptor';
 import { HttpInterceptorProvider } from '@core/interceptors/http.interceptor';
@@ -18,6 +21,15 @@ import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutComponent } from './features/layout/layout.component';
+import { environment } from 'src/environments/environment';
+import { appState } from '@core/store/app-state';
+import { CategoryEffects } from '@core/store/category';
+import {
+    FacebookLoginProvider,
+    SocialAuthServiceConfig,
+    SocialLoginModule
+} from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
@@ -31,8 +43,16 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
         SharedModule,
         LayoutComponent,
         ScrollTopModule,
-        ToastrModule.forRoot(),
+        SocialLoginModule,
         ...MATERIAL,
+        StoreModule.forRoot(appState),
+        EffectsModule.forRoot([CategoryEffects]),
+        ToastrModule.forRoot(),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25,
+            logOnly: environment.production
+        }),
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),
             // Register the ServiceWorker as soon as the application is stable
@@ -50,6 +70,23 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
                     auth.autoAuthentication();
                 };
             }
+        },
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: false,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(
+                            '192518032879-mrgpr1b7fekcvnnnlhrc86s22b90argc.apps.googleusercontent.com'
+                        )
+                    }
+                ],
+                onError: (error) => {
+                    console.error(error);
+                }
+            } as SocialAuthServiceConfig
         },
         AuthInterceptorProvider,
         HttpInterceptorProvider,

@@ -6,6 +6,16 @@
         <a routerLink="/auth/signin"> Lépj be! </a>
     </div>
 
+    <asl-google-signin-button
+        type="standard"
+        size="large"
+        shape="rectangular"
+        locale="HU"
+        text="signup_with">
+    </asl-google-signin-button>
+
+    <div class="nyk-signup-or-container paragraph-primary">Vagy</div>
+
     <form
         class="nyk-signup-form grid formgrid p-fluid"
         [formGroup]="signupForm"

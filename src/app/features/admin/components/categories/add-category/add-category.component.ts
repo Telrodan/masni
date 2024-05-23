@@ -32,6 +32,7 @@ import {
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
     selector: 'nyk-add-category',
@@ -48,7 +49,8 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         SpinnerComponent,
         DividerModule,
         InputSwitchModule,
-        DropdownModule
+        DropdownModule,
+        BadgeModule
     ],
     templateUrl: './add-category.component.html',
     styleUrls: ['./add-category.component.scss'],
@@ -66,7 +68,7 @@ export class AddCategoryComponent implements OnInit {
     isLoading = false;
 
     addCategoryForm = this.fb.group({
-        type: [CategoryType.PRODUCT_CATEGORY, Validators.required],
+        type: [CategoryType.Product, Validators.required],
         isSubCategory: [false],
         mainCategory: [''],
         name: ['', Validators.required],
@@ -90,21 +92,14 @@ export class AddCategoryComponent implements OnInit {
             .pipe(
                 map((categories) =>
                     categories
-                        .filter(
-                            (category) =>
-                                category.type ===
-                                this.addCategoryForm.value.type
-                        )
+                        .filter((category) => category.type === this.addCategoryForm.value.type)
                         .filter((category) => category.isSubCategory === false)
                 )
             );
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.addCategoryForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.addCategoryForm);
         this.changeDetectorRef.markForCheck();
     }
 
@@ -116,41 +111,29 @@ export class AddCategoryComponent implements OnInit {
     }
 
     onAddCategory(): void {
-        if (this.addCategoryForm.valid) {
-            const category: Category = {
-                type: this.addCategoryForm.value.type,
-                isSubCategory: this.addCategoryForm.value.isSubCategory,
-                mainCategory: this.addCategoryForm.value.isSubCategory
-                    ? this.addCategoryForm.value.mainCategory
-                    : '',
-                name: this.addCategoryForm.value.name.trim(),
-                image: this.addCategoryForm.value.image,
-                description: this.addCategoryForm.value.description.trim()
-            };
-
-            if (category.isSubCategory && !category.mainCategory) {
-                this.toastr.info('Kérlek válassz egy főkategóriát');
-                return;
-            }
-
-            if (category.name) {
-                this.isLoading = true;
-                this.categoryService
-                    .addCategory$(category)
-                    .pipe(
-                        tap(() => {
-                            this.isLoading = false;
-                            this.changeDetectorRef.markForCheck();
-                            this.toastr.success(`${category.name} hozzáadva`);
-                            this.router.navigate(['/admin/categories']);
-                        })
-                    )
-                    .subscribe();
-            } else {
-                this.toastr.info('Kérlek adj meg egy kategória nevet');
-            }
-        } else {
-            this.toastr.info('Kérlek töltsd ki az összes mezőt');
+        if (!this.addCategoryForm.valid) {
+            this.toastr.info('Kérlek töltsd ki az összes mezőt.');
+            return;
         }
+
+        const category: Category = this.addCategoryForm.value as Category;
+
+        if (category.isSubCategory && !category.mainCategory) {
+            this.toastr.info('Kérlek válassz egy főkategóriát.');
+            return;
+        }
+
+        this.isLoading = true;
+        this.categoryService
+            .addCategory$(category)
+            .pipe(
+                tap(() => {
+                    this.isLoading = false;
+                    this.changeDetectorRef.markForCheck();
+                    this.toastr.success(`${category.name} hozzáadva`);
+                    this.router.navigate(['/admin/categories']);
+                })
+            )
+            .subscribe();
     }
 }

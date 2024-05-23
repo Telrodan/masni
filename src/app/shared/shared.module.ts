@@ -10,32 +10,29 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ButtonModule } from 'primeng/button';
 
 import { ImageCompositionComponent } from './components/image-composition/image-composition.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ScrollableImageWithTitleComponent } from './components/scrollable-image-with-title/scrollable-image-with-title.component';
 import { MaterialCarouselComponent } from './components/material-carousel/material-carousel.component';
 
 const PRIME_NG = [CarouselModule, RippleModule, ButtonModule, SkeletonModule];
 
 @NgModule({
-  declarations: [
-    ConfirmDialogComponent,
-    ImageCompositionComponent,
-    ScrollableImageWithTitleComponent,
-    MaterialCarouselComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    ...PRIME_NG
-  ],
-  exports: [
-    ConfirmDialogComponent,
-    ImageCompositionComponent,
-    ScrollableImageWithTitleComponent,
-    MaterialCarouselComponent
-  ]
+    declarations: [
+        ImageCompositionComponent,
+        ScrollableImageWithTitleComponent,
+        MaterialCarouselComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        ...PRIME_NG
+    ],
+    exports: [
+        ImageCompositionComponent,
+        ScrollableImageWithTitleComponent,
+        MaterialCarouselComponent
+    ]
 })
 export class SharedModule {}

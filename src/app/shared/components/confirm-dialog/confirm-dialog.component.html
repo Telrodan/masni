@@ -1,22 +1,18 @@
-<div class="confirm-dialog">
-    <i class="pi pi-times close" mat-dialog-close></i>
+<div class="nyk-confirm-dialog">
+    <i class="nyk-confirm-dialog-close pi pi-times" mat-dialog-close></i>
 
     <h2 mat-dialog-title class="mb-2">Megerősítés</h2>
 
     <mat-dialog-content>
-        <p>{{ data.message }}</p>
+        <p class="nyk-confirm-dialog-message paragraph-primary">{{ data.message }}</p>
 
-        <div class="dialog-actions flex justify-content-end mt-5">
-            <button
-                type="submit"
-                class="secondary-button mr-4"
-                mat-dialog-close>
-                Mégsem
-            </button>
-
-            <button type="submit" class="primary-button" (click)="confirm()">
-                Igen
-            </button>
+        <div class="nyk-confirm-dialog-actions">
+            <p-button label="Mégsem" [raised]="true" severity="danger" mat-dialog-close></p-button>
+            <p-button
+                label="Igen"
+                [raised]="true"
+                severity="success"
+                (click)="onConfirm()"></p-button>
         </div>
     </mat-dialog-content>
 </div>

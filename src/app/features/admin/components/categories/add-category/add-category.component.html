@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isLoading; else loading">
-    <div class="nyk-add-category-header">Kategória hozzáadás</div>
+    <div class="nyk-add-category-header">Új kategória hozzáadás</div>
 
     <form class="nyk-add-category-form" [formGroup]="addCategoryForm">
         <div class="form-group">
@@ -13,41 +13,42 @@
 
             <div class="flex align-items-center mb-2">
                 <p-radioButton
-                    [value]="CategoryType.PRODUCT_CATEGORY"
+                    [value]="CategoryType.Product"
                     formControlName="type"
                     inputId="productCategory">
                 </p-radioButton>
 
-                <label for="productCategory" class="ml-2">Termék</label>
+                <label for="productCategory" class="ml-2">
+                    <p-badge value="Termék" severity="success" styleClass="shadow-2"></p-badge
+                ></label>
             </div>
 
             <div class="flex align-items-center mb-2">
                 <p-radioButton
-                    [value]="CategoryType.MATERIAL_CATEGORY"
+                    [value]="CategoryType.Material"
                     formControlName="type"
                     inputId="materialCategory">
                 </p-radioButton>
 
-                <label for="materialCategory" class="ml-2"> Minta </label>
+                <label for="materialCategory" class="ml-2">
+                    <p-badge value="Minta" severity="info" styleClass="shadow-2"> </p-badge>
+                </label>
             </div>
 
             <div class="flex align-items-center">
                 <p-radioButton
-                    [value]="CategoryType.INSPIRATION_CATEGORY"
+                    [value]="CategoryType.Inspiration"
                     formControlName="type"
                     inputId="inspirationCategory">
                 </p-radioButton>
 
                 <label for="inspirationCategory" class="ml-2">
-                    Inspiráció
+                    <p-badge value="Inspiració" styleClass="shadow-2"></p-badge>
                 </label>
             </div>
         </div>
 
-        <ng-container
-            *ngIf="
-                addCategoryForm.value.type === CategoryType.PRODUCT_CATEGORY
-            ">
+        <ng-container *ngIf="addCategoryForm.value.type === CategoryType.Product">
             <div class="form-group">
                 <label for="name"> Alkategória </label>
 
@@ -69,9 +70,7 @@
             </div>
         </ng-container>
 
-        <div
-            *ngIf="addCategoryForm.value.type === CategoryType.PRODUCT_CATEGORY"
-            class="form-group">
+        <div *ngIf="addCategoryForm.value.type === CategoryType.Product" class="form-group">
             <label for="description"> Kategória leírása </label>
 
             <textarea
@@ -88,21 +87,22 @@
 
             <p-button
                 *ngIf="!imagePreview"
+                [raised]="true"
                 icon="pi pi-image"
                 styleClass="p-button p-button-secondary"
                 (click)="imagePicker.click()">
             </p-button>
 
-            <button
+            <p-button
                 *ngIf="imagePreview"
-                pButton
-                pRipple
+                icon="pi pi-times"
+                severity="danger"
+                [raised]="true"
+                styleClass="mb-2"
                 pTooltip="Kép törlése"
                 tooltipPosition="bottom"
-                (click)="onImageClear(imagePicker)"
-                type="button"
-                icon="pi pi-times"
-                class="p-button p-button-danger p-button mb-2"></button>
+                (click)="onImageClear(imagePicker)">
+            </p-button>
 
             <input
                 id="imagePicker"

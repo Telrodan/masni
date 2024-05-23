@@ -3,6 +3,7 @@ import {
     ChangeDetectorRef,
     Component,
     HostBinding,
+    OnInit,
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
@@ -10,12 +11,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 
-import { catchError, tap } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
 
 import { User } from '@core/models/user.model';
 import { ToastrService } from '@core/services/toastr.service';
@@ -36,14 +38,15 @@ import { phoneRegex } from '@shared/util/regex.util';
         SpinnerComponent,
         RouterModule,
         ButtonModule,
-        PasswordModule
+        PasswordModule,
+        GoogleSigninButtonModule
     ],
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
     @HostBinding('class.nyk-signup') hostClass = true;
 
     signupForm = this.fb.group({
@@ -78,7 +81,8 @@ export class SignupComponent {
         private titleService: Title,
         private metaService: Meta,
         private viewportScroller: ViewportScroller,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private socialAuthService: SocialAuthService
     ) {
         this.titleService.setTitle('Regisztráció | Nyuszkó Kuckó');
         this.metaService.addTags([
@@ -106,6 +110,12 @@ export class SignupComponent {
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }
         ]);
+    }
+
+    ngOnInit(): void {
+        this.socialAuthService.authState
+            .pipe(switchMap((user) => this.authService.googleSignup$(user.idToken)))
+            .subscribe();
     }
 
     isFormFieldValid(form: FormGroup, controllerName: string): boolean {

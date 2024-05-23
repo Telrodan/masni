@@ -9,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { filter, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Table, TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -26,6 +26,8 @@ import { CategoryService } from '@core/services/category.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Store } from '@ngrx/store';
+import { CategorySelector } from '@core/store/category';
 
 @Component({
     selector: 'nyk-categories',
@@ -41,7 +43,8 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
         TooltipModule,
         InputTextModule,
         RouterModule,
-        SpinnerComponent
+        SpinnerComponent,
+        ConfirmDialogComponent
     ],
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
@@ -52,6 +55,7 @@ export class CategoriesComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-categories';
 
     categories$: Observable<Category[]>;
+    isBusy$: Observable<boolean>;
 
     images: string[] = [];
     imageLoadedStatus: boolean[] = [];
@@ -65,18 +69,16 @@ export class CategoriesComponent implements OnInit {
         private categoryService: CategoryService,
         private changeDetectorRef: ChangeDetectorRef,
         private toastr: ToastrService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private store: Store
     ) {}
 
     ngOnInit(): void {
-        this.categories$ = this.categoryDeleteSubject.pipe(
-            startWith(null),
-            switchMap(() =>
-                this.categoryService
-                    .getCategories$()
-                    .pipe(tap((categories) => console.log(categories)))
-            )
-        );
+        this.isBusy$ = this.store.select(CategorySelector.isBusy());
+
+        this.categories$ = this.store
+            .select(CategorySelector.selectCategories())
+            .pipe(map((categories) => [...categories]));
     }
 
     onDeleteCategory(category: Category): void {
@@ -94,9 +96,7 @@ export class CategoriesComponent implements OnInit {
                     this.isLoading = true;
                     this.changeDetectorRef.detectChanges();
                 }),
-                switchMap(() =>
-                    this.categoryService.deleteCategory$(category.id)
-                ),
+                switchMap(() => this.categoryService.deleteCategory$(category.id)),
                 tap(() => {
                     this.isLoading = false;
                     this.categoryDeleteSubject.next();
