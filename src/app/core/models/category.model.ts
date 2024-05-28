@@ -8,7 +8,7 @@ export interface Category {
     type: CategoryType;
     isSubCategory?: boolean;
     subCategories?: ProductCategory[];
-    mainCategory?: string;
+    parentCategory?: string;
     name: string;
     image: string;
     sortIndex?: number;

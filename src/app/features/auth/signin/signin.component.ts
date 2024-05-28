@@ -1,12 +1,10 @@
 import {
-    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     HostBinding,
     OnDestroy,
     OnInit,
-    Renderer2,
     ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,7 +12,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { catchError, take, tap } from 'rxjs';
+import { Subscription, catchError, filter, switchMap, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
@@ -44,7 +42,7 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SigninComponent implements OnInit {
+export class SigninComponent implements OnInit, OnDestroy {
     @HostBinding('class') hostClass = 'nyk-signin';
 
     signinForm = this.fb.group({
@@ -53,6 +51,8 @@ export class SigninComponent implements OnInit {
     });
 
     isLoading = false;
+
+    private authSubscription$$: Subscription;
 
     constructor(
         private authService: AuthService,
@@ -93,15 +93,23 @@ export class SigninComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.socialAuthService.authState
+        this.authSubscription$$ = this.socialAuthService.authState
             .pipe(
-                take(1),
-                tap((user) => {
-                    console.log(user.idToken);
-                    //perform further logics
-                })
+                filter((user) => !!user.idToken),
+                switchMap((user) =>
+                    this.authService.google$(user.idToken).pipe(
+                        tap(() => {
+                            this.toastr.success('Belépés sikeres, átirányítva a főoldalra.');
+                            this.router.navigate(['/']);
+                        })
+                    )
+                )
             )
             .subscribe();
+    }
+
+    ngOnDestroy(): void {
+        this.authSubscription$$.unsubscribe();
     }
 
     isFormFieldValid(form: FormGroup, controllerName: string): boolean {
@@ -116,8 +124,7 @@ export class SigninComponent implements OnInit {
         this.isLoading = true;
 
         const authData: AuthData = {
-            email: this.signinForm.value.email.trim(),
-            password: this.signinForm.value.password.trim()
+            ...(this.signinForm.value as AuthData)
         };
 
         this.authService

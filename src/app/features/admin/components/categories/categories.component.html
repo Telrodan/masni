@@ -26,8 +26,9 @@
                         <input
                             pInputText
                             pTooltip="Kereshető mezők:
-                            Azonosító
-                            Név"
+                                Azonosító
+                                Név
+                            "
                             tooltipPosition="bottom"
                             class="w-full"
                             type="text"
@@ -179,7 +180,9 @@
                                 [raised]="true"
                                 icon="pi pi-times"
                                 severity="danger"
-                                [disabled]="category.items.length || category.subCategories.length"
+                                [disabled]="
+                                    !!category.items.length || !!category.subCategories.length
+                                "
                                 [pTooltip]="
                                     category.isSubCategory
                                         ? 'Alkategória törlése'
@@ -195,12 +198,13 @@
 
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="8" class="text-center text-800 text-4xl">
+                    <td colspan="8" class="text-center text-800 text-4xl h-20rem">
                         Nem található kategória
                         <p-button
+                            [raised]="true"
                             icon="pi pi-plus"
                             label="Kategória hozzáadás"
-                            styleClass="p-button p-button-success block mx-auto mt-2"
+                            styleClass="p-button block mx-auto mt-2"
                             routerLink="/admin/categories/add">
                         </p-button>
                     </td>

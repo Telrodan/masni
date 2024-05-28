@@ -1,16 +1,16 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     HostBinding,
-    OnInit,
+    inject,
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
-import { filter, map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Store } from '@ngrx/store';
+import { filter, map, Observable, tap } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -22,12 +22,9 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
-import { CategoryService } from '@core/services/category.service';
-import { ToastrService } from '@core/services/toastr.service';
+import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { Store } from '@ngrx/store';
-import { CategorySelector } from '@core/store/category';
 
 @Component({
     selector: 'nyk-categories',
@@ -51,29 +48,20 @@ import { CategorySelector } from '@core/store/category';
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent {
     @HostBinding('class') hostClass = 'nyk-categories';
 
     categories$: Observable<Category[]>;
     isBusy$: Observable<boolean>;
 
-    images: string[] = [];
     imageLoadedStatus: boolean[] = [];
 
-    isLoading = false;
-
     readonly CategoryType = CategoryType;
-    private categoryDeleteSubject = new Subject<void>();
 
-    constructor(
-        private categoryService: CategoryService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private toastr: ToastrService,
-        private dialog: MatDialog,
-        private store: Store
-    ) {}
+    private readonly store = inject(Store);
+    private readonly dialog = inject(MatDialog);
 
-    ngOnInit(): void {
+    constructor() {
         this.isBusy$ = this.store.select(CategorySelector.isBusy());
 
         this.categories$ = this.store
@@ -92,17 +80,11 @@ export class CategoriesComponent implements OnInit {
             .afterClosed()
             .pipe(
                 filter((confirmed) => !!confirmed),
-                tap(() => {
-                    this.isLoading = true;
-                    this.changeDetectorRef.detectChanges();
-                }),
-                switchMap(() => this.categoryService.deleteCategory$(category.id)),
-                tap(() => {
-                    this.isLoading = false;
-                    this.categoryDeleteSubject.next();
-                    this.changeDetectorRef.detectChanges();
-                    this.toastr.success(`${category.name} kategória törölve`);
-                })
+                tap(() =>
+                    this.store.dispatch(
+                        CategoryAction.deleteCategory({ id: category.id, name: category.name })
+                    )
+                )
             )
             .subscribe();
     }
@@ -111,8 +93,10 @@ export class CategoriesComponent implements OnInit {
         this.imageLoadedStatus[index] = true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
         const filter = ($event.target as HTMLInputElement).value;
+
         table.filterGlobal(filter, stringVal);
     }
 }

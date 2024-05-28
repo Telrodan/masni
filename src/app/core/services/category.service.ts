@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, map, Observable, of, switchMap, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { ApiResponse } from '@core/models/api-response.model';
 import {
@@ -12,6 +12,9 @@ import {
 import { ApiService } from './api.service';
 import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
 import { createFormDataFromObject } from '@shared/util/create-form-data-from-object.util';
+import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
+
+const ROUTE_SUFFIX = 'categories';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +26,18 @@ export class CategoryService {
         const categoryFormData = createFormDataFromObject(category);
 
         return this.apiService
-            .post<ApiResponse<Category>>('categories/addOne', categoryFormData)
+            .post<ApiResponse<Category>>(`${ROUTE_SUFFIX}/addOne`, categoryFormData)
+            .pipe(map((categoryDTO) => categoryDTO.data));
+    }
+
+    updateCategory$(category: Category): Observable<Category> {
+        const categoryFormData = createFormDataFromObject(category);
+
+        return this.apiService
+            .patch<ApiResponse<Category>>(
+                `${ROUTE_SUFFIX}/updateOne/${category.id}`,
+                categoryFormData
+            )
             .pipe(map((categoryDTO) => categoryDTO.data));
     }
 
@@ -57,25 +71,19 @@ export class CategoryService {
             .pipe(map((categoriesDTO) => categoriesDTO.data));
     }
 
-    updateCategory$(category: Category, categoryId: string): Observable<Category> {
-        const categoryFormData = new FormData();
-        categoryFormData.append('category', JSON.stringify(category));
-        categoryFormData.append('image', category.image);
-
-        return this.apiService
-            .patch<ApiResponse<Category>>(`category/updateCategory/${categoryId}`, categoryFormData)
-            .pipe(map((categoryDTO) => categoryDTO.data));
-    }
-
     updateCategoriesOrder$(categoryOrderData: CategoryOrderData): Observable<null> {
         return this.apiService
-            .patch<ApiResponse<null>>('category/updateCategoriesOrder', {
-                categoryOrderData
-            })
+            .patch<ApiResponse<null>>(`${ROUTE_SUFFIX}/updateOrder`, categoryOrderData)
             .pipe(map((categoryDTO) => categoryDTO.data));
     }
 
-    deleteCategory$(id: string): Observable<null> {
-        return this.apiService.delete<null>('categories/deleteOne', id);
+    deleteCategory$(id: string): Observable<ApiResponse<string>> {
+        return this.apiService.delete<ApiResponse<string>>('categories/deleteOne', id);
+    }
+
+    getNavbarMenu$() {
+        return this.apiService
+            .get<ApiResponse<NavbarMenuItem[]>>(`${ROUTE_SUFFIX}/navbarMenu`)
+            .pipe(map((navbarDTO) => navbarDTO.data));
     }
 }

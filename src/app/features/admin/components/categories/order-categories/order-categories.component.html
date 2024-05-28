@@ -1,63 +1,57 @@
-<ng-container *ngIf="!isLoading; else loading">
-  <ng-container *ngIf="categories$ | async as categories; else loading">
-    <div class="font-medium text-2xl text-900">Kategóriák rendezése</div>
-    <p-divider styleClass="mb-5"></p-divider>
+<ng-container *ngIf="categories$ | async as categories">
+    <div class="nyk-order-categories-header">Kategóriák rendezése</div>
 
     <p class="block font-medium text-900 mb-2 text-lg">Főkategóriák</p>
+
     <div
-      cdkDropList
-      cdkDropListOrientation="vertical"
-      class="nyk-order-categories-main-categories"
-      (cdkDropListDropped)="dropMainCategory(categories, $event)">
-      <div
-        *ngFor="let category of categories"
-        class="nyk-order-categories-category"
-        [class.selected]="selectedCategory?.id === category.id"
-        (click)="onSelectCategory(category)"
-        cdkDragBoundary=".drag-boundary"
-        cdkDrag>
-        {{ category.name }}
-      </div>
+        cdkDropList
+        cdkDropListOrientation="vertical"
+        class="nyk-order-categories-main-categories"
+        (cdkDropListDropped)="dropMainCategory(categories, $event)">
+        <div
+            *ngFor="let category of categories"
+            class="nyk-order-categories-category"
+            [class.selected]="selectedCategory?.id === category.id"
+            (click)="onSelectCategory(category)"
+            cdkDragBoundary=".drag-boundary"
+            cdkDrag>
+            {{ category.name }}
+        </div>
     </div>
 
     <p-button
-      label="Főkategória sorrend mentése"
-      [disabled]="!isMainCategoiesOrderChanged"
-      styleClass="p-button p-button-success mt-3 w-full"
-      (click)="onUpdateMainCategoriesOrder(categories)">
+        [raised]="true"
+        label="Főkategoriák sorrend mentése"
+        [disabled]="!isMainCategoriesOrderChanged"
+        styleClass="p-button p-button mt-3 w-full"
+        (click)="onUpdateCategoryOrder(categories, false)">
     </p-button>
 
     <ng-container *ngIf="selectedCategory">
-      <p class="block font-medium text-900 mb-2 text-lg mt-5">
-        {{ selectedCategory.name }} alkategóriák
-      </p>
+        <p class="block font-medium text-900 mb-2 text-lg mt-5">
+            {{ selectedCategory.name }} alkategóriák
+        </p>
 
-      <div
-        class="nyk-order-categories-sub-categories"
-        cdkDropList
-        cdkDropListOrientation="vertical"
-        (cdkDropListDropped)="
-          dropSubCategory(selectedCategory.subCategories, $event)
-        ">
         <div
-          *ngFor="let category of selectedCategory.subCategories"
-          class="nyk-order-categories-category"
-          cdkDrag
-          cdkDragBoundary=".drag-boundary">
-          {{ category.name }}
+            class="nyk-order-categories-sub-categories"
+            cdkDropList
+            cdkDropListOrientation="vertical"
+            (cdkDropListDropped)="dropSubCategory(selectedCategory.subCategories, $event)">
+            <div
+                *ngFor="let category of selectedCategory.subCategories"
+                class="nyk-order-categories-category"
+                cdkDrag
+                cdkDragBoundary=".drag-boundary">
+                {{ category.name }}
+            </div>
         </div>
-      </div>
 
-      <p-button
-        label="Alkategória sorrend mentése"
-        [disabled]="!isSubCategoiesOrderChanged"
-        styleClass="p-button p-button-success mt-3 w-full"
-        (onClick)="onUpdateSubCategoriesOrder(selectedCategory.subCategories)">
-      </p-button>
+        <p-button
+            [raised]="true"
+            label="Alkategóriák sorrend mentése"
+            [disabled]="!isSubCategoriesOrderChanged"
+            styleClass="p-button p-button mt-3 w-full"
+            (onClick)="onUpdateCategoryOrder(selectedCategory.subCategories, true)">
+        </p-button>
     </ng-container>
-  </ng-container>
 </ng-container>
-
-<ng-template #loading>
-  <nyk-spinner></nyk-spinner>
-</ng-template>

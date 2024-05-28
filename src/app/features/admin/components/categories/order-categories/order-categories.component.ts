@@ -1,160 +1,93 @@
 import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  OnInit,
-  ViewEncapsulation
+    ChangeDetectionStrategy,
+    Component,
+    HostBinding,
+    OnInit,
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
-import {
-  CdkDragDrop,
-  CdkDrag,
-  CdkDropList,
-  moveItemInArray
-} from '@angular/cdk/drag-drop';
-import { CategoryService } from '@core/services/category.service';
-import { Category } from '@core/models/category.model';
-import { Observable, Subject, map, startWith, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, map } from 'rxjs';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
+import { cloneDeep } from 'lodash';
+
+import { Category } from '@core/models/category.model';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { ToastrService } from '@core/services/toastr.service';
+import { CategoryAction, CategorySelector } from '@core/store/category';
 
 export interface CategorySortItem {
-  id: string;
-  sortIndex: number;
+    id: string;
+    sortIndex: number;
 }
 
 export interface CategoryOrderData {
-  isSubCategory: boolean;
-  parentCategoryId?: string;
-  categories: CategorySortItem[];
+    isSubCategory: boolean;
+    categories: CategorySortItem[];
 }
 
 @Component({
-  selector: 'nyk-order-categories',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CdkDrag,
-    CdkDropList,
-    DividerModule,
-    ButtonModule,
-    SpinnerComponent
-  ],
-  templateUrl: './order-categories.component.html',
-  styleUrls: ['./order-categories.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'nyk-order-categories',
+    standalone: true,
+    imports: [CommonModule, CdkDrag, CdkDropList, DividerModule, ButtonModule, SpinnerComponent],
+    templateUrl: './order-categories.component.html',
+    styleUrls: ['./order-categories.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderCategoriesComponent implements OnInit {
-  @HostBinding('class') class = 'nyk-order-categories';
+    @HostBinding('class') class = 'nyk-order-categories';
 
-  categories$: Observable<Category[]>;
-  selectedCategory: Category;
-  isMainCategoiesOrderChanged = false;
-  isSubCategoiesOrderChanged = false;
-  updateCategoriesOrderSubject = new Subject<void>();
-  isLoading = false;
+    categories$: Observable<Category[]>;
+    selectedCategory: Category;
+    isMainCategoriesOrderChanged = false;
+    isSubCategoriesOrderChanged = false;
 
-  constructor(
-    private categoryService: CategoryService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private toastr: ToastrService
-  ) {}
+    private readonly store = inject(Store);
+    private readonly router = inject(Router);
 
-  ngOnInit(): void {
-    this.categories$ = this.updateCategoriesOrderSubject.pipe(
-      startWith(null),
-      switchMap(() =>
-        this.categoryService.getProductCategories$().pipe(
-          map((categories) =>
-            categories.filter((category) => !category.isSubCategory)
-          ),
-          tap((categories) => {
-            if (categories.length > 0) {
-              this.selectedCategory = categories[0];
-            }
-          })
-        )
-      )
-    );
-  }
+    ngOnInit(): void {
+        this.categories$ = this.store.select(CategorySelector.selectMainProductCategories()).pipe(
+            map((categories) => {
+                categories = categories.sort((a, b) => a.sortIndex - b.sortIndex);
+                return cloneDeep(categories);
+            })
+        );
+    }
 
-  dropMainCategory(items: Category[], event: CdkDragDrop<string[]>) {
-    moveItemInArray(items, event.previousIndex, event.currentIndex);
-    this.isMainCategoiesOrderChanged = true;
-  }
+    dropMainCategory(items: Category[], event: CdkDragDrop<string[]>) {
+        moveItemInArray(items, event.previousIndex, event.currentIndex);
+        this.isMainCategoriesOrderChanged = true;
+    }
 
-  dropSubCategory(items: Category[], event: CdkDragDrop<string[]>) {
-    moveItemInArray(items, event.previousIndex, event.currentIndex);
-    this.isSubCategoiesOrderChanged = true;
-  }
+    dropSubCategory(items: Category[], event: CdkDragDrop<string[]>) {
+        moveItemInArray(items, event.previousIndex, event.currentIndex);
+        this.isSubCategoriesOrderChanged = true;
+    }
 
-  onSelectCategory(category: Category) {
-    this.selectedCategory = category;
-  }
+    onSelectCategory(category: Category) {
+        category.subCategories = category.subCategories.sort((a, b) => a.sortIndex - b.sortIndex);
+        this.selectedCategory = cloneDeep(category);
+    }
 
-  onUpdateMainCategoriesOrder(categories: Category[]) {
-    this.isLoading = true;
-    const categoryOrderData: CategoryOrderData = {
-      isSubCategory: false,
-      categories: []
-    };
-    categories.forEach((category, index) => {
-      category.sortIndex = index + 1;
-      categoryOrderData.categories.push({
-        id: category.id,
-        sortIndex: category.sortIndex
-      });
-    });
+    onUpdateCategoryOrder(categories: Category[], isSubCategory: boolean) {
+        const categoryOrderData: CategoryOrderData = {
+            isSubCategory,
+            categories: []
+        };
 
-    this.categoryService
-      .updateCategoriesOrder$(categoryOrderData)
-      .pipe(
-        tap(() => {
-          this.isLoading = false;
-          this.isMainCategoiesOrderChanged = false;
-          this.isSubCategoiesOrderChanged = false;
-          this.updateCategoriesOrderSubject.next();
-          this.toastr.success('Főkategóriák sorrendje módosítva');
-          this.changeDetectorRef.markForCheck();
-        })
-      )
-      .subscribe();
-  }
+        categories.forEach((category, index) => {
+            categoryOrderData.categories.push({
+                id: category.id,
+                sortIndex: index + 1
+            });
+        });
 
-  onUpdateSubCategoriesOrder(categories: Category[]) {
-    this.isLoading = true;
-    const categoryOrderData: CategoryOrderData = {
-      isSubCategory: true,
-      parentCategoryId: this.selectedCategory.id,
-      categories: []
-    };
-    categories.forEach((category, index) => {
-      category.sortIndex = index + 1;
-      categoryOrderData.categories.push({
-        id: category.id,
-        sortIndex: category.sortIndex
-      });
-    });
-
-    this.categoryService
-      .updateCategoriesOrder$(categoryOrderData)
-      .pipe(
-        tap(() => {
-          this.isLoading = false;
-          this.isMainCategoiesOrderChanged = false;
-          this.isSubCategoiesOrderChanged = false;
-          this.updateCategoriesOrderSubject.next();
-          this.toastr.success(
-            `${this.selectedCategory.name} alkategóri sorrendje módosítva`
-          );
-          this.changeDetectorRef.markForCheck();
-        })
-      )
-      .subscribe();
-  }
+        this.store.dispatch(CategoryAction.updateCategoriesOrder({ categoryOrderData }));
+        this.router.navigate(['/admin/categories']);
+    }
 }

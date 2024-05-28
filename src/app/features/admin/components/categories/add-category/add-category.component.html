@@ -1,139 +1,134 @@
-<ng-container *ngIf="!isLoading; else loading">
-    <div class="nyk-add-category-header">Új kategória hozzáadás</div>
+<div class="nyk-add-category-header">Új kategória hozzáadás</div>
 
-    <form class="nyk-add-category-form" [formGroup]="addCategoryForm">
+<form class="nyk-add-category-form" [formGroup]="addCategoryForm">
+    <div class="form-group">
+        <label for="name"> Kategória neve </label>
+
+        <input id="name" formControlName="name" type="text" pInputText />
+    </div>
+
+    <div class="form-group">
+        <label> Tételek típusa </label>
+
+        <div class="flex align-items-center mb-2">
+            <p-radioButton
+                [value]="CategoryType.Product"
+                formControlName="type"
+                inputId="productCategory">
+            </p-radioButton>
+
+            <label for="productCategory" class="ml-2">
+                <p-badge value="Termék" severity="success" styleClass="shadow-2"></p-badge
+            ></label>
+        </div>
+
+        <div class="flex align-items-center mb-2">
+            <p-radioButton
+                [value]="CategoryType.Material"
+                formControlName="type"
+                inputId="materialCategory">
+            </p-radioButton>
+
+            <label for="materialCategory" class="ml-2">
+                <p-badge value="Minta" severity="info" styleClass="shadow-2"> </p-badge>
+            </label>
+        </div>
+
+        <div class="flex align-items-center">
+            <p-radioButton
+                [value]="CategoryType.Inspiration"
+                formControlName="type"
+                inputId="inspirationCategory">
+            </p-radioButton>
+
+            <label for="inspirationCategory" class="ml-2">
+                <p-badge value="Inspiració" styleClass="shadow-2"></p-badge>
+            </label>
+        </div>
+    </div>
+
+    <ng-container *ngIf="addCategoryForm.value.type === CategoryType.Product">
         <div class="form-group">
-            <label for="name"> Kategória neve </label>
+            <label for="name"> Alkategória </label>
 
-            <input id="name" formControlName="name" type="text" pInputText />
+            <p-inputSwitch formControlName="isSubCategory"></p-inputSwitch>
         </div>
 
-        <div class="form-group">
-            <label> Tételek típusa </label>
+        <div class="form-group" *ngIf="addCategoryForm.value.isSubCategory">
+            <label for="name"> Válassz egy főkategóriát </label>
 
-            <div class="flex align-items-center mb-2">
-                <p-radioButton
-                    [value]="CategoryType.Product"
-                    formControlName="type"
-                    inputId="productCategory">
-                </p-radioButton>
-
-                <label for="productCategory" class="ml-2">
-                    <p-badge value="Termék" severity="success" styleClass="shadow-2"></p-badge
-                ></label>
-            </div>
-
-            <div class="flex align-items-center mb-2">
-                <p-radioButton
-                    [value]="CategoryType.Material"
-                    formControlName="type"
-                    inputId="materialCategory">
-                </p-radioButton>
-
-                <label for="materialCategory" class="ml-2">
-                    <p-badge value="Minta" severity="info" styleClass="shadow-2"> </p-badge>
-                </label>
-            </div>
-
-            <div class="flex align-items-center">
-                <p-radioButton
-                    [value]="CategoryType.Inspiration"
-                    formControlName="type"
-                    inputId="inspirationCategory">
-                </p-radioButton>
-
-                <label for="inspirationCategory" class="ml-2">
-                    <p-badge value="Inspiració" styleClass="shadow-2"></p-badge>
-                </label>
-            </div>
+            <p-dropdown
+                *ngIf="mainCategories$ | async as mainCategories"
+                [options]="mainCategories"
+                formControlName="parentCategory"
+                placeholder="Válassz egy főkategóriát"
+                optionValue="id"
+                optionLabel="name"
+                styleClass="w-full">
+            </p-dropdown>
         </div>
+    </ng-container>
 
-        <ng-container *ngIf="addCategoryForm.value.type === CategoryType.Product">
-            <div class="form-group">
-                <label for="name"> Alkategória </label>
+    <div *ngIf="addCategoryForm.value.type === CategoryType.Product" class="form-group">
+        <label for="description"> Kategória leírása </label>
 
-                <p-inputSwitch formControlName="isSubCategory"></p-inputSwitch>
-            </div>
+        <textarea
+            rows="5"
+            cols="30"
+            pInputTextarea
+            [autoResize]="true"
+            formControlName="description">
+        </textarea>
+    </div>
 
-            <div class="form-group" *ngIf="addCategoryForm.value.isSubCategory">
-                <label for="name"> Válassz egy főkategóriát </label>
-
-                <p-dropdown
-                    *ngIf="mainCategories$ | async as mainCategories"
-                    [options]="mainCategories"
-                    formControlName="mainCategory"
-                    placeholder="Válassz egy főkategóriát"
-                    optionValue="id"
-                    optionLabel="name"
-                    styleClass="w-full">
-                </p-dropdown>
-            </div>
-        </ng-container>
-
-        <div *ngIf="addCategoryForm.value.type === CategoryType.Product" class="form-group">
-            <label for="description"> Kategória leírása </label>
-
-            <textarea
-                rows="5"
-                cols="30"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="description">
-            </textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="imagePicker"> Kategória képe </label>
-
-            <p-button
-                *ngIf="!imagePreview"
-                [raised]="true"
-                icon="pi pi-image"
-                styleClass="p-button p-button-secondary"
-                (click)="imagePicker.click()">
-            </p-button>
-
-            <p-button
-                *ngIf="imagePreview"
-                icon="pi pi-times"
-                severity="danger"
-                [raised]="true"
-                styleClass="mb-2"
-                pTooltip="Kép törlése"
-                tooltipPosition="bottom"
-                (click)="onImageClear(imagePicker)">
-            </p-button>
-
-            <input
-                id="imagePicker"
-                type="file"
-                class="hidden"
-                #imagePicker
-                (change)="onImagePicked($event)" />
-
-            <img
-                *ngIf="imagePreview"
-                class="image-preview border-round"
-                [src]="imagePreview"
-                alt="Kategória" />
-
-            <img
-                *ngIf="!imagePreview"
-                class="mt-2 image-preview border-round"
-                src="../../../../../../assets/images/no-image.png"
-                alt="Kategória" />
-        </div>
+    <div class="form-group">
+        <label for="imagePicker"> Kategória képe </label>
 
         <p-button
-            type="submit"
-            label="Hozzáadás"
-            styleClass="p-button w-full"
-            [disabled]="!addCategoryForm.valid || !addCategoryForm.dirty"
-            (click)="onAddCategory()">
+            *ngIf="!imagePreview"
+            [raised]="true"
+            icon="pi pi-image"
+            styleClass="p-button p-button-secondary"
+            (click)="imagePicker.click()">
         </p-button>
-    </form>
-</ng-container>
 
-<ng-template #loading>
-    <nyk-spinner></nyk-spinner>
-</ng-template>
+        <p-button
+            *ngIf="imagePreview"
+            icon="pi pi-times"
+            severity="danger"
+            [raised]="true"
+            styleClass="mb-2"
+            pTooltip="Kép törlése"
+            tooltipPosition="bottom"
+            (click)="onImageClear(imagePicker)">
+        </p-button>
+
+        <input
+            id="imagePicker"
+            type="file"
+            class="hidden"
+            #imagePicker
+            (change)="onImagePicked($event)" />
+
+        <img
+            *ngIf="imagePreview"
+            class="image-preview border-round"
+            [src]="imagePreview"
+            alt="Kategória" />
+
+        <img
+            *ngIf="!imagePreview"
+            class="mt-2 image-preview border-round"
+            src="../../../../../../assets/images/no-image.png"
+            alt="Kategória" />
+    </div>
+
+    <p-button
+        [raised]="true"
+        type="submit"
+        label="Hozzáadás"
+        styleClass="p-button w-full"
+        [disabled]="!addCategoryForm.valid || !addCategoryForm.dirty"
+        (click)="onAddCategory()">
+    </p-button>
+</form>

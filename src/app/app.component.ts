@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.store.dispatch(CategoryAction.getCategories());
+        this.store.dispatch(CategoryAction.getNavbarMenu());
 
         this.router.events
             .pipe(

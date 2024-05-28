@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, BehaviorSubject, tap, filter } from 'rxjs';
@@ -12,6 +12,8 @@ import { ApiResponse } from '@core/models/api-response.model';
 import { TokenPayload } from '@core/models/token-payload.model';
 import { RoleType } from '@core/enums/role-type.enum';
 import { ToastrService } from './toastr.service';
+import * as moment from 'moment';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 const ROUTE_SUFFIX = 'auth';
 
@@ -26,6 +28,8 @@ export class AuthService {
     private tokenPayload: TokenPayload;
     private tokenTimer: NodeJS.Timeout;
 
+    private socialAuthService = inject(SocialAuthService);
+
     constructor(
         private router: Router,
         private apiService: ApiService,
@@ -34,27 +38,21 @@ export class AuthService {
     ) {}
 
     signup$(user: User): Observable<ApiResponse<string>> {
-        return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signup`, user);
-    }
-
-    googleSignup$(token: string) {
-        return this.apiService.post(`${ROUTE_SUFFIX}/googleSignup`, { token });
-    }
-
-    googleSignin$() {
-        return this.apiService.get(`${ROUTE_SUFFIX}/googleSignin`);
+        return this.apiService
+            .post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signup`, user)
+            .pipe(tap((authDTO) => this.handleJwtToken(authDTO.data)));
     }
 
     signin$(authData: AuthData): Observable<ApiResponse<string>> {
-        return this.apiService.post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signin`, authData).pipe(
-            filter((authDTO) => !!authDTO.data),
-            tap((authDTO) => {
-                this.token = authDTO.data;
-                this.tokenPayload = jwt_decode(authDTO.data);
-                this.setAuthData();
-                this.setAuthenticationTimer(this.tokenPayload.expiresIn);
-            })
-        );
+        return this.apiService
+            .post<ApiResponse<string>>(`${ROUTE_SUFFIX}/signin`, authData)
+            .pipe(tap((authDTO) => this.handleJwtToken(authDTO.data)));
+    }
+
+    google$(token: string) {
+        return this.apiService
+            .post<ApiResponse<string>>(`${ROUTE_SUFFIX}/google`, { token })
+            .pipe(tap((authDTO) => this.handleJwtToken(authDTO.data)));
     }
 
     forgotPassword$(email: string): Observable<ApiResponse<null>> {
@@ -80,7 +78,7 @@ export class AuthService {
                     if (this.token) {
                         this.tokenPayload = jwt_decode(response.data);
                         this.setAuthData();
-                        this.setAuthenticationTimer(this.tokenPayload.expiresIn);
+                        this.setAuthenticationTimer(this.tokenPayload.exp);
                     }
                 })
             );
@@ -99,13 +97,11 @@ export class AuthService {
             return;
         }
 
-        const currentDate = new Date();
-        const expiresIn = authData.expirationDate.getTime() - currentDate.getTime();
+        const tokenExpirationDuration = authData.expirationDate.getTime() - Date.now();
 
-        if (expiresIn > 0) {
-            console.log('dasdasdsa');
+        if (tokenExpirationDuration > 0) {
             this.setAuthStatus(true);
-            this.setAuthenticationTimer(expiresIn / 1000);
+            this.setAuthenticationTimer(tokenExpirationDuration);
         }
     }
 
@@ -130,6 +126,13 @@ export class AuthService {
         this.cookieService.clearCookies();
         this.router.navigate(['/']);
         this.setAuthStatus(false);
+        this.socialAuthService.signOut();
+    }
+
+    private handleJwtToken(token: string) {
+        this.token = token;
+        this.tokenPayload = jwt_decode(this.token);
+        this.setAuthData();
     }
 
     private setAuthStatus(isAuth: boolean): void {
@@ -138,10 +141,11 @@ export class AuthService {
     }
 
     private setAuthData(): void {
-        const currentDate = new Date();
-        const expirationDate = new Date(currentDate.getTime() + this.tokenPayload.expiresIn * 1000);
-        this.saveAuthenticationData(expirationDate);
+        const tokenExpirationDate = new Date(moment.unix(this.tokenPayload.exp).format());
+        const tokenExpirationDuration = tokenExpirationDate.getTime() - Date.now();
         this.setAuthStatus(true);
+        this.saveAuthenticationData(tokenExpirationDate);
+        this.setAuthenticationTimer(tokenExpirationDuration);
     }
 
     private saveAuthenticationData(expirationDate: Date): void {
@@ -173,8 +177,8 @@ export class AuthService {
 
     private setAuthenticationTimer(duration: number): void {
         this.tokenTimer = setTimeout(() => {
-            this.toastr.info('Időkorlát lejárt, kérlek lépj be újra');
+            this.toastr.info('Időkorlát lejárt, kérlek lépj be újra.');
             this.logout();
-        }, duration * 1000);
+        }, duration);
     }
 }

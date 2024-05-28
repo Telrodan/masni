@@ -4,50 +4,43 @@ import {
     Component,
     ElementRef,
     HostBinding,
-    OnInit,
     ViewChild,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { Observable, map, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
-import { DividerModule } from 'primeng/divider';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
+import { BadgeModule } from 'primeng/badge';
 
 import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
-import { CategoryService } from '@core/services/category.service';
+import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ToastrService } from '@core/services/toastr.service';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { BadgeModule } from 'primeng/badge';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'nyk-add-category',
     standalone: true,
     imports: [
         CommonModule,
-        MatDialogModule,
         ReactiveFormsModule,
         RadioButtonModule,
         InputTextareaModule,
         ButtonModule,
-        CardModule,
         InputTextModule,
-        SpinnerComponent,
-        DividerModule,
         InputSwitchModule,
         DropdownModule,
         BadgeModule
@@ -57,7 +50,7 @@ import { BadgeModule } from 'primeng/badge';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddCategoryComponent implements OnInit {
+export class AddCategoryComponent {
     @HostBinding('class') class = 'nyk-add-category';
 
     @ViewChild('imagePicker', { static: false })
@@ -65,42 +58,31 @@ export class AddCategoryComponent implements OnInit {
 
     mainCategories$: Observable<Category[]>;
     imagePreview: string;
-    isLoading = false;
-
-    addCategoryForm = this.fb.group({
-        type: [CategoryType.Product, Validators.required],
-        isSubCategory: [false],
-        mainCategory: [''],
-        name: ['', Validators.required],
-        image: ['', Validators.required],
-        description: ['']
-    });
+    addCategoryForm: FormGroup;
 
     readonly CategoryType = CategoryType;
 
-    constructor(
-        private categoryService: CategoryService,
-        private toastr: ToastrService,
-        private fb: FormBuilder,
-        private changeDetectorRef: ChangeDetectorRef,
-        private router: Router
-    ) {}
+    private readonly store = inject(Store);
+    private readonly fb = inject(FormBuilder);
+    private readonly toastr = inject(ToastrService);
+    private readonly changeDetectorRef = inject(ChangeDetectorRef);
+    private readonly router = inject(Router);
 
-    ngOnInit(): void {
-        this.mainCategories$ = this.categoryService
-            .getCategories$()
-            .pipe(
-                map((categories) =>
-                    categories
-                        .filter((category) => category.type === this.addCategoryForm.value.type)
-                        .filter((category) => category.isSubCategory === false)
-                )
-            );
+    constructor() {
+        this.mainCategories$ = this.store.select(CategorySelector.selectMainProductCategories());
+        this.addCategoryForm = this.fb.group({
+            type: [CategoryType.Product, Validators.required],
+            isSubCategory: [false],
+            parentCategory: [''],
+            name: ['', Validators.required],
+            image: ['', Validators.required],
+            description: ['']
+        });
     }
 
     async onImagePicked(event: Event): Promise<void> {
         this.imagePreview = await addImageToFormAndSetPreview(event, this.addCategoryForm);
-        this.changeDetectorRef.markForCheck();
+        this.changeDetectorRef.detectChanges();
     }
 
     onImageClear(imageInput: HTMLInputElement): void {
@@ -113,27 +95,21 @@ export class AddCategoryComponent implements OnInit {
     onAddCategory(): void {
         if (!this.addCategoryForm.valid) {
             this.toastr.info('Kérlek töltsd ki az összes mezőt.');
+
             return;
         }
 
-        const category: Category = this.addCategoryForm.value as Category;
+        const category = this.addCategoryForm.value as Category;
 
-        if (category.isSubCategory && !category.mainCategory) {
+        console.log('debug, category', category);
+
+        if (category.isSubCategory && !category.parentCategory) {
             this.toastr.info('Kérlek válassz egy főkategóriát.');
+
             return;
         }
 
-        this.isLoading = true;
-        this.categoryService
-            .addCategory$(category)
-            .pipe(
-                tap(() => {
-                    this.isLoading = false;
-                    this.changeDetectorRef.markForCheck();
-                    this.toastr.success(`${category.name} hozzáadva`);
-                    this.router.navigate(['/admin/categories']);
-                })
-            )
-            .subscribe();
+        this.store.dispatch(CategoryAction.addCategory({ category }));
+        this.router.navigate(['/admin/categories']);
     }
 }

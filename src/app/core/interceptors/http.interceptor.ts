@@ -16,10 +16,7 @@ import { ToastrService } from '@core/services/toastr.service';
 export class HTTPInterceptor implements HttpInterceptor {
     constructor(private toastr: ToastrService) {}
 
-    intercept(
-        request: HttpRequest<unknown>,
-        next: HttpHandler
-    ): Observable<HttpEvent<unknown>> {
+    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 let errorMsg = '';
@@ -27,9 +24,8 @@ export class HTTPInterceptor implements HttpInterceptor {
                 if (errorMsg) {
                     this.toastr.error(errorMsg);
                 } else {
-                    this.toastr.error(
-                        'Hiba történt! Kérjük próbálja újra később!'
-                    );
+                    console.log('error', error);
+                    this.toastr.error('Hiba történt! Kérjük próbálja újra később!');
                 }
 
                 return throwError(() => new Error(errorMsg));

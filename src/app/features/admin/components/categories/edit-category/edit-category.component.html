@@ -1,115 +1,114 @@
-<ng-container *ngIf="!isLoading; else loading">
-    <ng-container *ngIf="category$ | async as category; else loading">
-        <div class="nyk-edit-category-header">Kategória módosítás</div>
+<ng-container *ngIf="category$ | async as category">
+    <div class="nyk-edit-category-header">Kategória módosítás</div>
 
-        <form class="nyk-edit-category-form" [formGroup]="editCategoryForm">
-            <div class="form-group">
-                <p-badge
-                    *ngIf="category.type === CategoryType.Product"
-                    value="Termék kategória"
-                    severity="success"
-                    styleClass="mb-1">
-                </p-badge>
+    <form class="nyk-edit-category-form" [formGroup]="editCategoryForm">
+        <div class="form-group">
+            <p-badge
+                *ngIf="category.type === CategoryType.Product"
+                value="Termék kategória"
+                severity="success"
+                styleClass="shadow-2 mb-1">
+            </p-badge>
 
-                <p-badge
-                    *ngIf="category.type === CategoryType.Product"
-                    [value]="category.isSubCategory ? 'Alkategória' : 'Főkategória'"
-                    severity="warning">
-                </p-badge>
+            <p-badge
+                *ngIf="category.type === CategoryType.Product"
+                [value]="category.isSubCategory ? 'Alkategória' : 'Főkategória'"
+                [severity]="category.isSubCategory ? 'info' : 'warning'"
+                styleClass="shadow-2">
+            </p-badge>
 
-                <p-badge
-                    *ngIf="category.type === CategoryType.Material"
-                    value="Minta kategória"
-                    severity="warning"
-                    size="large">
-                </p-badge>
+            <p-badge
+                *ngIf="category.type === CategoryType.Material"
+                value="Minta kategória"
+                severity="info"
+                styleClass="shadow-2">
+            </p-badge>
 
-                <p-badge
-                    *ngIf="category.type === CategoryType.Inspiration"
-                    value="Inspiració kategória"
-                    size="large">
-                </p-badge>
-            </div>
+            <p-badge
+                *ngIf="category.type === CategoryType.Inspiration"
+                value="Inspiració kategória"
+                styleClass="shadow-2">
+            </p-badge>
+        </div>
 
-            <div class="form-group">
-                <label for="name"> Kategória neve </label>
+        <div class="form-group">
+            <label for="name"> Kategória neve </label>
 
-                <input id="name" formControlName="name" type="text" pInputText />
-            </div>
+            <input id="name" formControlName="name" type="text" pInputText />
+        </div>
 
-            <div *ngIf="category.type === CategoryType.Product" class="form-group">
-                <label for="description"> Kategória leírása </label>
+        <div *ngIf="category.type === CategoryType.Product" class="form-group">
+            <label for="description"> Kategória leírása </label>
 
-                <textarea
-                    rows="5"
-                    cols="30"
-                    pInputTextarea
-                    [autoResize]="true"
-                    formControlName="description"></textarea>
-            </div>
+            <textarea
+                rows="5"
+                cols="30"
+                pInputTextarea
+                [autoResize]="true"
+                formControlName="description"></textarea>
+        </div>
 
-            <div class="form-group">
-                <label>Kategória képe</label>
-
-                <p-button
-                    *ngIf="!imagePreview"
-                    icon="pi pi-image"
-                    styleClass="p-button p-button-secondary"
-                    (click)="imagePicker.click()">
-                </p-button>
-
-                <button
-                    *ngIf="imagePreview"
-                    pButton
-                    pRipple
-                    pTooltip="Kép törlése"
-                    tooltipPosition="bottom"
-                    (click)="onImageClear(imagePicker)"
-                    type="button"
-                    icon="pi pi-times"
-                    class="p-button p-button-danger p-button mb-2"></button>
-
-                <input
-                    id="imagePicker"
-                    type="file"
-                    class="hidden"
-                    #imagePicker
-                    (change)="onImagePicked($event)" />
-
-                <img
-                    *ngIf="imagePreview"
-                    class="image-preview border-round"
-                    [src]="imagePreview"
-                    alt="Kategória" />
-
-                <img
-                    *ngIf="!imagePreview"
-                    class="mt-2 image-preview border-round"
-                    src="../../../../../../assets/images/no-image.png"
-                    alt="Kategória" />
-            </div>
+        <div class="form-group">
+            <label>Kategória képe</label>
 
             <p-button
-                label="Módosítás"
-                styleClass="p-button w-full mb-3"
-                [disabled]="!editCategoryForm.dirty || !editCategoryForm.valid"
-                (click)="onEditCategory()">
+                *ngIf="!imagePreview"
+                [raised]="true"
+                icon="pi pi-image"
+                styleClass="p-button p-button-secondary"
+                (click)="imagePicker.click()">
             </p-button>
-        </form>
 
-        <div class="nyk-edit-category-header">Kategória előzmények</div>
+            <p-button
+                *ngIf="imagePreview"
+                [raised]="true"
+                icon="pi pi-times"
+                styleClass="p-button p-button-danger mb-2"
+                (click)="onImageClear(imagePicker)">
+            </p-button>
 
-        <span class="text-blue-500">
-            Hozzáadva:
-            {{ category.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <input
+                id="imagePicker"
+                type="file"
+                class="hidden"
+                #imagePicker
+                (change)="onImagePicked($event)" />
 
-        <span class="text-green-500 block mb-4">
-            Utoljára módosítva:
-            {{ category.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <img
+                *ngIf="imagePreview"
+                class="image-preview border-round"
+                [src]="imagePreview"
+                alt="Kategória" />
 
-        <!-- <p-table class="nyk-edit-category-history" [value]="category.logs">
+            <img
+                *ngIf="!imagePreview"
+                class="mt-2 image-preview border-round"
+                src="../../../../../../assets/images/no-image.png"
+                alt="Kategória" />
+        </div>
+
+        <p-button
+            [raised]="true"
+            label="Módosítás"
+            styleClass="p-button w-full mb-3"
+            [disabled]="!editCategoryForm.dirty || !editCategoryForm.valid"
+            (click)="onEditCategory()">
+        </p-button>
+    </form>
+
+    <div class="nyk-edit-category-header">Kategória előzmények</div>
+
+    <span class="text-blue-500">
+        Hozzáadva:
+        {{ category.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <span class="text-green-500 block mb-4">
+        Utoljára módosítva:
+        {{ category.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <!-- <p-table class="nyk-edit-category-history" [value]="category.logs">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Modul</th>
@@ -129,9 +128,4 @@
                 </tr>
             </ng-template>
         </p-table> -->
-    </ng-container>
 </ng-container>
-
-<ng-template #loading>
-    <nyk-spinner></nyk-spinner>
-</ng-template>

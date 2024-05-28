@@ -3,6 +3,7 @@ import {
     ChangeDetectorRef,
     Component,
     HostBinding,
+    OnDestroy,
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 
-import { catchError, switchMap, tap } from 'rxjs';
+import { Subscription, catchError, filter, switchMap, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
@@ -46,7 +47,7 @@ import { phoneRegex } from '@shared/util/regex.util';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
     @HostBinding('class.nyk-signup') hostClass = true;
 
     signupForm = this.fb.group({
@@ -72,6 +73,8 @@ export class SignupComponent implements OnInit {
     });
 
     isLoading = false;
+
+    private authSubscription$$: Subscription;
 
     constructor(
         private authService: AuthService,
@@ -113,9 +116,29 @@ export class SignupComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.socialAuthService.authState
-            .pipe(switchMap((user) => this.authService.googleSignup$(user.idToken)))
+        this.authSubscription$$ = this.socialAuthService.authState
+            .pipe(
+                filter((user) => !!user.idToken),
+                switchMap((user) =>
+                    this.authService.google$(user.idToken).pipe(
+                        tap(() => {
+                            this.toastr.success('Regisztráció sikeres, átirányítva a főoldalra.');
+                            this.router.navigate(['/']);
+                        })
+                    )
+                )
+            )
             .subscribe();
+    }
+
+    ngOnDestroy(): void {
+        this.authSubscription$$.unsubscribe();
+    }
+
+    logout() {
+        this.socialAuthService.signOut().then((asd) => {
+            console.log('asd', asd);
+        });
     }
 
     isFormFieldValid(form: FormGroup, controllerName: string): boolean {
@@ -145,10 +168,7 @@ export class SignupComponent implements OnInit {
     onCopyShippingAddress(): void {
         this.signupForm.patchValue({
             billingAddress: {
-                postcode: this.signupForm.get('shippingAddress.postcode').value,
-                street: this.signupForm.get('shippingAddress.street').value,
-                city: this.signupForm.get('shippingAddress.city').value,
-                county: this.signupForm.get('shippingAddress.county').value
+                ...this.signupForm.get('shippingAddress').value
             }
         });
     }
@@ -170,8 +190,7 @@ export class SignupComponent implements OnInit {
                         this.toastr.success('Regisztráció sikeres, átirányítva a belépeshez');
                         this.router.navigate(['auth/signin']);
                     }),
-                    catchError((error) => {
-                        console.error(error);
+                    catchError(() => {
                         this.isLoading = false;
                         this.changeDetectorRef.detectChanges();
 

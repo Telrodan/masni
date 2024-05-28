@@ -5,7 +5,8 @@ import {
     HostBinding,
     OnInit,
     Output,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 
 import { Observable, tap } from 'rxjs';
@@ -18,20 +19,15 @@ import { RouterModule } from '@angular/router';
 import { StyleClassModule } from 'primeng/styleclass';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
-import { NavbarService } from '@core/services/navbar.service';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
+import { Store } from '@ngrx/store';
+import { CategorySelector } from '@core/store/category';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
     selector: 'nyk-navbar',
     standalone: true,
-    imports: [
-        CommonModule,
-        RouterModule,
-        StyleClassModule,
-        MatSidenavModule,
-        MatMenuModule
-    ],
+    imports: [CommonModule, RouterModule, StyleClassModule, MatSidenavModule, MatMenuModule],
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,15 +48,13 @@ export class NavbarComponent implements OnInit {
 
     isAdmin = false;
 
-    constructor(
-        private authService: AuthService,
-        private messageService: MessageService,
-        private navbarService: NavbarService
-    ) {}
+    private readonly store = inject(Store);
+
+    constructor(private authService: AuthService, private messageService: MessageService) {
+        this.navbarMenu$ = this.store.select(CategorySelector.selectNavbarMenu());
+    }
 
     ngOnInit(): void {
-        this.navbarMenu$ = this.navbarService.getNavbarMenu$();
-
         this.isAuthenticated$ = this.authService.getAuthStatus$().pipe(
             tap(() => {
                 this.isAdmin = this.authService.isAdmin();
