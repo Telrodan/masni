@@ -18,7 +18,6 @@ import { DividerModule } from 'primeng/divider';
 
 import { InspirationService } from '@core/services/inspiration.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { Category } from '@core/models/category.model';
 import { BackendInspiration } from '@core/models/inspiration.model';
 import { CategoryService } from '@core/services/category.service';
 import {
@@ -26,6 +25,7 @@ import {
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-add-inspiration',
@@ -72,10 +72,7 @@ export class AddInspirationComponent implements OnInit {
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.addInspirationForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.addInspirationForm);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -101,9 +98,7 @@ export class AddInspirationComponent implements OnInit {
                     .pipe(
                         tap(() => {
                             this.isLoading = false;
-                            this.toastr.success(
-                                `${inspiration.name} inspiráció hozzáadva`
-                            );
+                            this.toastr.success(`${inspiration.name} inspiráció hozzáadva`);
                             this.router.navigate(['/admin/inspirations']);
                         })
                     )

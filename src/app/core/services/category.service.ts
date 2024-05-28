@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { ApiResponse } from '@core/models/api-response.model';
-import {
-    Category,
-    InspirationCategory,
-    MaterialCategory,
-    ProductCategory
-} from '@core/models/category.model';
+
 import { ApiService } from './api.service';
 import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
 import { createFormDataFromObject } from '@shared/util/create-form-data-from-object.util';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
+import {
+    Category,
+    ProductCategory,
+    InspirationCategory,
+    MaterialCategory
+} from '@core/store/category/category.model';
 
 const ROUTE_SUFFIX = 'categories';
 

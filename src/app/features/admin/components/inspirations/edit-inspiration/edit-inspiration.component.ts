@@ -6,12 +6,7 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -22,11 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { InspirationCategory } from '@core/models/category.model';
-import {
-    Inspiration,
-    BackendInspiration
-} from '@core/models/inspiration.model';
+import { Inspiration, BackendInspiration } from '@core/models/inspiration.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { InspirationService } from '@core/services/inspiration.service';
 import {
@@ -37,6 +28,7 @@ import { CategoryService } from '@core/services/category.service';
 import { LogService } from '@core/services/log.service';
 import { Log } from '@core/models/log.model';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { InspirationCategory } from '@core/store/category/category.model';
 
 interface InspirationData extends Inspiration {
     logs: Log[];
@@ -122,10 +114,7 @@ export class EditInspirationComponent implements OnInit {
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.editInspirationForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.editInspirationForm);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -151,9 +140,7 @@ export class EditInspirationComponent implements OnInit {
                     .pipe(
                         tap((inspiration) => {
                             this.isLoading = false;
-                            this.toastr.success(
-                                `${inspiration.name} inspiráció módosítva`
-                            );
+                            this.toastr.success(`${inspiration.name} inspiráció módosítva`);
                             this.router.navigate(['/admin/inspirations']);
                         })
                     )

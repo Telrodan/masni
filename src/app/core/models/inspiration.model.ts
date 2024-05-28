@@ -1,4 +1,4 @@
-import { InspirationCategory } from './category.model';
+import { InspirationCategory } from '@core/store/category/category.model';
 
 export interface BackendInspiration {
     name: string;

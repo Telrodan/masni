@@ -20,11 +20,11 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-categories',

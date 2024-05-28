@@ -21,7 +21,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
 import { BadgeModule } from 'primeng/badge';
 
-import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ToastrService } from '@core/services/toastr.service';
@@ -30,6 +29,7 @@ import {
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { Observable } from 'rxjs';
+import { Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-add-category',

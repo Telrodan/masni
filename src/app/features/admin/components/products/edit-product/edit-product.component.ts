@@ -6,12 +6,7 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,7 +30,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 
 import { Product, BackendProduct } from '@core/models/product.model';
-import { Category } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -48,6 +42,7 @@ import {
     removeImagesFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Category } from '@core/store/category/category.model';
 
 interface ProductData extends Product {
     logs: Log[];
@@ -117,9 +112,7 @@ export class EditProductComponent implements OnInit {
             map(([product, logs]) => ({
                 ...product,
                 logs: logs.sort(
-                    (a, b) =>
-                        new Date(b.timestamp).getTime() -
-                        new Date(a.timestamp).getTime()
+                    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
                 )
             })),
             tap((product) => {
@@ -129,10 +122,7 @@ export class EditProductComponent implements OnInit {
                     name: [product.name, Validators.required],
                     categoryId: [product.category.id, Validators.required],
                     inspirationCategoryId: [product?.inspirationCategory?.id],
-                    shortDescription: [
-                        product.shortDescription,
-                        Validators.required
-                    ],
+                    shortDescription: [product.shortDescription, Validators.required],
                     description: [product.description, Validators.required],
                     isCustom: [product.isCustom, Validators.required],
                     isDollDress: [product.isDollDress, Validators.required],
@@ -143,15 +133,10 @@ export class EditProductComponent implements OnInit {
                         Validators.required
                     ],
                     selectedQuestion: [null],
-                    questions: this.fb.array<string>(
-                        product.questions.map((q) => q.id)
-                    ),
+                    questions: this.fb.array<string>(product.questions.map((q) => q.id)),
                     images: [product.images, Validators.required],
                     price: [product.price, Validators.required],
-                    discountedPrice: [
-                        product.discountedPrice,
-                        Validators.required
-                    ],
+                    discountedPrice: [product.discountedPrice, Validators.required],
                     stock: [product.stock, Validators.required]
                 });
 
@@ -161,11 +146,7 @@ export class EditProductComponent implements OnInit {
 
         this.categories$ = this.categoryService
             .getProductCategories$()
-            .pipe(
-                map((categories) =>
-                    categories.filter((category) => category.isSubCategory)
-                )
-            );
+            .pipe(map((categories) => categories.filter((category) => category.isSubCategory)));
 
         this.questions$ = this.questionService.getQuestions$().pipe(
             tap((questions) => {
@@ -173,24 +154,17 @@ export class EditProductComponent implements OnInit {
             })
         );
 
-        this.inspirationCategories$ =
-            this.categoryService.getInspirationCategories$();
+        this.inspirationCategories$ = this.categoryService.getInspirationCategories$();
     }
 
     drop(event: CdkDragDrop<{ image: string }[]>): void {
-        moveItemInArray(
-            this.editProductForm.value.images,
-            event.previousIndex,
-            event.currentIndex
-        );
+        moveItemInArray(this.editProductForm.value.images, event.previousIndex, event.currentIndex);
     }
 
     addQuestion(id: string): void {
         if (id) {
             this.editProductForm.value.questions.push(id);
-            const selectedQuestion = this.questions.find(
-                (question) => question.id === id
-            );
+            const selectedQuestion = this.questions.find((question) => question.id === id);
             this.selectedQuestions.push(selectedQuestion);
             this.toastr.success('Kérdés hozzáadva');
             this.editProductForm.get('selectedQuestion').patchValue('');
@@ -200,20 +174,16 @@ export class EditProductComponent implements OnInit {
     }
 
     deleteQuestion(id: string, index: number): void {
-        this.editProductForm.value.questions =
-            this.editProductForm.value.questions.filter(
-                (questionId: string) => questionId !== id
-            );
+        this.editProductForm.value.questions = this.editProductForm.value.questions.filter(
+            (questionId: string) => questionId !== id
+        );
         this.selectedQuestions.splice(index, 1);
         this.editProductForm.markAsDirty();
         this.toastr.success('Kérdés törölve');
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagesPreview = await addImagesToFormAndSetPreview(
-            event,
-            this.editProductForm
-        );
+        this.imagesPreview = await addImagesToFormAndSetPreview(event, this.editProductForm);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -228,8 +198,7 @@ export class EditProductComponent implements OnInit {
         if (this.editProductForm.valid) {
             const product: BackendProduct = {
                 categoryId: this.editProductForm.value.categoryId,
-                inspirationCategoryId:
-                    this.editProductForm.value?.inspirationCategoryId,
+                inspirationCategoryId: this.editProductForm.value?.inspirationCategoryId,
                 name: this.editProductForm.value.name,
                 shortDescription: this.editProductForm.value.shortDescription,
                 description: this.editProductForm.value.description,
@@ -238,8 +207,7 @@ export class EditProductComponent implements OnInit {
                 isDollDress: this.editProductForm.value.isDollDress,
                 isDressable: this.editProductForm.value.isDressable,
                 isFeatured: this.editProductForm.value.isFeatured,
-                isNameEmbroideryAvailable:
-                    this.editProductForm.value.isNameEmbroideryAvailable,
+                isNameEmbroideryAvailable: this.editProductForm.value.isNameEmbroideryAvailable,
                 images: this.editProductForm.value.images,
                 price: this.editProductForm.value.price,
                 discountedPrice: this.editProductForm.value.discountedPrice,
@@ -253,9 +221,7 @@ export class EditProductComponent implements OnInit {
                     .pipe(
                         tap((product) => {
                             this.isLoading = false;
-                            this.toastr.success(
-                                `${product.name} termék módosítva`
-                            );
+                            this.toastr.success(`${product.name} termék módosítva`);
                             this.router.navigate(['/admin/products']);
                         })
                     )

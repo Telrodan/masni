@@ -1,4 +1,4 @@
-import { MaterialCategory } from './category.model';
+import { MaterialCategory } from '@core/store/category/category.model';
 
 export interface BackendMaterial {
     name: string;

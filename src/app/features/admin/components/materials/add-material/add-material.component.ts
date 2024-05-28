@@ -13,7 +13,6 @@ import { Observable, tap } from 'rxjs';
 
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { Category } from '@core/models/category.model';
 import { BackendMaterial } from '@core/models/material.model';
 import {
     addImageToFormAndSetPreview,
@@ -29,6 +28,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CategoryService } from '@core/services/category.service';
 import { Router } from '@angular/router';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-add-material',
@@ -80,10 +80,7 @@ export class AddMaterialComponent implements OnInit {
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.addMaterialForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.addMaterialForm);
         this.changeDetectorRef.detectChanges();
     }
 

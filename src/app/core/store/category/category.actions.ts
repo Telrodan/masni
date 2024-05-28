@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Category } from '@core/models/category.model';
 import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
+import { Category } from './category.model';
 
 // export enum CategoryActionsTypes {
 //     GET_CATEGORIES = '[Category] Get Categories',

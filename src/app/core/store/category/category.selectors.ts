@@ -1,8 +1,8 @@
 import { createSelector } from '@ngrx/store';
 
 import { AppState } from '../app-state.model';
-import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
+import { Category } from './category.model';
 
 const selectCategoryState = (state: AppState) => state.category;
 

@@ -7,22 +7,12 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
-import {
-    MAT_DIALOG_DATA,
-    MatDialogModule,
-    MatDialogRef
-} from '@angular/material/dialog';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { Observable, tap, filter, switchMap, map, combineLatest } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { Category } from '@core/models/category.model';
 import { Material, BackendMaterial } from '@core/models/material.model';
 import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -43,6 +33,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
 import { Log } from '@core/models/log.model';
 import { LogService } from '@core/services/log.service';
+import { Category } from '@core/store/category/category.model';
 
 interface MaterialData extends Material {
     logs: Log[];
@@ -129,10 +120,7 @@ export class EditMaterialComponent implements OnInit {
     }
 
     async onImagePicked(event: Event): Promise<void> {
-        this.imagePreview = await addImageToFormAndSetPreview(
-            event,
-            this.editMaterialForm
-        );
+        this.imagePreview = await addImageToFormAndSetPreview(event, this.editMaterialForm);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -160,9 +148,7 @@ export class EditMaterialComponent implements OnInit {
                     .pipe(
                         tap((material) => {
                             this.isLoading = false;
-                            this.toastr.success(
-                                `${material.name} minta módosítva`
-                            );
+                            this.toastr.success(`${material.name} minta módosítva`);
                             this.router.navigate(['/admin/materials']);
                         })
                     )

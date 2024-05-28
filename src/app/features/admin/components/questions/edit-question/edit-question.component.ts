@@ -6,13 +6,7 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormArray,
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -26,7 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 import { QuestionType } from '@core/enums/question-type.enum';
-import { Category, MaterialCategory } from '@core/models/category.model';
+// import { Category, MaterialCategory } from '@core/models/category.model';
 import { QuestionOption } from '@core/models/question.model';
 import { Question, BackendQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
@@ -36,6 +30,7 @@ import { LogService } from '@core/services/log.service';
 import { CategoryService } from '@core/services/category.service';
 import { MaterialService } from '@core/services/material.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Category, MaterialCategory } from '@core/store/category/category.model';
 
 interface QuestionData extends Question {
     logs: Log[];
@@ -127,9 +122,7 @@ export class EditQuestionComponent implements OnInit {
                     name: [question.name, Validators.required],
                     question: [question.question, Validators.required],
                     categoryId: [''],
-                    materialCategories: this.fb.array<string>(
-                        question.materialCategories
-                    ),
+                    materialCategories: this.fb.array<string>(question.materialCategories),
                     options: this.fb.array<QuestionOption>(question.options)
                 });
             })
@@ -185,13 +178,9 @@ export class EditQuestionComponent implements OnInit {
             .pipe(
                 tap((category: MaterialCategory) => {
                     console.log(category);
-                    this.editMaterialQuestionForm.value.materialCategories.push(
-                        category.id
-                    );
+                    this.editMaterialQuestionForm.value.materialCategories.push(category.id);
                     this.selectedCategories.push(category);
-                    const options = this.editMaterialQuestionForm.get(
-                        'options'
-                    ) as FormArray;
+                    const options = this.editMaterialQuestionForm.get('options') as FormArray;
 
                     category.items.forEach((material) => {
                         if (material.isAvailable) {
@@ -200,10 +189,7 @@ export class EditQuestionComponent implements OnInit {
                                 name: material.name,
                                 extraPrice: material.extraPrice,
                                 slug: material.extraPrice
-                                    ? material.name +
-                                      ' +' +
-                                      material.extraPrice +
-                                      ' Ft'
+                                    ? material.name + ' +' + material.extraPrice + ' Ft'
                                     : material.name
                             });
                             options.push(option);
@@ -221,9 +207,7 @@ export class EditQuestionComponent implements OnInit {
             .getMaterialsByCategoryId$(categoryId)
             .pipe(
                 tap((materials) => {
-                    const options = this.editMaterialQuestionForm.get(
-                        'options'
-                    ) as FormArray;
+                    const options = this.editMaterialQuestionForm.get('options') as FormArray;
                     const materialIds = materials.map((item) => item.id);
                     const materialOptions = options.controls.filter((control) =>
                         materialIds.includes(control.value.materialId)
@@ -231,10 +215,7 @@ export class EditQuestionComponent implements OnInit {
                     materialOptions.forEach((option) => {
                         options.removeAt(options.controls.indexOf(option));
                     });
-                    this.editMaterialQuestionForm.value.materialCategories.splice(
-                        index,
-                        1
-                    );
+                    this.editMaterialQuestionForm.value.materialCategories.splice(index, 1);
                     this.selectedCategories.splice(index, 1);
                     this.changeDetectorRef.detectChanges();
                     this.toastr.success('Kategória törölve');
@@ -304,17 +285,13 @@ export class EditQuestionComponent implements OnInit {
             if (this.editStringQuestionForm.valid) {
                 this.editQuestionWithStringAnser();
             } else {
-                this.toastr.info(
-                    'Kérlek töltsd ki a kérdéshez szükséges mezőket'
-                );
+                this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
             }
         } else {
             if (this.editMaterialQuestionForm.valid) {
                 this.editQuestionWithMaterialCategoryAnswer();
             } else {
-                this.toastr.info(
-                    'Kérlek töltsd ki a kérdéshez szükséges mezőket'
-                );
+                this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
             }
         }
     }

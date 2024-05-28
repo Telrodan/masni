@@ -6,12 +6,7 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -34,7 +29,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { BackendProduct } from '@core/models/product.model';
-import { Category, ProductCategory } from '@core/models/category.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -45,6 +39,7 @@ import {
     removeImagesFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { ProductCategory, Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-add-product',
@@ -114,14 +109,9 @@ export class AddProductComponent implements OnInit {
     ngOnInit(): void {
         this.productSubCategories$ = this.categoryService
             .getProductCategories$()
-            .pipe(
-                map((categories) =>
-                    categories.filter((category) => category.isSubCategory)
-                )
-            );
+            .pipe(map((categories) => categories.filter((category) => category.isSubCategory)));
 
-        this.inspirationCategories$ =
-            this.categoryService.getInspirationCategories$();
+        this.inspirationCategories$ = this.categoryService.getInspirationCategories$();
 
         this.questions$ = this.questionService.getQuestions$().pipe(
             tap((questions) => {
@@ -133,9 +123,7 @@ export class AddProductComponent implements OnInit {
     addQuestion(id: string): void {
         if (id) {
             this.addProductForm.value.questions.push(id);
-            const selectedQuestion = this.questions.find(
-                (question) => question.id === id
-            );
+            const selectedQuestion = this.questions.find((question) => question.id === id);
             this.selectedQuestions.push(selectedQuestion);
             this.toastr.success('Kérdés hozzáadva');
             this.addProductForm.get('selectedQuestion').patchValue('');
@@ -146,20 +134,16 @@ export class AddProductComponent implements OnInit {
 
     deleteQuestion(id: string, index: number): void {
         this.selectedQuestions.splice(index, 1);
-        this.addProductForm.value.questions =
-            this.addProductForm.value.questions.filter(
-                (questionId) => questionId !== id
-            );
+        this.addProductForm.value.questions = this.addProductForm.value.questions.filter(
+            (questionId) => questionId !== id
+        );
 
         this.toastr.success('Kérdés törölve');
     }
 
     async onImagePicked(event: Event): Promise<void> {
         console.log((event.target as HTMLInputElement).files);
-        this.imagesPreview = await addImagesToFormAndSetPreview(
-            event,
-            this.addProductForm
-        );
+        this.imagesPreview = await addImagesToFormAndSetPreview(event, this.addProductForm);
         this.changeDetectorRef.markForCheck();
 
         if (this.imagesPreview.length > 4) {
@@ -179,16 +163,8 @@ export class AddProductComponent implements OnInit {
     }
 
     drop(event: CdkDragDrop<{ image: string }[]>) {
-        moveItemInArray(
-            this.imagesPreview,
-            event.previousIndex,
-            event.currentIndex
-        );
-        moveItemInArray(
-            this.addProductForm.value.images,
-            event.previousIndex,
-            event.currentIndex
-        );
+        moveItemInArray(this.imagesPreview, event.previousIndex, event.currentIndex);
+        moveItemInArray(this.addProductForm.value.images, event.previousIndex, event.currentIndex);
     }
 
     onAddProduct(): void {
@@ -196,15 +172,13 @@ export class AddProductComponent implements OnInit {
             const product: BackendProduct = {
                 name: this.addProductForm.value.name,
                 categoryId: this.addProductForm.value.categoryId,
-                inspirationCategoryId:
-                    this.addProductForm.value.inspirationCategoryId,
+                inspirationCategoryId: this.addProductForm.value.inspirationCategoryId,
                 shortDescription: this.addProductForm.value.shortDescription,
                 isCustom: this.addProductForm.value.isCustom,
                 isDollDress: this.addProductForm.value.isDollDress,
                 isDressable: this.addProductForm.value.isDressable,
                 isFeatured: this.addProductForm.value.isFeatured,
-                isNameEmbroideryAvailable:
-                    this.addProductForm.value.isNameEmbroideryAvailable,
+                isNameEmbroideryAvailable: this.addProductForm.value.isNameEmbroideryAvailable,
                 description: this.addProductForm.value.description,
                 questions: this.addProductForm.value.questions,
                 images: this.addProductForm.value.images,

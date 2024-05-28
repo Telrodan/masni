@@ -16,9 +16,9 @@ import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { cloneDeep } from 'lodash';
 
-import { Category } from '@core/models/category.model';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { CategoryAction, CategorySelector } from '@core/store/category';
+import { Category } from '@core/store/category/category.model';
 
 export interface CategorySortItem {
     id: string;

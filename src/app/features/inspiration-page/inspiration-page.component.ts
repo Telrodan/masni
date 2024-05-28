@@ -5,7 +5,7 @@ import { Observable, filter, map } from 'rxjs';
 import { Inspiration } from '@core/models/inspiration.model';
 import { InspirationPageData } from '@core/models/inspiration-page-data.model';
 import { Title, Meta } from '@angular/platform-browser';
-import { InspirationCategory } from '@core/models/category.model';
+// import { InspirationCategory } from '@core/models/category.model';
 
 @Component({
     selector: 'mhd-inspiration-page',
@@ -44,8 +44,7 @@ export class InspirationPageComponent implements OnInit {
             },
             {
                 property: 'og:image',
-                content:
-                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+                content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
             },
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }

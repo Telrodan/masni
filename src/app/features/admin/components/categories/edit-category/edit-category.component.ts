@@ -20,7 +20,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Category } from '@core/models/category.model';
 import { CategoryType } from '@core/enums/category-type.enum';
 import { ToastrService } from '@core/services/toastr.service';
 import { CategoryAction, CategorySelector } from '@core/store/category';
@@ -29,6 +28,7 @@ import {
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Category } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-edit-category',

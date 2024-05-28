@@ -6,12 +6,7 @@ import {
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    FormArray,
-    FormBuilder,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -27,7 +22,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { QuestionType } from '@core/enums/question-type.enum';
-import { Category, MaterialCategory } from '@core/models/category.model';
 import { BackendQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -35,6 +29,7 @@ import { QuestionOption } from '@core/models/question.model';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { CategoryService } from '@core/services/category.service';
 import { MaterialService } from '@core/services/material.service';
+import { Category, MaterialCategory } from '@core/store/category/category.model';
 
 const QUESTION_TYPE_FORM_OPTIONS = [
     {
@@ -155,13 +150,9 @@ export class AddQuestionComponent implements OnInit {
             .pipe(
                 tap((category: MaterialCategory) => {
                     console.log(category);
-                    this.addMaterialQuestionForm.value.materialCategories.push(
-                        category.id
-                    );
+                    this.addMaterialQuestionForm.value.materialCategories.push(category.id);
                     this.selectedCategories.push(category);
-                    const options = this.addMaterialQuestionForm.get(
-                        'options'
-                    ) as FormArray;
+                    const options = this.addMaterialQuestionForm.get('options') as FormArray;
 
                     category.items.forEach((material) => {
                         if (material.isAvailable) {
@@ -170,10 +161,7 @@ export class AddQuestionComponent implements OnInit {
                                 name: material.name,
                                 extraPrice: material.extraPrice,
                                 slug: material.extraPrice
-                                    ? material.name +
-                                      ' +' +
-                                      material.extraPrice +
-                                      ' Ft'
+                                    ? material.name + ' +' + material.extraPrice + ' Ft'
                                     : material.name
                             });
                             options.push(option);
@@ -191,9 +179,7 @@ export class AddQuestionComponent implements OnInit {
             .getMaterialsByCategoryId$(categoryId)
             .pipe(
                 tap((materials) => {
-                    const options = this.addMaterialQuestionForm.get(
-                        'options'
-                    ) as FormArray;
+                    const options = this.addMaterialQuestionForm.get('options') as FormArray;
                     const materialIds = materials.map((item) => item.id);
                     const materialOptions = options.controls.filter((control) =>
                         materialIds.includes(control.value.materialId)
@@ -201,10 +187,7 @@ export class AddQuestionComponent implements OnInit {
                     materialOptions.forEach((option) => {
                         options.removeAt(options.controls.indexOf(option));
                     });
-                    this.addMaterialQuestionForm.value.materialCategories.splice(
-                        index,
-                        1
-                    );
+                    this.addMaterialQuestionForm.value.materialCategories.splice(index, 1);
                     this.selectedCategories.splice(index, 1);
                     this.changeDetectorRef.detectChanges();
                     this.toastr.success('Kategória törölve');
@@ -241,8 +224,7 @@ export class AddQuestionComponent implements OnInit {
     addQuestionWithMaterialCategoryAnswer(): void {
         const name = this.addMaterialQuestionForm.value.name.trim();
         const question = this.addMaterialQuestionForm.value.question.trim();
-        const materialCategories =
-            this.addMaterialQuestionForm.value.materialCategories;
+        const materialCategories = this.addMaterialQuestionForm.value.materialCategories;
         const options = this.addMaterialQuestionForm.value.options;
 
         const questionObj: BackendQuestion = {
@@ -277,14 +259,12 @@ export class AddQuestionComponent implements OnInit {
 
     onSubmit(): void {
         if (
-            this.questionTypeHelper ===
-                QuestionType.QUESTION_WITH_STRING_ANSWER &&
+            this.questionTypeHelper === QuestionType.QUESTION_WITH_STRING_ANSWER &&
             this.addStringQuestionForm.valid
         ) {
             this.addQuestionWithStringAnswer();
         } else if (
-            this.questionTypeHelper ===
-                QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER &&
+            this.questionTypeHelper === QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER &&
             this.addMaterialQuestionForm.valid
         ) {
             this.addQuestionWithMaterialCategoryAnswer();

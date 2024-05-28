@@ -1,4 +1,4 @@
-import { InspirationCategory, ProductCategory } from './category.model';
+import { InspirationCategory, ProductCategory } from '@core/store/category/category.model';
 import { Question } from './question.model';
 import { Review } from './review.model';
 
