@@ -29,7 +29,6 @@ import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TableModule } from 'primeng/table';
 
-import { Product, BackendProduct } from '@core/models/product.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -43,6 +42,7 @@ import {
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { Category } from '@core/store/category/category.model';
+import { Product, BackendProduct } from '@core/store/product/product.model';
 
 interface ProductData extends Product {
     logs: Log[];

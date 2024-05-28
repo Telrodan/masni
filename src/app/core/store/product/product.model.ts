@@ -1,6 +1,6 @@
+import { Question } from '@core/models/question.model';
+import { Review } from '@core/models/review.model';
 import { InspirationCategory, ProductCategory } from '@core/store/category/category.model';
-import { Question } from './question.model';
-import { Review } from './review.model';
 
 export interface BackendProduct {
     categoryId: string;

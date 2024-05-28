@@ -1,4 +1,4 @@
-import { Product } from './product.model';
+import { Product } from '@core/store/product/product.model';
 import { User } from './user.model';
 
 export interface BackendShoppingCartItem {

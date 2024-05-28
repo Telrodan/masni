@@ -11,19 +11,13 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { startWith, map } from 'rxjs';
-
-import { Product } from '@core/models/product.model';
+import { Product } from '@core/store/product/product.model';
 
 @Component({
     selector: 'nyk-product-details-form',
@@ -69,10 +63,7 @@ export class ProductDetailsFormComponent implements OnInit, OnChanges {
                             this.product.questions.forEach((question) => {
                                 if (question.id === key) {
                                     question.options.forEach((option) => {
-                                        if (
-                                            option._id ===
-                                            changes.questions[key]
-                                        ) {
+                                        if (option._id === changes.questions[key]) {
                                             this.price += option.extraPrice;
                                         }
                                     });

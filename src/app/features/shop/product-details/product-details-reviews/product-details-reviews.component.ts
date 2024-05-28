@@ -11,7 +11,6 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '@core/models/product.model';
 import { AuthService } from '@core/services/auth.service';
 import { Observable } from 'rxjs';
 import { BackendReview, Review } from '@core/models/review.model';
@@ -20,6 +19,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ReviewService } from '@core/services/review.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Product } from '@core/store/product/product.model';
 
 interface RatingStatistics {
     averageRating: number;
@@ -33,12 +33,7 @@ interface RatingStatistics {
 @Component({
     selector: 'nyk-product-details-reviews',
     standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        InputTextareaModule,
-        SpinnerComponent
-    ],
+    imports: [CommonModule, ReactiveFormsModule, InputTextareaModule, SpinnerComponent],
     templateUrl: './product-details-reviews.component.html',
     styleUrls: ['./product-details-reviews.component.scss'],
     encapsulation: ViewEncapsulation.None,
@@ -77,9 +72,7 @@ export class ProductDetailsReviewsComponent implements OnInit, OnChanges {
     ngOnChanges(changes: { product: SimpleChange }): void {
         if (changes.product) {
             this.product.reviews.reverse();
-            this.ratingStatistics = this.calculateRatingStatistics(
-                this.product.reviews
-            );
+            this.ratingStatistics = this.calculateRatingStatistics(this.product.reviews);
             this.reviews = [...this.product.reviews];
             this.reviews = this.reviews.slice(0, 3);
 
@@ -156,17 +149,15 @@ export class ProductDetailsReviewsComponent implements OnInit, OnChanges {
 
         const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0;
 
-        const ratingStatistics = Object.keys(completeRatingCounts).map(
-            (rating) => {
-                const count = completeRatingCounts[rating];
-                const percentage = (count / totalReviews) * 100;
-                return {
-                    rating: parseInt(rating),
-                    count,
-                    percentage: Math.ceil(percentage) + '%'
-                };
-            }
-        );
+        const ratingStatistics = Object.keys(completeRatingCounts).map((rating) => {
+            const count = completeRatingCounts[rating];
+            const percentage = (count / totalReviews) * 100;
+            return {
+                rating: parseInt(rating),
+                count,
+                percentage: Math.ceil(percentage) + '%'
+            };
+        });
 
         return {
             averageRating: Math.ceil(averageRating),

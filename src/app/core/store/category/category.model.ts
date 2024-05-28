@@ -2,7 +2,7 @@ import { CategoryType } from '@core/enums/category-type.enum';
 import { Inspiration } from '@core/models/inspiration.model';
 import { Material } from '@core/models/material.model';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
-import { Product } from '@core/models/product.model';
+import { Product } from '../product/product.model';
 
 export interface CategoryState {
     categories: Category[];

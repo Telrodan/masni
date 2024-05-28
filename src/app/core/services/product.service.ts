@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
-import { BackendProduct, Product } from '@core/models/product.model';
 import { ApiResponse } from '@core/models/api-response.model';
 import { ApiService } from './api.service';
+import { BackendProduct, Product } from '@core/store/product/product.model';
 
 @Injectable({
     providedIn: 'root'
@@ -24,20 +24,14 @@ export class ProductService {
             .pipe(map((productDTO) => productDTO.data));
     }
 
-    updateProduct$(
-        product: BackendProduct,
-        productId: string
-    ): Observable<Product> {
+    updateProduct$(product: BackendProduct, productId: string): Observable<Product> {
         const productFormData = new FormData();
         productFormData.append('product', JSON.stringify(product));
         product.images.forEach((image: string) => {
             productFormData.append('images', image);
         });
         return this.apiService
-            .patch<ApiResponse<Product>>(
-                `product/updateOne/${productId}`,
-                productFormData
-            )
+            .patch<ApiResponse<Product>>(`product/updateOne/${productId}`, productFormData)
             .pipe(map((productDTO) => productDTO.data));
     }
 

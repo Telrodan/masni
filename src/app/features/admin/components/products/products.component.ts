@@ -20,11 +20,11 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Product } from '@core/store/product/product.model';
 
 @Component({
     selector: 'nyk-products',

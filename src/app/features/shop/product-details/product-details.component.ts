@@ -13,14 +13,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule, Location } from '@angular/common';
 
-import {
-    BehaviorSubject,
-    map,
-    Observable,
-    startWith,
-    switchMap,
-    tap
-} from 'rxjs';
+import { BehaviorSubject, map, Observable, startWith, switchMap, tap } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { GalleriaModule } from 'primeng/galleria';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -30,17 +23,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
-import { Product } from '@core/models/product.model';
 import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from '@core/services/toastr.service';
 import { PreviousRouteService } from '@core/services/previous-route.service';
 import { ShoppingCartService } from '@core/services/shopping-cart.service';
 import { BackendReview } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
-import {
-    BackendShoppingCartItem,
-    ShoppingCartItem
-} from '@core/models/shopping-cart-item.model';
+import { BackendShoppingCartItem, ShoppingCartItem } from '@core/models/shopping-cart-item.model';
 import { ProductService } from '@core/services/product.service';
 import { CookieService } from '@core/services/cookie.service';
 import { BreadcrumpComponent } from '@shared/breadcrump/breadcrump.component';
@@ -49,6 +38,7 @@ import { ProductDetailsGalleryComponent } from './product-details-gallery/produc
 import { ProductDetailsFormComponent } from './product-details-form/product-details-form.component';
 import { ProductDetailsReviewsComponent } from './product-details-reviews/product-details-reviews.component';
 import { DollDressDialogComponent } from '../doll-dress-dialog/doll-dress-dialog.component';
+import { Product } from '@core/store/product/product.model';
 
 @Component({
     selector: 'nyk-product-details',
@@ -87,9 +77,7 @@ export class ProductDetailsComponent implements OnInit {
     productDetailsFormComponent: ProductDetailsFormComponent;
 
     get isLiked(): boolean {
-        return this.product.likes.includes(
-            this.cookieService.getCookie('userId')
-        );
+        return this.product.likes.includes(this.cookieService.getCookie('userId'));
     }
 
     refreshProduct$ = new BehaviorSubject<void>(null);
@@ -113,10 +101,7 @@ export class ProductDetailsComponent implements OnInit {
         pullDrag: true,
         dots: false,
         navSpeed: 1000,
-        navText: [
-            '<i class="pi pi-chevron-left"></i>',
-            '<i class="pi pi-chevron-right"></i>'
-        ],
+        navText: ['<i class="pi pi-chevron-left"></i>', '<i class="pi pi-chevron-right"></i>'],
         responsive: {
             0: {
                 items: 1
@@ -157,13 +142,10 @@ export class ProductDetailsComponent implements OnInit {
                     switchMap((id) => this.productService.getProductById$(id)),
                     tap((product) => {
                         this.product = product;
-                        this.product.category.items =
-                            this.product.category.items.filter(
-                                (item) => item.id !== this.product.id
-                            );
-                        this.fullUrl =
-                            'https://www.nyuszkokucko.hu/#' +
-                            this.location.path();
+                        this.product.category.items = this.product.category.items.filter(
+                            (item) => item.id !== this.product.id
+                        );
+                        this.fullUrl = 'https://www.nyuszkokucko.hu/#' + this.location.path();
                     })
                 )
             )
@@ -239,18 +221,12 @@ export class ProductDetailsComponent implements OnInit {
         if (this.productDetailsFormComponent.productDetailsForm.valid) {
             const questions = [];
             for (const key of Object.keys(
-                this.productDetailsFormComponent.productDetailsForm.value
-                    .questions
+                this.productDetailsFormComponent.productDetailsForm.value.questions
             )) {
                 const value =
-                    this.productDetailsFormComponent.productDetailsForm.value
-                        .questions[key];
-                const question = this.product.questions.find(
-                    (question) => question.id === key
-                );
-                const option = question.options.find(
-                    (option) => option._id === value
-                );
+                    this.productDetailsFormComponent.productDetailsForm.value.questions[key];
+                const question = this.product.questions.find((question) => question.id === key);
+                const option = question.options.find((option) => option._id === value);
                 if (value) {
                     questions.push({
                         question: question.question,
@@ -265,9 +241,7 @@ export class ProductDetailsComponent implements OnInit {
                 questions,
                 nameEmbroidery:
                     this.productDetailsFormComponent.productDetailsForm.value.nameEmbroidery.trim(),
-                comment:
-                    this.productDetailsFormComponent.productDetailsForm.value
-                        .comment,
+                comment: this.productDetailsFormComponent.productDetailsForm.value.comment,
                 quantity: this.orderQty
             };
 
@@ -275,9 +249,7 @@ export class ProductDetailsComponent implements OnInit {
                 .addItem$(cartItem)
                 .pipe(
                     tap(() => {
-                        this.toastr.success(
-                            `${cartItem.product.name} hozzáadva a kosárhoz`
-                        );
+                        this.toastr.success(`${cartItem.product.name} hozzáadva a kosárhoz`);
                         this.productDetailsFormComponent.productDetailsForm.reset();
                         this.productDetailsFormComponent.productDetailsForm
                             .get('nameEmbroidery')

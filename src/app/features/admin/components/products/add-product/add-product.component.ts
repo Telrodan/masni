@@ -28,7 +28,6 @@ import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { BackendProduct } from '@core/models/product.model';
 import { Question } from '@core/models/question.model';
 import { ProductService } from '@core/services/product.service';
 import { ToastrService } from '@core/services/toastr.service';
@@ -40,6 +39,7 @@ import {
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { ProductCategory, Category } from '@core/store/category/category.model';
+import { BackendProduct } from '@core/store/product/product.model';
 
 @Component({
     selector: 'nyk-add-product',

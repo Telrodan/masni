@@ -12,8 +12,8 @@ import { RouterModule } from '@angular/router';
 
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
-import { Product } from '@core/models/product.model';
 import { ProductCardComponent } from '@shared/product-card/product-card.component';
+import { Product } from '@core/store/product/product.model';
 
 @Component({
     selector: 'nyk-products-carousel',
@@ -43,10 +43,7 @@ export class ProductsCarouselComponent {
         pullDrag: true,
         dots: false,
         navSpeed: 1000,
-        navText: [
-            '<i class="pi pi-chevron-left"></i>',
-            '<i class="pi pi-chevron-right"></i>'
-        ],
+        navText: ['<i class="pi pi-chevron-left"></i>', '<i class="pi pi-chevron-right"></i>'],
         responsive: {
             0: {
                 items: 1

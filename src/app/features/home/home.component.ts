@@ -14,12 +14,12 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 import { CategoryService } from '@core/services/category.service';
 import { CategoriesComponent } from './categories/categories.component';
-import { Product } from '@core/models/product.model';
 import { ProductService } from '@core/services/product.service';
 import { SliderComponent } from './slider/slider.component';
 import { ProductsCarouselComponent } from './products-carousel/products-carousel.component';
 import { DreamItCtaComponent } from './dream-it-cta/dream-it-cta.component';
 import { ProductCategory } from '@core/store/category/category.model';
+import { Product } from '@core/store/product/product.model';
 
 interface SortedProducts {
     title: string;
