@@ -1,130 +1,103 @@
-<ng-container *ngIf="!isLoading; else loading">
-    <ng-container *ngIf="material$ | async as material; else loading">
-        <div class="nyk-edit-material-header">Minta módosítása</div>
+<ng-container *ngIf="material$ | async as material; else loading">
+    <div class="nyk-edit-material-header">Minta módosítása</div>
 
-        <form class="nyk-edit-material-form" [formGroup]="editMaterialForm">
-            <div class="form-group">
-                <label for="name"> Minta neve </label>
+    <form class="nyk-edit-material-form" [formGroup]="editMaterialForm">
+        <div class="form-group">
+            <label for="name"> Minta neve </label>
 
-                <input
-                    id="name"
-                    type="text"
-                    formControlName="name"
-                    pInputText />
-            </div>
+            <input id="name" type="text" formControlName="name" pInputText />
+        </div>
 
-            <div class="form-group">
-                <label for="categoryId"> Minta kategória </label>
+        <div class="form-group">
+            <label for="categoryId"> Minta kategória </label>
 
-                <p-dropdown
-                    id="categoryId"
-                    formControlName="categoryId"
-                    placeholder="Válassz egy kategóriát"
-                    [options]="categories$ | async"
-                    optionValue="id"
-                    optionLabel="name"
-                    styleClass="w-full">
-                </p-dropdown>
-            </div>
+            <p-dropdown
+                id="category"
+                formControlName="category"
+                placeholder="Válassz egy kategóriát"
+                [options]="materialCategories$ | async"
+                optionValue="id"
+                optionLabel="name"
+                styleClass="w-full">
+            </p-dropdown>
+        </div>
 
-            <div class="form-group">
-                <label for="extraPrice" type="number"> Minta extra ára </label>
+        <div class="form-group">
+            <label for="extraPrice" type="number"> Minta extra ára </label>
 
-                <input
-                    id="extraPrice"
-                    formControlName="extraPrice"
-                    type="number"
-                    pInputText />
-            </div>
+            <p-inputNumber
+                [showButtons]="true"
+                id="extraPrice"
+                formControlName="extraPrice"
+                mode="currency"
+                currency="HUF"
+                styleClass="w-full"
+                [min]="0" />
+        </div>
 
-            <div class="form-group">
-                <label for="stock"> Rendelhető? </label>
+        <div class="form-group">
+            <label for="stock"> Rendelhető? </label>
 
-                <p-inputSwitch formControlName="isAvailable"></p-inputSwitch>
-            </div>
+            <p-inputSwitch formControlName="isAvailable"></p-inputSwitch>
+        </div>
 
-            <div class="form-group">
-                <label for="image"> Minta képe </label>
-
-                <p-button
-                    *ngIf="!imagePreview"
-                    icon="pi pi-image"
-                    styleClass="p-button p-button-secondary"
-                    (click)="imagePicker.click()">
-                </p-button>
-
-                <button
-                    *ngIf="imagePreview"
-                    pButton
-                    pRipple
-                    pTooltip="Kép törlése"
-                    tooltipPosition="bottom"
-                    (click)="onImageClear(imagePicker)"
-                    type="button"
-                    icon="pi pi-times"
-                    class="p-button p-button-danger p-button mb-2"></button>
-
-                <input
-                    id="imagePicker"
-                    type="file"
-                    class="hidden"
-                    #imagePicker
-                    (change)="onImagePicked($event)" />
-
-                <img
-                    *ngIf="imagePreview"
-                    class="image-preview border-round"
-                    [src]="imagePreview"
-                    alt="Kategória" />
-
-                <img
-                    *ngIf="!imagePreview"
-                    class="mt-2 image-preview border-round"
-                    src="../../../../../../assets/images/no-image.png"
-                    alt="Kategória" />
-            </div>
+        <div class="form-group">
+            <label for="image"> Minta képe </label>
 
             <p-button
-                label="Módosítás"
-                styleClass="p-button w-full mb-3"
-                [disabled]="!editMaterialForm.valid || !editMaterialForm.dirty"
-                (click)="onEditMaterial()">
+                *ngIf="!imagePreview"
+                [raised]="true"
+                icon="pi pi-image"
+                styleClass="p-button p-button-secondary"
+                (click)="imagePicker.click()">
             </p-button>
-        </form>
 
-        <div class="nyk-edit-material-header">Kategória előzmények</div>
+            <p-button
+                *ngIf="imagePreview"
+                [raised]="true"
+                icon="pi pi-times"
+                pTooltip="Kép törlése"
+                tooltipPosition="bottom"
+                severity="danger"
+                styleClass="mb-2"
+                (click)="onImageClear(imagePicker)">
+            </p-button>
 
-        <span class="text-blue-500">
-            Hozzáadva:
-            {{ material.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <input
+                id="imagePicker"
+                type="file"
+                class="hidden"
+                #imagePicker
+                (change)="onImagePicked($event)" />
 
-        <span class="text-green-500 block mb-4">
-            Utoljára módosítva:
-            {{ material.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <img
+                *ngIf="imagePreview"
+                class="image-preview border-round"
+                [src]="imagePreview"
+                alt="Kategória" />
 
-        <p-table class="nyk-edit-material-history" [value]="material.logs">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Modul</th>
-                    <th>Dátum</th>
-                    <th>Üzenet</th>
-                    <th>Felhasználó</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-log>
-                <tr>
-                    <td>{{ log.meta.module }}</td>
-                    <td>
-                        {{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}
-                    </td>
-                    <td>{{ log.message }}</td>
-                    <td>{{ log.meta.user }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </ng-container>
+            <img
+                *ngIf="!imagePreview"
+                class="mt-2 image-preview border-round"
+                src="../../../../../../assets/images/no-image.png"
+                alt="Kategória" />
+        </div>
+
+        <p-button
+            [raised]="true"
+            label="Módosítás"
+            styleClass="p-button w-full mb-3"
+            [disabled]="!editMaterialForm.valid || !editMaterialForm.dirty"
+            (click)="onEditMaterial()">
+        </p-button>
+    </form>
+
+    <nyk-item-history
+        itemType="Minta"
+        [logs]="logs$ | async"
+        [createdAt]="material.createdAt"
+        [updatedAt]="material.updatedAt">
+    </nyk-item-history>
 </ng-container>
 
 <ng-template #loading>

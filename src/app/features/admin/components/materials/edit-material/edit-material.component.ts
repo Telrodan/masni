@@ -3,43 +3,39 @@ import {
     ChangeDetectorRef,
     Component,
     HostBinding,
-    Inject,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
-import { Observable, tap, filter, switchMap, map, combineLatest } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+import { Observable, tap, switchMap, map } from 'rxjs';
+import { DropdownModule } from 'primeng/dropdown';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
-import { Material, BackendMaterial } from '@core/models/material.model';
-import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService } from '@core/services/category.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { TableModule } from 'primeng/table';
-import { Log } from '@core/models/log.model';
-import { LogService } from '@core/services/log.service';
 import { Category } from '@core/store/category/category.model';
+import { Material } from '@core/store/material/material.model';
+import { MaterialSelector } from '@core/store/material/material.selectors';
+import { CategorySelector } from '@core/store/category';
+import { Log, LogSelector } from '@core/store/log';
+import { ItemHistoryComponent } from '@shared/item-history/item-history.component';
+import { MaterialAction } from '@core/store/material';
 
-interface MaterialData extends Material {
-    logs: Log[];
-}
-
-@UntilDestroy()
 @Component({
     selector: 'nyk-edit-material',
     standalone: true,
@@ -49,12 +45,13 @@ interface MaterialData extends Material {
         ReactiveFormsModule,
         DropdownModule,
         RadioButtonModule,
-        DividerModule,
         ButtonModule,
         SpinnerComponent,
         InputTextModule,
         InputSwitchModule,
-        TableModule
+        TableModule,
+        InputNumberModule,
+        ItemHistoryComponent
     ],
     templateUrl: './edit-material.component.html',
     styleUrls: ['./edit-material.component.scss'],
@@ -64,50 +61,30 @@ interface MaterialData extends Material {
 export class EditMaterialComponent implements OnInit {
     @HostBinding('class') class = 'nyk-edit-material';
 
-    material$: Observable<MaterialData>;
-    categories$: Observable<Category[]>;
-    materialId: string;
-    isLoading = false;
+    material$: Observable<Material>;
+    materialCategories$: Observable<Category[]>;
+    logs$: Observable<Log[]>;
+
     editMaterialForm: FormGroup;
     imagePreview: string;
 
-    constructor(
-        private materialService: MaterialService,
-        private categoryService: CategoryService,
-        private logService: LogService,
-        private route: ActivatedRoute,
-        private router: Router,
-        private toastr: ToastrService,
-        private fb: FormBuilder,
-        private changeDetectorRef: ChangeDetectorRef
-    ) {}
+    private readonly store = inject(Store);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly toastr = inject(ToastrService);
+    private readonly fb = inject(FormBuilder);
+    private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
     ngOnInit(): void {
-        this.material$ = this.route.params.pipe(
-            switchMap((params) =>
-                combineLatest([
-                    this.materialService.getMaterialById$(params['id']),
-                    this.logService
-                        .getItemLogsByItemId$(params['id'])
-                        .pipe(
-                            map((logs) =>
-                                logs.sort(
-                                    (a, b) =>
-                                        new Date(b.timestamp).getTime() -
-                                        new Date(a.timestamp).getTime()
-                                )
-                            )
-                        )
-                ])
-            ),
-            filter((material) => !!material),
-            map(([material, logs]) => ({ ...material, logs })),
+        const materialId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.material$ = materialId$.pipe(
+            switchMap((id) => this.store.select(MaterialSelector.selectMaterialById(id))),
             tap((material) => {
-                console.log(material);
-                this.materialId = material.id;
                 this.editMaterialForm = this.fb.group({
+                    id: [material.id, Validators.required],
                     name: [material.name, Validators.required],
-                    categoryId: [material.category.id, Validators.required],
+                    category: [material.category.id, Validators.required],
                     image: [material.image, Validators.required],
                     extraPrice: [material.extraPrice, Validators.required],
                     isAvailable: [material.isAvailable, Validators.required]
@@ -116,7 +93,12 @@ export class EditMaterialComponent implements OnInit {
                 this.imagePreview = material.image;
             })
         );
-        this.categories$ = this.categoryService.getMaterialCategories$();
+
+        this.materialCategories$ = this.store.select(CategorySelector.selectMaterialCategories());
+
+        this.logs$ = materialId$.pipe(
+            switchMap((id) => this.store.select(LogSelector.selectLogsByItemId(id)))
+        );
     }
 
     async onImagePicked(event: Event): Promise<void> {
@@ -132,32 +114,14 @@ export class EditMaterialComponent implements OnInit {
     }
 
     onEditMaterial(): void {
-        if (this.editMaterialForm.valid) {
-            const material: BackendMaterial = {
-                name: this.editMaterialForm.value.name.trim(),
-                categoryId: this.editMaterialForm.value.categoryId,
-                image: this.editMaterialForm.value.image,
-                extraPrice: this.editMaterialForm.value.extraPrice,
-                isAvailable: this.editMaterialForm.value.isAvailable
-            };
-
-            if (material.name) {
-                this.isLoading = true;
-                this.materialService
-                    .updateMaterial$(material, this.materialId)
-                    .pipe(
-                        tap((material) => {
-                            this.isLoading = false;
-                            this.toastr.success(`${material.name} minta módosítva`);
-                            this.router.navigate(['/admin/materials']);
-                        })
-                    )
-                    .subscribe();
-            } else {
-                this.toastr.info('Kérlek adj meg egy minta nevet');
-            }
-        } else {
-            this.toastr.info('Kérlek töltsd ki az összes mezőt');
+        if (!this.editMaterialForm.valid) {
+            this.toastr.info('Kérlek töltsd ki az összes mezőt!');
+            return;
         }
+
+        const material = this.editMaterialForm.value as Material;
+
+        this.store.dispatch(MaterialAction.updateMaterial({ material }));
+        this.router.navigate(['/admin/materials']);
     }
 }

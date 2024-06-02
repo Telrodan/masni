@@ -25,11 +25,14 @@
         <div class="form-group">
             <label for="extraPrice"> Minta extra ára </label>
 
-            <input
+            <p-inputNumber
+                [showButtons]="true"
                 id="extraPrice"
                 formControlName="extraPrice"
-                type="number"
-                pInputText />
+                mode="currency"
+                currency="HUF"
+                styleClass="w-full"
+                [min]="0" />
         </div>
 
         <div class="form-group">
@@ -43,21 +46,22 @@
 
             <p-button
                 *ngIf="!imagePreview"
+                [raised]="true"
                 icon="pi pi-image"
                 styleClass="p-button p-button-secondary"
                 (click)="imagePicker.click()">
             </p-button>
 
-            <button
+            <p-button
                 *ngIf="imagePreview"
-                pButton
-                pRipple
+                [raised]="true"
+                icon="pi pi-times"
                 pTooltip="Kép törlése"
                 tooltipPosition="bottom"
-                (click)="onImageClear(imagePicker)"
-                type="button"
-                icon="pi pi-times"
-                class="p-button p-button-danger p-button mb-2"></button>
+                severity="danger"
+                styleClass="mb-2"
+                (click)="onImageClear(imagePicker)">
+            </p-button>
 
             <input
                 id="imagePicker"
@@ -80,6 +84,7 @@
         </div>
 
         <p-button
+            [raised]="true"
             type="submit"
             label="Hozzáadás"
             styleClass="p-button w-full"

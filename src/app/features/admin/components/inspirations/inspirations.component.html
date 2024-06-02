@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoading; else loading">
+<ng-container *ngIf="(isBusy$ | async) === false; else loading">
     <ng-container *ngIf="inspirations$ | async as inspirations; else loading">
         <div class="nyk-inspirations-header">Összes inspiráció</div>
 
@@ -13,9 +13,10 @@
             <ng-template pTemplate="caption">
                 <div class="nyk-inspirations-actions">
                     <p-button
+                        [raised]="true"
                         icon="pi pi-plus"
-                        label="Inspiráció hozzáadás"
-                        styleClass="p-button p-button-success"
+                        label="Új inspiráció hozzáadása"
+                        styleClass="w-full"
                         routerLink="/admin/inspirations/add">
                     </p-button>
 
@@ -24,13 +25,14 @@
 
                         <input
                             pInputText
-                            pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
+                            pTooltip="Kereshető mezők:
+                                Azonosító
+                                Név
+                                Kategória"
                             tooltipPosition="bottom"
                             class="w-full"
                             type="text"
-                            (input)="
-                                applyFilterGlobal($event, 'contains', table)
-                            "
+                            (input)="applyFilterGlobal($event, 'contains', table)"
                             placeholder="Keresés" />
                     </span>
                 </div>
@@ -42,9 +44,19 @@
 
                     <th class="nyk-inspirations-id">Azonosító</th>
 
-                    <th>Név</th>
+                    <th pSortableColumn="name">
+                        <div class="nyk-inspirations-th-wrapper">
+                            Név
+                            <p-sortIcon field="name"></p-sortIcon>
+                        </div>
+                    </th>
 
-                    <th class="nyk-inspirations-category">Kategória</th>
+                    <th class="nyk-inspirations-category" pSortableColumn="category.name">
+                        <div class="nyk-inspirations-th-wrapper">
+                            Kategória
+                            <p-sortIcon field="category.name"></p-sortIcon>
+                        </div>
+                    </th>
 
                     <th class="w-3rem">Opciók</th>
                 </tr>
@@ -61,6 +73,7 @@
 
                         <p-image
                             *ngIf="imageLoadedStatus[i]"
+                            styleClass="shadow-2"
                             [src]="inspiration.image"
                             [alt]="inspiration.name"
                             [preview]="true">
@@ -71,40 +84,39 @@
                             styleClass="skeleton"></p-skeleton>
                     </td>
 
-                    <td class="nyk-inspirations-id text-primary w-9rem">
+                    <td class="nyk-inspirations-id text-primary w-9rem font-italic">
                         {{ inspiration.id }}
                     </td>
 
-                    <td class="text-cyan-900">{{ inspiration.name }}</td>
+                    <td class="text-black-alpha-90 font-medium">{{ inspiration.name }}</td>
 
-                    <td class="nyk-inspirations-category text-cyan-900 w-9rem">
-                        <p-badge [value]="inspiration.category.name"></p-badge>
+                    <td class="nyk-inspirations-category w-9rem">
+                        <p-badge
+                            [value]="inspiration.category.name"
+                            styleClass="shadow-2"></p-badge>
                     </td>
 
                     <td>
-                        <div class="flex flex-row">
-                            <button
-                                [routerLink]="[
-                                    '/admin/inspirations/edit',
-                                    inspiration.id
-                                ]"
-                                pButton
-                                pRipple
+                        <div class="flex flex-column">
+                            <p-button
+                                [raised]="true"
+                                icon="pi pi-cog"
+                                severity="info"
+                                styleClass="mb-2"
+                                [routerLink]="['/admin/inspirations/edit', inspiration.id]"
                                 pTooltip="Inspiráció módosítása"
                                 tooltipPosition="left"
-                                type="button"
-                                icon="pi pi-cog"
-                                class="p-button p-button-warning p-button mr-1"></button>
+                                tooltipPosition="left">
+                            </p-button>
 
-                            <button
-                                (click)="onDeleteInspiration(inspiration)"
-                                pButton
-                                pRipple
+                            <p-button
+                                [raised]="true"
+                                icon="pi pi-times"
+                                severity="danger"
                                 pTooltip="Inspiráció törlése"
                                 tooltipPosition="left"
-                                type="button"
-                                icon="pi pi-times"
-                                class="p-button p-button-danger p-button"></button>
+                                (click)="onDeleteInspiration(inspiration)">
+                            </p-button>
                         </div>
                     </td>
                 </tr>
@@ -112,13 +124,14 @@
 
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="6" class="text-center text-800 text-4xl">
+                    <td colspan="6" class="text-center text-800 text-4xl h-20rem">
                         Nem található inspiráció
 
                         <p-button
+                            [raised]="true"
                             icon="pi pi-plus"
-                            label="Inspiráció hozzáadás"
-                            styleClass="p-button p-button-success block mx-auto mt-2"
+                            label="Új inspiráció hozzáadása"
+                            styleClass="block mx-auto mt-2"
                             routerLink="/admin/inspirations/add">
                         </p-button>
                     </td>

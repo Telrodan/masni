@@ -4,35 +4,33 @@ import {
     Component,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, map, switchMap, tap } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Inspiration, BackendInspiration } from '@core/models/inspiration.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { InspirationService } from '@core/services/inspiration.service';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { CategoryService } from '@core/services/category.service';
-import { LogService } from '@core/services/log.service';
-import { Log } from '@core/models/log.model';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { InspirationCategory } from '@core/store/category/category.model';
-
-interface InspirationData extends Inspiration {
-    logs: Log[];
-}
+import { Inspiration } from '@core/store/inspiration/inspiration.model';
+import { InspirationAction, InspirationSelector } from '@core/store/inspiration';
+import { CategorySelector } from '@core/store/category';
+import { Log, LogSelector } from '@core/store/log';
+import { ItemHistoryComponent } from '@shared/item-history/item-history.component';
 
 @Component({
     selector: 'nyk-edit-inspiration',
@@ -45,7 +43,8 @@ interface InspirationData extends Inspiration {
         DropdownModule,
         SpinnerComponent,
         TableModule,
-        InputTextModule
+        InputTextModule,
+        ItemHistoryComponent
     ],
     templateUrl: './edit-inspiration.component.html',
     styleUrls: ['./edit-inspiration.component.scss'],
@@ -55,54 +54,30 @@ interface InspirationData extends Inspiration {
 export class EditInspirationComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-edit-inspiration';
 
-    inspiration$: Observable<InspirationData>;
-    inspirationId: string;
+    inspiration$: Observable<Inspiration>;
     categories$: Observable<InspirationCategory[]>;
-    isLoading = false;
+    logs$: Observable<Log[]>;
 
     editInspirationForm: FormGroup;
-
     imagePreview: string;
 
-    constructor(
-        private inspirationService: InspirationService,
-        private categoryService: CategoryService,
-        private logService: LogService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private router: Router,
-        private route: ActivatedRoute,
-        private fb: FormBuilder,
-        private toastr: ToastrService
-    ) {}
+    private readonly store = inject(Store);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly fb = inject(FormBuilder);
+    private readonly toastr = inject(ToastrService);
+    private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
     ngOnInit(): void {
-        this.inspiration$ = this.route.params.pipe(
-            switchMap((params) =>
-                combineLatest([
-                    this.inspirationService.getInspirationById$(params['id']),
-                    this.logService
-                        .getItemLogsByItemId$(params['id'])
-                        .pipe(
-                            map((logs) =>
-                                logs.sort(
-                                    (a, b) =>
-                                        new Date(b.timestamp).getTime() -
-                                        new Date(a.timestamp).getTime()
-                                )
-                            )
-                        )
-                ])
-            ),
-            filter((inspiration) => !!inspiration),
-            map(([inspiration, logs]) => ({
-                ...inspiration,
-                logs
-            })),
+        const inspirationId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.inspiration$ = inspirationId$.pipe(
+            switchMap((id) => this.store.select(InspirationSelector.selectInspirationById(id))),
             tap((inspiration) => {
-                this.inspirationId = inspiration.id;
                 this.editInspirationForm = this.fb.group({
+                    id: [inspiration.id, Validators.required],
                     name: [inspiration.name, Validators.required],
-                    categoryId: [inspiration.category.id, Validators.required],
+                    category: [inspiration.category.id, Validators.required],
                     image: [inspiration.image, Validators.required]
                 });
 
@@ -110,7 +85,11 @@ export class EditInspirationComponent implements OnInit {
             })
         );
 
-        this.categories$ = this.categoryService.getInspirationCategories$();
+        this.categories$ = this.store.select(CategorySelector.selectInspirationCategories());
+
+        this.logs$ = inspirationId$.pipe(
+            switchMap((id) => this.store.select(LogSelector.selectLogsByItemId(id)))
+        );
     }
 
     async onImagePicked(event: Event): Promise<void> {
@@ -126,30 +105,15 @@ export class EditInspirationComponent implements OnInit {
     }
 
     onEditInspiration(): void {
-        if (this.editInspirationForm.valid) {
-            const inspiration: BackendInspiration = {
-                name: this.editInspirationForm.value.name.trim(),
-                categoryId: this.editInspirationForm.value.categoryId,
-                image: this.editInspirationForm.value.image
-            };
+        if (!this.editInspirationForm.valid) {
+            this.toastr.info('Kérlek töltsd ki az összes mezőt.');
 
-            if (inspiration.name) {
-                this.isLoading = true;
-                this.inspirationService
-                    .updateInspiration$(inspiration, this.inspirationId)
-                    .pipe(
-                        tap((inspiration) => {
-                            this.isLoading = false;
-                            this.toastr.success(`${inspiration.name} inspiráció módosítva`);
-                            this.router.navigate(['/admin/inspirations']);
-                        })
-                    )
-                    .subscribe();
-            } else {
-                this.toastr.error('Kérlek add meg az inspiráció nevét');
-            }
-        } else {
-            this.toastr.error('Kérlek töltsd ki az összes mezőt');
+            return;
         }
+
+        const inspiration = this.editInspirationForm.value as Inspiration;
+
+        this.store.dispatch(InspirationAction.updateInspiration({ inspiration }));
+        this.router.navigate(['/admin/inspirations']);
     }
 }

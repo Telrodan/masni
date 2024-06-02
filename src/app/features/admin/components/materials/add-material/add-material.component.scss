@@ -2,11 +2,6 @@
 
 .nyk-add-material {
     display: block;
-    padding: 20px 40px;
-
-    @include respond(sm) {
-        padding: 20px;
-    }
 
     &-header {
         margin-bottom: 20px;

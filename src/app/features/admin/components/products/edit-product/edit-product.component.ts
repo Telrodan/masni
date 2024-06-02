@@ -20,7 +20,7 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import { Store } from '@ngrx/store';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, map, switchMap, tap } from 'rxjs';
 import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { DividerModule } from 'primeng/divider';
@@ -42,6 +42,9 @@ import { Category } from '@core/store/category/category.model';
 import { Product } from '@core/store/product/product.model';
 import { CategorySelector } from '@core/store/category';
 import { ProductAction, ProductSelector } from '@core/store/product';
+import { Log } from '@core/store/log/log.model';
+import { LogSelector } from '@core/store/log/log.selectors';
+import { ItemHistoryComponent } from '@shared/item-history/item-history.component';
 
 @Component({
     selector: 'nyk-edit-product',
@@ -63,7 +66,8 @@ import { ProductAction, ProductSelector } from '@core/store/product';
         CdkDrag,
         CdkDragPreview,
         TableModule,
-        InputNumberModule
+        InputNumberModule,
+        ItemHistoryComponent
     ],
     templateUrl: './edit-product.component.html',
     styleUrls: ['./edit-product.component.scss'],
@@ -75,6 +79,7 @@ export class EditProductComponent implements OnInit {
 
     product$: Observable<Product>;
     productSubCategories$: Observable<Category[]>;
+    logs$: Observable<Log[]>;
 
     editProductForm: FormGroup;
     imagesPreview: string[] = [];
@@ -87,10 +92,10 @@ export class EditProductComponent implements OnInit {
     private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
     ngOnInit(): void {
-        this.product$ = this.route.params.pipe(
-            switchMap((params: { id: string }) =>
-                this.store.select(ProductSelector.selectProductById(params.id))
-            ),
+        const productId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.product$ = productId$.pipe(
+            switchMap((id) => this.store.select(ProductSelector.selectProductById(id))),
             tap((product) => {
                 this.editProductForm = this.fb.group({
                     id: [product.id, Validators.required],
@@ -119,6 +124,10 @@ export class EditProductComponent implements OnInit {
 
         this.productSubCategories$ = this.store.select(
             CategorySelector.selectProductSubCategories()
+        );
+
+        this.logs$ = productId$.pipe(
+            switchMap((id) => this.store.select(LogSelector.selectLogsByItemId(id)))
         );
     }
 

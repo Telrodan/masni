@@ -1,13 +1,12 @@
 import { InspirationCategory } from '@core/store/category/category.model';
 
-export interface BackendInspiration {
-    name: string;
-    categoryId: string;
-    image: string;
+export interface InspirationState {
+    inspirations: Inspiration[];
+    isBusy: boolean;
 }
 
 export interface Inspiration {
-    id: string;
+    id?: string;
     name: string;
     category: InspirationCategory;
     image: string;

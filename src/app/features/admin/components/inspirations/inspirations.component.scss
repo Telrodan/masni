@@ -2,11 +2,6 @@
 
 .nyk-inspirations {
     display: block;
-    padding: 20px 40px;
-
-    @include respond(sm) {
-        padding: 20px;
-    }
 
     &-header {
         margin-bottom: 20px;
@@ -26,6 +21,10 @@
             flex-direction: column;
             gap: 16px;
         }
+    }
+
+    &-th-wrapper {
+        display: flex;
     }
 
     &-id,

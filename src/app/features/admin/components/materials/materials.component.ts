@@ -5,13 +5,14 @@ import {
     ChangeDetectionStrategy,
     ViewEncapsulation,
     HostBinding,
-    ChangeDetectorRef
+    inject
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { Observable, Subject, filter, startWith, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, filter, map, tap } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -21,11 +22,11 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Material } from '@core/models/material.model';
-import { MaterialService } from '@core/services/material.service';
-import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { Material } from '@core/store/material/material.model';
+import { MaterialSelector } from '@core/store/material/material.selectors';
+import { MaterialAction } from '@core/store/material';
 
 @Component({
     selector: 'nyk-materials',
@@ -54,23 +55,19 @@ export class MaterialsComponent implements OnInit {
     @ViewChild('table') materialsTable: Table;
 
     materials$: Observable<Material[]>;
+    isBusy$: Observable<boolean>;
+
     imageLoadedStatus: boolean[] = [];
-    isLoading = false;
 
-    private materialDeleteSubject = new Subject<void>();
-
-    constructor(
-        private materialService: MaterialService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private toastr: ToastrService,
-        private dialog: MatDialog
-    ) {}
+    private readonly store = inject(Store);
+    private readonly dialog = inject(MatDialog);
 
     ngOnInit(): void {
-        this.materials$ = this.materialDeleteSubject.pipe(
-            startWith(null),
-            switchMap(() => this.materialService.getMaterials$())
-        );
+        this.isBusy$ = this.store.select(MaterialSelector.isBusy());
+
+        this.materials$ = this.store
+            .select(MaterialSelector.selectMaterials())
+            .pipe(map((materials) => [...materials]));
     }
 
     onDeleteMaterial(material: Material): void {
@@ -85,15 +82,9 @@ export class MaterialsComponent implements OnInit {
             .pipe(
                 filter((confirmed) => !!confirmed),
                 tap(() => {
-                    this.isLoading = true;
-                    this.changeDetectorRef.detectChanges();
-                }),
-                switchMap(() => this.materialService.deleteMaterial$(material)),
-                tap(() => {
-                    this.isLoading = false;
-                    this.materialDeleteSubject.next();
-                    this.toastr.success(`${material.name} minta törölve`);
-                    this.changeDetectorRef.detectChanges();
+                    this.store.dispatch(
+                        MaterialAction.deleteMaterial({ id: material.id, name: material.name })
+                    );
                 })
             )
             .subscribe();
@@ -103,6 +94,7 @@ export class MaterialsComponent implements OnInit {
         this.imageLoadedStatus[index] = true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applyFilterGlobal($event: any, stringVal: string, table: Table): void {
         const filter = ($event.target as HTMLInputElement).value;
         table.filterGlobal(filter, stringVal);

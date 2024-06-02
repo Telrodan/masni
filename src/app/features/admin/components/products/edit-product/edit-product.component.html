@@ -213,36 +213,10 @@
         </p-button>
     </form>
 
-    <div class="nyk-edit-product-header">Termék előzmények</div>
-
-    <span class="text-blue-500">
-        Hozzáadva:
-        {{ product.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
-    </span>
-
-    <span class="text-green-500 block mb-4">
-        Utoljára módosítva:
-        {{ product.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
-    </span>
-
-    <!-- <p-table class="nyk-edit-product-history" [value]="product.logs">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Modul</th>
-                    <th>Dátum</th>
-                    <th>Üzenet</th>
-                    <th>Felhasználó</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-log>
-                <tr>
-                    <td>{{ log.meta.module }}</td>
-                    <td>
-                        {{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}
-                    </td>
-                    <td>{{ log.message }}</td>
-                    <td>{{ log.meta.user }}</td>
-                </tr>
-            </ng-template>
-        </p-table> -->
+    <nyk-item-history
+        itemType="Termék"
+        [logs]="logs$ | async"
+        [createdAt]="product.createdAt"
+        [updatedAt]="product.updatedAt">
+    </nyk-item-history>
 </ng-container>

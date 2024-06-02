@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoading; else loading">
+<ng-container *ngIf="(isBusy$ | async) === false; else loading">
     <ng-container *ngIf="materials$ | async as materials; else loading">
         <div class="nyk-materials-header">Összes minta</div>
 
@@ -8,14 +8,15 @@
             [value]="materials"
             [globalFilterFields]="['id', 'name', 'category.name']"
             [paginator]="true"
-            [rows]="25"
-            [rowsPerPageOptions]="[25, 50, 100]">
+            [rows]="50"
+            [rowsPerPageOptions]="[50, 100, 200]">
             <ng-template pTemplate="caption">
                 <div class="nyk-materials-actions">
                     <p-button
+                        [raised]="true"
                         icon="pi pi-plus"
-                        label="Minta hozzáadás"
-                        styleClass="p-button p-button-success"
+                        label="Új minta hozzáadása"
+                        styleClass="w-full"
                         routerLink="/admin/materials/add">
                     </p-button>
 
@@ -24,13 +25,14 @@
 
                         <input
                             pInputText
-                            pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
+                            pTooltip="Kereshető mezők:
+                                Azonosító
+                                Név
+                                Kategória"
                             tooltipPosition="bottom"
                             class="w-full"
                             type="text"
-                            (input)="
-                                applyFilterGlobal($event, 'contains', table)
-                            "
+                            (input)="applyFilterGlobal($event, 'contains', table)"
                             placeholder="Keresés" />
                     </span>
                 </div>
@@ -42,31 +44,41 @@
 
                     <th class="nyk-materials-id">Azonosító</th>
 
-                    <th>Név</th>
-
-                    <th class="nyk-materials-category">Kategória</th>
-
-                    <th
-                        pSortableColumn="extra"
-                        class="nyk-materials-extra w-8rem">
-                        Extra ár
-                        <p-sortIcon field="extra"></p-sortIcon>
+                    <th pSortableColumn="name">
+                        <div class="nyk-materials-th-wrapper">
+                            Név
+                            <p-sortIcon field="name"></p-sortIcon>
+                        </div>
                     </th>
 
-                    <th
-                        class="nyk-materials-is-available"
-                        pSortableColumn="isAvailable">
-                        Rendelhető
-                        <p-sortIcon field="isAvailable"></p-sortIcon>
+                    <th class="nyk-materials-category" pSortableColumn="category.name">
+                        <div class="nyk-materials-th-wrapper">
+                            Kategória
+                            <p-sortIcon field="category.name"></p-sortIcon>
+                        </div>
                     </th>
 
-                    <th class="w-3rem">Opciók</th>
+                    <th pSortableColumn="extraPrice" class="nyk-materials-extra w-8rem">
+                        <div class="nyk-materials-th-wrapper">
+                            Extra ár
+                            <p-sortIcon field="extraPrice"></p-sortIcon>
+                        </div>
+                    </th>
+
+                    <th class="nyk-materials-is-available" pSortableColumn="isAvailable">
+                        <div class="nyk-materials-th-wrapper">
+                            Rendelhető
+                            <p-sortIcon field="isAvailable"></p-sortIcon>
+                        </div>
+                    </th>
+
+                    <th class="w-3rem"></th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-material let-i="rowIndex">
                 <tr>
-                    <td class="w-7rem">
+                    <td class="w-1">
                         <img
                             class="hidden"
                             [src]="material.image"
@@ -85,60 +97,56 @@
                             styleClass="skeleton"></p-skeleton>
                     </td>
 
-                    <td class="nyk-materials-id text-primary w-9rem">
+                    <td class="nyk-materials-id text-primary w-9rem font-italic">
                         {{ material.id }}
                     </td>
 
-                    <td class="text-cyan-900 font-normal">
+                    <td class="text-black-alpha-90 font-medium">
                         {{ material.name }}
                     </td>
 
                     <td class="nyk-materials-category w-10rem text-center">
                         <p-badge
+                            styleClass="shadow-2"
                             [value]="material.category.name"
-                            severity="warning"></p-badge>
+                            severity="info"></p-badge>
                     </td>
 
-                    <td
-                        class="nyk-materials-extra text-cyan-900 font-normal w-5rem text-center">
-                        {{ material?.extraPrice }} Ft
+                    <td class="nyk-materials-extra text-black-alpha-90 w-7rem text-center">
+                        {{ material.extraPrice }} Ft
                     </td>
 
-                    <td class="nyk-materials-is-available w-4rem text-center">
+                    <td class="nyk-materials-is-available w-9rem text-center">
                         <div class="is-available">
                             <p-badge
+                                styleClass="shadow-2"
                                 [value]="material.isAvailable ? 'igen' : 'nem'"
-                                [severity]="
-                                    material.isAvailable ? 'success' : 'danger'
-                                ">
+                                [severity]="material.isAvailable ? 'success' : 'danger'">
                             </p-badge>
                         </div>
                     </td>
 
                     <td>
-                        <div class="flex flex-row">
-                            <button
-                                [routerLink]="[
-                                    '/admin/materials/edit',
-                                    material.id
-                                ]"
-                                pButton
-                                pRipple
-                                pTooltip="Minta módosítása"
-                                tooltipPosition="left"
-                                type="button"
+                        <div class="flex flex-column">
+                            <p-button
+                                [raised]="true"
                                 icon="pi pi-cog"
-                                class="p-button p-button-warning p-button mr-1"></button>
+                                severity="info"
+                                class="mr-1"
+                                styleClass="mb-2"
+                                [routerLink]="['/admin/materials/edit', material.id]"
+                                pTooltip="Minta módosítása"
+                                tooltipPosition="left">
+                            </p-button>
 
-                            <button
-                                (click)="onDeleteMaterial(material)"
-                                pButton
-                                pRipple
+                            <p-button
+                                [raised]="true"
+                                icon="pi pi-times"
+                                severity="danger"
                                 pTooltip="Minta törlése"
                                 tooltipPosition="left"
-                                type="button"
-                                icon="pi pi-times"
-                                class="p-button p-button-danger p-button"></button>
+                                (click)="onDeleteMaterial(material)">
+                            </p-button>
                         </div>
                     </td>
                 </tr>
@@ -146,12 +154,13 @@
 
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="7" class="text-center text-800 text-4xl">
+                    <td colspan="7" class="text-center text-800 text-4xl h-20rem">
                         Nem található minta
                         <p-button
+                            [raised]="true"
                             icon="pi pi-plus"
-                            label="Minta hozzáadás"
-                            styleClass="p-button p-button-success block mx-auto mt-2"
+                            label="Új minta hozzáadása"
+                            styleClass="block mx-auto mt-2"
                             routerLink="/admin/materials/add">
                         </p-button>
                     </td>

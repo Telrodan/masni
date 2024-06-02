@@ -1,67 +1,46 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
-import {
-    Inspiration,
-    BackendInspiration
-} from '@core/models/inspiration.model';
 import { ApiResponse } from '@core/models/api-response.model';
+import { Inspiration } from '@core/store/inspiration/inspiration.model';
+import { createFormDataFromObject } from '@shared/util/create-form-data-from-object.util';
 import { ApiService } from './api.service';
+
+const ROUTE_PREFIX = 'inspirations';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InspirationService {
-    constructor(private apiService: ApiService) {}
+    private readonly apiService = inject(ApiService);
 
-    addInspiration$(inspiration: BackendInspiration): Observable<Inspiration> {
-        const inspirationFormData = new FormData();
-        inspirationFormData.append('inspiration', JSON.stringify(inspiration));
-        inspirationFormData.append('image', inspiration.image);
+    addInspiration$(inspiration: Inspiration): Observable<Inspiration> {
+        const inspirationFormData = createFormDataFromObject(inspiration);
 
         return this.apiService
-            .post<ApiResponse<Inspiration>>(
-                'inspiration/addOne',
-                inspirationFormData
-            )
+            .post<ApiResponse<Inspiration>>(`${ROUTE_PREFIX}/addOne`, inspirationFormData)
             .pipe(map((inspirationDTO) => inspirationDTO.data));
     }
 
-    updateInspiration$(
-        inspiration: BackendInspiration,
-        inspirationId: string
-    ): Observable<Inspiration> {
-        const inspirationFormData = new FormData();
-        inspirationFormData.append('inspiration', JSON.stringify(inspiration));
-        inspirationFormData.append('image', inspiration.image);
+    updateInspiration$(inspiration: Inspiration): Observable<Inspiration> {
+        const inspirationFormData = createFormDataFromObject(inspiration);
 
         return this.apiService
             .patch<ApiResponse<Inspiration>>(
-                `inspiration/updateOne/${inspirationId}`,
+                `${ROUTE_PREFIX}/updateOne/${inspiration.id}`,
                 inspirationFormData
             )
             .pipe(map((inspirationDTO) => inspirationDTO.data));
     }
 
-    deleteInspiration$(inspiration: Inspiration): Observable<null> {
-        return this.apiService.delete<null>(
-            'inspiration/deleteOne',
-            inspiration.id
-        );
+    deleteInspiration$(id: string): Observable<null> {
+        return this.apiService.delete<null>(`${ROUTE_PREFIX}/deleteOne`, id);
     }
 
     getInspirations$(): Observable<Inspiration[]> {
         return this.apiService
-            .get<ApiResponse<Inspiration[]>>('inspiration/getAll')
+            .get<ApiResponse<Inspiration[]>>(`${ROUTE_PREFIX}/getAll`)
             .pipe(map((inspirationsDTO) => inspirationsDTO.data));
-    }
-
-    getInspirationById$(id: string): Observable<Inspiration> {
-        return this.apiService
-            .get<ApiResponse<Inspiration>>(
-                `inspiration/getInspirationById/${id}`
-            )
-            .pipe(map((inspirationDTO) => inspirationDTO.data));
     }
 }

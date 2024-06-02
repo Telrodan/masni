@@ -4,28 +4,30 @@ import {
     Component,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { Observable, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { DividerModule } from 'primeng/divider';
 
-import { InspirationService } from '@core/services/inspiration.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { BackendInspiration } from '@core/models/inspiration.model';
-import { CategoryService } from '@core/services/category.service';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { Category } from '@core/store/category/category.model';
+import { Inspiration } from '@core/store/inspiration/inspiration.model';
+import { CategorySelector } from '@core/store/category';
+import { InspirationAction } from '@core/store/inspiration';
 
 @Component({
     selector: 'nyk-add-inspiration',
@@ -47,28 +49,25 @@ import { Category } from '@core/store/category/category.model';
 export class AddInspirationComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-add-inspiration';
 
-    categories$: Observable<Category[]>;
-    isLoading = false;
-
-    addInspirationForm = this.fb.group({
-        name: ['', Validators.required],
-        categoryId: ['', Validators.required],
-        image: ['', Validators.required]
-    });
-
+    inspirationCategories$: Observable<Category[]>;
+    addInspirationForm: FormGroup;
     imagePreview: string;
 
-    constructor(
-        private inspirationService: InspirationService,
-        private categoryService: CategoryService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private router: Router,
-        private toastr: ToastrService,
-        private fb: FormBuilder
-    ) {}
+    private readonly store = inject(Store);
+    private readonly fb = inject(FormBuilder);
+    private readonly toastr = inject(ToastrService);
+    private readonly changeDetectorRef = inject(ChangeDetectorRef);
+    private readonly router = inject(Router);
 
     ngOnInit(): void {
-        this.categories$ = this.categoryService.getInspirationCategories$();
+        this.inspirationCategories$ = this.store.select(
+            CategorySelector.selectInspirationCategories()
+        );
+        this.addInspirationForm = this.fb.group({
+            name: [undefined, Validators.required],
+            category: [undefined, Validators.required],
+            image: [undefined, Validators.required]
+        });
     }
 
     async onImagePicked(event: Event): Promise<void> {
@@ -84,30 +83,15 @@ export class AddInspirationComponent implements OnInit {
     }
 
     onAddInspiration(): void {
-        if (this.addInspirationForm.valid) {
-            const inspiration: BackendInspiration = {
-                name: this.addInspirationForm.value.name.trim(),
-                categoryId: this.addInspirationForm.value.categoryId,
-                image: this.addInspirationForm.value.image
-            };
+        if (!this.addInspirationForm.valid) {
+            this.toastr.info('Kérlek töltsd ki az összes mezőt.');
 
-            if (inspiration.name) {
-                this.isLoading = true;
-                this.inspirationService
-                    .addInspiration$(inspiration)
-                    .pipe(
-                        tap(() => {
-                            this.isLoading = false;
-                            this.toastr.success(`${inspiration.name} inspiráció hozzáadva`);
-                            this.router.navigate(['/admin/inspirations']);
-                        })
-                    )
-                    .subscribe();
-            } else {
-                this.toastr.error('Kérlek adj meg egy inspiráció nevet');
-            }
-        } else {
-            this.toastr.error('Kérlek töltsd ki az összes mezőt');
+            return;
         }
+
+        const inspiration = this.addInspirationForm.value as Inspiration;
+
+        this.store.dispatch(InspirationAction.addInspiration({ inspiration }));
+        this.router.navigate(['/admin/inspirations']);
     }
 }

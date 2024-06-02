@@ -2,11 +2,6 @@
 
 .nyk-materials {
     display: block;
-    padding: 20px 40px;
-
-    @include respond(sm) {
-        padding: 20px;
-    }
 
     &-header {
         margin-bottom: 20px;
@@ -17,6 +12,10 @@
         @include respond(sm) {
             font-size: var(--font-size-m);
         }
+    }
+
+    &-th-wrapper {
+        display: flex;
     }
 
     &-actions {

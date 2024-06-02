@@ -1,15 +1,16 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 
-import { Observable, Subject, filter, startWith, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, filter, map, tap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { Table, TableModule } from 'primeng/table';
@@ -19,12 +20,10 @@ import { ImageModule } from 'primeng/image';
 import { SkeletonModule } from 'primeng/skeleton';
 import { BadgeModule } from 'primeng/badge';
 
-import { Inspiration } from '@core/models/inspiration.model';
-import { InspirationService } from '@core/services/inspiration.service';
-import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { AddInspirationComponent } from './add-inspiration/add-inspiration.component';
+import { Inspiration } from '@core/store/inspiration/inspiration.model';
+import { InspirationAction, InspirationSelector } from '@core/store/inspiration';
 
 @Component({
     selector: 'nyk-inspirations',
@@ -50,29 +49,19 @@ export class InspirationsComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-inspirations';
 
     inspirations$: Observable<Inspiration[]>;
+    isBusy$: Observable<boolean>;
+
     imageLoadedStatus: boolean[] = [];
-    isLoading = false;
 
-    private deleteInspirationSubject = new Subject<void>();
-
-    constructor(
-        private inspirationService: InspirationService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private dialog: MatDialog,
-        private toastr: ToastrService
-    ) {}
+    private readonly store = inject(Store);
+    private readonly dialog = inject(MatDialog);
 
     ngOnInit(): void {
-        this.inspirations$ = this.deleteInspirationSubject.pipe(
-            startWith(null),
-            switchMap(() => this.inspirationService.getInspirations$())
-        );
-    }
+        this.isBusy$ = this.store.select(InspirationSelector.isBusy());
 
-    onAddInspiration(): void {
-        this.dialog.open(AddInspirationComponent, {
-            minWidth: '40vw'
-        });
+        this.inspirations$ = this.store
+            .select(InspirationSelector.selectInspirations())
+            .pipe(map((inspirations) => [...inspirations]));
     }
 
     onDeleteInspiration(inspiration: Inspiration): void {
@@ -86,21 +75,14 @@ export class InspirationsComponent implements OnInit {
             .afterClosed()
             .pipe(
                 filter((confirmed) => !!confirmed),
-                tap(() => {
-                    this.isLoading = true;
-                    this.changeDetectorRef.detectChanges();
-                }),
-                switchMap(() =>
-                    this.inspirationService.deleteInspiration$(inspiration)
-                ),
-                tap(() => {
-                    this.isLoading = false;
-                    this.deleteInspirationSubject.next();
-                    this.toastr.success(
-                        `${inspiration.name} inspiráció törölve`
-                    );
-                    this.changeDetectorRef.detectChanges();
-                })
+                tap(() =>
+                    this.store.dispatch(
+                        InspirationAction.deleteInspiration({
+                            id: inspiration.id,
+                            name: inspiration.name
+                        })
+                    )
+                )
             )
             .subscribe();
     }
@@ -109,6 +91,7 @@ export class InspirationsComponent implements OnInit {
         this.imageLoadedStatus[index] = true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applyFilterGlobal($event: any, stringVal: string, table: Table): void {
         const filter = ($event.target as HTMLInputElement).value;
         table.filterGlobal(filter, stringVal);

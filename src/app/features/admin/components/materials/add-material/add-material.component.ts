@@ -4,31 +4,33 @@ import {
     Component,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { Observable, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
-import { MaterialService } from '@core/services/material.service';
 import { ToastrService } from '@core/services/toastr.service';
-import { BackendMaterial } from '@core/models/material.model';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { ButtonModule } from 'primeng/button';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { DividerModule } from 'primeng/divider';
-import { InputTextModule } from 'primeng/inputtext';
-import { CategoryService } from '@core/services/category.service';
-import { Router } from '@angular/router';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import { Category } from '@core/store/category/category.model';
+import { Material } from '@core/store/material/material.model';
+import { CategorySelector } from '@core/store/category';
+import { MaterialAction } from '@core/store/material';
 
 @Component({
     selector: 'nyk-add-material',
@@ -41,9 +43,9 @@ import { Category } from '@core/store/category/category.model';
         RadioButtonModule,
         ButtonModule,
         SpinnerComponent,
-        DividerModule,
         InputTextModule,
-        InputSwitchModule
+        InputSwitchModule,
+        InputNumberModule
     ],
     templateUrl: './add-material.component.html',
     styleUrls: ['./add-material.component.scss'],
@@ -56,27 +58,25 @@ export class AddMaterialComponent implements OnInit {
     categories$: Observable<Category[]>;
     isLoading = false;
 
-    addMaterialForm = this.fb.group({
-        name: ['', Validators.required],
-        category: ['', Validators.required],
-        image: ['', Validators.required],
-        extraPrice: [0, Validators.required],
-        isAvailable: [true, Validators.required]
-    });
-
+    addMaterialForm: FormGroup;
     imagePreview: string;
 
-    constructor(
-        private materialService: MaterialService,
-        private categoryService: CategoryService,
-        private toastr: ToastrService,
-        private fb: FormBuilder,
-        private changeDetectorRef: ChangeDetectorRef,
-        private router: Router
-    ) {}
+    private readonly store = inject(Store);
+    private readonly router = inject(Router);
+    private readonly fb = inject(FormBuilder);
+    private readonly changeDetectorRef = inject(ChangeDetectorRef);
+    private readonly toastr = inject(ToastrService);
 
     ngOnInit(): void {
-        this.categories$ = this.categoryService.getMaterialCategories$();
+        this.addMaterialForm = this.fb.group({
+            name: ['', Validators.required],
+            category: ['', Validators.required],
+            image: ['', Validators.required],
+            extraPrice: [0, Validators.required],
+            isAvailable: [true, Validators.required]
+        });
+
+        this.categories$ = this.store.select(CategorySelector.selectMaterialCategories());
     }
 
     async onImagePicked(event: Event): Promise<void> {
@@ -92,32 +92,15 @@ export class AddMaterialComponent implements OnInit {
     }
 
     onAddMaterial(): void {
-        if (this.addMaterialForm.valid) {
-            const material: BackendMaterial = {
-                name: this.addMaterialForm.value.name.trim(),
-                categoryId: this.addMaterialForm.value.category,
-                image: this.addMaterialForm.value.image,
-                extraPrice: this.addMaterialForm.value.extraPrice,
-                isAvailable: this.addMaterialForm.value.isAvailable
-            };
+        if (!this.addMaterialForm.valid) {
+            this.toastr.error('Kérlek töltsd ki az összes mezőt.');
 
-            if (material.name) {
-                this.isLoading = true;
-                this.materialService
-                    .addMaterial$(material)
-                    .pipe(
-                        tap(() => {
-                            this.isLoading = false;
-                            this.toastr.success(`${material.name} hozzáadva`);
-                            this.router.navigate(['/admin/materials']);
-                        })
-                    )
-                    .subscribe();
-            } else {
-                this.toastr.error('Kérlek adj meg egy minta nevet');
-            }
-        } else {
-            this.toastr.error('Kérlek töltsd ki az összes mezőt');
+            return;
         }
+
+        const material = this.addMaterialForm.value as Material;
+
+        this.store.dispatch(MaterialAction.addMaterial({ material }));
+        this.router.navigate(['/admin/materials']);
     }
 }
