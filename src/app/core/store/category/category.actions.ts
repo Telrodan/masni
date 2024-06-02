@@ -1,19 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 
-import { CategoryOrderData } from '@features/admin/components/categories/order-categories/order-categories.component';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
-import { Category } from './category.model';
-
-// export enum CategoryActionsTypes {
-//     GET_CATEGORIES = '[Category] Get Categories',
-//     GET_CATEGORIES_SUCCESS = '[Category] Get Categories Success',
-//     ADD_CATEGORY = '[Category] Add Category',
-//     UPDATE_CATEGORY = '[Category] Update Category',
-//     DELETE_CATEGORY = '[Category] Delete Category',
-//     ADD_ITEM_TO_CATEGORY = '[Category] Add Item To Category',
-//     DELETE_ITEM_FROM_CATEGORY = '[Category] Delete Item From Category',
-//     MOVE_ITEM_BETWEEN_CATEGORIES = '[Category] Move Item Between Categories'
-// }
+import { Category, CategoryOrderData } from './category.model';
 
 const ACTION_PREFIX = '[Category]';
 
@@ -67,5 +55,15 @@ export const CategoryAction = {
     deleteCategorySuccess: createAction(
         `${ACTION_PREFIX} Delete Category Success`,
         props<{ id: string }>()
+    ),
+
+    deleteItemFromCategory: createAction(
+        `${ACTION_PREFIX} Delete Item From Category Sync`,
+        props<{ categoryId: string; itemId: string }>()
+    ),
+
+    addItemToCategory: createAction(
+        `${ACTION_PREFIX} Add Item To Category Sync`,
+        props<{ categoryId: string; itemId: string }>()
     )
 };

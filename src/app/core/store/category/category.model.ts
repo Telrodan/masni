@@ -1,8 +1,7 @@
-import { CategoryType } from '@core/enums/category-type.enum';
-import { Inspiration } from '@core/models/inspiration.model';
-import { Material } from '@core/models/material.model';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
 import { Product } from '../product/product.model';
+import { Material } from '../material/material.model';
+import { Inspiration } from '../inspiration/inspiration.model';
 
 export interface CategoryState {
     categories: Category[];
@@ -10,23 +9,39 @@ export interface CategoryState {
     isBusy: boolean;
 }
 
+export enum CategoryType {
+    Product = 'Product',
+    Material = 'Material',
+    Inspiration = 'Inspiration'
+}
+
+export interface CategorySortItem {
+    id: string;
+    sortIndex: number;
+}
+
+export interface CategoryOrderData {
+    isSubCategory: boolean;
+    categories: CategorySortItem[];
+}
+
 export interface Category {
     id?: string;
     type: CategoryType;
-    isSubCategory?: boolean;
-    subCategories?: ProductCategory[];
-    parentCategory?: string;
     name: string;
     image: string;
-    sortIndex?: number;
     description?: string;
+    isMainCategory: boolean;
+    parentCategory?: Category;
+    subCategories?: ProductCategory[];
+    items?: Product[] | Material[] | Inspiration[];
+    sortIndex?: number;
     updatedAt?: Date;
     createdAt?: Date;
 }
 
 export interface ProductCategory extends Category {
     items: Product[];
-    slug?: string;
 }
 
 export interface MaterialCategory extends Category {

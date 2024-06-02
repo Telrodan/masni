@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { CategoryState } from './category.model';
+
+import { cloneDeep } from 'lodash';
+
+import { CategoryState, ProductCategory } from './category.model';
 import { CategoryAction } from './category.actions';
 
 export const categoryInitialState: CategoryState = {
@@ -37,11 +40,25 @@ export const categoryReducers = createReducer(
         isBusy: true
     })),
 
-    on(CategoryAction.addCategorySuccess, (state, action) => ({
-        ...state,
-        categories: [...state.categories, action.category],
-        isBusy: false
-    })),
+    on(CategoryAction.addCategorySuccess, (state, action) => {
+        const stateClone = cloneDeep(state);
+
+        if (!action.category.isMainCategory) {
+            const parentCategoryIndex = stateClone.categories.findIndex(
+                (category) => category.id === action.category.parentCategory.id
+            );
+
+            stateClone.categories[parentCategoryIndex].subCategories.push(
+                action.category as ProductCategory
+            );
+        }
+
+        return {
+            ...stateClone,
+            categories: [...stateClone.categories, action.category],
+            isBusy: false
+        };
+    }),
 
     on(CategoryAction.updateCategory, (state) => ({
         ...state,
@@ -72,9 +89,42 @@ export const categoryReducers = createReducer(
         isBusy: true
     })),
 
-    on(CategoryAction.deleteCategorySuccess, (state, action) => ({
-        ...state,
-        categories: state.categories.filter((category) => category.id !== action.id),
-        isBusy: false
-    }))
+    on(CategoryAction.deleteCategorySuccess, (state, action) => {
+        const stateClone = cloneDeep(state);
+
+        const category = stateClone.categories.find((category) => category.id === action.id);
+
+        if (!category.isMainCategory) {
+            const parentCategoryIndex = stateClone.categories.findIndex(
+                (c) => c.id === category.parentCategory.id
+            );
+
+            stateClone.categories[parentCategoryIndex].subCategories = stateClone.categories[
+                parentCategoryIndex
+            ].subCategories.filter((subCategory) => subCategory.id !== action.id);
+        }
+
+        return {
+            ...stateClone,
+            categories: stateClone.categories.filter((category) => category.id !== action.id),
+            isBusy: false
+        };
+    }),
+
+    on(CategoryAction.deleteItemFromCategory, (state, action) => {
+        const stateClone = cloneDeep(state);
+
+        const categoryIndex = stateClone.categories.findIndex(
+            (category) => category.id === action.categoryId
+        );
+        const items = stateClone.categories[categoryIndex].items;
+        const itemIndex = items.findIndex((item) => item.id === action.itemId);
+        items.splice(itemIndex, 1);
+
+        stateClone.categories[categoryIndex].items = items;
+
+        return {
+            ...stateClone
+        };
+    })
 );

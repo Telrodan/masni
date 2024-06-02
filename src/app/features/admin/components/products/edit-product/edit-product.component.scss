@@ -2,7 +2,6 @@
 
 .nyk-edit-product {
     display: block;
-    padding: 20px 40px;
 
     @include respond(sm) {
         padding: 20px;
@@ -32,6 +31,15 @@
         flex-wrap: wrap;
         border-radius: 5px;
         overflow: hidden;
+
+        &-preview {
+            width: 200px;
+            box-shadow: var(--shadow);
+        }
+
+        &:empty {
+            display: none;
+        }
     }
 
     &-image {

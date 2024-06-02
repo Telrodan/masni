@@ -1,8 +1,13 @@
 import { createSelector } from '@ngrx/store';
 
 import { AppState } from '../app-state.model';
-import { CategoryType } from '@core/enums/category-type.enum';
-import { Category } from './category.model';
+import {
+    Category,
+    CategoryType,
+    InspirationCategory,
+    MaterialCategory,
+    ProductCategory
+} from './category.model';
 
 const selectCategoryState = (state: AppState) => state.category;
 
@@ -21,10 +26,39 @@ export const CategorySelector = {
         ),
 
     selectMainProductCategories: () =>
-        createSelector(selectCategoryState, (categoryState): Category[] =>
-            categoryState.categories.filter(
-                (category) => category.type === CategoryType.Product && !category.isSubCategory
-            )
+        createSelector(
+            selectCategoryState,
+            (categoryState): ProductCategory[] =>
+                categoryState.categories.filter(
+                    (category) => category.type === CategoryType.Product && category.isMainCategory
+                ) as ProductCategory[]
+        ),
+
+    selectProductSubCategories: () =>
+        createSelector(
+            selectCategoryState,
+            (categoryState): ProductCategory[] =>
+                categoryState.categories.filter(
+                    (category) => category.type === CategoryType.Product && !category.isMainCategory
+                ) as ProductCategory[]
+        ),
+
+    selectMaterialCategories: () =>
+        createSelector(
+            selectCategoryState,
+            (categoryState): MaterialCategory[] =>
+                categoryState.categories.filter(
+                    (category) => category.type === CategoryType.Material
+                ) as MaterialCategory[]
+        ),
+
+    selectInspirationCategories: () =>
+        createSelector(
+            selectCategoryState,
+            (categoryState): InspirationCategory[] =>
+                categoryState.categories.filter(
+                    (category) => category.type === CategoryType.Inspiration
+                ) as InspirationCategory[]
         ),
 
     isBusy: () =>

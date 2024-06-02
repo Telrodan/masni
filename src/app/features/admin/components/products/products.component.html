@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoading; else loading">
+<ng-container *ngIf="(isBusy$ | async) === false; else loading">
     <ng-container *ngIf="products$ | async as products; else loading">
         <div class="nyk-products-header">Összes termék</div>
 
@@ -13,9 +13,10 @@
             <ng-template pTemplate="caption">
                 <div class="nyk-products-actions">
                     <p-button
+                        [raised]="true"
                         icon="pi pi-plus"
-                        label="Termék hozzáadás"
-                        styleClass="p-button p-button-success"
+                        label="Új termék hozzáadása"
+                        styleClass="w-full "
                         routerLink="/admin/products/add">
                     </p-button>
 
@@ -24,17 +25,14 @@
 
                         <input
                             pInputText
-                            pTooltip="Kereshető mezők: Azonosító, Név, Kategória"
+                            pTooltip="Kereshető mezők:
+                                Azonosító
+                                Név
+                                Kategória"
                             tooltipPosition="bottom"
                             class="w-full"
                             type="text"
-                            (input)="
-                                applyTableGlobalFilter(
-                                    $event,
-                                    'contains',
-                                    table
-                                )
-                            "
+                            (input)="applyTableGlobalFilter($event, 'contains', table)"
                             placeholder="Keresés" />
                     </span>
                 </div>
@@ -46,31 +44,41 @@
 
                     <th class="nyk-products-id">Azonosító</th>
 
-                    <th>Név</th>
-
-                    <th class="nyk-products-category">Kategória</th>
-
-                    <th
-                        pSortableColumn="price"
-                        class="nyk-products-price w-8rem">
-                        Ár
-                        <p-sortIcon field="price"></p-sortIcon>
+                    <th pSortableColumn="name">
+                        <div class="nyk-products-th-wrapper">
+                            Név
+                            <p-sortIcon field="name"></p-sortIcon>
+                        </div>
                     </th>
 
-                    <th
-                        pSortableColumn="stock"
-                        class="nyk-products-stock w-9rem">
-                        Készlet
-                        <p-sortIcon field="stock"></p-sortIcon>
+                    <th class="nyk-products-category" pSortableColumn="category.name">
+                        <div class="nyk-products-th-wrapper">
+                            Kategória
+                            <p-sortIcon field="category.name"></p-sortIcon>
+                        </div>
                     </th>
 
-                    <th class="w-3rem">Opciók</th>
+                    <th pSortableColumn="stock" class="nyk-products-stock">
+                        <div class="nyk-products-th-wrapper">
+                            Készlet
+                            <p-sortIcon field="stock"></p-sortIcon>
+                        </div>
+                    </th>
+
+                    <th pSortableColumn="price" class="nyk-products-price">
+                        <div class="nyk-products-th-wrapper">
+                            Ár
+                            <p-sortIcon field="price"></p-sortIcon>
+                        </div>
+                    </th>
+
+                    <th class="w-3rem"></th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-product let-i="rowIndex">
                 <tr>
-                    <td class="w-7rem">
+                    <td class="w-1">
                         <img
                             class="hidden"
                             [src]="product.images[0]"
@@ -79,6 +87,7 @@
 
                         <p-image
                             *ngIf="imageLoadedStatus[i]"
+                            styleClass="shadow-2"
                             [src]="product.images[0]"
                             [alt]="'Termék ' + i + ' képe'"
                             [preview]="true">
@@ -89,13 +98,13 @@
                             styleClass="skeleton"></p-skeleton>
                     </td>
 
-                    <td class="nyk-products-id text-primary w-9rem">
+                    <td class="nyk-products-id text-primary w-9rem font-italic">
                         {{ product.id }}
                     </td>
 
                     <td>
                         <div class="flex align-items-center">
-                            <p class="text-cyan-900 font-normal">
+                            <p class="text-black-alpha-90 font-medium">
                                 {{ product.name }}
                             </p>
 
@@ -115,12 +124,25 @@
 
                     <td class="nyk-products-category w-10rem text-center">
                         <p-badge
-                            [value]="product?.category?.name"
-                            severity="success"></p-badge>
+                            styleClass="shadow-2"
+                            [value]="product.category.name"
+                            severity="success">
+                        </p-badge>
                     </td>
 
-                    <td
-                        class="nyk-products-price text-cyan-900 font-normal w-5rem text-center">
+                    <td class="nyk-products-stock w-9rem text-center">
+                        <p-badge
+                            styleClass="shadow-2"
+                            [value]="
+                                product.stock > 0
+                                    ? 'Készleten: ' + product.stock
+                                    : 'Nincs készleten'
+                            "
+                            [severity]="product.stock > 0 ? 'success' : 'danger'">
+                        </p-badge>
+                    </td>
+
+                    <td class="nyk-products-price text-black-alpha-90 w-7rem text-center">
                         <span
                             [ngClass]="{
                                 'line-through': product.discountedPrice > 0,
@@ -136,43 +158,26 @@
                         </span>
                     </td>
 
-                    <td class="nyk-products-stock w-5rem text-center">
-                        <p-badge
-                            [value]="
-                                product.stock > 0
-                                    ? 'Készleten: ' + product.stock
-                                    : 'Nincs készleten'
-                            "
-                            [severity]="
-                                product.stock > 0 ? 'success' : 'danger'
-                            ">
-                        </p-badge>
-                    </td>
-
                     <td>
-                        <div class="flex flex-row">
-                            <button
-                                [routerLink]="[
-                                    '/admin/products/edit',
-                                    product.id
-                                ]"
-                                pButton
-                                pRipple
-                                pTooltip="Termék módosítása"
-                                tooltipPosition="left"
-                                type="button"
+                        <div class="flex flex-column">
+                            <p-button
+                                [raised]="true"
                                 icon="pi pi-cog"
-                                class="p-button p-button-warning p-button mr-1"></button>
+                                severity="info"
+                                styleClass="mb-2"
+                                [routerLink]="['/admin/products/edit', product.id]"
+                                pTooltip="Termék módosítása"
+                                tooltipPosition="left">
+                            </p-button>
 
-                            <button
-                                (click)="onDeleteProduct(product)"
-                                pButton
-                                pRipple
+                            <p-button
+                                [raised]="true"
+                                icon="pi pi-times"
+                                severity="danger"
                                 pTooltip="Termék törlése"
                                 tooltipPosition="left"
-                                type="button"
-                                icon="pi pi-times"
-                                class="p-button p-button-danger p-button"></button>
+                                (click)="onDeleteProduct(product)">
+                            </p-button>
                         </div>
                     </td>
                 </tr>
@@ -180,12 +185,13 @@
 
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="7" class="text-center text-800 text-4xl">
+                    <td colspan="7" class="text-center text-800 text-4xl h-20rem">
                         Nem található termék
                         <p-button
+                            [raised]="true"
                             icon="pi pi-plus"
-                            label="Termék hozzáadás"
-                            styleClass="p-button p-button-success block mx-auto mt-2"
+                            label="Új termék hozzáadása"
+                            styleClass="block mx-auto mt-2"
                             routerLink="/admin/products/add">
                         </p-button>
                     </td>

@@ -12,8 +12,8 @@
 
             <p-badge
                 *ngIf="category.type === CategoryType.Product"
-                [value]="category.isSubCategory ? 'Alkategória' : 'Főkategória'"
-                [severity]="category.isSubCategory ? 'info' : 'warning'"
+                [value]="category.isMainCategory ? 'Főkategória' : 'Alkategória'"
+                [severity]="category.isMainCategory ? 'warning' : 'info'"
                 styleClass="shadow-2">
             </p-badge>
 
@@ -96,36 +96,9 @@
         </p-button>
     </form>
 
-    <div class="nyk-edit-category-header">Kategória előzmények</div>
-
-    <span class="text-blue-500">
-        Hozzáadva:
-        {{ category.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
-    </span>
-
-    <span class="text-green-500 block mb-4">
-        Utoljára módosítva:
-        {{ category.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
-    </span>
-
-    <!-- <p-table class="nyk-edit-category-history" [value]="category.logs">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Modul</th>
-                    <th>Dátum</th>
-                    <th>Üzenet</th>
-                    <th>Felhasználó</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-log>
-                <tr>
-                    <td>{{ log.meta.module }}</td>
-                    <td>
-                        {{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}
-                    </td>
-                    <td>{{ log.message }}</td>
-                    <td>{{ log.meta.user }}</td>
-                </tr>
-            </ng-template>
-        </p-table> -->
+    <nyk-item-history
+        itemType="Kategória"
+        [logs]="logs$ | async"
+        [createdAt]="category.createdAt"
+        [updatedAt]="category.updatedAt"></nyk-item-history>
 </ng-container>

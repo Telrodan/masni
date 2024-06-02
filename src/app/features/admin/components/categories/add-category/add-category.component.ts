@@ -2,9 +2,8 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     HostBinding,
-    ViewChild,
+    OnInit,
     ViewEncapsulation,
     inject
 } from '@angular/core';
@@ -13,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+import { Observable, filter } from 'rxjs';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
@@ -21,15 +21,13 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
 import { BadgeModule } from 'primeng/badge';
 
-import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ToastrService } from '@core/services/toastr.service';
 import {
     addImageToFormAndSetPreview,
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
-import { Observable } from 'rxjs';
-import { Category } from '@core/store/category/category.model';
+import { Category, CategoryType } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-add-category',
@@ -50,15 +48,13 @@ import { Category } from '@core/store/category/category.model';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddCategoryComponent {
+export class AddCategoryComponent implements OnInit {
     @HostBinding('class') class = 'nyk-add-category';
 
-    @ViewChild('imagePicker', { static: false })
-    imagePicker: ElementRef<HTMLInputElement>;
+    productMainCategories$: Observable<Category[]>;
 
-    mainCategories$: Observable<Category[]>;
-    imagePreview: string;
     addCategoryForm: FormGroup;
+    imagePreview: string;
 
     readonly CategoryType = CategoryType;
 
@@ -68,15 +64,18 @@ export class AddCategoryComponent {
     private readonly changeDetectorRef = inject(ChangeDetectorRef);
     private readonly router = inject(Router);
 
-    constructor() {
-        this.mainCategories$ = this.store.select(CategorySelector.selectMainProductCategories());
+    ngOnInit(): void {
+        this.productMainCategories$ = this.store
+            .select(CategorySelector.selectMainProductCategories())
+            .pipe(filter((categories) => !!categories));
+
         this.addCategoryForm = this.fb.group({
             type: [CategoryType.Product, Validators.required],
-            isSubCategory: [false],
-            parentCategory: [''],
-            name: ['', Validators.required],
-            image: ['', Validators.required],
-            description: ['']
+            name: [undefined, Validators.required],
+            image: [undefined, Validators.required],
+            description: [undefined],
+            isMainCategory: [true, Validators.required],
+            parentCategory: [undefined]
         });
     }
 
@@ -101,9 +100,7 @@ export class AddCategoryComponent {
 
         const category = this.addCategoryForm.value as Category;
 
-        console.log('debug, category', category);
-
-        if (category.isSubCategory && !category.parentCategory) {
+        if (!category.isMainCategory && !category.parentCategory) {
             this.toastr.info('Kérlek válassz egy főkategóriát.');
 
             return;

@@ -37,17 +37,17 @@ export class CategoriesComponent implements OnChanges {
     ngOnChanges(changes: { productCategories: SimpleChange }): void {
         if (changes.productCategories) {
             const subProductCategories: ProductCategory[] = changes.productCategories.currentValue
-                .filter((subProductCategory: ProductCategory) => subProductCategory.isSubCategory)
+                .filter((subProductCategory: ProductCategory) => subProductCategory.isMainCategory)
                 .filter(
                     (subProductCategory: ProductCategory) => subProductCategory.items.length > 0
                 );
 
-            this.data = subProductCategories.map((category: ProductCategory) => ({
-                label: category.slug,
-                image: category.image,
-                routerLink: `/shop/${category.id}`,
-                count: category.items.length
-            }));
+            // this.data = subProductCategories.map((category: ProductCategory) => ({
+            //     label: category.slug,
+            //     image: category.image,
+            //     routerLink: `/shop/${category.id}`,
+            //     count: category.items.length
+            // }));
         }
     }
 

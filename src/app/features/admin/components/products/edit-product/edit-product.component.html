@@ -1,242 +1,231 @@
-<ng-container *ngIf="!isLoading; else loading">
-    <ng-container *ngIf="product$ | async as product; else loading">
-        <div class="nyk-edit-product-header">Termék módosítása</div>
+<ng-container *ngIf="product$ | async as product">
+    <div class="nyk-edit-product-header">Termék módosítása</div>
 
-        <form class="nyk-edit-product-form" [formGroup]="editProductForm">
-            <div class="form-group">
-                <label for="name"> Termék neve </label>
+    <form class="nyk-edit-product-form" [formGroup]="editProductForm">
+        <div class="form-group">
+            <label for="name"> Termék neve </label>
 
-                <input
-                    id="name"
-                    type="text"
-                    formControlName="name"
-                    pInputText />
-            </div>
+            <input id="name" type="text" formControlName="name" pInputText />
+        </div>
 
-            <div class="form-group">
-                <label for="categoryId"> Termék kategória </label>
+        <div class="form-group">
+            <label for="categoryId"> Termék kategória </label>
 
+            <p-dropdown
+                id="category"
+                formControlName="category"
+                [options]="productSubCategories$ | async"
+                placeholder="Válassz egy kategóriát"
+                optionValue="id"
+                optionLabel="name"
+                styleClass="w-full">
+            </p-dropdown>
+        </div>
+
+        <div class="form-group">
+            <label for="shortDescription"> Termék rövid leírása </label>
+
+            <input
+                id="shortDescription"
+                type="text"
+                formControlName="shortDescription"
+                pInputText />
+        </div>
+
+        <div class="form-group">
+            <label for="description"> Termék leírása </label>
+
+            <p-editor formControlName="description" [style]="{ height: '320px' }"></p-editor>
+        </div>
+
+        <div class="form-group">
+            <label for="price"> Termék ára </label>
+
+            <p-inputNumber
+                [showButtons]="true"
+                inputId="price"
+                formControlName="price"
+                mode="currency"
+                currency="HUF"
+                styleClass="w-full"
+                [min]="0" />
+        </div>
+
+        <div class="form-group">
+            <label for="discountedPrice"> Termék akciós ára </label>
+
+            <p-inputNumber
+                [showButtons]="true"
+                inputId="discountedPrice"
+                formControlName="discountedPrice"
+                mode="currency"
+                currency="HUF"
+                styleClass="w-full"
+                [min]="0" />
+        </div>
+
+        <div class="form-group">
+            <label for="stock"> Készleten </label>
+
+            <p-inputNumber
+                [showButtons]="true"
+                inputId="stock"
+                formControlName="stock"
+                mode="decimal"
+                styleClass="w-full"
+                [min]="0" />
+        </div>
+
+        <!-- <div class="form-group">
+            <label for="selectedQuestion"> Kérdések </label>
+
+            <div class="nyk-edit-product-questions-wrapper">
                 <p-dropdown
-                    id="categoryId"
-                    formControlName="categoryId"
-                    [options]="categories$ | async"
-                    placeholder="Válassz egy kategóriát"
-                    optionValue="id"
-                    optionLabel="slug"
-                    styleClass="w-full">
-                </p-dropdown>
-            </div>
-
-            <div class="form-group">
-                <label for="shortDescription"> Termék rövid leírása </label>
-
-                <input
-                    id="shortDescription"
-                    type="text"
-                    formControlName="shortDescription"
-                    pInputText />
-            </div>
-
-            <div class="form-group">
-                <label for="description"> Termék leírása </label>
-
-                <p-editor
-                    formControlName="description"
-                    [style]="{ height: '320px' }"></p-editor>
-            </div>
-
-            <div class="form-group">
-                <label for="price"> Termék ára </label>
-
-                <input
-                    id="price"
-                    formControlName="price"
-                    type="text"
-                    pInputText />
-            </div>
-
-            <div class="form-group">
-                <label for="discountedPrice"> Termék akciós ára </label>
-
-                <input
-                    id="discountedPrice"
-                    formControlName="discountedPrice"
-                    type="text"
-                    pInputText />
-            </div>
-
-            <div class="form-group">
-                <label for="stock"> Készleten </label>
-
-                <input
-                    id="stock"
-                    formControlName="stock"
-                    type="text"
-                    pInputText />
-            </div>
-
-            <div class="form-group">
-                <label for="selectedQuestion"> Kérdések </label>
-
-                <div class="nyk-edit-product-questions-wrapper">
-                    <p-dropdown
-                        id="selectedQuestion"
-                        formControlName="selectedQuestion"
-                        [options]="questions$ | async"
-                        placeholder="Válassz egy kérdést"
-                        optionValue="id"
-                        optionLabel="name"
-                        styleClass="mr-2">
-                    </p-dropdown>
-
-                    <p-button
-                        icon="pi pi-plus"
-                        styleClass="p-button-success ml-2"
-                        pTooltip="Kérdés hozzáadás"
-                        tooltipPosition="bottom"
-                        (click)="
-                            addQuestion(
-                                editProductForm.get('selectedQuestion').value
-                            )
-                        "></p-button>
-                </div>
-            </div>
-
-            <div *ngIf="selectedQuestions.length" class="form-group">
-                <label> Választott kérdések </label>
-
-                <div
-                    class="nyk-edit-product-option-wrapper mb-2"
-                    *ngFor="let question of selectedQuestions; let i = index">
-                    <p class="block font-medium text-800 mb-1">
-                        {{ i + 1 }}. {{ question.name }}
-                    </p>
-
-                    <p-button
-                        icon="pi pi-times"
-                        styleClass="p-button-danger"
-                        (click)="deleteQuestion(question.id, i)">
-                    </p-button>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label> Egyedi termék </label>
-
-                <p-inputSwitch formControlName="isCustom"></p-inputSwitch>
-            </div>
-
-            <div *ngIf="editProductForm.value.isCustom" class="form-group">
-                <label for="inspirationCategoryId">
-                    Inspiráció kategória
-                </label>
-
-                <p-dropdown
-                    id="inspirationCategoryId"
-                    formControlName="inspirationCategoryId"
-                    [options]="inspirationCategories$ | async"
-                    placeholder="Válassz egy kategóriát"
+                    id="selectedQuestion"
+                    formControlName="selectedQuestion"
+                    [options]="questions$ | async"
+                    placeholder="Válassz egy kérdést"
                     optionValue="id"
                     optionLabel="name"
-                    styleClass="w-full">
+                    styleClass="mr-2">
                 </p-dropdown>
-            </div>
-
-            <div class="form-group">
-                <label>Babaruha</label>
-
-                <p-inputSwitch formControlName="isDollDress"></p-inputSwitch>
-            </div>
-
-            <div class="form-group">
-                <label> Öltöztethető </label>
-
-                <p-inputSwitch formControlName="isDressable"></p-inputSwitch>
-            </div>
-
-            <div class="form-group">
-                <label> Kiemelt termék </label>
-
-                <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
-            </div>
-
-            <div class="form-group">
-                <label for="isNameEmbroideryAvailable">
-                    Név hímzés elérhető
-                </label>
-
-                <p-inputSwitch
-                    formControlName="isNameEmbroideryAvailable"></p-inputSwitch>
-            </div>
-
-            <div class="form-group">
-                <label for="images">
-                    Termék képek (az első kép lesz mindig a nagy kép)
-                </label>
 
                 <p-button
-                    *ngIf="imagesPreview.length === 0; else clearImagesButton"
-                    icon="pi pi-image"
-                    styleClass="p-button p-button-secondary"
-                    (click)="imagesPicker.click()">
-                </p-button>
-
-                <ng-template #clearImagesButton>
-                    <button
-                        pButton
-                        pRipple
-                        pTooltip="Kép törlése"
-                        tooltipPosition="bottom"
-                        (click)="onImageClear(imagesPicker)"
-                        type="button"
-                        icon="pi pi-times"
-                        class="p-button p-button-danger p-button mb-2"></button>
-                </ng-template>
-
-                <input
-                    id="imagesPicker"
-                    multiple
-                    type="file"
-                    class="hidden"
-                    #imagesPicker
-                    (change)="onImagePicked($event)" />
-
-                <div
-                    cdkDropList
-                    cdkDropListOrientation="horizontal"
-                    class="nyk-edit-product-images-container"
-                    (cdkDropListDropped)="drop($event)">
-                    <div
-                        *ngFor="let image of imagesPreview"
-                        class="nyk-edit-product-image"
-                        cdkDrag>
-                        <img [src]="image" />
-                        <img *cdkDragPreview [src]="image" />
-                    </div>
-                </div>
+                    icon="pi pi-plus"
+                    styleClass="p-button-success ml-2"
+                    pTooltip="Kérdés hozzáadás"
+                    tooltipPosition="bottom"
+                    (click)="addQuestion(editProductForm.get('selectedQuestion').value)"></p-button>
             </div>
+        </div> -->
+
+        <!-- <div *ngIf="selectedQuestions.length" class="form-group">
+            <label> Választott kérdések </label>
+
+            <div
+                class="nyk-edit-product-option-wrapper mb-2"
+                *ngFor="let question of selectedQuestions; let i = index">
+                <p class="block font-medium text-800 mb-1">{{ i + 1 }}. {{ question.name }}</p>
+
+                <p-button
+                    icon="pi pi-times"
+                    styleClass="p-button-danger"
+                    (click)="deleteQuestion(question.id, i)">
+                </p-button>
+            </div>
+        </div> -->
+
+        <div class="form-group">
+            <label> Egyedi termék </label>
+
+            <p-inputSwitch formControlName="isCustom"></p-inputSwitch>
+        </div>
+
+        <!-- <div *ngIf="editProductForm.value.isCustom" class="form-group">
+            <label for="inspirationCategoryId"> Inspiráció kategória </label>
+
+            <p-dropdown
+                id="inspirationCategoryId"
+                formControlName="inspirationCategoryId"
+                [options]="inspirationCategories$ | async"
+                placeholder="Válassz egy kategóriát"
+                optionValue="id"
+                optionLabel="name"
+                styleClass="w-full">
+            </p-dropdown>
+        </div> -->
+
+        <div class="form-group">
+            <label>Babaruha</label>
+
+            <p-inputSwitch formControlName="isDollDress"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label> Öltöztethető </label>
+
+            <p-inputSwitch formControlName="isDressable"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label> Kiemelt termék </label>
+
+            <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label for="isNameEmbroideryAvailable"> Név hímzés elérhető </label>
+
+            <p-inputSwitch formControlName="isNameEmbroideryAvailable"></p-inputSwitch>
+        </div>
+
+        <div class="form-group">
+            <label for="images"> Termék képek (az első kép lesz mindig a nagy kép) </label>
 
             <p-button
-                label="Módosítás"
-                styleClass="p-button w-full mb-3"
-                [disabled]="!editProductForm.valid || !editProductForm.dirty"
-                (click)="onEditProduct()">
+                *ngIf="imagesPreview.length === 0; else clearImagesButton"
+                [raised]="true"
+                icon="pi pi-image"
+                styleClass="p-button p-button-secondary"
+                (click)="imagesPicker.click()">
             </p-button>
-        </form>
 
-        <div class="nyk-edit-product-header">Termék előzmények</div>
+            <ng-template #clearImagesButton>
+                <p-button
+                    [raised]="true"
+                    icon="pi pi-times"
+                    severity="danger"
+                    pTooltip="Kép törlése"
+                    tooltipPosition="bottom"
+                    (click)="onImageClear(imagesPicker)">
+                </p-button>
+            </ng-template>
 
-        <span class="text-blue-500">
-            Hozzáadva:
-            {{ product.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <input
+                id="imagesPicker"
+                multiple
+                type="file"
+                class="hidden"
+                #imagesPicker
+                (change)="onImagePicked($event)" />
 
-        <span class="text-green-500 block mb-4">
-            Utoljára módosítva:
-            {{ product.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
-        </span>
+            <div
+                cdkDropList
+                cdkDropListOrientation="horizontal"
+                class="nyk-edit-product-images-container"
+                (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let image of imagesPreview" class="nyk-edit-product-image" cdkDrag>
+                    <img [src]="image" />
+                    <img
+                        *cdkDragPreview
+                        [src]="image"
+                        class="nyk-edit-product-images-container-preview" />
+                </div>
+            </div>
+        </div>
 
-        <p-table class="nyk-edit-product-history" [value]="product.logs">
+        <p-button
+            [raised]="true"
+            label="Módosítás"
+            styleClass="p-button w-full mb-3"
+            [disabled]="!editProductForm.valid || !editProductForm.dirty"
+            (click)="onEditProduct()">
+        </p-button>
+    </form>
+
+    <div class="nyk-edit-product-header">Termék előzmények</div>
+
+    <span class="text-blue-500">
+        Hozzáadva:
+        {{ product.createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <span class="text-green-500 block mb-4">
+        Utoljára módosítva:
+        {{ product.updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <!-- <p-table class="nyk-edit-product-history" [value]="product.logs">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Modul</th>
@@ -255,10 +244,5 @@
                     <td>{{ log.meta.user }}</td>
                 </tr>
             </ng-template>
-        </p-table>
-    </ng-container>
+        </p-table> -->
 </ng-container>
-
-<ng-template #loading>
-    <nyk-spinner></nyk-spinner>
-</ng-template>

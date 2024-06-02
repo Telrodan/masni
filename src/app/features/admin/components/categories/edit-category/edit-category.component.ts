@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, map, switchMap, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
@@ -20,7 +20,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { CategoryType } from '@core/enums/category-type.enum';
 import { ToastrService } from '@core/services/toastr.service';
 import { CategoryAction, CategorySelector } from '@core/store/category';
 import {
@@ -28,7 +27,10 @@ import {
     removeImageFromFormAndInputAndClearPreview
 } from '@shared/util/image-upload-helpers';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { Category } from '@core/store/category/category.model';
+import { Category, CategoryType } from '@core/store/category/category.model';
+import { Log } from '@core/store/log/log.model';
+import { LogSelector } from '@core/store/log/log.selectors';
+import { ItemHistoryComponent } from '@shared/item-history/item-history.component';
 
 @Component({
     selector: 'nyk-edit-category',
@@ -42,7 +44,8 @@ import { Category } from '@core/store/category/category.model';
         InputTextareaModule,
         ButtonModule,
         SpinnerComponent,
-        TableModule
+        TableModule,
+        ItemHistoryComponent
     ],
     templateUrl: './edit-category.component.html',
     styleUrls: ['./edit-category.component.scss'],
@@ -53,9 +56,10 @@ export class EditCategoryComponent implements OnInit {
     @HostBinding('class') class = 'nyk-edit-category';
 
     category$: Observable<Category>;
+    logs$: Observable<Log[]>;
+
     editCategoryForm: FormGroup;
     imagePreview: string;
-    isLoading = false;
 
     readonly CategoryType = CategoryType;
 
@@ -67,22 +71,25 @@ export class EditCategoryComponent implements OnInit {
     private readonly router = inject(Router);
 
     ngOnInit(): void {
-        this.category$ = this.route.params.pipe(
-            switchMap((params: { id: string }) =>
-                this.store.select(CategorySelector.selectCategoryById(params.id))
-            ),
+        const categoryId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.category$ = categoryId$.pipe(
+            switchMap((id) => this.store.select(CategorySelector.selectCategoryById(id))),
             tap((category) => {
                 this.editCategoryForm = this.fb.group({
                     id: [category.id],
                     type: [category.type, Validators.required],
                     name: [category.name, Validators.required],
-                    isSubCategory: [category.isSubCategory],
                     image: [category.image, Validators.required],
                     description: [category.description]
                 });
 
                 this.imagePreview = category.image;
             })
+        );
+
+        this.logs$ = categoryId$.pipe(
+            switchMap((id) => this.store.select(LogSelector.selectLogsByItemId(id)))
         );
     }
 
@@ -100,7 +107,7 @@ export class EditCategoryComponent implements OnInit {
 
     onEditCategory(): void {
         if (!this.editCategoryForm.valid) {
-            this.toastr.info('Kérlek töltsd ki az összes mezőt');
+            this.toastr.info('Kérlek töltsd ki az összes mezőt.');
 
             return;
         }

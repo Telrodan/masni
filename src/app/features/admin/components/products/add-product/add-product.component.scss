@@ -1,8 +1,8 @@
 @import 'mixins';
 
 .nyk-add-product {
-    display: block;
-    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
 
     @include respond(sm) {
         padding: 20px;
@@ -43,8 +43,15 @@
         }
     }
 
-    &-images-container:empty {
-        display: none;
+    &-images-container {
+        &-preview {
+            width: 200px;
+            box-shadow: var(--shadow);
+        }
+
+        &:empty {
+            display: none;
+        }
     }
 
     &-questions-wrapper {

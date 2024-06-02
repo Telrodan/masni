@@ -1,15 +1,16 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     HostBinding,
+    inject,
     OnInit,
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { filter, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { filter, map, Observable, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Table, TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -20,11 +21,10 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { ProductService } from '@core/services/product.service';
-import { ToastrService } from '@core/services/toastr.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { Product } from '@core/store/product/product.model';
+import { ProductAction, ProductSelector } from '@core/store/product';
 
 @Component({
     selector: 'nyk-products',
@@ -51,24 +51,19 @@ export class ProductsComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-products';
 
     products$: Observable<Product[]>;
-    images: string[];
+    isBusy$: Observable<boolean>;
+
     imageLoadedStatus: boolean[] = [];
-    isLoading = false;
 
-    private productDeleteSubject = new Subject<void>();
-
-    constructor(
-        private productService: ProductService,
-        private changeDetectorRef: ChangeDetectorRef,
-        private dialog: MatDialog,
-        private toastr: ToastrService
-    ) {}
+    private readonly store = inject(Store);
+    private readonly dialog = inject(MatDialog);
 
     ngOnInit(): void {
-        this.products$ = this.productDeleteSubject.pipe(
-            startWith(null),
-            switchMap(() => this.productService.getProducts$())
-        );
+        this.isBusy$ = this.store.select(ProductSelector.isBusy());
+
+        this.products$ = this.store
+            .select(ProductSelector.selectProducts())
+            .pipe(map((products) => [...products]));
     }
 
     onDeleteProduct(product: Product): void {
@@ -82,16 +77,11 @@ export class ProductsComponent implements OnInit {
             .afterClosed()
             .pipe(
                 filter((confirmed) => !!confirmed),
+
                 tap(() => {
-                    this.isLoading = true;
-                    this.changeDetectorRef.detectChanges();
-                }),
-                switchMap(() => this.productService.deleteProduct$(product)),
-                tap(() => {
-                    this.isLoading = false;
-                    this.productDeleteSubject.next();
-                    this.toastr.success(`${product.name} termék törölve`);
-                    this.changeDetectorRef.detectChanges();
+                    this.store.dispatch(
+                        ProductAction.deleteProduct({ id: product.id, name: product.name })
+                    );
                 })
             )
             .subscribe();
@@ -101,6 +91,7 @@ export class ProductsComponent implements OnInit {
         this.imageLoadedStatus[index] = true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
         const filter = ($event.target as HTMLInputElement).value;
         table.filterGlobal(filter, stringVal);

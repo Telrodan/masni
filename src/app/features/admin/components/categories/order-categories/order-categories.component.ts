@@ -18,17 +18,7 @@ import { cloneDeep } from 'lodash';
 
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { CategoryAction, CategorySelector } from '@core/store/category';
-import { Category } from '@core/store/category/category.model';
-
-export interface CategorySortItem {
-    id: string;
-    sortIndex: number;
-}
-
-export interface CategoryOrderData {
-    isSubCategory: boolean;
-    categories: CategorySortItem[];
-}
+import { Category, CategoryOrderData } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-order-categories',
@@ -43,6 +33,7 @@ export class OrderCategoriesComponent implements OnInit {
     @HostBinding('class') class = 'nyk-order-categories';
 
     categories$: Observable<Category[]>;
+
     selectedCategory: Category;
     isMainCategoriesOrderChanged = false;
     isSubCategoriesOrderChanged = false;
@@ -54,6 +45,7 @@ export class OrderCategoriesComponent implements OnInit {
         this.categories$ = this.store.select(CategorySelector.selectMainProductCategories()).pipe(
             map((categories) => {
                 categories = categories.sort((a, b) => a.sortIndex - b.sortIndex);
+
                 return cloneDeep(categories);
             })
         );
@@ -61,11 +53,13 @@ export class OrderCategoriesComponent implements OnInit {
 
     dropMainCategory(items: Category[], event: CdkDragDrop<string[]>) {
         moveItemInArray(items, event.previousIndex, event.currentIndex);
+
         this.isMainCategoriesOrderChanged = true;
     }
 
     dropSubCategory(items: Category[], event: CdkDragDrop<string[]>) {
         moveItemInArray(items, event.previousIndex, event.currentIndex);
+
         this.isSubCategoriesOrderChanged = true;
     }
 

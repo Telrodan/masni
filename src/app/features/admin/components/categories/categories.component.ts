@@ -3,6 +3,7 @@ import {
     Component,
     HostBinding,
     inject,
+    OnInit,
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -20,11 +21,10 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { CategoryType } from '@core/enums/category-type.enum';
 import { CategoryAction, CategorySelector } from '@core/store/category';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { Category } from '@core/store/category/category.model';
+import { Category, CategoryType } from '@core/store/category/category.model';
 
 @Component({
     selector: 'nyk-categories',
@@ -48,7 +48,7 @@ import { Category } from '@core/store/category/category.model';
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-categories';
 
     categories$: Observable<Category[]>;
@@ -61,7 +61,7 @@ export class CategoriesComponent {
     private readonly store = inject(Store);
     private readonly dialog = inject(MatDialog);
 
-    constructor() {
+    ngOnInit(): void {
         this.isBusy$ = this.store.select(CategorySelector.isBusy());
 
         this.categories$ = this.store

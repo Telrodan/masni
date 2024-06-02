@@ -49,16 +49,16 @@
 
     <ng-container *ngIf="addCategoryForm.value.type === CategoryType.Product">
         <div class="form-group">
-            <label for="name"> Alkategória </label>
+            <label for="isMainCategory"> Főkategória? </label>
 
-            <p-inputSwitch formControlName="isSubCategory"></p-inputSwitch>
+            <p-inputSwitch formControlName="isMainCategory"></p-inputSwitch>
         </div>
 
-        <div class="form-group" *ngIf="addCategoryForm.value.isSubCategory">
+        <div class="form-group" *ngIf="!addCategoryForm.value.isMainCategory">
             <label for="name"> Válassz egy főkategóriát </label>
 
             <p-dropdown
-                *ngIf="mainCategories$ | async as mainCategories"
+                *ngIf="productMainCategories$ | async as mainCategories"
                 [options]="mainCategories"
                 formControlName="parentCategory"
                 placeholder="Válassz egy főkategóriát"
