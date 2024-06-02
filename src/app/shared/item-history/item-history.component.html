@@ -1,0 +1,46 @@
+<div class="nyk-item-history-header">{{ itemType }} előzmények</div>
+
+<div class="nyk-item-history-dates">
+    <span class="text-primary">
+        Hozzáadva:
+        {{ createdAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+
+    <span class="text-green-400">
+        Utoljára módosítva:
+        {{ updatedAt | date : "yyy, MMM dd '-' hh:mm a" }}
+    </span>
+</div>
+
+<ng-container *ngIf="logs">
+    <p-table class="nyk-edit-product-history" [value]="logs">
+        <ng-template pTemplate="header">
+            <tr>
+                <th></th>
+                <th>Modul</th>
+                <th pSortableColumn="timestamp">
+                    <div class="flex">
+                        Dátum
+                        <p-sortIcon field="timestamp"></p-sortIcon>
+                    </div>
+                </th>
+                <th>Üzenet</th>
+                <th>Felhasználó</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-log>
+            <tr>
+                <td class="w-3rem">
+                    <p-badge [severity]="getBadgeSeverity(log)" [styleClass]="getBadgeIcon(log)">
+                    </p-badge>
+                </td>
+                <td class="text-primary w-7rem">{{ log.meta.module }}</td>
+                <td class="text-black-alpha-90">
+                    {{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}
+                </td>
+                <td class="text-black-alpha-90 font-medium">{{ log.message }}</td>
+                <td class="text-cyan-600">{{ log.meta?.user?.email }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-container>

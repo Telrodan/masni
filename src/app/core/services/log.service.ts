@@ -1,24 +1,22 @@
-import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { Injectable, inject } from '@angular/core';
+
 import { Observable, map } from 'rxjs';
-import { Log } from '@core/models/log.model';
+
+import { ApiService } from './api.service';
+import { Log } from '@core/store/log/log.model';
 import { ApiResponse } from '@core/models/api-response.model';
 
+const ROUTE_PREFIX = 'logs';
+
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class LogService {
-  constructor(private apiService: ApiService) {}
+    private readonly apiService = inject(ApiService);
 
-  getLogs(): Observable<Log[]> {
-    return this.apiService
-      .get<ApiResponse<Log[]>>('log/getAll')
-      .pipe(map((logsDTO) => logsDTO.data));
-  }
-
-  getItemLogsByItemId$(itemId: string): Observable<Log[]> {
-    return this.apiService
-      .get<ApiResponse<Log[]>>(`log/getLogsByItemId/${itemId}`)
-      .pipe(map((logsDTO) => logsDTO.data));
-  }
+    getLogs(): Observable<Log[]> {
+        return this.apiService
+            .get<ApiResponse<Log[]>>(`${ROUTE_PREFIX}/getAll`)
+            .pipe(map((logsDTO) => logsDTO.data));
+    }
 }
