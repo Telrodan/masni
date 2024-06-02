@@ -1,0 +1,56 @@
+<div class="nyk-detailed-log-wrapper">
+    <h1 class="nyk-detailed-log-header">Esemény részletei</h1>
+
+    <p class="nyk-detailed-log-timestamp text-black-alpha-90 font-medium">
+        Dátum:
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.timestamp | date : "yyy, MMM dd '-' hh:mm a" }}
+        </span>
+    </p>
+
+    <p class="nyk-detailed-log-level text-black-alpha-90 font-medium">
+        Szint:
+        <p-badge [severity]="getBadgeSeverity(log)" [styleClass]="getBadgeIcon(log)"> </p-badge>
+
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.level }}
+        </span>
+    </p>
+
+    <p class="nyk-detailed-log-module text-black-alpha-90 font-medium">
+        Modul:
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.meta?.module }}
+        </span>
+    </p>
+
+    <p class="nyk-log-message text-black-alpha-90 font-medium">
+        Üzenet:
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.message }}
+        </span>
+    </p>
+
+    <h1 class="nyk-detailed-log-header">Metaadatok</h1>
+
+    <p class="nyk-log-metadata-item text-black-alpha-90 font-medium">
+        Felhasználó:
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.meta?.user?.email }}
+        </span>
+    </p>
+
+    <p class="nyk-log-metadata-function text-black-alpha-90 font-medium">
+        Funkció:
+        <span class="text-black-alpha-70 font-normal">
+            {{ log.meta?.function }}
+        </span>
+    </p>
+
+    <p-button
+        [raised]="true"
+        label="Bezárás"
+        severity="warning"
+        class="ml-auto"
+        mat-dialog-close></p-button>
+</div>

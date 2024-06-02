@@ -24,12 +24,12 @@ import { LayoutComponent } from './features/layout/layout.component';
 import { environment } from 'src/environments/environment';
 import { appState } from '@core/store/app-state';
 import { CategoryEffects } from '@core/store/category';
-import {
-    FacebookLoginProvider,
-    SocialAuthServiceConfig,
-    SocialLoginModule
-} from '@abacritt/angularx-social-login';
+import { SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { MaterialEffects } from '@core/store/material/material.effects';
+import { LogEffects } from '@core/store/log/log.effects';
+import { InspirationEffects } from '@core/store/inspiration';
+import { ProductEffects } from '@core/store/product';
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
@@ -46,7 +46,13 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
         SocialLoginModule,
         ...MATERIAL,
         StoreModule.forRoot(appState),
-        EffectsModule.forRoot([CategoryEffects]),
+        EffectsModule.forRoot([
+            CategoryEffects,
+            ProductEffects,
+            MaterialEffects,
+            LogEffects,
+            InspirationEffects
+        ]),
         ToastrModule.forRoot(),
         StoreDevtoolsModule.instrument({
             maxAge: 25,

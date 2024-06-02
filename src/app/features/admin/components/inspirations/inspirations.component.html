@@ -51,7 +51,9 @@
                         </div>
                     </th>
 
-                    <th class="nyk-inspirations-category" pSortableColumn="category.name">
+                    <th
+                        class="nyk-inspirations-category text-center"
+                        pSortableColumn="category.name">
                         <div class="nyk-inspirations-th-wrapper">
                             Kategória
                             <p-sortIcon field="category.name"></p-sortIcon>
@@ -90,7 +92,7 @@
 
                     <td class="text-black-alpha-90 font-medium">{{ inspiration.name }}</td>
 
-                    <td class="nyk-inspirations-category w-9rem">
+                    <td class="nyk-inspirations-category w-12rem text-center">
                         <p-badge
                             [value]="inspiration.category.name"
                             styleClass="shadow-2"></p-badge>

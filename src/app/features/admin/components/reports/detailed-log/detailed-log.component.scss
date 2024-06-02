@@ -1,0 +1,33 @@
+@import 'mixins';
+
+.nyk-detailed-log {
+    &-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+    }
+
+    &-header {
+        padding-bottom: 16px;
+        color: var(--color-black);
+        font-size: var(--font-size-l);
+        font-weight: 700;
+        border-bottom: 1px solid var(--color-grey);
+
+        @include respond(sm) {
+            font-size: var(--font-size-m);
+        }
+    }
+
+    &-level {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .p-badge {
+        display: flex;
+        align-items: center;
+    }
+}
