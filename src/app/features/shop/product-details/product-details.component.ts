@@ -139,7 +139,7 @@ export class ProductDetailsComponent implements OnInit {
             switchMap(() =>
                 this.route.params.pipe(
                     map((params) => params['id']),
-                    switchMap((id) => this.productService.getProductById$(id)),
+                    // switchMap((id) => this.productService.getProductById$(id)),
                     tap((product) => {
                         this.product = product;
                         this.product.category.items = this.product.category.items.filter(

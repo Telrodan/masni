@@ -59,7 +59,7 @@ export class SliderComponent implements OnChanges {
     ngOnChanges(changes: { productCategories: SimpleChange }) {
         if (changes.productCategories) {
             const mainCategories: ProductCategory[] = changes.productCategories.currentValue.filter(
-                (category: ProductCategory) => !category.isSubCategory
+                (category: ProductCategory) => category.isMainCategory
             );
 
             this.data = mainCategories.map((category) => ({

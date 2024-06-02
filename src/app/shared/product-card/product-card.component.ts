@@ -42,7 +42,8 @@ export class ProductCardComponent implements OnInit {
     isAuthenticated$: Observable<boolean>;
 
     get isLiked(): boolean {
-        return this.product.likes.includes(this.cookieService.getCookie('userId'));
+        return false;
+        // return this.product.likes.includes(this.cookieService.getCookie('userId'));
     }
 
     get isDiscounted(): boolean {

@@ -1,6 +1,6 @@
-import { Inspiration } from './inspiration.model';
+import { Inspiration } from '../store/inspiration/inspiration.model';
 
 export interface InspirationPageData {
-  title: string;
-  items: Inspiration[];
+    title: string;
+    items: Inspiration[];
 }

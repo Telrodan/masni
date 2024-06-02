@@ -4,7 +4,8 @@ import {
     EventEmitter,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
@@ -20,6 +21,8 @@ import { ProductsCarouselComponent } from './products-carousel/products-carousel
 import { DreamItCtaComponent } from './dream-it-cta/dream-it-cta.component';
 import { ProductCategory } from '@core/store/category/category.model';
 import { Product } from '@core/store/product/product.model';
+import { Store } from '@ngrx/store';
+import { CategorySelector } from '@core/store/category';
 
 interface SortedProducts {
     title: string;
@@ -51,6 +54,8 @@ export class HomeComponent implements OnInit {
     sortedProducts$: Observable<SortedProducts[]>;
 
     private likeProduct = new EventEmitter<Product>();
+
+    private readonly store = inject(Store);
 
     constructor(
         private categoryService: CategoryService,
@@ -89,7 +94,9 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.productCategories$ = this.categoryService.getProductCategories$();
+        this.productCategories$ = this.store
+            .select(CategorySelector.selectMainProductCategories())
+            .pipe(map((categories: ProductCategory[]) => categories));
 
         this.sortedProducts$ = this.likeProduct.pipe(
             startWith(null),

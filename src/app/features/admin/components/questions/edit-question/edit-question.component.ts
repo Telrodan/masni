@@ -24,7 +24,7 @@ import { QuestionType } from '@core/enums/question-type.enum';
 import { QuestionOption } from '@core/models/question.model';
 import { Question, BackendQuestion } from '@core/models/question.model';
 import { QuestionService } from '@core/services/question.service';
-import { Log } from '@core/models/log.model';
+import { Log } from '@core/store/log/log.model';
 import { ToastrService } from '@core/services/toastr.service';
 import { LogService } from '@core/services/log.service';
 import { CategoryService } from '@core/services/category.service';
@@ -84,64 +84,62 @@ export class EditQuestionComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.question$ = this.route.params.pipe(
-            switchMap((params) =>
-                combineLatest([
-                    this.questionService.getQuestionById$(params['id']),
-                    this.logService
-                        .getItemLogsByItemId$(params['id'])
-                        .pipe(
-                            map((logs) =>
-                                logs.sort(
-                                    (a, b) =>
-                                        new Date(b.timestamp).getTime() -
-                                        new Date(a.timestamp).getTime()
-                                )
-                            )
-                        )
-                ])
-            ),
-            filter((question) => !!question),
-            map(([question, logs]) => ({
-                ...question,
-                logs
-            })),
-            tap((question) => {
-                console.log(question);
-                this.questionId = question.id;
-                this.questionType = question.type;
-                this.editStringQuestionForm = this.fb.group({
-                    name: [question.name, Validators.required],
-                    question: [question.question, Validators.required],
-                    optionName: [''],
-                    options: this.fb.array<QuestionOption>(question.options),
-                    extraPrice: [0]
-                });
-
-                this.editMaterialQuestionForm = this.fb.group({
-                    name: [question.name, Validators.required],
-                    question: [question.question, Validators.required],
-                    categoryId: [''],
-                    materialCategories: this.fb.array<string>(question.materialCategories),
-                    options: this.fb.array<QuestionOption>(question.options)
-                });
-            })
-        );
-
-        this.categories$ = this.categoryService.getMaterialCategories$().pipe(
-            tap((categories) => {
-                categories.forEach((category) => {
-                    this.categories = categories;
-                    if (
-                        this.editMaterialQuestionForm.value.materialCategories.find(
-                            (id: string) => id === category.id
-                        )
-                    ) {
-                        this.selectedCategories.push(category);
-                    }
-                });
-            })
-        );
+        // this.question$ = this.route.params.pipe(
+        //     switchMap((params) =>
+        //         combineLatest([
+        //             this.questionService.getQuestionById$(params['id']),
+        //             this.logService
+        //                 .getItemLogsByItemId$(params['id'])
+        //                 .pipe(
+        //                     map((logs) =>
+        //                         logs.sort(
+        //                             (a, b) =>
+        //                                 new Date(b.timestamp).getTime() -
+        //                                 new Date(a.timestamp).getTime()
+        //                         )
+        //                     )
+        //                 )
+        //         ])
+        //     ),
+        //     filter((question) => !!question),
+        //     map(([question, logs]) => ({
+        //         ...question,
+        //         logs
+        //     })),
+        //     tap((question) => {
+        //         console.log(question);
+        //         this.questionId = question.id;
+        //         this.questionType = question.type;
+        //         this.editStringQuestionForm = this.fb.group({
+        //             name: [question.name, Validators.required],
+        //             question: [question.question, Validators.required],
+        //             optionName: [''],
+        //             options: this.fb.array<QuestionOption>(question.options),
+        //             extraPrice: [0]
+        //         });
+        //         this.editMaterialQuestionForm = this.fb.group({
+        //             name: [question.name, Validators.required],
+        //             question: [question.question, Validators.required],
+        //             categoryId: [''],
+        //             materialCategories: this.fb.array<string>(question.materialCategories),
+        //             options: this.fb.array<QuestionOption>(question.options)
+        //         });
+        //     })
+        // );
+        // this.categories$ = this.categoryService.getMaterialCategories$().pipe(
+        //     tap((categories) => {
+        //         categories.forEach((category) => {
+        //             this.categories = categories;
+        //             if (
+        //                 this.editMaterialQuestionForm.value.materialCategories.find(
+        //                     (id: string) => id === category.id
+        //                 )
+        //             ) {
+        //                 this.selectedCategories.push(category);
+        //             }
+        //         });
+        //     })
+        // );
     }
 
     addStringOption(): void {
@@ -173,55 +171,54 @@ export class EditQuestionComponent implements OnInit {
     }
 
     addMaterialOption(materialCategoryId: string): void {
-        this.categoryService
-            .getCategoryById$(materialCategoryId)
-            .pipe(
-                tap((category: MaterialCategory) => {
-                    console.log(category);
-                    this.editMaterialQuestionForm.value.materialCategories.push(category.id);
-                    this.selectedCategories.push(category);
-                    const options = this.editMaterialQuestionForm.get('options') as FormArray;
-
-                    category.items.forEach((material) => {
-                        if (material.isAvailable) {
-                            const option = this.fb.group({
-                                materialId: material.id,
-                                name: material.name,
-                                extraPrice: material.extraPrice,
-                                slug: material.extraPrice
-                                    ? material.name + ' +' + material.extraPrice + ' Ft'
-                                    : material.name
-                            });
-                            options.push(option);
-                        }
-                    });
-                    this.changeDetectorRef.detectChanges();
-                    this.toastr.success(`${category.name} kategória hozzáadva`);
-                })
-            )
-            .subscribe();
+        // this.categoryService
+        //     .getCategoryById$(materialCategoryId)
+        //     .pipe(
+        //         tap((category: MaterialCategory) => {
+        //             console.log(category);
+        //             this.editMaterialQuestionForm.value.materialCategories.push(category.id);
+        //             this.selectedCategories.push(category);
+        //             const options = this.editMaterialQuestionForm.get('options') as FormArray;
+        //             category.items.forEach((material) => {
+        //                 if (material.isAvailable) {
+        //                     const option = this.fb.group({
+        //                         materialId: material.id,
+        //                         name: material.name,
+        //                         extraPrice: material.extraPrice,
+        //                         slug: material.extraPrice
+        //                             ? material.name + ' +' + material.extraPrice + ' Ft'
+        //                             : material.name
+        //                     });
+        //                     options.push(option);
+        //                 }
+        //             });
+        //             this.changeDetectorRef.detectChanges();
+        //             this.toastr.success(`${category.name} kategória hozzáadva`);
+        //         })
+        //     )
+        //     .subscribe();
     }
 
     deleteMaterialCategoryOption(categoryId: string, index: number): void {
-        this.materialService
-            .getMaterialsByCategoryId$(categoryId)
-            .pipe(
-                tap((materials) => {
-                    const options = this.editMaterialQuestionForm.get('options') as FormArray;
-                    const materialIds = materials.map((item) => item.id);
-                    const materialOptions = options.controls.filter((control) =>
-                        materialIds.includes(control.value.materialId)
-                    );
-                    materialOptions.forEach((option) => {
-                        options.removeAt(options.controls.indexOf(option));
-                    });
-                    this.editMaterialQuestionForm.value.materialCategories.splice(index, 1);
-                    this.selectedCategories.splice(index, 1);
-                    this.changeDetectorRef.detectChanges();
-                    this.toastr.success('Kategória törölve');
-                })
-            )
-            .subscribe();
+        // this.materialService
+        //     .getMaterialsByCategoryId$(categoryId)
+        //     .pipe(
+        //         tap((materials) => {
+        //             const options = this.editMaterialQuestionForm.get('options') as FormArray;
+        //             const materialIds = materials.map((item) => item.id);
+        //             const materialOptions = options.controls.filter((control) =>
+        //                 materialIds.includes(control.value.materialId)
+        //             );
+        //             materialOptions.forEach((option) => {
+        //                 options.removeAt(options.controls.indexOf(option));
+        //             });
+        //             this.editMaterialQuestionForm.value.materialCategories.splice(index, 1);
+        //             this.selectedCategories.splice(index, 1);
+        //             this.changeDetectorRef.detectChanges();
+        //             this.toastr.success('Kategória törölve');
+        //         })
+        //     )
+        //     .subscribe();
     }
 
     editQuestionWithStringAnser(): void {

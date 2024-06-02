@@ -3,7 +3,6 @@ import { Title, Meta } from '@angular/platform-browser';
 
 import { filter, map, Observable } from 'rxjs';
 
-import { Material } from '@core/models/material.model';
 import { MaterialPageData } from '@core/models/material-page-data.model';
 
 @Component({
@@ -43,8 +42,7 @@ export class MaterialPageComponent implements OnInit {
             },
             {
                 property: 'og:image',
-                content:
-                    'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
+                content: 'https://nyuszkokucko.hu/assets/images/nyuszko-kucko-logo.png'
             },
             { name: 'robots', content: 'index, follow' },
             { name: 'author', content: 'Nyuszkó Kuckó' }

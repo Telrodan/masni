@@ -1,25 +1,25 @@
 @import 'mixins';
 
 .nyk-home {
-  &-decoration {
-    margin: 0 auto;
-    padding: 80px 0 20px;
+    &-decoration {
+        margin: 0 auto;
+        padding: 80px 0 20px;
 
-    @include respond(sm) {
-      padding: 40px 0 20px;
+        @include respond(sm) {
+            padding: 40px 0 20px;
+        }
     }
-  }
 
-  &-slider-skeleton {
-    height: 700px !important;
+    &-slider-skeleton {
+        height: 700px !important;
 
-    @include respond(sm) {
-      height: 500px !important;
+        @include respond(sm) {
+            height: 500px !important;
+        }
     }
-  }
 
-  &-products-carousel-skeleton {
-    height: 100vh !important;
-    margin-top: 40px;
-  }
+    &-products-carousel-skeleton {
+        height: 100vh !important;
+        margin-top: 40px;
+    }
 }

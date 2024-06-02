@@ -18,6 +18,9 @@ import { ChildrenOutletContexts, NavigationEnd, Router, RouterOutlet } from '@an
 import AOS from 'aos';
 import { Store } from '@ngrx/store';
 import { CategoryAction } from '@core/store/category';
+import { InspirationAction } from '@core/store/inspiration';
+import { ProductAction } from '@core/store/product';
+import { MaterialAction } from '@core/store/material';
 
 @Component({
     selector: 'mhd-root',
@@ -46,8 +49,11 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.store.dispatch(CategoryAction.getCategories());
         this.store.dispatch(CategoryAction.getNavbarMenu());
+        this.store.dispatch(CategoryAction.getCategories());
+        this.store.dispatch(ProductAction.getProducts());
+        this.store.dispatch(MaterialAction.getMaterials());
+        this.store.dispatch(InspirationAction.getInspirations());
 
         this.router.events
             .pipe(

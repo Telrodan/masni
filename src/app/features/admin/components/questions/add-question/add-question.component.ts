@@ -105,7 +105,7 @@ export class AddQuestionComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.categories$ = this.categoryService.getMaterialCategories$();
+        // this.categories$ = this.categoryService.getMaterialCategories$();
 
         this.questionTypeForm.valueChanges
             .pipe(
@@ -145,55 +145,54 @@ export class AddQuestionComponent implements OnInit {
     }
 
     addMaterialOption(materialCategoryId: string): void {
-        this.categoryService
-            .getCategoryById$(materialCategoryId)
-            .pipe(
-                tap((category: MaterialCategory) => {
-                    console.log(category);
-                    this.addMaterialQuestionForm.value.materialCategories.push(category.id);
-                    this.selectedCategories.push(category);
-                    const options = this.addMaterialQuestionForm.get('options') as FormArray;
-
-                    category.items.forEach((material) => {
-                        if (material.isAvailable) {
-                            const option = this.fb.group({
-                                materialId: material.id,
-                                name: material.name,
-                                extraPrice: material.extraPrice,
-                                slug: material.extraPrice
-                                    ? material.name + ' +' + material.extraPrice + ' Ft'
-                                    : material.name
-                            });
-                            options.push(option);
-                        }
-                    });
-                    this.changeDetectorRef.detectChanges();
-                    this.toastr.success(`${category.name} kategória hozzáadva`);
-                })
-            )
-            .subscribe();
+        // this.categoryService
+        //     .getCategoryById$(materialCategoryId)
+        //     .pipe(
+        //         tap((category: MaterialCategory) => {
+        //             console.log(category);
+        //             this.addMaterialQuestionForm.value.materialCategories.push(category.id);
+        //             this.selectedCategories.push(category);
+        //             const options = this.addMaterialQuestionForm.get('options') as FormArray;
+        //             category.items.forEach((material) => {
+        //                 if (material.isAvailable) {
+        //                     const option = this.fb.group({
+        //                         materialId: material.id,
+        //                         name: material.name,
+        //                         extraPrice: material.extraPrice,
+        //                         slug: material.extraPrice
+        //                             ? material.name + ' +' + material.extraPrice + ' Ft'
+        //                             : material.name
+        //                     });
+        //                     options.push(option);
+        //                 }
+        //             });
+        //             this.changeDetectorRef.detectChanges();
+        //             this.toastr.success(`${category.name} kategória hozzáadva`);
+        //         })
+        //     )
+        //     .subscribe();
     }
 
     deleteMaterialCategoryOption(categoryId: string, index: number): void {
-        this.materialService
-            .getMaterialsByCategoryId$(categoryId)
-            .pipe(
-                tap((materials) => {
-                    const options = this.addMaterialQuestionForm.get('options') as FormArray;
-                    const materialIds = materials.map((item) => item.id);
-                    const materialOptions = options.controls.filter((control) =>
-                        materialIds.includes(control.value.materialId)
-                    );
-                    materialOptions.forEach((option) => {
-                        options.removeAt(options.controls.indexOf(option));
-                    });
-                    this.addMaterialQuestionForm.value.materialCategories.splice(index, 1);
-                    this.selectedCategories.splice(index, 1);
-                    this.changeDetectorRef.detectChanges();
-                    this.toastr.success('Kategória törölve');
-                })
-            )
-            .subscribe();
+        // this.materialService
+        //     .getMaterialsByCategoryId$(categoryId)
+        //     .pipe(
+        //         tap((materials) => {
+        //             const options = this.addMaterialQuestionForm.get('options') as FormArray;
+        //             const materialIds = materials.map((item) => item.id);
+        //             const materialOptions = options.controls.filter((control) =>
+        //                 materialIds.includes(control.value.materialId)
+        //             );
+        //             materialOptions.forEach((option) => {
+        //                 options.removeAt(options.controls.indexOf(option));
+        //             });
+        //             this.addMaterialQuestionForm.value.materialCategories.splice(index, 1);
+        //             this.selectedCategories.splice(index, 1);
+        //             this.changeDetectorRef.detectChanges();
+        //             this.toastr.success('Kategória törölve');
+        //         })
+        //     )
+        //     .subscribe();
     }
 
     addQuestionWithStringAnswer(): void {
