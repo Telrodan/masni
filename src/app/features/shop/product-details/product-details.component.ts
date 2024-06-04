@@ -226,14 +226,14 @@ export class ProductDetailsComponent implements OnInit {
                 const value =
                     this.productDetailsFormComponent.productDetailsForm.value.questions[key];
                 const question = this.product.questions.find((question) => question.id === key);
-                const option = question.options.find((option) => option._id === value);
-                if (value) {
-                    questions.push({
-                        question: question.question,
-                        optionId: value,
-                        option: option.slug
-                    });
-                }
+                // const option = question.options.find((option) => option._id === value);
+                // if (value) {
+                //     questions.push({
+                //         question: question.question,
+                //         optionId: value,
+                //         option: option.slug
+                //     });
+                // }
             }
             const cartItem: BackendShoppingCartItem = {
                 product: this.product,

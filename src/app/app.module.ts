@@ -30,6 +30,7 @@ import { MaterialEffects } from '@core/store/material/material.effects';
 import { LogEffects } from '@core/store/log/log.effects';
 import { InspirationEffects } from '@core/store/inspiration';
 import { ProductEffects } from '@core/store/product';
+import { QuestionEffects } from '@core/store/question';
 
 const MATERIAL = [MatSnackBarModule, MatDialogModule];
 
@@ -51,7 +52,8 @@ const MATERIAL = [MatSnackBarModule, MatDialogModule];
             ProductEffects,
             MaterialEffects,
             LogEffects,
-            InspirationEffects
+            InspirationEffects,
+            QuestionEffects
         ]),
         ToastrModule.forRoot(),
         StoreDevtoolsModule.instrument({

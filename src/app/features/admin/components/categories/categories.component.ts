@@ -63,7 +63,6 @@ export class CategoriesComponent implements OnInit {
 
     ngOnInit(): void {
         this.isBusy$ = this.store.select(CategorySelector.isBusy());
-
         this.categories$ = this.store
             .select(CategorySelector.selectCategories())
             .pipe(map((categories) => [...categories]));

@@ -1,16 +1,17 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     HostBinding,
     OnInit,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, combineLatest, filter, map, switchMap, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, map, switchMap, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -19,22 +20,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 
-import { QuestionType } from '@core/enums/question-type.enum';
-// import { Category, MaterialCategory } from '@core/models/category.model';
-import { QuestionOption } from '@core/models/question.model';
-import { Question, BackendQuestion } from '@core/models/question.model';
-import { QuestionService } from '@core/services/question.service';
-import { Log } from '@core/store/log/log.model';
+import { QuestionOption, QuestionType } from '@core/store/question/question.model';
+import { Question } from '@core/store/question/question.model';
 import { ToastrService } from '@core/services/toastr.service';
-import { LogService } from '@core/services/log.service';
-import { CategoryService } from '@core/services/category.service';
-import { MaterialService } from '@core/services/material.service';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
-import { Category, MaterialCategory } from '@core/store/category/category.model';
-
-interface QuestionData extends Question {
-    logs: Log[];
-}
+import { MaterialCategory } from '@core/store/category/category.model';
+import { QuestionAction, QuestionSelector } from '@core/store/question';
+import { CategorySelector } from '@core/store/category';
+import { MaterialSelector } from '@core/store/material';
+import { Log } from '@core/store/log';
 
 @Component({
     selector: 'nyk-edit-question',
@@ -59,237 +53,196 @@ interface QuestionData extends Question {
 export class EditQuestionComponent implements OnInit {
     @HostBinding('class') hostClass = 'nyk-edit-question';
 
-    editStringQuestionForm: FormGroup;
+    question$: Observable<Question>;
+    materialCategories$: Observable<MaterialCategory[]>;
+    logs$: Observable<Log[]>;
+
+    editCustomQuestionForm: FormGroup;
     editMaterialQuestionForm: FormGroup;
-    question$: Observable<QuestionData>;
-    questionId: string;
-    questionType: QuestionType;
-    categories$: Observable<Category[]>;
-    categories: Category[] = [];
-    selectedCategories: Category[] = [];
-    isLoading = false;
+    selectedCategories: MaterialCategory[] = [];
 
     readonly QuestionType = QuestionType;
 
-    constructor(
-        private questionService: QuestionService,
-        private categoryService: CategoryService,
-        private materialService: MaterialService,
-        private logService: LogService,
-        private route: ActivatedRoute,
-        private router: Router,
-        private fb: FormBuilder,
-        private toastr: ToastrService,
-        private changeDetectorRef: ChangeDetectorRef
-    ) {}
+    private readonly store = inject(Store);
+    private readonly fb = inject(FormBuilder);
+    private readonly toastr = inject(ToastrService);
+    private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
 
     ngOnInit(): void {
-        // this.question$ = this.route.params.pipe(
-        //     switchMap((params) =>
-        //         combineLatest([
-        //             this.questionService.getQuestionById$(params['id']),
-        //             this.logService
-        //                 .getItemLogsByItemId$(params['id'])
-        //                 .pipe(
-        //                     map((logs) =>
-        //                         logs.sort(
-        //                             (a, b) =>
-        //                                 new Date(b.timestamp).getTime() -
-        //                                 new Date(a.timestamp).getTime()
-        //                         )
-        //                     )
-        //                 )
-        //         ])
-        //     ),
-        //     filter((question) => !!question),
-        //     map(([question, logs]) => ({
-        //         ...question,
-        //         logs
-        //     })),
-        //     tap((question) => {
-        //         console.log(question);
-        //         this.questionId = question.id;
-        //         this.questionType = question.type;
-        //         this.editStringQuestionForm = this.fb.group({
-        //             name: [question.name, Validators.required],
-        //             question: [question.question, Validators.required],
-        //             optionName: [''],
-        //             options: this.fb.array<QuestionOption>(question.options),
-        //             extraPrice: [0]
-        //         });
-        //         this.editMaterialQuestionForm = this.fb.group({
-        //             name: [question.name, Validators.required],
-        //             question: [question.question, Validators.required],
-        //             categoryId: [''],
-        //             materialCategories: this.fb.array<string>(question.materialCategories),
-        //             options: this.fb.array<QuestionOption>(question.options)
-        //         });
-        //     })
-        // );
-        // this.categories$ = this.categoryService.getMaterialCategories$().pipe(
-        //     tap((categories) => {
-        //         categories.forEach((category) => {
-        //             this.categories = categories;
-        //             if (
-        //                 this.editMaterialQuestionForm.value.materialCategories.find(
-        //                     (id: string) => id === category.id
-        //                 )
-        //             ) {
-        //                 this.selectedCategories.push(category);
-        //             }
-        //         });
-        //     })
-        // );
+        const questionId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.question$ = questionId$.pipe(
+            switchMap((id) => this.store.select(QuestionSelector.selectQuestionById(id))),
+            tap((question) => {
+                if (!question) {
+                    this.store.dispatch(QuestionAction.getQuestions());
+
+                    return;
+                }
+                console.log('debug', question);
+                this.editCustomQuestionForm = this.fb.group({
+                    id: [question.id],
+                    isOptional: [question.isOptional],
+                    name: [question.name, Validators.required],
+                    question: [question.question, Validators.required],
+                    optionName: [''],
+                    options: this.fb.array<QuestionOption>(question.options),
+                    extraPrice: [0]
+                });
+
+                this.editMaterialQuestionForm = this.fb.group({
+                    id: [question.id],
+                    isOptional: [question.isOptional],
+                    name: [question.name, Validators.required],
+                    question: [question.question, Validators.required],
+                    category: [null],
+                    materialCategories: this.fb.array<string>(
+                        question.materialCategories.map((category) => category.id)
+                    ),
+                    options: this.fb.array<QuestionOption>(question.options)
+                });
+
+                if (question.type === QuestionType.Material) {
+                    this.selectedCategories = [...question.materialCategories];
+                }
+            })
+        );
+
+        this.materialCategories$ = this.store.select(CategorySelector.selectMaterialCategories());
     }
 
-    addStringOption(): void {
-        const name = this.editStringQuestionForm.value.optionName.trim();
-        const extraPrice = this.editStringQuestionForm.value.extraPrice;
+    onAddCustomOption(): void {
+        const { optionName, extraPrice } = this.editCustomQuestionForm.value;
         const option: QuestionOption = {
-            name,
+            name: optionName,
             extraPrice,
-            slug: extraPrice ? name + ' +' + extraPrice + ' Ft' : name
+            nameWithExtra: extraPrice ? optionName + ' +' + extraPrice + ' Ft' : optionName
         };
 
-        const options = this.editStringQuestionForm.get('options') as FormArray;
-        options.push(
+        (this.editCustomQuestionForm.get('options') as FormArray).push(
             this.fb.group({
                 name: option.name,
                 extraPrice: option.extraPrice,
-                slug: option.slug
+                nameWithExtra: option.nameWithExtra
             })
         );
-        this.editStringQuestionForm.get('optionName').patchValue('');
-        this.editStringQuestionForm.get('extraPrice').patchValue(0);
-        this.toastr.success('Választási lehetőség hozzáadva');
+        this.editCustomQuestionForm.get('optionName').patchValue(undefined);
+        this.editCustomQuestionForm.get('extraPrice').patchValue(0);
+        this.toastr.success(`${option.name} opció hozzáadva.`);
     }
 
-    deleteStringOption(index: number): void {
-        const options = this.editStringQuestionForm.get('options') as FormArray;
-        options.removeAt(index);
-        this.toastr.success('Választási lehetőség törölve');
+    onDeleteCustomOption(index: number): void {
+        const deletedOption = (this.editCustomQuestionForm.get('options') as FormArray).at(index)
+            .value as QuestionOption;
+        (this.editCustomQuestionForm.get('options') as FormArray).removeAt(index);
+        this.toastr.success(`${deletedOption.name} opció törölve.`);
     }
 
-    addMaterialOption(materialCategoryId: string): void {
-        // this.categoryService
-        //     .getCategoryById$(materialCategoryId)
-        //     .pipe(
-        //         tap((category: MaterialCategory) => {
-        //             console.log(category);
-        //             this.editMaterialQuestionForm.value.materialCategories.push(category.id);
-        //             this.selectedCategories.push(category);
-        //             const options = this.editMaterialQuestionForm.get('options') as FormArray;
-        //             category.items.forEach((material) => {
-        //                 if (material.isAvailable) {
-        //                     const option = this.fb.group({
-        //                         materialId: material.id,
-        //                         name: material.name,
-        //                         extraPrice: material.extraPrice,
-        //                         slug: material.extraPrice
-        //                             ? material.name + ' +' + material.extraPrice + ' Ft'
-        //                             : material.name
-        //                     });
-        //                     options.push(option);
-        //                 }
-        //             });
-        //             this.changeDetectorRef.detectChanges();
-        //             this.toastr.success(`${category.name} kategória hozzáadva`);
-        //         })
-        //     )
-        //     .subscribe();
-    }
-
-    deleteMaterialCategoryOption(categoryId: string, index: number): void {
-        // this.materialService
-        //     .getMaterialsByCategoryId$(categoryId)
-        //     .pipe(
-        //         tap((materials) => {
-        //             const options = this.editMaterialQuestionForm.get('options') as FormArray;
-        //             const materialIds = materials.map((item) => item.id);
-        //             const materialOptions = options.controls.filter((control) =>
-        //                 materialIds.includes(control.value.materialId)
-        //             );
-        //             materialOptions.forEach((option) => {
-        //                 options.removeAt(options.controls.indexOf(option));
-        //             });
-        //             this.editMaterialQuestionForm.value.materialCategories.splice(index, 1);
-        //             this.selectedCategories.splice(index, 1);
-        //             this.changeDetectorRef.detectChanges();
-        //             this.toastr.success('Kategória törölve');
-        //         })
-        //     )
-        //     .subscribe();
-    }
-
-    editQuestionWithStringAnser(): void {
-        const name = this.editStringQuestionForm.value.name.trim();
-        const question = this.editStringQuestionForm.value.question.trim();
-        const options = this.editStringQuestionForm.value.options;
-
-        const questionData: BackendQuestion = {
-            type: QuestionType.QUESTION_WITH_STRING_ANSWER,
-            name,
-            question,
-            options
-        };
-
-        this.isLoading = true;
-
-        this.questionService
-            .updateQuestion$(this.questionId, questionData)
+    onAddMaterialOption(materialCategoryId: string): void {
+        console.log('debug', materialCategoryId);
+        const option$ = this.store
+            .select(CategorySelector.selectMaterialCategoryById(materialCategoryId))
             .pipe(
-                tap(() => {
-                    this.isLoading = false;
-                    this.toastr.success('Kérdés sikeresen módosítva');
-                    this.editStringQuestionForm.reset();
-                    this.router.navigate(['/admin/questions']);
+                tap((category) => {
+                    const isAlreadyAdded = this.selectedCategories.some(
+                        (selectedCategory) => selectedCategory.id === category.id
+                    );
+
+                    if (isAlreadyAdded) {
+                        this.toastr.warn('Kategória már hozzáadva.');
+
+                        return;
+                    }
+
+                    this.editMaterialQuestionForm.value.materialCategories.push(category.id);
+                    this.selectedCategories.push(category);
+                    category.items.forEach((material) => {
+                        if (material.isAvailable) {
+                            const option = this.fb.group({
+                                materialId: material.id,
+                                name: material.name,
+                                extraPrice: material.extraPrice,
+                                nameWithExtra: material.extraPrice
+                                    ? material.name + ' +' + material.extraPrice + ' Ft'
+                                    : material.name
+                            });
+                            (this.editMaterialQuestionForm.get('options') as FormArray).push(
+                                option
+                            );
+                        }
+                    });
+                    this.toastr.success(`${category.name} kategória hozzáadva.`);
                 })
             )
             .subscribe();
+
+        option$.unsubscribe();
     }
 
-    editQuestionWithMaterialCategoryAnswer(): void {
-        const name = this.editMaterialQuestionForm.value.name.trim();
-        const question = this.editMaterialQuestionForm.value.question.trim();
-        const materialCategories = this.editMaterialQuestionForm.value
-            .materialCategories as string[];
-        const options = this.editMaterialQuestionForm.value.options;
-
-        const questionData: BackendQuestion = {
-            type: QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER,
-            name,
-            question,
-            materialCategories,
-            options
-        };
-
-        this.isLoading = true;
-        this.questionService
-            .updateQuestion$(this.questionId, questionData)
+    onDeleteMaterialCategoryOption(categoryId: string, index: number): void {
+        const deleteOption$ = this.store
+            .select(MaterialSelector.selectMaterialsByCategoryId(categoryId))
             .pipe(
-                tap(() => {
-                    this.isLoading = false;
-                    this.toastr.success('Kérdés sikeresen módosítva');
-                    this.editMaterialQuestionForm.reset();
-                    this.router.navigate(['/admin/questions']);
+                tap((materials) => {
+                    const options = this.editMaterialQuestionForm.get('options') as FormArray;
+                    const materialIds = materials.map((material) => material.id);
+                    const materialOptions = options.controls.filter((control) =>
+                        materialIds.includes(control.value.materialId)
+                    );
+                    materialOptions.forEach((option) => {
+                        options.removeAt(options.controls.indexOf(option));
+                    });
+                    this.editMaterialQuestionForm.value.materialCategories.splice(index, 1);
+                    this.selectedCategories.splice(index, 1);
+                    this.toastr.success('Kategória törölve.');
                 })
             )
             .subscribe();
+
+        deleteOption$.unsubscribe();
     }
 
-    onSubmit(): void {
-        if (this.questionType === QuestionType.QUESTION_WITH_STRING_ANSWER) {
-            if (this.editStringQuestionForm.valid) {
-                this.editQuestionWithStringAnser();
-            } else {
-                this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
-            }
-        } else {
-            if (this.editMaterialQuestionForm.valid) {
-                this.editQuestionWithMaterialCategoryAnswer();
-            } else {
-                this.toastr.info('Kérlek töltsd ki a kérdéshez szükséges mezőket');
-            }
+    onSubmit(questionType: QuestionType): void {
+        let updatedQuestion: Question;
+        if (questionType === QuestionType.Custom && this.editCustomQuestionForm.valid) {
+            const { id, name, question, options, isOptional } = this.editCustomQuestionForm.value;
+
+            updatedQuestion = {
+                id,
+                isOptional,
+                type: QuestionType.Custom,
+                name,
+                question,
+                options
+            };
+
+            this.store.dispatch(QuestionAction.updateQuestion({ question: updatedQuestion }));
+            this.router.navigate(['/admin/questions']);
+
+            return;
         }
+
+        if (questionType === QuestionType.Material && this.editMaterialQuestionForm.valid) {
+            const { id, name, question, materialCategories, options, isOptional } =
+                this.editMaterialQuestionForm.value;
+
+            updatedQuestion = {
+                id,
+                isOptional,
+                type: QuestionType.Material,
+                name,
+                question,
+                materialCategories,
+                options
+            };
+
+            this.store.dispatch(QuestionAction.updateQuestion({ question: updatedQuestion }));
+            this.router.navigate(['/admin/questions']);
+
+            return;
+        }
+
+        this.toastr.info('Kérlek töltsd ki a szükséges mezőket.');
     }
 }

@@ -1,99 +1,95 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  OnInit,
-  ViewEncapsulation
+    ChangeDetectionStrategy,
+    Component,
+    HostBinding,
+    OnInit,
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subject, filter, startWith, switchMap, tap } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { Question } from '@core/models/question.model';
-import { QuestionType } from '@core/enums/question-type.enum';
-import { QuestionService } from '@core/services/question.service';
-import { ToastrService } from '@core/services/toastr.service';
+import { Question, QuestionType } from '@core/store/question';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { QuestionAction, QuestionSelector } from '@core/store/question';
 
 @Component({
-  selector: 'nyk-questions',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    ButtonModule,
-    BadgeModule,
-    RouterModule,
-    SpinnerComponent,
-    InputTextModule,
-    TooltipModule
-  ],
-  templateUrl: './questions.component.html',
-  styleUrls: ['./questions.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'nyk-questions',
+    standalone: true,
+    imports: [
+        CommonModule,
+        TableModule,
+        ButtonModule,
+        BadgeModule,
+        RouterModule,
+        SpinnerComponent,
+        InputTextModule,
+        TooltipModule
+    ],
+    templateUrl: './questions.component.html',
+    styleUrls: ['./questions.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionsComponent implements OnInit {
-  @HostBinding('class') hostClass = 'nyk-questions';
+    @HostBinding('class') hostClass = 'nyk-questions';
 
-  questions$: Observable<Question[]>;
+    questions$: Observable<Question[]>;
+    isBusy$: Observable<boolean>;
 
-  isLoading = false;
+    hasDispatched = false;
 
-  readonly QuestionType = QuestionType;
-  private questionDeleteSubject = new Subject<void>();
+    readonly QuestionType = QuestionType;
 
-  constructor(
-    private questionService: QuestionService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private toastr: ToastrService,
-    private dialog: MatDialog
-  ) {}
+    private readonly store = inject(Store);
+    private readonly dialog = inject(MatDialog);
 
-  ngOnInit(): void {
-    this.questions$ = this.questionDeleteSubject.pipe(
-      startWith(null),
-      switchMap(() => this.questionService.getQuestions$())
-    );
-  }
+    ngOnInit(): void {
+        this.isBusy$ = this.store.select(QuestionSelector.isBusy());
+        this.questions$ = this.store.select(QuestionSelector.selectQuestions()).pipe(
+            tap((questions) => {
+                if (!questions.length && !this.hasDispatched) {
+                    this.hasDispatched = true;
+                    this.store.dispatch(QuestionAction.getQuestions());
+                }
+            }),
+            map((question) => [...question])
+        );
+    }
 
-  onDeleteQuestion(question: Question): void {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        minWidth: '40vw',
-        data: {
-          message: `Biztos törölni szeretnéd "${question.name}" kérdést?`
-        }
-      })
-      .afterClosed()
-      .pipe(
-        filter((confirmed) => !!confirmed),
-        tap(() => {
-          this.isLoading = true;
-          this.changeDetectorRef.detectChanges();
-        }),
-        switchMap(() => this.questionService.deleteQuestion$(question.id)),
-        tap(() => {
-          this.isLoading = false;
-          this.questionDeleteSubject.next();
-          this.toastr.success(`${question.name} kérdés sikeresen törölve`);
-          this.changeDetectorRef.detectChanges();
-        })
-      )
-      .subscribe();
-  }
+    onDeleteQuestion(question: Question): void {
+        this.dialog
+            .open(ConfirmDialogComponent, {
+                minWidth: '40vw',
+                data: {
+                    message: `Biztos törölni szeretnéd "${question.name}" kérdést?`
+                }
+            })
+            .afterClosed()
+            .pipe(
+                filter((confirmed) => !!confirmed),
+                tap(() =>
+                    this.store.dispatch(
+                        QuestionAction.deleteQuestion({ id: question.id, name: question.name })
+                    )
+                )
+            )
+            .subscribe();
+    }
 
-  applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
-    const filter = ($event.target as HTMLInputElement).value;
-    table.filterGlobal(filter, stringVal);
-  }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
+        const filter = ($event.target as HTMLInputElement).value;
+        table.filterGlobal(filter, stringVal);
+    }
 }

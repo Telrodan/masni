@@ -63,9 +63,9 @@ export class ProductDetailsFormComponent implements OnInit, OnChanges {
                             this.product.questions.forEach((question) => {
                                 if (question.id === key) {
                                     question.options.forEach((option) => {
-                                        if (option._id === changes.questions[key]) {
-                                            this.price += option.extraPrice;
-                                        }
+                                        // if (option._id === changes.questions[key]) {
+                                        //     this.price += option.extraPrice;
+                                        // }
                                     });
                                 }
                             });

@@ -52,6 +52,16 @@ export const CategorySelector = {
                 ) as MaterialCategory[]
         ),
 
+    selectMaterialCategoryById: (categoryId: string) =>
+        createSelector(
+            selectCategoryState,
+            (categoryState): MaterialCategory =>
+                categoryState.categories.find(
+                    (category) =>
+                        category.type === CategoryType.Material && category.id === categoryId
+                ) as MaterialCategory
+        ),
+
     selectInspirationCategories: () =>
         createSelector(
             selectCategoryState,

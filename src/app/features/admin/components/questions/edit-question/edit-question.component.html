@@ -1,247 +1,185 @@
-<ng-container *ngIf="!isLoading; else loading">
-    <ng-container *ngIf="question$ | async as question">
-        <div class="nyk-edit-question-header">Kérdés módosítás</div>
+<ng-container *ngIf="question$ | async as question; else loading">
+    <div class="nyk-edit-question-header">Kérdés módosítás</div>
+
+    <div *ngIf="question.type === QuestionType.Custom" class="nyk-edit-question-string-content">
+        <form class="nyk-edit-question-string-content-form" [formGroup]="editCustomQuestionForm">
+            <div class="form-group">
+                <label for="name"> Kérdés neve </label>
+
+                <input id="name" formControlName="name" type="text" pInputText />
+            </div>
+
+            <div class="form-group">
+                <label for="question"> Kérdés </label>
+
+                <input id="question" formControlName="question" type="text" pInputText />
+            </div>
+
+            <div class="form-group">
+                <label for="optionName"> Választási lehetőség </label>
+
+                <input id="optionName" formControlName="optionName" type="text" pInputText />
+            </div>
+
+            <div class="form-group">
+                <label for="extraPrice"> Lehetőség extra ára </label>
+
+                <p-inputNumber
+                    [showButtons]="true"
+                    inputId="extraPrice"
+                    formControlName="extraPrice"
+                    styleClass="w-full"
+                    mode="currency"
+                    currency="HUF"
+                    [min]="0" />
+            </div>
+
+            <p-button
+                [raised]="true"
+                label="Lehetőség hozzáadás"
+                icon="pi pi-plus"
+                styleClass="p-button p-button-success w-full"
+                [disabled]="
+                    !editCustomQuestionForm.value.optionName || !editCustomQuestionForm.value.name
+                "
+                (click)="onAddCustomOption()"></p-button>
+        </form>
 
         <div
-            *ngIf="questionType === QuestionType.QUESTION_WITH_STRING_ANSWER"
-            class="nyk-edit-question-string-content">
-            <form
-                class="nyk-edit-question-string-content-form"
-                [formGroup]="editStringQuestionForm">
-                <div class="form-group">
-                    <label for="name"> Kérdés neve </label>
+            *ngIf="editCustomQuestionForm.value.name"
+            class="nyk-edit-question-string-content-preview">
+            <p class="nyk-edit-question-string-content-preview-header">Előnézet</p>
 
-                    <input
-                        id="name"
-                        formControlName="name"
-                        type="text"
-                        pInputText />
-                </div>
+            <p class="nyk-edit-question-string-content-preview-name">
+                <span>Kérdés neve:</span>
+                {{ editCustomQuestionForm.value.name }}
+            </p>
 
-                <div class="form-group">
-                    <label for="question"> Kérdés </label>
+            <div class="form-group">
+                <label class="nyk-edit-question-string-content-preview-question" for="option">
+                    <span>Kérdés:</span>
+                    {{ editCustomQuestionForm.value.question }}
+                </label>
 
-                    <input
-                        id="question"
-                        formControlName="question"
-                        type="text"
-                        pInputText />
-                </div>
+                <p-dropdown
+                    *ngIf="editCustomQuestionForm.value.options.length"
+                    [options]="editCustomQuestionForm.value.options"
+                    optionLabel="nameWithExtra"
+                    styleClass="w-full">
+                </p-dropdown>
+            </div>
 
-                <div class="form-group">
-                    <label for="optionName"> Választási lehetőség </label>
-
-                    <input
-                        id="optionName"
-                        formControlName="optionName"
-                        type="text"
-                        pInputText />
-                </div>
-
-                <div class="form-group">
-                    <label for="extraPrice"> Lehetőség extra ára </label>
-
-                    <p-inputNumber
-                        inputId="extraPrice"
-                        styleClass="w-full"
-                        formControlName="extraPrice"></p-inputNumber>
-                </div>
-
-                <p-button
-                    label="Lehetőség hozzáadás"
-                    icon="pi pi-plus"
-                    styleClass="p-button p-button-success w-full"
-                    [disabled]="
-                        !editStringQuestionForm.value.optionName ||
-                        !editStringQuestionForm.value.name
-                    "
-                    (click)="addStringOption()"></p-button>
-            </form>
+            <h3 class="nyk-edit-question-string-content-preview-header">Lehetőségek</h3>
 
             <div
-                *ngIf="editStringQuestionForm.value.name"
-                class="nyk-edit-question-string-content-preview">
-                <p class="nyk-edit-question-string-content-preview-header">
-                    Előnézet
+                class="nyk-edit-question-string-content-preview-option-wrapper"
+                *ngFor="let option of editCustomQuestionForm.value.options; let i = index">
+                <p class="nyk-edit-question-string-content-preview-option-wrapper-option">
+                    <span>{{ i + 1 }}.</span> {{ option.nameWithExtra }}
                 </p>
 
-                <p class="nyk-edit-question-string-content-preview-name">
-                    <span>Kérdés neve:</span>
-                    {{ editStringQuestionForm.value.name }}
-                </p>
+                <p-button
+                    [raised]="true"
+                    icon="pi pi-times"
+                    styleClass="p-button-danger"
+                    (click)="onDeleteCustomOption(i)">
+                </p-button>
+            </div>
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label
-                        class="nyk-edit-question-string-content-preview-question"
-                        for="option">
-                        <span>Kérdés:</span>
-                        {{ editStringQuestionForm.value.question }}
-                    </label>
+    <div *ngIf="question.type === QuestionType.Material" class="nyk-edit-question-material-content">
+        <form
+            class="nyk-edit-question-material-content-form"
+            [formGroup]="editMaterialQuestionForm">
+            <div class="form-group">
+                <label for="name"> Kérdés neve </label>
 
-                    <p-dropdown
-                        *ngIf="editStringQuestionForm.value.options.length"
-                        [options]="editStringQuestionForm.value.options"
-                        optionLabel="slug"
-                        styleClass="w-full">
-                    </p-dropdown>
-                </div>
+                <input id="name" formControlName="name" type="text" pInputText />
+            </div>
 
-                <h3 class="nyk-edit-question-string-content-preview-header">
-                    Lehetőségek
-                </h3>
+            <div class="form-group">
+                <label for="question"> Kérdés </label>
+
+                <input id="question" formControlName="question" type="text" pInputText />
+            </div>
+
+            <div class="form-group">
+                <label for="category"> Valassz minta kategóriát </label>
+
+                <p-dropdown
+                    id="category"
+                    formControlName="category"
+                    placeholder="Válassz egy kategóriát"
+                    [options]="materialCategories$ | async"
+                    optionValue="id"
+                    optionLabel="name"
+                    styleClass="w-full">
+                </p-dropdown>
+            </div>
+
+            <p-button
+                [raised]="true"
+                label="Kategória hozzáadás"
+                icon="pi pi-plus"
+                styleClass="p-button p-button-success w-full"
+                (click)="onAddMaterialOption(editMaterialQuestionForm.value.category)">
+            </p-button>
+        </form>
+
+        <div
+            *ngIf="editMaterialQuestionForm.value.name"
+            class="nyk-edit-question-material-content-preview">
+            <p class="nyk-edit-question-material-content-preview-header">Előnézet</p>
+
+            <p class="nyk-edit-question-material-content-preview-name">
+                <span>Kérdés neve:</span>
+                {{ editMaterialQuestionForm.value.name }}
+            </p>
+
+            <div class="form-group">
+                <label class="nyk-edit-question-material-content-preview-question" for="option">
+                    <span>Kérdés:</span>
+                    {{ editMaterialQuestionForm.value.question }}
+                </label>
+
+                <p-dropdown
+                    *ngIf="editMaterialQuestionForm.value.options.length"
+                    [options]="editMaterialQuestionForm.value.options"
+                    optionLabel="nameWithExtra"
+                    styleClass="w-full">
+                </p-dropdown>
+            </div>
+
+            <ng-container *ngIf="editMaterialQuestionForm.value.options.length">
+                <h3 class="nyk-edit-question-material-content-preview-header">Lehetőségek</h3>
 
                 <div
-                    class="nyk-edit-question-string-content-preview-option-wrapper"
-                    *ngFor="
-                        let option of editStringQuestionForm.value.options;
-                        let i = index
-                    ">
-                    <p
-                        class="nyk-edit-question-string-content-preview-option-wrapper-option">
-                        <span>{{ i + 1 }}.</span> {{ option?.slug }}
+                    class="nyk-edit-question-material-content-preview-option-wrapper"
+                    *ngFor="let option of selectedCategories; let i = index">
+                    <p class="nyk-edit-question-material-content-preview-option-wrapper-option">
+                        <span>{{ i + 1 }}.</span> {{ option.name }}
                     </p>
 
                     <p-button
+                        [raised]="true"
                         icon="pi pi-times"
                         styleClass="p-button-danger"
-                        (click)="deleteStringOption(i)">
+                        (click)="onDeleteMaterialCategoryOption(option.id, i)">
                     </p-button>
                 </div>
-            </div>
+            </ng-container>
         </div>
+    </div>
 
-        <div
-            *ngIf="
-                questionType ===
-                QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
-            "
-            class="nyk-edit-question-material-content">
-            <form
-                class="nyk-edit-question-material-content-form"
-                [formGroup]="editMaterialQuestionForm">
-                <div class="form-group">
-                    <label for="name"> Kérdés neve </label>
-
-                    <input
-                        id="name"
-                        formControlName="name"
-                        type="text"
-                        pInputText />
-                </div>
-
-                <div class="form-group">
-                    <label for="question"> Kérdés </label>
-
-                    <input
-                        id="question"
-                        formControlName="question"
-                        type="text"
-                        pInputText />
-                </div>
-
-                <div class="form-group">
-                    <label for="category"> Valassz minta kategóriát </label>
-
-                    <p-dropdown
-                        id="category"
-                        formControlName="categoryId"
-                        placeholder="Válassz egy kategóriát"
-                        [options]="categories$ | async"
-                        optionValue="id"
-                        optionLabel="name"
-                        styleClass="w-full">
-                    </p-dropdown>
-                </div>
-
-                <p-button
-                    label="Kategória hozzáadás"
-                    icon="pi pi-plus"
-                    styleClass="p-button p-button-success w-full"
-                    (click)="
-                        addMaterialOption(
-                            editMaterialQuestionForm.value.categoryId
-                        )
-                    ">
-                </p-button>
-            </form>
-
-            <div
-                *ngIf="editMaterialQuestionForm.value.name"
-                class="nyk-edit-question-material-content-preview">
-                <p class="nyk-edit-question-material-content-preview-header">
-                    Előnézet
-                </p>
-
-                <p class="nyk-edit-question-material-content-preview-name">
-                    <span>Kérdés neve:</span>
-                    {{ editMaterialQuestionForm.value.name }}
-                </p>
-
-                <div class="form-group">
-                    <label
-                        class="nyk-edit-question-material-content-preview-question"
-                        for="option">
-                        <span>Kérdés:</span>
-                        {{ editMaterialQuestionForm.value.question }}
-                    </label>
-
-                    <p-dropdown
-                        *ngIf="editMaterialQuestionForm.value.options.length"
-                        [options]="editMaterialQuestionForm.value.options"
-                        optionLabel="slug"
-                        styleClass="w-full">
-                    </p-dropdown>
-                </div>
-
-                <ng-container
-                    *ngIf="editMaterialQuestionForm.value.options.length">
-                    <h3
-                        class="nyk-edit-question-material-content-preview-header">
-                        Lehetőségek
-                    </h3>
-
-                    <div
-                        class="nyk-edit-question-material-content-preview-option-wrapper"
-                        *ngFor="
-                            let option of selectedCategories;
-                            let i = index
-                        ">
-                        <p
-                            class="nyk-edit-question-material-content-preview-option-wrapper-option">
-                            <span>{{ i + 1 }}.</span> {{ option.name }}
-                        </p>
-
-                        <p-button
-                            icon="pi pi-times"
-                            styleClass="p-button-danger"
-                            (click)="
-                                deleteMaterialCategoryOption(option.id, i)
-                            ">
-                        </p-button>
-                    </div>
-                </ng-container>
-            </div>
-        </div>
-
-        <p-button
-            *ngIf="questionType === QuestionType.QUESTION_WITH_STRING_ANSWER"
-            type="submit"
-            label="Kérdés módosítása"
-            styleClass="p-button w-full mt-3"
-            (click)="onSubmit()">
-        </p-button>
-
-        <p-button
-            *ngIf="
-                questionType ===
-                QuestionType.QUESTION_WITH_MATERIAL_CATEGORY_ANSWER
-            "
-            type="submit"
-            label="Kérdés módosítása"
-            styleClass="p-button w-full mt-3"
-            (click)="onSubmit()">
-        </p-button>
-        <div class="nyk-edit-question-header">Termék előzmények</div>
+    <p-button
+        [raised]="true"
+        type="submit"
+        label="Kérdés módosítása"
+        styleClass="p-button w-full mt-3"
+        (click)="onSubmit(question.type)">
+    </p-button>
+    <!-- <div class="nyk-edit-question-header">Termék előzmények</div>
 
         <span class="text-blue-500">
             Hozzáadva:
@@ -272,8 +210,7 @@
                     <td>{{ log.meta.user }}</td>
                 </tr>
             </ng-template>
-        </p-table>
-    </ng-container>
+        </p-table> -->
 </ng-container>
 
 <ng-template #loading>

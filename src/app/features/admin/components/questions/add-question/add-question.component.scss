@@ -2,11 +2,6 @@
 
 .nyk-add-question {
     display: block;
-    padding: 20px 40px;
-
-    @include respond(sm) {
-        padding: 20px;
-    }
 
     &-header {
         margin-bottom: 20px;
@@ -68,8 +63,10 @@
                 border-bottom: 1px solid var(--color-grey);
             }
 
-            &-name {
-                font-size: var(--font-size-s);
+            &-name,
+            &-question {
+                font-size: var(--font-size-m);
+                font-weight: 300 !important;
 
                 span {
                     font-weight: 500;
@@ -78,14 +75,6 @@
 
             .form-group {
                 margin-bottom: 16px;
-            }
-
-            &-question {
-                font-weight: 300 !important;
-
-                span {
-                    font-weight: 500;
-                }
             }
 
             &-option-wrapper {

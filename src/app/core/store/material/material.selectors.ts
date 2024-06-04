@@ -12,6 +12,11 @@ export const MaterialSelector = {
             materialState.materials.find((material) => material.id === id)
         ),
 
+    selectMaterialsByCategoryId: (categoryId: string) =>
+        createSelector(selectMaterialState, (materialState) =>
+            materialState.materials.filter((material) => material.category.id === categoryId)
+        ),
+
     isBusy: () =>
         createSelector(selectMaterialState, (materialState): boolean => materialState.isBusy)
 };
