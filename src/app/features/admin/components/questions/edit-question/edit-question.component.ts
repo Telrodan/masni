@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { Observable, map, switchMap, tap } from 'rxjs';
+import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -74,13 +74,8 @@ export class EditQuestionComponent implements OnInit {
 
         this.question$ = questionId$.pipe(
             switchMap((id) => this.store.select(QuestionSelector.selectQuestionById(id))),
+            filter((question) => !!question),
             tap((question) => {
-                if (!question) {
-                    this.store.dispatch(QuestionAction.getQuestions());
-
-                    return;
-                }
-                console.log('debug', question);
                 this.editCustomQuestionForm = this.fb.group({
                     id: [question.id],
                     isOptional: [question.isOptional],

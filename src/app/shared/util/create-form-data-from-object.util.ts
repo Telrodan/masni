@@ -6,7 +6,11 @@ export function createFormDataFromObject(object: object): FormData {
             formData.append(key, value);
         }
 
-        if (Array.isArray(value)) {
+        if (key !== 'images' && Array.isArray(value)) {
+            formData.append(key, value.join(','));
+        }
+
+        if (key === 'images' && Array.isArray(value)) {
             value.forEach((item) => {
                 formData.append(`${key}`, item);
             });

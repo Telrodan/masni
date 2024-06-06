@@ -47,8 +47,6 @@ export class QuestionsComponent implements OnInit {
     questions$: Observable<Question[]>;
     isBusy$: Observable<boolean>;
 
-    hasDispatched = false;
-
     readonly QuestionType = QuestionType;
 
     private readonly store = inject(Store);
@@ -56,15 +54,9 @@ export class QuestionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.isBusy$ = this.store.select(QuestionSelector.isBusy());
-        this.questions$ = this.store.select(QuestionSelector.selectQuestions()).pipe(
-            tap((questions) => {
-                if (!questions.length && !this.hasDispatched) {
-                    this.hasDispatched = true;
-                    this.store.dispatch(QuestionAction.getQuestions());
-                }
-            }),
-            map((question) => [...question])
-        );
+        this.questions$ = this.store
+            .select(QuestionSelector.selectQuestions())
+            .pipe(map((question) => [...question]));
     }
 
     onDeleteQuestion(question: Question): void {

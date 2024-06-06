@@ -19,6 +19,7 @@ import { BreadcrumpComponent } from '@shared/breadcrump/breadcrump.component';
 import { UserService } from '@core/services/user.service';
 import { User } from '@core/models/user.model';
 import { LogAction } from '@core/store/log/log.actions';
+import { QuestionAction } from '@core/store/question';
 
 @Component({
     selector: 'nyk-admin',
@@ -44,6 +45,7 @@ export class AdminComponent implements OnInit {
 
     ngOnInit(): void {
         this.store.dispatch(LogAction.getLogs());
+        this.store.dispatch(QuestionAction.getQuestions());
         this.user$ = this.userService.getUser$();
 
         this.router.events

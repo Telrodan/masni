@@ -26,7 +26,7 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { EditorModule } from 'primeng/editor';
 import { DividerModule } from 'primeng/divider';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -47,6 +47,7 @@ import { ProductCategory } from '@core/store/category/category.model';
 import { CategorySelector } from '@core/store/category';
 import { Product } from '@core/store/product/product.model';
 import { ProductAction } from '@core/store/product';
+import { Question, QuestionSelector } from '@core/store/question';
 
 @Component({
     selector: 'nyk-add-product',
@@ -79,7 +80,10 @@ export class AddProductComponent implements OnInit {
     @HostBinding('class') class = 'nyk-add-product';
 
     productSubCategories$: Observable<ProductCategory[]>;
+    questions$: Observable<Question[]>;
+
     imagesPreview: string[] = [];
+    selectedQuestions: Question[] = [];
     addProductForm: FormGroup;
 
     private readonly store = inject(Store);
@@ -93,6 +97,8 @@ export class AddProductComponent implements OnInit {
             CategorySelector.selectProductSubCategories()
         );
 
+        this.questions$ = this.store.select(QuestionSelector.selectQuestions());
+
         this.addProductForm = this.fb.group({
             name: ['', Validators.required],
             category: ['', Validators.required],
@@ -103,12 +109,13 @@ export class AddProductComponent implements OnInit {
             discountedPrice: [0, Validators.required],
             stock: [0, Validators.required],
             isCustom: [false, Validators.required],
+            questions: this.fb.array<string>([]),
+            selectedQuestion: [undefined],
             isNameEmbroideryAvailable: [false, Validators.required],
             isDollDress: [false, Validators.required],
             isDressable: [false, Validators.required],
             isFeatured: [false, Validators.required],
-            inspirationCategoryId: [''],
-            questions: this.fb.array<string>([])
+            inspirationCategoryId: ['']
         });
     }
 
@@ -135,6 +142,38 @@ export class AddProductComponent implements OnInit {
     drop(event: CdkDragDrop<{ image: string }[]>) {
         moveItemInArray(this.imagesPreview, event.previousIndex, event.currentIndex);
         moveItemInArray(this.addProductForm.value.images, event.previousIndex, event.currentIndex);
+    }
+
+    onAddQuestion(questionId: string) {
+        const question$$ = this.store
+            .select(QuestionSelector.selectQuestionById(questionId))
+            .pipe(
+                tap((question) => {
+                    this.selectedQuestions.push(question);
+                    this.addProductForm.value.questions.push(question.id);
+                    this.toastr.success(`${question.name} kérdés hozzáadva.`);
+                })
+            )
+            .subscribe();
+
+        question$$.unsubscribe();
+    }
+
+    onDeleteQuestion(questionId: string, index: number) {
+        const question$$ = this.store
+            .select(QuestionSelector.selectQuestionById(questionId))
+            .pipe(
+                tap((question) => {
+                    this.selectedQuestions = this.selectedQuestions.filter(
+                        (selectedQuestion) => selectedQuestion.id !== question.id
+                    );
+                    this.addProductForm.value.questions.splice(index, 1);
+                    this.toastr.success(`${question.name} kérdés törölve.`);
+                })
+            )
+            .subscribe();
+
+        question$$.unsubscribe();
     }
 
     onAddProduct(): void {

@@ -45,6 +45,7 @@ import { ProductAction, ProductSelector } from '@core/store/product';
 import { Log } from '@core/store/log/log.model';
 import { LogSelector } from '@core/store/log/log.selectors';
 import { ItemHistoryComponent } from '@shared/item-history/item-history.component';
+import { Question, QuestionSelector } from '@core/store/question';
 
 @Component({
     selector: 'nyk-edit-product',
@@ -79,9 +80,11 @@ export class EditProductComponent implements OnInit {
 
     product$: Observable<Product>;
     productSubCategories$: Observable<Category[]>;
+    questions$: Observable<Question[]>;
     logs$: Observable<Log[]>;
 
     editProductForm: FormGroup;
+    selectedQuestions: Question[] = [];
     imagesPreview: string[] = [];
 
     private readonly store = inject(Store);
@@ -108,6 +111,8 @@ export class EditProductComponent implements OnInit {
                     discountedPrice: [product.discountedPrice, Validators.required],
                     stock: [product.stock, Validators.required],
                     isCustom: [product.isCustom, Validators.required],
+                    questions: this.fb.array<string>([]),
+                    selectedQuestion: [undefined],
                     isNameEmbroideryAvailable: [
                         product.isNameEmbroideryAvailable,
                         Validators.required
@@ -125,6 +130,8 @@ export class EditProductComponent implements OnInit {
         this.productSubCategories$ = this.store.select(
             CategorySelector.selectProductSubCategories()
         );
+
+        this.questions$ = this.store.select(QuestionSelector.selectQuestions());
 
         this.logs$ = productId$.pipe(
             switchMap((id) => this.store.select(LogSelector.selectLogsByItemId(id)))
@@ -146,6 +153,38 @@ export class EditProductComponent implements OnInit {
     drop(event: CdkDragDrop<{ image: string }[]>): void {
         moveItemInArray(this.imagesPreview, event.previousIndex, event.currentIndex);
         moveItemInArray(this.editProductForm.value.images, event.previousIndex, event.currentIndex);
+    }
+
+    onAddQuestion(questionId: string) {
+        const question$$ = this.store
+            .select(QuestionSelector.selectQuestionById(questionId))
+            .pipe(
+                tap((question) => {
+                    this.selectedQuestions.push(question);
+                    this.editProductForm.value.questions.push(question.id);
+                    this.toastr.success(`${question.name} kérdés hozzáadva.`);
+                })
+            )
+            .subscribe();
+
+        question$$.unsubscribe();
+    }
+
+    onDeleteQuestion(questionId: string, index: number) {
+        const question$$ = this.store
+            .select(QuestionSelector.selectQuestionById(questionId))
+            .pipe(
+                tap((question) => {
+                    this.selectedQuestions = this.selectedQuestions.filter(
+                        (selectedQuestion) => selectedQuestion.id !== question.id
+                    );
+                    this.editProductForm.value.questions.splice(index, 1);
+                    this.toastr.success(`${question.name} kérdés törölve.`);
+                })
+            )
+            .subscribe();
+
+        question$$.unsubscribe();
     }
 
     onEditProduct(): void {
