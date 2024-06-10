@@ -11,9 +11,15 @@ import { CommonModule } from '@angular/common';
 
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
-import { SliderItem } from '@core/models/slider-item.model';
 import { SliderItemComponent } from './slider-item/slider-item.component';
 import { ProductCategory } from '@core/store/category/category.model';
+
+export interface SliderItem {
+    label: string;
+    image: string;
+    fromPrice: number;
+    routerLink: string;
+}
 
 @Component({
     selector: 'nyk-slider',
@@ -24,12 +30,10 @@ import { ProductCategory } from '@core/store/category/category.model';
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class SliderComponent implements OnChanges {
+export class SliderComponent {
     @HostBinding('class.nyk-slider') hostClass = true;
 
-    @Input() productCategories: ProductCategory[];
-
-    data: SliderItem[];
+    @Input() slides: SliderItem[];
 
     customOptions: OwlOptions = {
         loop: true,
@@ -56,39 +60,7 @@ export class SliderComponent implements OnChanges {
         nav: true
     };
 
-    ngOnChanges(changes: { productCategories: SimpleChange }) {
-        if (changes.productCategories) {
-            const mainCategories: ProductCategory[] = changes.productCategories.currentValue.filter(
-                (category: ProductCategory) => category.isMainCategory
-            );
-
-            this.data = mainCategories.map((category) => ({
-                label: category.name,
-                image: category.image,
-                fromPrice: this.findLowestPrice(category.subCategories),
-                routerLink: `/shop/${category.id}`
-            }));
-        }
-    }
-
     trackByLabel(index: number, item: SliderItem) {
         return item.label;
-    }
-
-    private findLowestPrice(subCategories: ProductCategory[]): number {
-        if (subCategories.length === 0) {
-            return 0;
-        }
-
-        let minValue = 5000000000;
-
-        subCategories.forEach((category) => {
-            category.items.forEach((product) => {
-                if (product.price < minValue) {
-                    minValue = product.price;
-                }
-            });
-        });
-        return minValue;
     }
 }

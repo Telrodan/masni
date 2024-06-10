@@ -1,19 +1,18 @@
-<ng-container *ngIf="data">
-  <div
-    *ngFor="let category of data; trackByLabel"
-    class="nyk-categories-item"
-    routerLink="{{ category.routerLink }}">
-    <img
-      class="nyk-categories-item-image"
-      [src]="category.image"
-      [alt]="category.label" />
+<div class="nyk-categories-container" #container>
+    <div
+        *ngFor="let category of productSubCategoriesData | slice : 0 : displayNumber; trackByLabel"
+        class="nyk-categories-item"
+        [routerLink]="category.routerLink">
+        <img class="nyk-categories-item-image" [src]="category.image" [alt]="category.label" />
 
-    <p class="nyk-categories-item-title heading-secondary">
-      {{ category.label }}
-    </p>
+        <p class="heading-secondary">
+            {{ category.label }}
+        </p>
 
-    <div class="nyk-categories-item-count paragraph-primary">
-      {{ category.count }} Termék
+        <div class="paragraph-primary">{{ category.count }} Termék</div>
     </div>
-  </div>
-</ng-container>
+</div>
+
+<button nyk-button (click)="onShowAll()" class="nyk-categories-button">
+    {{ buttonLabel }}
+</button>

@@ -1,114 +1,114 @@
 .primary-button,
 .secondary-button,
 .tertiary-button {
-  padding: 12px 24px;
-  font-size: var(--font-size-m);
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 300;
-  text-align: center;
-  border: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
+    padding: 12px 24px;
+    font-size: var(--font-size-m);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
 
-  &:focus {
-    outline: none;
-  }
+    &:focus {
+        outline: none;
+    }
 
-  i {
-    margin-right: 4px;
-  }
+    i {
+        margin-right: 4px;
+    }
 }
 
 .primary-button {
-  color: var(--color-black);
-  background-color: var(--color-secondary);
-
-  &:hover {
-    color: var(--color-dark-grey);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+    color: var(--text-color);
+    background-color: var(--secondary-color);
 
     &:hover {
-      color: var(--color-black);
+        color: var(--color-dark-grey);
     }
-  }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+            color: var(--text-color);
+        }
+    }
 }
 
 .secondary-button {
-  color: var(--color-black);
-  background-color: var(--color-primary);
-
-  &:hover {
-    color: var(--color-blue);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+    color: var(--text-color);
+    background-color: var(--primary-color);
 
     &:hover {
-      color: var(--color-white);
+        color: var(--color-blue);
     }
-  }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+            color: var(--white-color);
+        }
+    }
 }
 
 .tertiary-button {
-  color: var(--color-pure-white);
-  background-color: var(--color-black);
-
-  &:hover {
-    color: var(--color-white);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+    color: var(--white-color);
+    background-color: var(--text-color);
 
     &:hover {
-      color: var(--color-pure-white);
+        color: var(--white-color);
     }
-  }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+            color: var(--white-color);
+        }
+    }
 }
 
 .button-underline {
-  display: block;
-  position: relative;
-  padding: 0 2px 2px;
-  margin: 0;
-  background: transparent;
-  border: none;
-  font-size: var(--font-size-m);
-  font-weight: 300;
-  font-family: 'Roboto Condensed', sans-serif;
-  transition: all 0.4s ease;
+    display: block;
+    position: relative;
+    padding: 0 2px 2px;
+    margin: 0;
+    background: transparent;
+    border: none;
+    font-size: var(--font-size-m);
+    font-weight: 300;
+    font-family: 'Roboto Condensed', sans-serif;
+    transition: all 0.4s ease;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--color-primary);
-    transition: transform 0.4s ease;
-    transform: scale(0, 1);
-    transform-origin: right center;
-  }
-
-  &:hover:before {
-    transform: scale(1, 1);
-    transform-origin: left center;
-  }
-
-  &.active {
     &:before {
-      transform: scale(1, 1);
-      transform-origin: left center;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--primary-color);
+        transition: transform 0.4s ease;
+        transform: scale(0, 1);
+        transform-origin: right center;
     }
-  }
+
+    &:hover:before {
+        transform: scale(1, 1);
+        transform-origin: left center;
+    }
+
+    &.active {
+        &:before {
+            transform: scale(1, 1);
+            transform-origin: left center;
+        }
+    }
 }

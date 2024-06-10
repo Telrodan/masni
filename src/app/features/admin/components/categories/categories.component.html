@@ -89,7 +89,6 @@
 
                         <p-image
                             *ngIf="imageLoadedStatus[i]"
-                            styleClass="shadow-2"
                             [src]="category.image"
                             [alt]="'Kategória ' + i + ' képe'"
                             [preview]="true">
@@ -108,8 +107,9 @@
 
                     <td class="nyk-categories-type w-10rem text-center">
                         <p-badge
-                            [value]="category.isMainCategory ? 'Főkategória' : 'Alkategória'"
-                            [severity]="category.isMainCategory ? 'warning' : 'info'"
+                            *ngIf="category.type === CategoryType.Product"
+                            [value]="category.parentId ? 'Alkategória' : 'Főkategória'"
+                            [severity]="category.parentId ? 'info' : 'warning'"
                             styleClass="shadow-2">
                         </p-badge>
                     </td>
@@ -137,37 +137,11 @@
                     </td>
 
                     <td class="nyk-categories-items font-medium w-6rem text-center">
-                        <ng-container
-                            *ngIf="
-                                category.type === CategoryType.Product;
-                                else notProductCategoryItemsPlaceholder
-                            ">
-                            <span *ngIf="category.isMainCategory"> - </span>
-
-                            <span *ngIf="!category.isMainCategory">
-                                {{ category.items.length }}
-                            </span>
-                        </ng-container>
-
-                        <ng-template #notProductCategoryItemsPlaceholder>
-                            {{ category.items.length }}
-                        </ng-template>
+                        {{ getCategoryItemsCountById(category.id) | async }}
                     </td>
 
                     <td class="nyk-categories-sub-categories font-medium w-9rem text-center">
-                        <ng-container
-                            *ngIf="
-                                category.type === CategoryType.Product;
-                                else notProductCategorySubcategoriesPlaceholder
-                            ">
-                            <span *ngIf="category.isMainCategory">
-                                {{ category.subCategories.length }}
-                            </span>
-
-                            <span *ngIf="!category.isMainCategory"> - </span>
-                        </ng-container>
-
-                        <ng-template #notProductCategorySubcategoriesPlaceholder> - </ng-template>
+                        {{ getCategorySubCategoriesCountById(category.id) | async }}
                     </td>
 
                     <td>
@@ -191,7 +165,8 @@
                                 icon="pi pi-times"
                                 severity="danger"
                                 [disabled]="
-                                    !!category.items.length || !!category.subCategories.length
+                                    (getCategoryItemsCountById(category.id) | async) > 0 ||
+                                    (getCategorySubCategoriesCountById(category.id) | async) > 0
                                 "
                                 [pTooltip]="
                                     category.isMainCategory

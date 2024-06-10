@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     HostBinding,
+    inject,
     OnInit,
     ViewChild,
     ViewEncapsulation
@@ -39,6 +40,8 @@ import { ProductDetailsFormComponent } from './product-details-form/product-deta
 import { ProductDetailsReviewsComponent } from './product-details-reviews/product-details-reviews.component';
 import { DollDressDialogComponent } from '../doll-dress-dialog/doll-dress-dialog.component';
 import { Product } from '@core/store/product/product.model';
+import { Store } from '@ngrx/store';
+import { ProductSelector } from '@core/store/product';
 
 @Component({
     selector: 'nyk-product-details',
@@ -76,13 +79,17 @@ export class ProductDetailsComponent implements OnInit {
     @ViewChild('productDetailsForm', { static: false })
     productDetailsFormComponent: ProductDetailsFormComponent;
 
-    get isLiked(): boolean {
-        return this.product.likes.includes(this.cookieService.getCookie('userId'));
-    }
+    product$: Observable<Product>;
+
+    private readonly store = inject(Store);
+    //////
+
+    // get isLiked(): boolean {
+    //     return this.product.likes.includes(this.cookieService.getCookie('userId'));
+    // }
 
     refreshProduct$ = new BehaviorSubject<void>(null);
 
-    product$: Observable<Product>;
     relatedProduct$: Observable<Product[]>;
     isAuthenticated$: Observable<boolean>;
     product: Product;
@@ -132,24 +139,30 @@ export class ProductDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        const productId$ = this.route.params.pipe(map((params: { id: string }) => params.id));
+
+        this.product$ = productId$.pipe(
+            switchMap((id) => this.store.select(ProductSelector.selectProductById(id)))
+        );
+
         this.isAuthenticated$ = this.authService.getAuthStatus$();
 
-        this.product$ = this.refreshProduct$.pipe(
-            startWith(null),
-            switchMap(() =>
-                this.route.params.pipe(
-                    map((params) => params['id']),
-                    // switchMap((id) => this.productService.getProductById$(id)),
-                    tap((product) => {
-                        this.product = product;
-                        this.product.category.items = this.product.category.items.filter(
-                            (item) => item.id !== this.product.id
-                        );
-                        this.fullUrl = 'https://www.nyuszkokucko.hu/#' + this.location.path();
-                    })
-                )
-            )
-        );
+        // this.product$ = this.refreshProduct$.pipe(
+        //     startWith(null),
+        //     switchMap(() =>
+        //         this.route.params.pipe(
+        //             map((params) => params['id']),
+        //             // switchMap((id) => this.productService.getProductById$(id)),
+        //             tap((product) => {
+        //                 this.product = product;
+        //                 this.product.category.items = this.product.category.items.filter(
+        //                     (item) => item.id !== this.product.id
+        //                 );
+        //                 this.fullUrl = 'https://www.nyuszkokucko.hu/#' + this.location.path();
+        //             })
+        //         )
+        //     )
+        // );
     }
 
     onShareProduct(): void {

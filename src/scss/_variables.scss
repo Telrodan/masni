@@ -1,0 +1,71 @@
+// Colors
+:root {
+    --primary-color: #ffc0cb !important; /* Pasztell rózsaszín */
+    --secondary-color: #add8e6; /* Világoskék */
+    --tertiary-color: #f3d7ca; /* Krémszín */
+    --accent-color: #ffa07a; /* Narancssárga */
+    --text-color: #333333; /* Sötétszürke */
+    --white-color: #f8f8ff; /* Fehér */
+    --green-color: #97da8b; /* Zöld */
+    --red-color: #ff6060; /* Piros */
+    --grey-color: #f5f5f5; /* Világosszürke */
+
+    --hover-state: rgba(255, 255, 255, 0.2);
+    ////////////////////////////////////////////////////
+
+    --color-blue: #3f51b5;
+    --color-grey: #dedede;
+    --color-dark-grey: #676767;
+    --color-on-grey: #ff9058;
+
+    --color-overlay: rgba(0, 0, 0, 0.45);
+
+    --background-gradient: linear-gradient(
+        180deg,
+        var(--primary-color) 0%,
+        var(--white-color) 100%
+    );
+
+    --shadow: 1px 2px 3px var(--color-overlay);
+
+    // Font Sizes
+    --font-size-xs: 16px;
+    --font-size-s: 18px;
+    --font-size-m: 20px;
+    --font-size-l: 24px;
+    --font-size-xl: 30px;
+    --font-size-2xl: 36px;
+    --font-size-3xl: 48px;
+
+    // Icon Sizes
+    --icon-size-l: 24px;
+    --icon-size-m: 18px;
+    --icon-size-s: 12px;
+
+    // Spacings
+    --spacing-xs: 4px;
+    --spacing-s: 8px;
+    --spacing-m: 16px;
+    --spacing-l: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+
+    // Dimensions
+    --dimension-xs: 16px;
+    --dimension-s: 24px;
+    --dimension-m: 32px;
+    --dimension-l: 48px;
+    --dimension-xl: 64px;
+    --dimension-2xl: 96px;
+    --dimension-3xl: 128px;
+
+    // Bord Radius
+    --border-radius: 4px;
+    --border-radius-badge: 24px;
+    --border-radius-full: 9999px;
+
+    // Component Variables
+    // Product Card
+    --product-card-max-width: 380px;
+}

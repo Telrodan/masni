@@ -1,23 +1,19 @@
 <div *ngIf="product" class="nyk-product-card" (click)="onProductDetails()">
     <div class="nyk-product-card-top">
-        <button
-            *ngIf="isAuthenticated$ | async"
-            class="nyk-product-card-top-like"
-            (click)="onLike($event)">
-            <i [ngClass]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'"></i>
-        </button>
-
         <span *ngIf="isDiscounted" class="nyk-product-card-top-discount">
             -{{ product.discountPercentage }}%
         </span>
 
-        <span *ngIf="product.isCustom" class="nyk-product-card-top-dream-it">
-            "Álmodd meg"
-        </span>
+        <span *ngIf="product.isCustom" class="nyk-product-card-top-dream-it"> "Álmodd meg" </span>
 
-        <span *ngIf="isNewArrival" class="nyk-product-card-top-new-arrival">
-            Új
-        </span>
+        <span *ngIf="isNewArrival" class="nyk-product-card-top-new-arrival"> Új </span>
+
+        <!-- <button
+            *ngIf="isAuthenticated$ | async"
+            class="nyk-product-card-top-like"
+            (click)="onLike($event)">
+            <i [ngClass]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'"></i>
+        </button> -->
 
         <img
             class="nyk-product-card-top-image"
@@ -25,12 +21,7 @@
             [src]="product.images[0]"
             (load)="imageLoaded()" />
 
-        <p-skeleton
-            *ngIf="isImageLoading"
-            styleClass="skeleton"
-            width="w-full"
-            height="h-full">
-        </p-skeleton>
+        <p-skeleton *ngIf="isImageLoading" styleClass="skeleton"> </p-skeleton>
     </div>
 
     <div class="nyk-product-card-bottom">
@@ -59,8 +50,8 @@
             <p class="stock">Készleten: {{ product.stock }}</p>
         </div>
 
-        <button class="nyk-product-card-button primary-button">
-            <i class="pi pi-shopping-cart"></i>
+        <button nyk-button class="nyk-product-card-button">
+            <i nyk-icon class="pi pi-shopping-cart"></i>
         </button>
     </div>
 </div>

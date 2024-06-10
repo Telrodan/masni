@@ -6,19 +6,22 @@
 
 <nav class="nyk-navbar-navigation">
     <button
+        nyk-button
+        type="underline"
         routerLink="/home"
         routerLinkActive="active"
-        class="button-underline"
         aria-label="Főoldal"
         title="Főoldal">
         Főoldal
     </button>
 
     <button
+        nyk-button
+        type="underline"
         [matMenuTriggerFor]="productsMenu"
         (menuOpened)="isProductsMenuOpen = true"
         (menuClosed)="isProductsMenuOpen = false"
-        class="nyk-navbar-navigation-subgroup-trigger button-underline"
+        class="nyk-navbar-navigation-subgroup-trigger"
         [class.active]="isProductsMenuOpen">
         Termékek
         <i class="pi pi-chevron-down"> </i>
@@ -51,19 +54,19 @@
         </ng-container>
     </mat-menu>
 
-    <button class="button-underline" routerLink="/material" routerLinkActive="active">
+    <button nyk-button type="underline" routerLink="/material" routerLinkActive="active">
         Minták
     </button>
 
-    <button routerLink="/inspiration" routerLinkActive="active" class="button-underline">
+    <button nyk-button type="underline" routerLink="/inspiration" routerLinkActive="active">
         Inspirációk
     </button>
 
-    <button routerLink="/contact" routerLinkActive="active" class="button-underline">
+    <button nyk-button type="underline" routerLink="/contact" routerLinkActive="active">
         Kapcsolat
     </button>
 
-    <button routerLink="/about" routerLinkActive="active" class="button-underline">Rolam</button>
+    <button nyk-button type="underline" routerLink="/about" routerLinkActive="active">Rolam</button>
 </nav>
 
 <div class="nyk-navbar-actions">

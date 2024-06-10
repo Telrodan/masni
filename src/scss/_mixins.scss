@@ -4,36 +4,24 @@
 // xl - desktop
 
 @mixin respond($breakpoint) {
-  @if $breakpoint == sm {
-    @media only screen and (max-width: 576px) {
-      @content;
+    @if $breakpoint == sm {
+        @media only screen and (max-width: 576px) {
+            @content;
+        }
     }
-  }
-  @if $breakpoint == md {
-    @media only screen and (max-width: 768px) {
-      @content;
+    @if $breakpoint == md {
+        @media only screen and (max-width: 768px) {
+            @content;
+        }
     }
-  }
-  @if $breakpoint == lg {
-    @media only screen and (max-width: 992px) {
-      @content;
+    @if $breakpoint == lg {
+        @media only screen and (max-width: 992px) {
+            @content;
+        }
     }
-  }
-  @if $breakpoint == xl {
-    @media only screen and (min-width: 1200px) {
-      @content;
+    @if $breakpoint == xl {
+        @media only screen and (min-width: 1200px) {
+            @content;
+        }
     }
-  }
-}
-
-@mixin section {
-  width: 80%;
-  margin: 120px auto;
-  text-align: center;
-
-  @include respond(sm) {
-    margin: 80px auto;
-    width: 100%;
-    padding: 0 10px;
-  }
 }

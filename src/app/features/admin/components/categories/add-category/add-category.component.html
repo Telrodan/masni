@@ -81,7 +81,7 @@
         </textarea>
     </div>
 
-    <div class="form-group">
+    <div *ngIf="addCategoryForm.value.type === CategoryType.Product" class="form-group">
         <label for="imagePicker"> Kategória képe </label>
 
         <p-button

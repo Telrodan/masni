@@ -31,7 +31,7 @@
         <p class="block font-medium text-900 mb-2 text-lg mt-5">
             {{ selectedCategory.name }} alkategóriák
         </p>
-
+        <!-- 
         <div
             class="nyk-order-categories-sub-categories"
             cdkDropList
@@ -44,14 +44,14 @@
                 cdkDragBoundary=".drag-boundary">
                 {{ category.name }}
             </div>
-        </div>
+        </div> -->
 
-        <p-button
+        <!-- <p-button
             [raised]="true"
             label="Alkategóriák sorrend mentése"
             [disabled]="!isSubCategoriesOrderChanged"
             styleClass="p-button p-button mt-3 w-full"
             (onClick)="onUpdateCategoryOrder(selectedCategory.subCategories, true)">
-        </p-button>
+        </p-button> -->
     </ng-container>
 </ng-container>

@@ -10,19 +10,19 @@ import {
 import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
+import { Store, select } from '@ngrx/store';
 import { Observable, map, startWith, switchMap } from 'rxjs';
 import { SkeletonModule } from 'primeng/skeleton';
 
-import { CategoryService } from '@core/services/category.service';
-import { CategoriesComponent } from './categories/categories.component';
+import { CategoriesComponent, ProductSubCategoriesData } from './categories/categories.component';
 import { ProductService } from '@core/services/product.service';
-import { SliderComponent } from './slider/slider.component';
+import { SliderComponent, SliderItem } from './slider/slider.component';
 import { ProductsCarouselComponent } from './products-carousel/products-carousel.component';
 import { DreamItCtaComponent } from './dream-it-cta/dream-it-cta.component';
 import { ProductCategory } from '@core/store/category/category.model';
 import { Product } from '@core/store/product/product.model';
-import { Store } from '@ngrx/store';
 import { CategorySelector } from '@core/store/category';
+import { ProductSelector } from '@core/store/product';
 
 interface SortedProducts {
     title: string;
@@ -50,19 +50,15 @@ interface SortedProducts {
 export class HomeComponent implements OnInit {
     @HostBinding('class.nyk-home') hostClass = true;
 
-    productCategories$: Observable<ProductCategory[]>;
+    sliderItems$: Observable<SliderItem[]>;
+    productSubCategoriesData$: Observable<ProductSubCategoriesData[]>;
     sortedProducts$: Observable<SortedProducts[]>;
 
-    private likeProduct = new EventEmitter<Product>();
-
     private readonly store = inject(Store);
+    private readonly titleService = inject(Title);
+    private readonly metaService = inject(Meta);
 
-    constructor(
-        private categoryService: CategoryService,
-        private productService: ProductService,
-        private titleService: Title,
-        private metaService: Meta
-    ) {
+    constructor() {
         this.titleService.setTitle('Nyuszkó Kuckó | Főoldal');
         this.metaService.addTags([
             {
@@ -94,36 +90,55 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.productCategories$ = this.store
-            .select(CategorySelector.selectMainProductCategories())
-            .pipe(map((categories: ProductCategory[]) => categories));
+        // this.sliderItems$ = this.store.select(CategorySelector.selectMainProductCategories()).pipe(
+        //     map((categories) =>
+        //         categories
+        //             // .filter((category) => category.subCategories.length > 0)
+        //             .map((category) => ({
+        //                 label: category.name,
+        //                 image: category.image,
+        //                 // fromPrice: this.findLowestPrice(category.subCategories),
+        //                 routerLink: `/shop/${category.id}`
+        //             }))
+        //     )
+        // );
 
-        this.sortedProducts$ = this.likeProduct.pipe(
-            startWith(null),
-            switchMap(() =>
-                this.productService.getProducts$().pipe(
-                    map((products) => [
-                        {
-                            title: 'Kiemelt termékek',
-                            products: products.filter((product) => product.isFeatured),
-                            routerLink: '/shop/featured',
-                            image: '../../../assets/images/home-page-decoration-1.png'
-                        },
-                        {
-                            title: 'Álmodd meg',
-                            products: products.filter((product) => product.isCustom),
-                            routerLink: '/shop/dream-it',
-                            image: '../../../assets/images/home-page-decoration-2.png'
-                        },
-                        {
-                            title: 'Összes termék',
-                            products: products,
-                            routerLink: '/shop/all',
-                            image: '../../../assets/images/home-page-decoration-3.png'
-                        }
-                    ])
+        this.productSubCategoriesData$ = this.store
+            .select(CategorySelector.selectProductSubCategories())
+            .pipe(
+                map((categories) =>
+                    categories
+                        .filter((category) => category.items.length > 0)
+                        .map((category) => ({
+                            label: category.name,
+                            image: category.image,
+                            routerLink: `/shop/${category.id}`,
+                            count: category.items.length
+                        }))
                 )
-            )
+            );
+
+        this.sortedProducts$ = this.store.select(ProductSelector.selectProducts()).pipe(
+            map((products) => [
+                {
+                    title: 'Kiemelt termékek',
+                    products: products.filter((product) => product.isFeatured),
+                    routerLink: '/shop/featured',
+                    image: '../../../assets/images/home-page-decoration-1.png'
+                },
+                {
+                    title: 'Álmodd meg',
+                    products: products.filter((product) => product.isCustom),
+                    routerLink: '/shop/dream-it',
+                    image: '../../../assets/images/home-page-decoration-2.png'
+                },
+                {
+                    title: 'Összes termék',
+                    products: products,
+                    routerLink: '/shop/all',
+                    image: '../../../assets/images/home-page-decoration-3.png'
+                }
+            ])
         );
     }
 
@@ -131,7 +146,11 @@ export class HomeComponent implements OnInit {
         return SortedProducts.title;
     }
 
-    onLikeProduct() {
-        this.likeProduct.emit();
+    private findLowestPrice(subCategories: ProductCategory[]): number {
+        return subCategories.reduce((minPrice, category) => {
+            return category.items.reduce((currentMin, product) => {
+                return Math.min(currentMin, product.price);
+            }, minPrice);
+        }, Infinity);
     }
 }

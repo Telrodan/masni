@@ -92,6 +92,14 @@ export class CategoriesComponent implements OnInit {
         this.imageLoadedStatus[index] = true;
     }
 
+    getCategoryItemsCountById(categoryId: string): Observable<number> {
+        return this.store.select(CategorySelector.selectCategoryItemsCountById(categoryId));
+    }
+
+    getCategorySubCategoriesCountById(categoryId: string): Observable<number> {
+        return this.store.select(CategorySelector.selectCategorySubCategoriesCountById(categoryId));
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applyTableGlobalFilter($event: any, stringVal: string, table: Table): void {
         const filter = ($event.target as HTMLInputElement).value;

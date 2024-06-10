@@ -43,15 +43,15 @@ export const categoryReducers = createReducer(
     on(CategoryAction.addCategorySuccess, (state, action) => {
         const stateClone = cloneDeep(state);
 
-        if (!action.category.isMainCategory) {
-            const parentCategoryIndex = stateClone.categories.findIndex(
-                (category) => category.id === action.category.parentCategory.id
-            );
+        // if (!action.category.isMainCategory) {
+        //     const parentCategoryIndex = stateClone.categories.findIndex(
+        //         (category) => category.id === action.category.parentCategory.id
+        //     );
 
-            stateClone.categories[parentCategoryIndex].subCategories.push(
-                action.category as ProductCategory
-            );
-        }
+        //     stateClone.categories[parentCategoryIndex].subCategories.push(
+        //         action.category as ProductCategory
+        //     );
+        // }
 
         return {
             ...stateClone,
@@ -94,15 +94,15 @@ export const categoryReducers = createReducer(
 
         const category = stateClone.categories.find((category) => category.id === action.id);
 
-        if (!category.isMainCategory) {
-            const parentCategoryIndex = stateClone.categories.findIndex(
-                (c) => c.id === category.parentCategory.id
-            );
+        // if (!category.isMainCategory) {
+        //     const parentCategoryIndex = stateClone.categories.findIndex(
+        //         (c) => c.id === category.parentCategory.id
+        //     );
 
-            stateClone.categories[parentCategoryIndex].subCategories = stateClone.categories[
-                parentCategoryIndex
-            ].subCategories.filter((subCategory) => subCategory.id !== action.id);
-        }
+        //     stateClone.categories[parentCategoryIndex].subCategories = stateClone.categories[
+        //         parentCategoryIndex
+        //     ].subCategories.filter((subCategory) => subCategory.id !== action.id);
+        // }
 
         return {
             ...stateClone,
@@ -114,14 +114,14 @@ export const categoryReducers = createReducer(
     on(CategoryAction.deleteItemFromCategory, (state, action) => {
         const stateClone = cloneDeep(state);
 
-        const categoryIndex = stateClone.categories.findIndex(
-            (category) => category.id === action.categoryId
-        );
-        const items = stateClone.categories[categoryIndex].items;
-        const itemIndex = items.findIndex((item) => item.id === action.itemId);
-        items.splice(itemIndex, 1);
+        // const categoryIndex = stateClone.categories.findIndex(
+        //     (category) => category.id === action.categoryId
+        // );
+        // const items = stateClone.categories[categoryIndex].items;
+        // const itemIndex = items.findIndex((item) => item.id === action.itemId);
+        // items.splice(itemIndex, 1);
 
-        stateClone.categories[categoryIndex].items = items;
+        // stateClone.categories[categoryIndex].items = items;
 
         return {
             ...stateClone

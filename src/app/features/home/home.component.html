@@ -1,35 +1,26 @@
-<ng-container
-  *ngIf="productCategories$ | async as productCategories; else sliderSkeleton">
-  <nyk-slider [productCategories]="productCategories"></nyk-slider>
+<nyk-slider *ngIf="sliderItems$ | async as sliderItems; else sliderSkeleton" [slides]="sliderItems">
+</nyk-slider>
 
-  <nyk-categories [productCategories]="productCategories"> </nyk-categories>
-</ng-container>
+<nyk-categories [productSubCategoriesData]="productSubCategoriesData$ | async"> </nyk-categories>
 
-<ng-container
-  *ngIf="
-    sortedProducts$ | async as sortedProducts;
-    else productsCarouselSkeleton
-  ">
-  <ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
-    <img class="nyk-home-decoration" [src]="carousel.image" alt="Dekoráció" />
+<ng-container *ngIf="sortedProducts$ | async as sortedProducts; else productsCarouselSkeleton">
+    <ng-container *ngFor="let carousel of sortedProducts; trackBy: trackByTitle">
+        <img class="nyk-home-decoration" [src]="carousel.image" alt="Dekoráció" />
 
-    <nyk-products-carousel
-      [title]="carousel.title"
-      [products]="carousel.products"
-      (likeProduct)="onLikeProduct()"
-      [routerLink]="carousel.routerLink">
-    </nyk-products-carousel>
-  </ng-container>
+        <nyk-products-carousel
+            [title]="carousel.title"
+            [products]="carousel.products"
+            [routerLink]="carousel.routerLink">
+        </nyk-products-carousel>
+    </ng-container>
 </ng-container>
 
 <nyk-dream-it-cta></nyk-dream-it-cta>
 
 <ng-template #sliderSkeleton>
-  <p-skeleton styleClass="nyk-home-slider-skeleton" width="w-full">
-  </p-skeleton>
+    <p-skeleton styleClass="nyk-home-slider-skeleton" width="w-full"> </p-skeleton>
 </ng-template>
 
 <ng-template #productsCarouselSkeleton>
-  <p-skeleton styleClass="nyk-home-products-carousel-skeleton" width="w-full">
-  </p-skeleton>
+    <p-skeleton styleClass="nyk-home-products-carousel-skeleton" width="w-full"> </p-skeleton>
 </ng-template>

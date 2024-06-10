@@ -1,18 +1,16 @@
-<ng-container *ngIf="images">
-  <div class="nyk-gallery-preview">
+<div class="nyk-gallery-preview">
     <img
-      *ngFor="let image of images; let i = index"
-      class="nyk-gallery-preview-image"
-      [src]="image"
-      [alt]="'Termék kép' + i"
-      [class.active]="i === activeImage"
-      (click)="onImageClick(i)" />
-  </div>
+        *ngFor="let image of images; let i = index"
+        class="nyk-gallery-preview-image"
+        [src]="image"
+        [alt]="'Termék kép' + i"
+        [class.active]="i === activeImage"
+        (click)="onImageClick(i)" />
+</div>
 
-  <div class="nyk-gallery-main">
+<div class="nyk-gallery-main">
     <img
-      class="nyk-gallery-main-image"
-      [src]="images[activeImage]"
-      [alt]="'Termék kép' + activeImage" />
-  </div>
-</ng-container>
+        class="nyk-gallery-main-image"
+        [src]="images[activeImage]"
+        [alt]="'Termék kép' + activeImage" />
+</div>

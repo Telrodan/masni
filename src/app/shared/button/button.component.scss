@@ -1,0 +1,123 @@
+.nyk-button {
+    display: flex;
+    gap: var(--spacing-s);
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-m);
+    border-radius: var(--border-radius);
+    color: var(--color-text);
+    cursor: pointer;
+
+    &-icon:empty {
+        display: none;
+    }
+
+    &-basic {
+        padding: var(--spacing-s) var(--spacing-m);
+        border: none;
+        box-shadow: var(--shadow);
+
+        &.nyk-button-primary {
+            background-color: var(--primary-color);
+        }
+
+        &.nyk-button-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        &.nyk-button-success {
+            background-color: var(--green-color);
+        }
+
+        &.nyk-button-danger {
+            background-color: var(--red-color);
+        }
+    }
+
+    &-outlined {
+        padding: var(--spacing-s) var(--spacing-m);
+        border: 1px solid;
+        box-shadow: var(--shadow);
+        color: var(--color-text);
+        background-color: var(--color-white);
+
+        &.nyk-button-primary {
+            color: var(--primary-color);
+        }
+
+        &.nyk-button-secondary {
+            color: var(--secondary-color);
+        }
+
+        &.nyk-button-success {
+            color: var(--green-color);
+        }
+
+        &.nyk-button-danger {
+            color: var(--red-color);
+        }
+    }
+
+    &-underline {
+        display: block;
+        position: relative;
+        padding: 0 2px 2px;
+        margin: 0;
+        font-weight: 300;
+        border: none;
+        background: transparent;
+        transition: all 0.3s ease;
+
+        cursor: pointer;
+
+        &:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            transition: transform 0.4s ease;
+            transform: scale(0, 1);
+            transform-origin: right center;
+        }
+
+        &:hover:after {
+            transform: scale(1, 1);
+            transform-origin: left center;
+        }
+
+        &.active {
+            &:after {
+                transform: scale(1, 1);
+                transform-origin: left center;
+            }
+        }
+
+        &.nyk-button {
+            &-primary {
+                &:after {
+                    background-color: var(--primary-color);
+                }
+            }
+
+            &-secondary {
+                &:after {
+                    background-color: var(--secondary-color);
+                }
+            }
+
+            &-success {
+                &:after {
+                    background-color: var(--green-color);
+                }
+            }
+
+            &-danger {
+                &:after {
+                    background-color: var(--red-color);
+                }
+            }
+        }
+    }
+}

@@ -51,7 +51,7 @@
                 }
 
                 &-like-button {
-                    color: var(--color-red);
+                    color: var(--red-color);
                 }
             }
 
@@ -72,16 +72,16 @@
                 }
 
                 &-price {
-                    color: var(--color-black);
+                    color: var(--text-color);
 
                     &.discounted {
-                        color: var(--color-red);
+                        color: var(--red-color);
                         text-decoration: line-through;
                     }
                 }
 
                 &-discounted-price {
-                    color: var(--color-black);
+                    color: var(--text-color);
                 }
 
                 &-discount-percentage {
@@ -94,7 +94,7 @@
                     border-radius: 5000px;
                     aspect-ratio: 1 / 1;
                     font-size: var(--font-size-s);
-                    color: var(--color-red);
+                    color: var(--red-color);
                 }
             }
 
@@ -113,7 +113,7 @@
 
             &-stock {
                 margin-bottom: 16px;
-                color: var(--color-black);
+                color: var(--text-color);
 
                 i {
                     margin-right: 4px;
@@ -147,14 +147,14 @@
                         justify-content: center;
                         width: 48px;
                         height: 48px;
-                        color: var(--color-black);
+                        color: var(--text-color);
                         background-color: var(--color-grey);
                         border: none;
                         transition: all 0.3s ease;
                         cursor: pointer;
 
                         &:hover {
-                            color: var(--color-white);
+                            color: var(--white-color);
                             background-color: var(--color-dark-grey);
                         }
                     }
@@ -233,7 +233,7 @@
 
                 &-preparation,
                 &-shipping {
-                    color: var(--color-black);
+                    color: var(--text-color);
 
                     i {
                         margin-right: 4px;

@@ -2,10 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
-    EventEmitter,
     HostBinding,
     Input,
-    Output,
     ViewEncapsulation
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -14,11 +12,12 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 import { ProductCardComponent } from '@shared/product-card/product-card.component';
 import { Product } from '@core/store/product/product.model';
+import { ButtonComponent } from '@shared/button/button.component';
 
 @Component({
     selector: 'nyk-products-carousel',
     standalone: true,
-    imports: [CommonModule, RouterModule, CarouselModule, ProductCardComponent],
+    imports: [CommonModule, RouterModule, CarouselModule, ProductCardComponent, ButtonComponent],
     templateUrl: './products-carousel.component.html',
     styleUrls: ['./products-carousel.component.scss'],
     encapsulation: ViewEncapsulation.None,
@@ -30,8 +29,6 @@ export class ProductsCarouselComponent {
     @Input() title: string;
     @Input() products: Product[];
     @Input() routerLink: string;
-
-    @Output() likeProduct = new EventEmitter<Product>();
 
     customOptions: OwlOptions = {
         loop: true,
@@ -57,10 +54,6 @@ export class ProductsCarouselComponent {
         },
         nav: true
     };
-
-    onLikeProduct() {
-        this.likeProduct.emit();
-    }
 
     trackById(index: number, product: Product) {
         return product.id;

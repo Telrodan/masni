@@ -44,7 +44,7 @@ export class OrderCategoriesComponent implements OnInit {
     ngOnInit(): void {
         this.categories$ = this.store.select(CategorySelector.selectMainProductCategories()).pipe(
             map((categories) => {
-                categories = categories.sort((a, b) => a.sortIndex - b.sortIndex);
+                // categories = categories.sort((a, b) => a.sortIndex - b.sortIndex);
 
                 return cloneDeep(categories);
             })
@@ -64,7 +64,7 @@ export class OrderCategoriesComponent implements OnInit {
     }
 
     onSelectCategory(category: Category) {
-        category.subCategories = category.subCategories.sort((a, b) => a.sortIndex - b.sortIndex);
+        // category.subCategories = category.subCategories.sort((a, b) => a.sortIndex - b.sortIndex);
         this.selectedCategory = cloneDeep(category);
     }
 

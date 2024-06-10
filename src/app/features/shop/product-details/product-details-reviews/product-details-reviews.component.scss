@@ -45,7 +45,7 @@
     &-total {
         &-count {
             font-size: var(--font-size-xl);
-            color: var(--color-black);
+            color: var(--text-color);
             font-weight: 500;
         }
 
@@ -65,7 +65,7 @@
 
         &-user {
             margin-bottom: 4px;
-            color: var(--color-black);
+            color: var(--text-color);
             font-weight: 500;
         }
 

@@ -1,4 +1,4 @@
-<ng-container *ngIf="product$ | async; else skeleton">
+<ng-container *ngIf="product$ | async as product; else skeleton">
     <img
         class="nyk-product-details-decoration"
         src="../../../../assets/images/product-details-decoration.png"
@@ -6,14 +6,13 @@
 
     <div class="nyk-product-details-product">
         <div class="nyk-product-details-product-left">
-            <nyk-product-details-gallery
-                [images]="product.images"></nyk-product-details-gallery>
+            <nyk-product-details-gallery [images]="product.images"></nyk-product-details-gallery>
         </div>
 
         <div class="nyk-product-details-product-right">
             <div class="nyk-product-details-product-right-header">
                 <p class="nyk-product-details-product-right-header-category">
-                    {{ product.category.name | titlecase }}
+                    {{ product.category.name }}
                 </p>
 
                 <button
@@ -27,8 +26,8 @@
                     *ngIf="isAuthenticated$ | async"
                     class="nyk-product-details-product-right-header-like-button"
                     (click)="onLike()">
-                    <i [ngClass]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'">
-                    </i>
+                    <!-- <i [ngClass]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'"> -->
+                    <!-- </i> -->
                 </button>
             </div>
 
@@ -96,9 +95,7 @@
                 <button
                     class="nyk-product-details-product-right-actions-add-to-cart-button primary-button"
                     (click)="onAddToCart()"
-                    [disabled]="
-                        !productDetailsFormComponent?.productDetailsForm.valid
-                    ">
+                    [disabled]="!productDetailsFormComponent?.productDetailsForm.valid">
                     <i class="pi pi-shopping-cart"></i>
                     Kosárba
                 </button>
@@ -111,8 +108,7 @@
             </div>
 
             <div class="nyk-product-details-product-right-description">
-                <p
-                    class="nyk-product-details-product-right-description-title heading-secondary">
+                <p class="nyk-product-details-product-right-description-title heading-secondary">
                     Termékleírás
                 </p>
 
@@ -126,62 +122,46 @@
                         Minta információ
                     </p>
 
-                    <p
-                        class="nyk-product-details-product-right-description-materials-text">
+                    <p class="nyk-product-details-product-right-description-materials-text">
                         Ha tudni szeretnéd, hogy néznek ki a minták, kattints
                         <a routerLink="/material"> ide.</a>
                     </p>
                 </ng-container>
 
-                <p
-                    class="nyk-product-details-product-right-description-delivery heading-secondary">
+                <p class="nyk-product-details-product-right-description-delivery heading-secondary">
                     Szállítási információk
                 </p>
 
-                <p
-                    class="nyk-product-details-product-right-description-preparation">
+                <p class="nyk-product-details-product-right-description-preparation">
                     <i class="pi pi-stopwatch"></i>
                     <span>Elkészítési idő:</span>
                     {{ product.isCustom ? '5-10' : '3-5' }} munkanap
                 </p>
 
-                <p
-                    class="nyk-product-details-product-right-description-shipping">
+                <p class="nyk-product-details-product-right-description-shipping">
                     <i class="pi pi-truck"></i>
-                    <span>Szállítási díj:</span> A szállítási költségek fixek,
-                    és azokat a rendelés összegétől függetlenül számoljuk fel. A
-                    szállítási költségeket a kosaradban láthatod, mielőtt a
-                    fizetésre lépnél.
+                    <span>Szállítási díj:</span> A szállítási költségek fixek, és azokat a rendelés
+                    összegétől függetlenül számoljuk fel. A szállítási költségeket a kosaradban
+                    láthatod, mielőtt a fizetésre lépnél.
                 </p>
             </div>
         </div>
     </div>
 
     <div class="nyk-product-details-reviews">
-        <p class="nyk-product-details-reviews-title heading-secondary">
-            Vélemények
-        </p>
+        <p class="nyk-product-details-reviews-title heading-secondary">Vélemények</p>
 
         <nyk-product-details-reviews
             [product]="product"
-            (reviewProduct)="
-                onReviewProduct($event)
-            "></nyk-product-details-reviews>
+            (reviewProduct)="onReviewProduct($event)"></nyk-product-details-reviews>
     </div>
 
-    <div
-        *ngIf="product.category.items.length >= 4"
-        class="nyk-product-details-related-products">
-        <p class="nyk-product-details-related-products-title heading-secondary">
-            Hasonló termékek
-        </p>
+    <div *ngIf="product.category.items.length >= 4" class="nyk-product-details-related-products">
+        <p class="nyk-product-details-related-products-title heading-secondary">Hasonló termékek</p>
 
         <owl-carousel-o [options]="customOptions">
             <ng-template
-                *ngFor="
-                    let relatedProduct of product.category.items;
-                    trackBy: trackById
-                "
+                *ngFor="let relatedProduct of product.category.items; trackBy: trackById"
                 carouselSlide>
                 <div class="nyk-product-details-related-products-carousel-item">
                     <nyk-product-card

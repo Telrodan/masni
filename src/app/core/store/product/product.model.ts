@@ -9,6 +9,7 @@ export interface ProductState {
 
 export interface Product {
     id: string;
+    categoryId: string;
     category: ProductCategory;
     inspirationCategory?: InspirationCategory;
     name: string;

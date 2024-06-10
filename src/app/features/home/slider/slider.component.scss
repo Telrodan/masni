@@ -1,11 +1,12 @@
 @import 'mixins';
 
 .nyk-slider {
-  display: block;
-  height: 700px;
-  background: var(--color-tertiary);
+    display: block;
+    height: 700px;
+    background: var(--secondary-color);
+    border-radius: var(--border-radius);
 
-  @include respond(sm) {
-    height: 500px;
-  }
+    @include respond(sm) {
+        height: 500px;
+    }
 }

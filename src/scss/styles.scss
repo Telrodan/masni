@@ -1,11 +1,31 @@
 @import './base';
-@import './button';
-@import './colors';
 @import './form';
-@import './overrides';
 @import './reset';
 @import './typography';
+@import './util';
+@import './variables';
 
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
 @import 'ngx-toastr/toastr';
+
+// overrides
+// OWL Carousel
+.owl-prev,
+.owl-next {
+    padding: var(--spacing-s) !important;
+    color: var(--text-color) !important;
+    background-color: var(--primary-color) !important;
+    box-shadow: var(--shadow);
+}
+
+// p-scrolltop
+.p-scrolltop {
+    background-color: var(--primary-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+// p-skeleton
+.p-skeleton {
+    height: 100% !important;
+}

@@ -29,13 +29,10 @@ export interface Category {
     id?: string;
     type: CategoryType;
     name: string;
-    image: string;
+    image?: string;
     description?: string;
-    isMainCategory: boolean;
-    parentCategory?: Category;
-    subCategories?: ProductCategory[];
-    items?: Product[] | Material[] | Inspiration[];
-    sortIndex?: number;
+    parentId?: string;
+    sortOrder?: number;
     updatedAt?: Date;
     createdAt?: Date;
 }

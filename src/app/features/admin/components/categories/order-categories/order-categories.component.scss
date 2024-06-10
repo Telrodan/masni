@@ -7,7 +7,7 @@
     &-header {
         margin-bottom: 20px;
         padding-bottom: 10px;
-        color: var(--color-black);
+        color: var(--text-color);
         font-size: var(--font-size-l);
         font-weight: 700;
         border-bottom: 1px solid var(--color-grey);
@@ -33,13 +33,13 @@
         flex-grow: 1;
         flex-basis: 0;
         box-sizing: border-box;
-        color: var(--color-black);
-        background: var(--color-primary);
+        color: var(--text-color);
+        background: var(--primary-color);
         border: 1px solid transparent;
         cursor: move;
 
         &:not(:last-child) {
-            border-bottom: 1px solid var(--color-white);
+            border-bottom: 1px solid var(--white-color);
         }
 
         &.selected {

@@ -22,12 +22,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NavbarMenuItem } from '@core/models/navbar-menu-item.model';
 import { Store } from '@ngrx/store';
 import { CategorySelector } from '@core/store/category';
+import { ButtonComponent } from '@shared/button/button.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
     selector: 'nyk-navbar',
     standalone: true,
-    imports: [CommonModule, RouterModule, StyleClassModule, MatSidenavModule, MatMenuModule],
+    imports: [
+        CommonModule,
+        RouterModule,
+        StyleClassModule,
+        MatSidenavModule,
+        MatMenuModule,
+        ButtonComponent
+    ],
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

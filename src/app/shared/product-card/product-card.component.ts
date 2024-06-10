@@ -7,7 +7,8 @@ import {
     Input,
     OnInit,
     Output,
-    ViewEncapsulation
+    ViewEncapsulation,
+    inject
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
@@ -19,11 +20,12 @@ import { AuthService } from '@core/services/auth.service';
 import { CookieService } from '@core/services/cookie.service';
 import { ProductService } from '@core/services/product.service';
 import { Product } from '@core/store/product/product.model';
+import { ButtonComponent } from '@shared/button/button.component';
 
 @Component({
     selector: 'nyk-product-card',
     standalone: true,
-    imports: [CommonModule, RouterModule, ButtonModule, SkeletonModule],
+    imports: [CommonModule, RouterModule, ButtonModule, SkeletonModule, ButtonComponent],
     templateUrl: './product-card.component.html',
     styleUrls: ['./product-card.component.scss'],
     encapsulation: ViewEncapsulation.None,
@@ -35,47 +37,19 @@ export class ProductCardComponent implements OnInit {
     @Input() product: Product;
     @Input() page: number;
 
-    @Output() likeProduct = new EventEmitter<Product>();
-
-    isImageLoading = true;
-
     isAuthenticated$: Observable<boolean>;
 
-    get isLiked(): boolean {
-        return false;
-        // return this.product.likes.includes(this.cookieService.getCookie('userId'));
-    }
+    isDiscounted = false;
+    isImageLoading = true;
+    isNewArrival = false;
 
-    get isDiscounted(): boolean {
-        return this.product.discountedPrice > 0;
-    }
-
-    get isNewArrival(): boolean {
-        return this.isOneWeekPassed(this.product.createdAt);
-    }
-
-    constructor(
-        private productService: ProductService,
-        private authService: AuthService,
-        private cookieService: CookieService,
-        private router: Router
-    ) {}
+    private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
 
     ngOnInit(): void {
         this.isAuthenticated$ = this.authService.getAuthStatus$();
-    }
-
-    onLike(event: MouseEvent) {
-        event.stopPropagation();
-
-        this.productService
-            .likeProduct$(this.product.id)
-            .pipe(
-                tap(() => {
-                    this.likeProduct.emit();
-                })
-            )
-            .subscribe();
+        this.isDiscounted = this.product.discountedPrice > 0;
+        this.isNewArrival = this.isOneWeekPassed(this.product.createdAt);
     }
 
     imageLoaded() {
@@ -90,7 +64,7 @@ export class ProductCardComponent implements OnInit {
         this.router.navigate(['/shop/product-details', this.product.id]);
     }
 
-    isOneWeekPassed(date: Date): boolean {
+    private isOneWeekPassed(date: Date): boolean {
         const otherDate = new Date(date);
         const oneWeekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
         const today = new Date();

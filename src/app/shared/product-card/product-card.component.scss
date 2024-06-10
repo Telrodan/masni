@@ -3,12 +3,13 @@
 .nyk-product-card {
     display: block;
     width: 100%;
-    max-width: 380px;
+    max-width: var(--product-card-max-width);
     cursor: pointer;
 
     &-top {
         position: relative;
-        background-color: var(--color-tertiary);
+        width: 100%;
+        aspect-ratio: 1 / 1;
 
         &-like,
         &-discount,
@@ -17,92 +18,87 @@
             position: absolute;
             display: flex;
             align-items: center;
-            border: 2px solid var(--color-pure-white);
-            border-radius: 500px;
+            justify-content: center;
+            border: 2px solid var(--white-color);
             box-shadow: var(--shadow);
             z-index: 1;
             opacity: 0.85;
         }
 
-        &-like {
-            top: 8px;
-            right: 8px;
-            padding: 8px;
-            color: var(--color-red);
-            background-color: var(--color-primary);
-            font-size: 16px;
-            cursor: pointer;
-
-            i {
-                font-size: 20px;
-            }
-
-            @include respond(sm) {
-                top: 4px;
-                right: 4px;
-            }
-        }
-
         &-discount {
-            display: flex;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            top: 8px;
-            left: 8px;
-            padding: 4px;
-            color: var(--color-red);
-            background-color: var(--color-primary);
-            font-weight: 500;
+            width: var(--dimension-l);
+            height: var(--dimension-l);
+            top: var(--spacing-s);
+            left: var(--spacing-s);
+            padding: var(--spacing-xs);
+            color: var(--red-color);
+            background-color: var(--primary-color);
+            border-radius: var(--border-radius-full);
             aspect-ratio: 1 / 1;
 
             @include respond(sm) {
-                top: 4px;
-                left: 4px;
+                top: var(--spacing-xs);
+                left: var(--spacing-xs);
             }
         }
 
         &-dream-it {
-            bottom: 8px;
-            right: 8px;
-            padding: 4px 8px;
-            font-size: 18px;
+            bottom: var(--spacing-s);
+            right: var(--spacing-s);
+            padding: var(--spacing-xs) var(--spacing-s);
             font-family: 'Amatic SC', sans-serif;
-            background-color: var(--color-primary);
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius-badge);
             font-weight: 600;
 
             @include respond(sm) {
-                bottom: 4px;
-                right: 4px;
+                bottom: var(--spacing-xs);
+                right: var(--spacing-xs);
             }
         }
 
         &-new-arrival {
-            display: flex;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            bottom: 8px;
-            left: 8px;
-            padding: 4px 8px;
+            bottom: var(--spacing-s);
+            left: var(--spacing-s);
+            padding: var(--spacing-xs) var(--spacing-s);
             aspect-ratio: 1 / 1;
-            background-color: var(--color-secondary);
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius-full);
 
             @include respond(sm) {
-                bottom: 4px;
-                left: 4px;
+                bottom: var(--spacing-xs);
+                left: var(--spacing-xs);
             }
         }
 
+        // &-like {
+        //     top: 8px;
+        //     right: 8px;
+        //     padding: 8px;
+        //     color: var(--red-color);
+        //     background-color: var(--primary-color);
+        //     font-size: 16px;
+        //     cursor: pointer;
+
+        //     i {
+        //         font-size: 20px;
+        //     }
+
+        //     @include respond(sm) {
+        //         top: 4px;
+        //         right: 4px;
+        //     }
+        // }
+
         &-image {
-            margin-bottom: 8px;
+            border-radius: var(--border-radius);
         }
     }
 
     &-bottom {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--spacing-s);
         max-width: 100%;
         text-align: left;
 
@@ -110,6 +106,7 @@
             font-size: var(--font-size-xl);
             font-family: 'Amatic SC', sans-serif;
             font-weight: 600;
+            color: var(--color-text);
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -121,9 +118,9 @@
 
         &-short-description {
             height: 38px;
-            color: var(--color-dark-grey);
             font-size: var(--font-size-s);
             font-weight: 300;
+            color: var(--color-text);
 
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -140,37 +137,35 @@
             display: flex;
             align-items: center;
             font-size: var(--font-size-m);
-            font-weight: 400;
 
             @include respond(sm) {
                 margin-bottom: 0;
-                font-size: 14px;
+                font-size: var(--font-size-s);
             }
 
             &-price {
-                margin-right: 12px;
-                color: var(--color-black);
+                margin-right: var(--spacing-s);
+                color: var(--text-color);
 
                 @include respond(sm) {
                     margin-right: auto;
                 }
 
                 &.discounted {
-                    color: var(--color-red);
+                    color: var(--red-color);
                     text-decoration: line-through;
                 }
             }
 
             &-discounted-price {
-                color: var(--color-black);
-                font-size: 18px;
+                color: var(--text-color);
             }
 
             .stock {
                 margin-left: auto;
-                color: var(--color-dark-grey);
-                font-size: 16px;
+                font-size: var(--font-size-xs);
                 font-weight: 300;
+                color: var(--text-color);
 
                 @include respond(sm) {
                     display: none;
@@ -185,9 +180,5 @@
         @include respond(sm) {
             display: none;
         }
-    }
-
-    .skeleton {
-        width: 100%;
     }
 }

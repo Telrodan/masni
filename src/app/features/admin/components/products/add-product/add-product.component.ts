@@ -185,6 +185,10 @@ export class AddProductComponent implements OnInit {
 
         const product = this.addProductForm.value as Product;
 
+        if (product.questions.length === 0) {
+            delete product.questions;
+        }
+
         this.store.dispatch(ProductAction.addProduct({ product }));
         this.router.navigate(['/admin/products']);
     }

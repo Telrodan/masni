@@ -1,17 +1,17 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    ElementRef,
     HostBinding,
     Input,
-    OnChanges,
-    SimpleChange,
+    ViewChild,
     ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductCategory } from '@core/store/category/category.model';
+import { ButtonComponent } from '@shared/button/button.component';
 
-interface CategoriesData {
+export interface ProductSubCategoriesData {
     label: string;
     image: string;
     routerLink: string;
@@ -21,37 +21,36 @@ interface CategoriesData {
 @Component({
     selector: 'nyk-categories',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, ButtonComponent],
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CategoriesComponent implements OnChanges {
+export class CategoriesComponent {
     @HostBinding('class.nyk-categories') hostClass = true;
 
-    @Input() productCategories: ProductCategory[];
+    @ViewChild('container', { static: false }) container: ElementRef;
 
-    data: CategoriesData[];
+    @Input() productSubCategoriesData: ProductSubCategoriesData[];
 
-    ngOnChanges(changes: { productCategories: SimpleChange }): void {
-        if (changes.productCategories) {
-            const subProductCategories: ProductCategory[] = changes.productCategories.currentValue
-                .filter((subProductCategory: ProductCategory) => subProductCategory.isMainCategory)
-                .filter(
-                    (subProductCategory: ProductCategory) => subProductCategory.items.length > 0
-                );
+    displayNumber = 2;
+    buttonLabel = 'Összes mutatása';
 
-            // this.data = subProductCategories.map((category: ProductCategory) => ({
-            //     label: category.slug,
-            //     image: category.image,
-            //     routerLink: `/shop/${category.id}`,
-            //     count: category.items.length
-            // }));
-        }
+    trackByLabel(index: number, item: ProductSubCategoriesData): string {
+        return item.label;
     }
 
-    trackByLabel(index: number, item: CategoriesData): string {
-        return item.label;
+    onShowAll(): void {
+        if (this.displayNumber === this.productSubCategoriesData.length) {
+            this.displayNumber = 2;
+            this.buttonLabel = 'Összes mutatása';
+            this.container.nativeElement.scrollIntoView({ behavior: 'smooth' });
+
+            return;
+        }
+
+        this.buttonLabel = 'Kevesebb mutatása';
+        this.displayNumber = this.productSubCategoriesData.length;
     }
 }

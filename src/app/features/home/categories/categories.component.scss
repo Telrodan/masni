@@ -1,54 +1,46 @@
 @import 'mixins';
 
 .nyk-categories {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 40px;
-  grid-row-gap: 28px;
-  margin-top: 68px;
+    &-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: var(--spacing-xl);
+        grid-row-gap: var(--spacing-l);
+        margin-top: var(--spacing-3xl);
 
-  @include respond(sm) {
-    grid-column-gap: 20px;
-    grid-row-gap: 14px;
-  }
-
-  &-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 40px 60px;
-    background-color: var(--color-grey);
-    cursor: pointer;
-
-    @include respond(sm) {
-      padding: 20px 15px;
+        @include respond(sm) {
+            grid-column-gap: var(--spacing-m);
+            grid-row-gap: var(--spacing-s);
+        }
     }
 
-    &:hover {
-      .nyk-categories-item {
+    &-item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-s);
+        padding: var(--spacing-xl) var(--spacing-2xl);
+        background-color: var(--tertiary-color);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+
+        @include respond(sm) {
+            padding: var(--spacing-m) var(--spacing-l);
+        }
+
+        &:hover {
+            .nyk-categories-item-image {
+                transform: scale(1.1);
+            }
+        }
+
         &-image {
-          transform: scale(1.1);
+            width: 160px;
+            margin: 0 auto;
+            transition: all 0.3s ease-in-out;
         }
-
-        &-title {
-          color: var(--color-dark-grey);
-        }
-      }
     }
 
-    &-image {
-      width: 160px;
-      margin: 0 auto 8px;
-      transition: all 0.3s ease-in-out;
+    &-button {
+        margin: var(--spacing-l) auto 0;
     }
-
-    &-title {
-      margin-bottom: 8px;
-      transition: all 0.3s ease-in-out;
-    }
-
-    &-count {
-      color: var(--color-dark-grey);
-    }
-  }
 }

@@ -1,66 +1,66 @@
 @import 'mixins';
 
 .nyk-footer {
-  display: block;
-  margin-bottom: 24px;
-
-  &-link {
     display: block;
-    color: var(--color-dark-grey);
-    border-bottom: 1px solid transparent;
-    font-weight: 300;
-    transition: all 0.3s ease;
+    margin-bottom: 24px;
 
-    @include respond(sm) {
-      width: fit-content;
-
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
-    }
-
-    &:hover {
-      color: var(--color-black);
-      border-bottom: 1px solid var(--color-black);
-    }
-
-    &:not(:last-child) {
-      margin-right: 24px;
-    }
-
-    &-social {
-      color: var(--color-dark-grey);
-      font-size: 40px;
-      transition: all 0.3s ease;
-
-      &:hover {
-        color: var(--color-black);
-      }
-
-      &:not(:last-child) {
-        margin-right: 12px;
-      }
-
-      &-wrapper {
-        width: 160px;
-        text-align: right;
+    &-link {
+        display: block;
+        color: var(--color-dark-grey);
+        border-bottom: 1px solid transparent;
+        font-weight: 300;
+        transition: all 0.3s ease;
 
         @include respond(sm) {
-          text-align: left;
+            width: fit-content;
+
+            &:not(:last-child) {
+                margin-bottom: 12px;
+            }
         }
-      }
-    }
-  }
 
-  &-developer {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-dark-grey);
+        &:hover {
+            color: var(--text-color);
+            border-bottom: 1px solid var(--text-color);
+        }
 
-    @include respond(sm) {
-      justify-content: flex-start;
+        &:not(:last-child) {
+            margin-right: 24px;
+        }
+
+        &-social {
+            color: var(--color-dark-grey);
+            font-size: 40px;
+            transition: all 0.3s ease;
+
+            &:hover {
+                color: var(--text-color);
+            }
+
+            &:not(:last-child) {
+                margin-right: 12px;
+            }
+
+            &-wrapper {
+                width: 160px;
+                text-align: right;
+
+                @include respond(sm) {
+                    text-align: left;
+                }
+            }
+        }
     }
-  }
+
+    &-developer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-dark-grey);
+
+        @include respond(sm) {
+            justify-content: flex-start;
+        }
+    }
 }

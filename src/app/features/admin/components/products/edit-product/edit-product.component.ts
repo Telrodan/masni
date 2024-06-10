@@ -196,6 +196,10 @@ export class EditProductComponent implements OnInit {
 
         const product = this.editProductForm.value as Product;
 
+        if (product.questions.length === 0) {
+            delete product.questions;
+        }
+
         this.store.dispatch(ProductAction.updateProduct({ product }));
         this.router.navigate(['/admin/products']);
     }

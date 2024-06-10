@@ -1,5 +1,5 @@
 <owl-carousel-o [options]="customOptions">
-  <ng-template *ngFor="let item of data; trackByLabel" carouselSlide>
-    <nyk-slider-item [slide]="item"></nyk-slider-item>
-  </ng-template>
+    <ng-template *ngFor="let slide of slides; trackByLabel" carouselSlide>
+        <nyk-slider-item [slide]="slide"></nyk-slider-item>
+    </ng-template>
 </owl-carousel-o>

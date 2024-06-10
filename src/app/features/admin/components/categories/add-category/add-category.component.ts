@@ -72,7 +72,7 @@ export class AddCategoryComponent implements OnInit {
         this.addCategoryForm = this.fb.group({
             type: [CategoryType.Product, Validators.required],
             name: [undefined, Validators.required],
-            image: [undefined, Validators.required],
+            image: [undefined],
             description: [undefined],
             isMainCategory: [true, Validators.required],
             parentCategory: [undefined]
@@ -100,11 +100,11 @@ export class AddCategoryComponent implements OnInit {
 
         const category = this.addCategoryForm.value as Category;
 
-        if (!category.isMainCategory && !category.parentCategory) {
-            this.toastr.info('Kérlek válassz egy főkategóriát.');
+        // if (!category.isMainCategory && !category.parentCategory) {
+        //     this.toastr.info('Kérlek válassz egy főkategóriát.');
 
-            return;
-        }
+        //     return;
+        // }
 
         this.store.dispatch(CategoryAction.addCategory({ category }));
         this.router.navigate(['/admin/categories']);

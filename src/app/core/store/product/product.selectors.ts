@@ -13,5 +13,10 @@ export const ProductSelector = {
             productState.products.find((product) => product.id === id)
         ),
 
+    selectProductsByCategoryId: (categoryId: string) =>
+        createSelector(selectProductState, (productState) =>
+            productState.products.filter((product) => product.categoryId === categoryId)
+        ),
+
     isBusy: () => createSelector(selectProductState, (productState): boolean => productState.isBusy)
 };

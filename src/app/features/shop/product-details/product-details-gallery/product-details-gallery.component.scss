@@ -1,53 +1,44 @@
 @import 'mixins';
 
 .nyk-gallery {
-  display: flex;
-  gap: 16px;
-
-  @include respond(sm) {
-    flex-direction: column-reverse;
-  }
-
-  &-preview {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 16px;
-    width: 20%;
+    gap: var(--spacing-m);
 
     @include respond(sm) {
-      flex-direction: row;
-      justify-content: flex-start;
-      width: 100%;
+        flex-direction: column-reverse;
     }
 
-    &-image {
-      transition: all 0.3s ease;
-      aspect-ratio: 1 / 1;
-      cursor: pointer;
-
-      @include respond(sm) {
+    &-preview {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: var(--spacing-m);
         width: 20%;
-      }
 
-      &.active {
-        background-color: var(--color-tertiary);
-      }
+        @include respond(sm) {
+            flex-direction: row;
+            justify-content: flex-start;
+            width: 100%;
+        }
+
+        &-image {
+            border-radius: var(--border-radius);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            @include respond(sm) {
+                width: 20%;
+            }
+
+            &.active {
+                border: 2px solid var(--accent-color);
+            }
+        }
     }
-  }
 
-  &-main {
-    width: 80%;
-    background-color: var(--color-tertiary);
-
-    @include respond(sm) {
-      width: 100%;
+    &-main-image {
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
     }
-
-    &-image {
-      margin: 0 auto;
-      transition: all 0.3s ease;
-      aspect-ratio: 1 / 1;
-    }
-  }
 }

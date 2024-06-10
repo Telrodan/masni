@@ -8,6 +8,9 @@ import {
     MaterialCategory,
     ProductCategory
 } from './category.model';
+import { ProductSelector } from '../product';
+import { MaterialSelector } from '../material';
+import { InspirationSelector } from '../inspiration';
 
 const selectCategoryState = (state: AppState) => state.category;
 
@@ -30,7 +33,8 @@ export const CategorySelector = {
             selectCategoryState,
             (categoryState): ProductCategory[] =>
                 categoryState.categories.filter(
-                    (category) => category.type === CategoryType.Product && category.isMainCategory
+                    (category) => category.type === CategoryType.Product
+                    // && category.isMainCategory
                 ) as ProductCategory[]
         ),
 
@@ -39,7 +43,8 @@ export const CategorySelector = {
             selectCategoryState,
             (categoryState): ProductCategory[] =>
                 categoryState.categories.filter(
-                    (category) => category.type === CategoryType.Product && !category.isMainCategory
+                    (category) => category.type === CategoryType.Product
+                    // && !category.isMainCategory
                 ) as ProductCategory[]
         ),
 
@@ -69,6 +74,40 @@ export const CategorySelector = {
                 categoryState.categories.filter(
                     (category) => category.type === CategoryType.Inspiration
                 ) as InspirationCategory[]
+        ),
+
+    selectCategoryItemsCountById: (categoryId: string) =>
+        createSelector(
+            selectCategoryState,
+            ProductSelector.selectProducts(),
+            MaterialSelector.selectMaterials(),
+            InspirationSelector.selectInspirations(),
+            (categoryState, products, materials, inspirations): number => {
+                const category = categoryState.categories.find(
+                    (category) => category.id === categoryId
+                );
+
+                if (!category) {
+                    return 0;
+                }
+
+                switch (category.type) {
+                    case CategoryType.Product:
+                        return products.filter((product) => product.categoryId === categoryId)
+                            .length;
+
+                    default:
+                        return 0;
+                }
+            }
+        ),
+
+    selectCategorySubCategoriesCountById: (categoryId: string) =>
+        createSelector(
+            selectCategoryState,
+            (categoryState): number =>
+                categoryState.categories.filter((category) => category.parentId === categoryId)
+                    .length
         ),
 
     isBusy: () =>
